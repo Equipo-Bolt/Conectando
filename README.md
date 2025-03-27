@@ -20,6 +20,7 @@ npm run dev
 *Every code saved inside the src directory will refresh the app*
 
 
+
 ### General Branch Naming Conventions
 - All branch names must be in English.
 - Each branch name should have a maximum of three words after the branch divition, like Backend/
@@ -53,3 +54,20 @@ QA/1-2   QA/2-4
 ```
 Backend/ft/CreateUser   Frontend/ft/Collaborator   Frontend/ft/HomePage
 ```
+
+
+
+### Commit Message Conventions
+| Verb      | Definition |
+|-----------|------------|
+| **ADD**   | When the main changes involve implementing a new feature or adding resources or data necessary for the application. |
+| **DELETE** | When the main changes involve removing files, functions, or general code that can be omitted without replacement. |
+| **MERGE**  | When changes from another branch are merged. |
+| **FIX**    | When fixing a bug or implementing a solution to a test case. |
+| **REFACTOR** | When refactoring code without fixing a bug or adding new functionality, only restructuring existing features. |
+| **CHORE**  | When making changes unrelated to improvements, features, source files, or test files (e.g., updating project dependencies). |
+| **DOCS**   | When updating markdown documents or README files. |
+| **REVERT** | When reverting to a previous commit. |
+| **CONFIG** | When making configuration-related changes or adding packages to the project. |
+| **STYLE**  | When making changes that do not affect code functionality, such as fixing white spaces, missing semicolons, etc. |
+
