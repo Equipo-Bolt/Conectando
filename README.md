@@ -1,30 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Welcome to *Conectando+* the perfect web app to create and manage your work objectives.
 
-## Getting Started
+## To start working you must:
 
-First, run the development server:
+
+- First, install the depencies of the project:
+
+```sh
+npm i
+```
+
+- Second, run the development server with the command below:
 
 ```sh
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Next, open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*Every code saved inside the src directory will refresh the app*
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+### General Branch Naming Conventions
+- All branch names must be in English.
+- Each branch name should have a maximum of three words after the branch divition, like Backend/
+- Each word must start with an uppercase letter, except for the main branches (`main` and `staging`).
 
-To learn more about Next.js, take a look at the following resources:
+## Main and Staging Branches
+- The project will have only one main branch called `main`.
+- The `main` branch can only be updated through pull requests from a `QA` branch.
+- Direct changes or pushes to the `main` branch are not allowed.
+- The project will have a primary development branch called `staging`.
+- The `staging` branch serves to merge completed features to create a functional version.
+- The `staging` branch should be frequently updated for the creation of new feature branches.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## QA Branches
+- QA branches will be named following the pattern `QA/{sprint number}-{revision number}`.
+- The QA team will use these branches to review and test a version before merging it into `main`.
+- No development or bug fixes will be performed on QA branches.
+- Only tests and incident reports will be conducted on these branches.
+- If a version in a QA branch causes critical errors preventing further development, no pull request will be created to merge it into `main`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Examples of QA branch names:**
+```
+QA/1-2   QA/2-4
+```
 
-## Deploy on Vercel
+### Feature Branches
+- Feature branches will be created from `staging` and named following the pattern: `{layer}/ft/{feature name}`.
+- Once a group of functionalities is completed, a QA branch will be created as described earlier for the QA team to review.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Examples of feature branch names:**
+```
+Backend/ft/CreateUser   Frontend/ft/Collaborator   Frontend/ft/HomePage
+```
