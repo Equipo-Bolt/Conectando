@@ -7,6 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ---------------------
+//The following models are to test connection and functionality with the SQL SERVER
+//These should not and will not be included or consider in the future. tldr->DELETE LATER
 model Notes {
   id      Int    @id @default(autoincrement())
   title   String
@@ -19,3 +22,4 @@ model Users {
   name  String  @unique
   notes Notes[]
 }
+// ---------------------
