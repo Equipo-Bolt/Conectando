@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------
+//The following models are to test connection and functionality with the SQL SERVER
+//These should not and will not be included or consider in the future. tldr->DELETE LATER
+model Notes {
+  id      Int    @id @default(autoincrement())
+  title   String
+  user_id String
+  user    Users  @relation(fields: [user_id], references: [id])
+}
+
+model Users {
+  id    String  @id @default(uuid())
+  name  String  @unique
+  notes Notes[]
+}
+// ---------------------
