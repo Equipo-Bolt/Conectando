@@ -47,9 +47,9 @@ model Objective {
 model ObjectiveClasification {
   id Int @id @default(autoincrement())
   weight Int
-  objectives Objective[] //one-to-many
   clasificationTitle Clasification @relation(fields: [clasificationID], references: [id])
   clasificationID Int
+  objectives Objective[] //one-to-many
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deactived Boolean @default(false)
@@ -119,8 +119,6 @@ model User {
   collaborator User? @relation("BossOf")
   role Role @relation(fields: [roleID], references: [id])
   roleID Int
-  division Division @relation(fields: [divisionID], references: [id])
-  divisionID Int
   businessUnit BusinessUnit @relation(fields: [businessUnitID], references: [id])
   businessUnitID Int
   area Area @relation(fields: [areaID], references: [id])
@@ -146,7 +144,7 @@ model Role {
 model Division {
   id Int @id @default(autoincrement())
   title String @db.VarChar(255)
-  users User[]
+  businessUnits BusinessUnit[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deactived Boolean @default(false)
@@ -156,6 +154,8 @@ model Division {
 model BusinessUnit {
   id Int @id @default(autoincrement())
   title String @db.VarChar(255)
+  division Division @relation(fields: [divisionID], references: [id])
+  divisionID Int
   users User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
