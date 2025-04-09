@@ -11,3 +11,20 @@ In this file you will find links that direct you to important documentation.
 ### Your Clockify
 
 [Tracker](https://app.clockify.me/tracker)
+
+
+
+# Study References:
+Here, you should paste references to study and/or use the tools and libraries that are implemented in the project.
+
+## Backend Section
+
+### Prisma Docs
+
+- [Prisma Schemas](https://www.prisma.io/docs/orm/prisma-schema/overview)
+
+- [Prisma Model Relations](https://www.prisma.io/docs/orm/prisma-schema/data-model/relations)
+
+- [Prisma Self Relations](https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/self-relations)
+
+- [Prisma Schema SQL SERVER](https://www.prisma.io/docs/orm/overview/databases/sql-server)
