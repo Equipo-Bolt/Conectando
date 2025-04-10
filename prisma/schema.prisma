@@ -105,13 +105,13 @@ model User {
   id Int @id @default(autoincrement())
   employeeNumber Int? @unique
   fullName String? 
-  email String 
+  email String? 
   jobPosition String? 
   positionSeniority Int?
   companySeniority Int?
   companyContribution String?
   boss User? @relation("SubordinateOf", fields: [bossID], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  bossID Int @unique
+  bossID Int? @unique
   role Role? @relation(fields: [roleID], references: [id])
   roleID Int?
   businessUnit BusinessUnit? @relation(fields: [businessUnitID], references: [id])
