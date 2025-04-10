@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@next/env": "15.2.4",
     "@prisma/client": "6.5.0",
     "@radix-ui/react-slot": "^1.2.0",
