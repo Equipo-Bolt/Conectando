@@ -7,10 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//! ALL TABLES ARE PLURAL
-
-//! ENUM type is not supported by Microsoft SQL Server connector
-
 //* Convention:
 //* 1. Declare model name using PascalCase and add @@map with plural equivalent
 //* 2. First declare primary key, named "id" with Int type
@@ -33,8 +29,8 @@ model Objective {
   title String @db.VarChar(500)
   goal String @db.VarChar(1000)
   result String @db.VarChar(1000)
-  clasification ObjectiveClasification @relation(fields: [objectiveClasificationID], references: [id])
-  objectiveClasificationID Int
+  classification ObjectiveClassification @relation(fields: [objectiveClassificationID], references: [id])
+  objectiveClassificationID Int
   form Form @relation(fields: [formID], references: [id])
   formID Int
   comments Comment[]
@@ -44,26 +40,26 @@ model Objective {
   @@map("Objectives")
 }
 
-model ObjectiveClasification {
+model ObjectiveClassification {
   id Int @id @default(autoincrement())
   weight Int
-  clasificationTitle Clasification @relation(fields: [clasificationID], references: [id])
-  clasificationID Int
+  classificationTitle Classification @relation(fields: [classificationID], references: [id])
+  classificationID Int
   objectives Objective[] //one-to-many
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deactived Boolean @default(false)
-  @@map("ObjectiveClasifications")
+  @@map("ObjectiveClassifications")
 }
 
-model Clasification {
+model Classification {
   id Int @id @default(autoincrement())
   title String @unique @db.VarChar(255)
-  objectiveClasifications ObjectiveClasification[]
+  objectiveClassifications ObjectiveClassification[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deactived Boolean @default(false)
-  @@map("Clasifications")
+  @@map("Classifications")
 }
 
 model Comment {
@@ -80,7 +76,7 @@ model Comment {
 
 model Form {
   id Int @id @default(autoincrement())
-  aprovedAt DateTime
+  approvedAt DateTime
   gradedAt DateTime
   collaborator User @relation("WrittenForms", fields: [collaboratorID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   collaboratorID Int
@@ -114,15 +110,15 @@ model User {
   positionSeniority Int
   companySeniority Int
   companyContribution String @db.VarChar(1000)
-  boss User? @relation("BossOf", fields: [bossID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  boss User? @relation("SubordinateOf", fields: [bossID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   bossID Int @unique
-  collaborator User? @relation("BossOf")
   role Role @relation(fields: [roleID], references: [id])
   roleID Int
   businessUnit BusinessUnit @relation(fields: [businessUnitID], references: [id])
   businessUnitID Int
   area Area @relation(fields: [areaID], references: [id])
   areaID Int
+  collaborators User[] @relation("SubordinateOf")
   writtenForms Form[] @relation("WrittenForms")
   evaluatedForms Form[] @relation("EvaluatedForms")
   createdAt DateTime @default(now())
