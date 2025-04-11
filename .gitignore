@@ -40,5 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Ignore migrations
+# migrations
 /prisma/migrations
+
+# secure, sensitive data
+/secure 
