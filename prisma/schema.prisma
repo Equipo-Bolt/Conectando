@@ -111,7 +111,7 @@ model User {
   companySeniority Int?
   companyContribution String?
   boss User? @relation("SubordinateOf", fields: [bossID], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  bossID Int? @unique
+  bossID Int?
   role Role? @relation(fields: [roleID], references: [id])
   roleID Int?
   businessUnit BusinessUnit? @relation(fields: [businessUnitID], references: [id])
