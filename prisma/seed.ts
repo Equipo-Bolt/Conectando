@@ -1,4 +1,3 @@
-import { connect } from "http2";
 import { prisma } from "../src/lib/prisma";
 import * as fs from "fs";
 
@@ -8,8 +7,10 @@ import * as fs from "fs";
     * First, we will be include the catalogs
     * Next, entities using upsert function.
 */
+
 async function main() {
   //! ------------------------- Catalogs --------------------------------------
+
   const rawAreas = fs.readFileSync("./secure/areas.json", "utf-8");
   const rawBusinessUnits = fs.readFileSync("./secure/businessUnits.json","utf-8");
   const rawClasifications = fs.readFileSync("./secure/clasifications.json","utf-8");
@@ -116,7 +117,7 @@ async function main() {
         "actualizados en ámbitos tecnológicos.",
       boss: {
         create: { //* Boss of Daniel
-          employeeNumber: 11111, //! this shouldn't be done in actual logic
+          employeeNumber: 11111,
           fullName: "Juan Gutierrez",
           jobPosition: "Jefe del sector agrícola",
           roleID: 4
