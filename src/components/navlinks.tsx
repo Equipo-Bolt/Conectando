@@ -16,8 +16,6 @@ const links = [
 
 export default function NavLinks() {
   const pathname = usePathname();
-
-  // Renderizado condicional para evitar que el componente se renderice hasta que usePathname haya terminado de cargar
   if (!pathname) return null;
 
   return (
@@ -32,7 +30,7 @@ export default function NavLinks() {
               "flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium md:flex-none md:justify-start md:p-2 md:px-3",
               pathname.startsWith(href)
                 ? "bg-selected-blue text-white"
-                : "bg-gemso-blue text-white hover:bg-sky-100 hover:text-blue-600"
+                : "bg-gemso-dark-blue text-white hover:bg-sky-100 hover:text-blue-600"
             )}
           >
             <LinkIcon className="w-6" />

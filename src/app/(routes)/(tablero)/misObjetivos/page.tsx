@@ -2,7 +2,7 @@ import Borrador from "../../../../components/Borrador";
 import EsperandoRevision from "../../../../components/EsperandoRevision";
 
 export default function Page() {
-  const state = "borrador";
+  const state: "borrador" | "esperandoRevision" = "borrador";
 
   let content;
 
@@ -18,5 +18,10 @@ export default function Page() {
       break;
   }
 
-  return <>{content}</>;
+  return (
+    <>
+      <h1 className="text-4xl font-bold mb-1.5">Mis Objetivos</h1>
+      {content}
+    </>
+  );
 }
