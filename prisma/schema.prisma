@@ -7,10 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//! ALL TABLES ARE PLURAL
-
-//! ENUM type is not supported by Microsoft SQL Server connector
-
 //* Convention:
 //* 1. Declare model name using PascalCase and add @@map with plural equivalent
 //* 2. First declare primary key, named "id" with Int type
@@ -21,67 +17,67 @@ datasource db {
 //*    *Add a name to the relation to disambiguate the relation 
 //*    (Disambiguating relations section: https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#disambiguating-relations)
 //* 5. After that, add both following colums: createdAt and updatedAt --
-//*    for createdAt at use atribute @now() and for updatedAt us @updatedAt
+//*    for createdAt at use atribute @now() and for updatedAt us @updatedAt @default(now())
 //*    Both colums are DateTime type
 //* 6. Lastly add the colum "deactived" with Boolean type (equals to Bit) --
 //*    and with default value of "false" 
 
 model Objective {
   id Int @id @default(autoincrement())
-  grade Int
+  grade Int?
   weight Int
-  title String @db.VarChar(500)
-  goal String @db.VarChar(1000)
-  result String @db.VarChar(1000)
-  clasification ObjectiveClasification @relation(fields: [objectiveClasificationID], references: [id])
-  objectiveClasificationID Int
+  title String 
+  goal String?
+  result String? 
+  classification ObjectiveClassification @relation(fields: [objectiveClassificationID], references: [id])
+  objectiveClassificationID Int
   form Form @relation(fields: [formID], references: [id])
   formID Int
   comments Comment[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("Objectives")
 }
 
-model ObjectiveClasification {
+model ObjectiveClassification {
   id Int @id @default(autoincrement())
-  weight Int
-  clasificationTitle Clasification @relation(fields: [clasificationID], references: [id])
-  clasificationID Int
+  weight Int?
+  classificationTitle Classification @relation(fields: [classificationID], references: [id])
+  classificationID Int
   objectives Objective[] //one-to-many
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
-  @@map("ObjectiveClasifications")
+  @@map("ObjectiveClassifications")
 }
 
-model Clasification {
+model Classification {
   id Int @id @default(autoincrement())
-  title String @db.VarChar(255)
-  objectiveClasifications ObjectiveClasification[]
+  title String @unique 
+  objectiveClassifications ObjectiveClassification[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
-  @@map("Clasifications")
+  @@map("Classifications")
 }
 
 model Comment {
   id Int @id @default(autoincrement())
-  description String @db.VarChar(500)
-  commentedAt DateTime
+  description String 
+  commentedAt DateTime?
   objective Objective @relation(fields: [objectiveID], references: [id])
   objectiveID Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("Comments")
 }
 
 model Form {
   id Int @id @default(autoincrement())
-  aprovedAt DateTime
-  gradedAt DateTime
+  approvedAt DateTime?
+  gradedAt DateTime?
   collaborator User @relation("WrittenForms", fields: [collaboratorID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   collaboratorID Int
   evaluator User @relation("EvaluatedForms", fields: [evaluatorID], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -90,85 +86,96 @@ model Form {
   progressID Int
   objectives Objective[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("Forms")
 }
 
 model Progress {
   id Int @id @default(autoincrement())
-  title String @db.VarChar(255)
+  title String @unique 
   forms Form[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("Progresses")
 }
 
 model User {
   id Int @id @default(autoincrement())
-  employeeNumber Int @unique
-  fullName String @db.VarChar(255)
-  email String @db.VarChar(255)
-  jobPosition String @db.VarChar(255)
-  positionSeniority Int
-  companySeniority Int
-  companyContribution String @db.VarChar(1000)
-  boss User? @relation("BossOf", fields: [bossID], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  bossID Int @unique
-  collaborator User? @relation("BossOf")
-  role Role @relation(fields: [roleID], references: [id])
-  roleID Int
-  businessUnit BusinessUnit @relation(fields: [businessUnitID], references: [id])
-  businessUnitID Int
-  area Area @relation(fields: [areaID], references: [id])
-  areaID Int
+  employeeNumber Int? @unique
+  fullName String? 
+  email String? 
+  jobPosition String? 
+  positionSeniority Int?
+  companySeniority Int?
+  companyContribution String?
+  boss User? @relation("SubordinateOf", fields: [bossID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bossID Int?
+  role Role? @relation(fields: [roleID], references: [id])
+  roleID Int?
+  businessUnit BusinessUnit? @relation(fields: [businessUnitID], references: [id])
+  businessUnitID Int?
+  area Area? @relation(fields: [areaID], references: [id])
+  areaID Int?
+  collaborators User[] @relation("SubordinateOf")
   writtenForms Form[] @relation("WrittenForms")
   evaluatedForms Form[] @relation("EvaluatedForms")
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("Users")
 }
 
 model Role {
   id Int @id @default(autoincrement())
-  title String @db.VarChar(255)
+  title String @unique 
   users User[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("Roles")
 }
 
 model Division {
   id Int @id @default(autoincrement())
-  title String @db.VarChar(255)
+  title String @unique 
   businessUnits BusinessUnit[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("Divisions")
 }
 
 model BusinessUnit {
   id Int @id @default(autoincrement())
-  title String @db.VarChar(255)
+  title String @unique 
   division Division @relation(fields: [divisionID], references: [id])
   divisionID Int
   users User[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("BusinessUnits")
 }
 
 model Area {
   id Int @id @default(autoincrement())
-  title String @db.VarChar(255)
+  title String @unique 
   users User[]
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
   @@map("Areas")
+}
+
+model Period {
+  id Int @id @default(autoincrement())
+  startsAt DateTime
+  endsAt DateTime
+  isCurrent Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Periods")
 }
