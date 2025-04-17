@@ -1,12 +1,12 @@
-import { prisma } from '../../../../lib/prisma';
+import { prisma } from '@/lib/prisma';
 import type { ObjectiveClassification } from '@prisma/client';
 
 export async function createObjectiveClassification(data: ObjectiveClassification) {
   try {
-    const objectiveClassification = await prisma.objectiveClassification.create({
-      data,
+    await prisma.objectiveClassification.create({
+      data : data,
     });
-    return objectiveClassification;
+    return "Clasification with weight has been created for objective";
   } catch (error) {
     throw new Error('Failed to create objective classification');
   }

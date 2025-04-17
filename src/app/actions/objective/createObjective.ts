@@ -1,4 +1,4 @@
-import { prisma } from '../../../../lib/prisma';
+import { prisma } from '@/lib/prisma';
 import type { Objective } from '@prisma/client';
 
 export async function createObjective(data: Objective) {
@@ -8,20 +8,16 @@ export async function createObjective(data: Objective) {
   }
 
   try {
-    const objective = await prisma.objective.create({
-      data,
-    });
-
     await prisma.form.update({
       where: { id: data.formID },
       data: {
         objectives: {
-          connect: { id: objective.id }
+          create: data
         }
       }
     });
 
-    return objective;
+    return "Objective has been created for form";
   } catch (error) {
     throw new Error('Failed to create objective');
   }
