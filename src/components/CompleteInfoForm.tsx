@@ -48,25 +48,25 @@ import { format } from "date-fns";
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
 
-//! new
+//* Types
 import { TypeDivision } from "@/types/TypeDivision";
 import { TypeArea } from "@/types/TypeArea";
 import { TypeBusinessUnit } from "@/types/TypeBusinessUnit";
+import { TypeUser } from "@/types/TypeUser";
 
-//* prop interface
+//* Interface
 interface CompleteInfoFormProps {
     divisions : TypeDivision[],
     areas : TypeArea[],
-    businessUnits : TypeBusinessUnit[]
+    businessUnits : TypeBusinessUnit[],
+    bosses : TypeUser[]
 }
+
+//* Action
+import { createUserAction } from "@/app/actions/user/createUser";
+
                                 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
-export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteInfoFormProps ) {
-  
-    const bosses = [
-        { id: "1", name: "Juan Pérez" },
-        { id: "2", name: "María González" },
-        { id: "3", name: "Carlos Rodríguez" }
-    ];
+export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : CompleteInfoFormProps ) {
 
     const form = useForm<z.infer<typeof completeInfoSchema>>({
         resolver: zodResolver(completeInfoSchema),
@@ -85,13 +85,25 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
         }
     });
 
-    function onSubmit(data: z.infer<typeof completeInfoSchema>) {
-        console.log(data);
-    }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form 
+                action={async (formData) => {
+                    //! This literally regrabs the values of the form and sends it to the action
+                    const values = form.getValues();
+                    const data = new FormData();
+
+                    Object.entries(values).forEach(([key, value]) => {
+                        if (value) {
+                            data.append(key, value);
+                        }
+                    });
+
+                    await createUserAction(data);
+                }}
+                className="space-y-4"
+            >
                 <div className="flex flex-row items-start justify-between mb-4 gap-12">
                     <div className="flex flex-col gap-6 mb-4 w-1/3">
                         <FormField
@@ -132,7 +144,8 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                 <FormItem>
                                     <FormLabel>División</FormLabel>
                                     <Select 
-                                        onValueChange={field.onChange} 
+                                        onValueChange={field.onChange}
+                                        value={field.value}
                                         defaultValue={field.value}
                                     >
                                         <FormControl>
@@ -142,7 +155,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                         </FormControl>
                                         <SelectContent>
                                             {divisions.map((division ) => (
-                                                <SelectItem key={division.id} value={division.title}>
+                                                <SelectItem key={division.id} value={String(division.id)}>
                                                     {division.title}
                                                 </SelectItem>
                                             ))}
@@ -157,46 +170,51 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                             name="companySeniority"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Antigüedad en la Empresa</FormLabel>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    variant="outline"
-                                                    className={cn(
-                                                        "w-full pl-3 text-left font-normal bg-gray-50 py-3 px-5 border-gray-400 h-12 text-xs","focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[1px]",
-                                                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-                                                        !field.value && "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    {field.value ? (
-                                                        format(new Date(field.value), "dd/MM/yyyy")
-                                                    ) : (
-                                                        <span>Selecciona una fecha</span>
-                                                    )}
-                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0" align="start">
-                                            <Calendar
-                                                mode="single"
-                                                selected={field.value ? new Date(field.value) : undefined}
-                                                onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
-                                                disabled={(date) =>
-                                                    date > new Date() || date < new Date("1900-01-01")
-                                                }
-                                                initialFocus
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                    <FormDescription>
-                                        Selecciona la fecha de inicio en la empresa
-                                    </FormDescription>
-                                    <FormMessage />
+                                <FormLabel>Antigüedad en la Empresa</FormLabel>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button
+                                        variant="outline"
+                                        className={cn(
+                                            "w-full pl-3 text-left font-normal bg-gray-50 py-3 px-5 border-gray-400 h-12 text-xs",
+                                            "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[1px]",
+                                            "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                                            !field.value && "text-muted-foreground"
+                                        )}
+                                        >
+                                        {field.value ? (
+                                            format(new Date(field.value), "dd/MM/yyyy")
+                                        ) : (
+                                            <span>Selecciona una fecha</span>
+                                        )}
+                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </FormControl>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value ? new Date(field.value) : undefined}
+                                        onSelect={(date) => {
+                                        if (date) {
+                                            field.onChange(date.toISOString());
+                                        }
+                                        }}
+                                        disabled={(date) =>
+                                        date > new Date() || date < new Date("1900-01-01")
+                                        }
+                                        initialFocus
+                                    />
+                                    </PopoverContent>
+                                </Popover>
+                                <FormDescription>
+                                    Selecciona la fecha de inicio en la empresa
+                                </FormDescription>
+                                <FormMessage />
                                 </FormItem>
                             )}
-                        />
+                            />
                         <FormField
                             control={form.control}
                             name="areaId"
@@ -204,7 +222,8 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                 <FormItem>
                                     <FormLabel>Área de Trabajo</FormLabel>
                                     <Select 
-                                        onValueChange={field.onChange} 
+                                        onValueChange={field.onChange}
+                                        value={field.value}
                                         defaultValue={field.value}
                                     >
                                         <FormControl>
@@ -214,7 +233,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                         </FormControl>
                                         <SelectContent>
                                             {areas.map((area) => (
-                                                <SelectItem key={area.id} value={area.title}>
+                                                <SelectItem key={area.id} value={String(area.id)}>
                                                     {area.title}
                                                 </SelectItem>
                                             ))}
@@ -252,6 +271,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                     <FormLabel>Jefe Directo</FormLabel>
                                     <Select 
                                         onValueChange={field.onChange} 
+                                        value={field.value}
                                         defaultValue={field.value}
                                     >
                                         <FormControl>
@@ -261,8 +281,8 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                         </FormControl>
                                         <SelectContent>
                                             {bosses.map((boss) => (
-                                                <SelectItem key={boss.id} value={boss.id}>
-                                                    {boss.name}
+                                                <SelectItem key={boss.id} value={String(boss.id)}>
+                                                    {boss.fullName}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
@@ -279,6 +299,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                     <FormLabel>Unidad de Negocio</FormLabel>
                                     <Select 
                                         onValueChange={field.onChange} 
+                                        value={field.value} 
                                         defaultValue={field.value}
                                     >
                                         <FormControl>
@@ -288,7 +309,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                         </FormControl>
                                         <SelectContent>
                                             {businessUnits.map((bu) => (
-                                                <SelectItem key={bu.id} value={bu.title}>
+                                                <SelectItem key={bu.id} value={String(bu.id)}>
                                                     {bu.title}
                                                 </SelectItem>
                                             ))}
@@ -328,7 +349,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                             <Calendar
                                                 mode="single"
                                                 selected={field.value ? new Date(field.value) : undefined}
-                                                onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
+                                                onSelect={(date) => field.onChange(date?.toISOString() ?? "")}
                                                 disabled={(date) =>
                                                     date > new Date() || date < new Date("1900-01-01")
                                                 }
@@ -380,7 +401,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                 </div>
 
                 <div className="flex justify-end">
-                    <Button type="submit">Guardar Información</Button>
+                    <Button type="submit" onClick={() => console.log(form.getValues())}>Guardar Información</Button>
                 </div>
             </form>
         </Form>

@@ -4,11 +4,26 @@ import { TypeUser } from "@/types/TypeUser";
 export async function getAllBosses() {
     try {
         const bosses = await prisma.user.findMany({
-            where: { 
-                role: {
-                    title: "Jefe Directo"
-                },
-                deactived : false }
+            where: {
+                OR:[
+                    {
+                        roleID : 2,
+                        deactived : false 
+                    },
+                    {
+                        roleID : 4,
+                        deactived : false 
+                    },
+                    {
+                            roleID : 6,
+                        deactived : false 
+                    },
+                    {
+                        roleID : 7,
+                        deactived : false 
+                    }
+                ]
+            }
         });
 
         if (bosses.length === 0) {
