@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { TypeArea } from "@/types/TypeArea";
 
 export async function getAllAreas() {
     try {
@@ -14,7 +15,7 @@ export async function getAllAreas() {
         return areas.map(({ deactived, updatedAt, ...a }) => ({ //! will be omiting updatedAt and deactived
             ...a,
             createdAt: a.createdAt.toISOString() //* into ISO format
-        }));
+        })) as TypeArea[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

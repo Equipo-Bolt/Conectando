@@ -48,16 +48,20 @@ import { format } from "date-fns";
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
 
-export function CompleteInfoForm() {
-    // Mock data for selects - replace with actual data in production
-    const divisions = ["Corporativo", "Operaciones", "Comercial", "TI"];
-    const businessUnits = ["Matriz", "Sucursal Norte", "Sucursal Sur", "Desarrollo"];
-    const areas = [
-        { id: "1", name: "Recursos Humanos" },
-        { id: "2", name: "Finanzas" },
-        { id: "3", name: "Desarrollo de Software" },
-        { id: "4", name: "Marketing" }
-    ];
+//! new
+import { TypeDivision } from "@/types/TypeDivision";
+import { TypeArea } from "@/types/TypeArea";
+import { TypeBusinessUnit } from "@/types/TypeBusinessUnit";
+
+//* prop interface
+interface CompleteInfoFormProps {
+    divisions : TypeDivision[],
+    areas : TypeArea[],
+    businessUnits : TypeBusinessUnit[]
+}
+                                //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
+export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteInfoFormProps ) {
+  
     const bosses = [
         { id: "1", name: "Juan Pérez" },
         { id: "2", name: "María González" },
@@ -137,9 +141,9 @@ export function CompleteInfoForm() {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {divisions.map((division) => (
-                                                <SelectItem key={division} value={division}>
-                                                    {division}
+                                            {divisions.map((division ) => (
+                                                <SelectItem key={division.id} value={division.title}>
+                                                    {division.title}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
@@ -210,8 +214,8 @@ export function CompleteInfoForm() {
                                         </FormControl>
                                         <SelectContent>
                                             {areas.map((area) => (
-                                                <SelectItem key={area.id} value={area.id}>
-                                                    {area.name}
+                                                <SelectItem key={area.id} value={area.title}>
+                                                    {area.title}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>
@@ -283,9 +287,9 @@ export function CompleteInfoForm() {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {businessUnits.map((unit, index) => (
-                                                <SelectItem key={index} value={(index + 1).toString()}>
-                                                    {unit}
+                                            {businessUnits.map((bu) => (
+                                                <SelectItem key={bu.id} value={bu.title}>
+                                                    {bu.title}
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>

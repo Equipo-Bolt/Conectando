@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { TypeDivision } from "@/types/TypeDivision";
 
 export async function getAllDivisions() {
     try {
@@ -13,7 +14,7 @@ export async function getAllDivisions() {
         return divisions.map(({ deactived, updatedAt, ...d }) => ({
             ...d,
             createdAt: d.createdAt.toISOString()
-        }));
+        })) as TypeDivision[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }
