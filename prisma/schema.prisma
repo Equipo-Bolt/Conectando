@@ -107,8 +107,8 @@ model User {
   fullName String? 
   email String? 
   jobPosition String? 
-  positionSeniority Int?
-  companySeniority Int?
+  positionSeniority DateTime?
+  companySeniority DateTime?
   companyContribution String?
   boss User? @relation("SubordinateOf", fields: [bossID], references: [id], onDelete: NoAction, onUpdate: NoAction)
   bossID Int?

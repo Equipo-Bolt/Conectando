@@ -10,9 +10,9 @@ export async function getAllRoles() {
             throw new Error ("There are no roles")
         }
 
-        return roles.map(({ deactived, updatedAt, ...p }) => ({
-            ...p,
-            createdAt: p.createdAt.toISOString()
+        return roles.map(({ deactived, updatedAt, ...r }) => ({
+            ...r,
+            createdAt: r.createdAt.toISOString()
         }));
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
