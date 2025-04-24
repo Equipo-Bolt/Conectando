@@ -12,7 +12,7 @@ export async function disableBusinessUnitAction(businessUnitId : number) {
         })
 
         return "Business Unit has been disabled";
-    } catch (error) {
+    } catch {
         throw new Error ("Failed to disable business unit")
     }
 }

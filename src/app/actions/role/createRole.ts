@@ -8,14 +8,24 @@ export async function createRoleAction(data : FormData) {
     }
 
     try {
+        const rolesExists = await prisma.role.findUnique({
+            where: { 
+                title : newTitle,
+            }
+        });
+    
+        if (rolesExists) {
+            throw new Error ("Role with same title already exists");
+        }
+
         await prisma.role.create({
             data: {
                 title: newTitle
             }
-        })
+        });
 
         return "Role created";
-    } catch (error) {
+    } catch {
         throw new Error ("Failed to create role");
     }
 }

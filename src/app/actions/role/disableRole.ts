@@ -9,10 +9,10 @@ export async function disableRoleAction(roleId : number) {
         await prisma.role.update({
             where: { id : roleId },
             data: { deactived : true }
-        })
+        });
 
         return "Role has been disabled";
-    } catch (error) {
-        throw new Error ("Failed to disable role")
+    } catch {
+        throw new Error ("Failed to disable role");
     }
 }

@@ -9,9 +9,10 @@ export async function disableAreaAction(areaId : number) {
         await prisma.area.update({
             where: { id : areaId },
             data: { deactived: true }
-        })
-        return "Area has been disabled"
-    } catch (error) {
-        throw new Error ("Failed to disable area")
+        });
+
+        return "Area has been disabled";
+    } catch {
+        throw new Error ("Failed to disable area");
     }
 }

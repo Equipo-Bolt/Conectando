@@ -8,14 +8,24 @@ export async function createClassificationAction(data : FormData) {
     }
 
     try {
+        const classificationsExists = await prisma.classification.findUnique({
+            where: { 
+                title : newTitle 
+            }
+        });
+    
+        if (classificationsExists) {
+            throw new Error ("Classification with same title already exists");
+        }
+
         await prisma.classification.create({
             data: {
                 title: newTitle
             }
-        })
+        });
 
         return "Classification created";
-    } catch (error) {
-        throw new Error ("Failed to create classification")
+    } catch {
+        throw new Error ("Failed to create classification");
     }
 }
