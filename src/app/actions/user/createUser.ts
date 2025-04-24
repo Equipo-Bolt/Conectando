@@ -2,10 +2,10 @@
 
 import { prisma } from '@/lib/prisma';
 
-//? This is not the final version of this Action, maybe add Interface
-//TODO BUT should adapt this function to work with swrMutation hook.
+//TODO Should use interface to create object and adapt this action to work with useActionState hook.
 export async function createUserAction(data: FormData) {
-  try {
+
+    //* Create object to later use interface
     const newUser = {
       employeeNumber: data.get("employeeNumber") ? Number(data.get("employeeNumber")) : null,
       fullName: data.get("fullName") as string || null,
@@ -19,7 +19,6 @@ export async function createUserAction(data: FormData) {
       areaID: data.get("areaId") ? Number(data.get("areaId")) : null
     };
 
-    //! RE-Re-revalidate fields, not allowing empties
     const missingFields = Object.entries(newUser)
       .filter(([_, value]) => value === null)
       .map(([key]) => key);
@@ -28,55 +27,55 @@ export async function createUserAction(data: FormData) {
       throw new Error(`The following fields are missing in the new user data: ${missingFields.join(', ')}`);
     }
 
-    const userExists = await prisma.user.findFirst({
-      where: {
-        OR: [
-          { employeeNumber : newUser.employeeNumber },
-          { email : newUser.email },
-        ]
-      }
-    })
-
-    if (userExists) {
-      throw new Error('User with the same employee number or email already exists');
-    }
-  
-    await prisma.user.create({
-      data: {
-      employeeNumber: newUser.employeeNumber,
-      fullName: newUser.fullName,
-      email: newUser.email,
-      jobPosition: newUser.jobPosition,
-      positionSeniority: newUser.positionSeniority,
-      companySeniority: newUser.companySeniority,
-      companyContribution: newUser.companyContribution,
-      ...(newUser.bossID !== null && {
-        boss: {
-          connect: {
-            id: newUser.bossID
-          }
-        }
-      }),
-      ...(newUser.businessUnitID !== null && {
-        businessUnit: {
-          connect: {
-            id: newUser.businessUnitID
-          }
-        }
-      }),
-      ...(newUser.areaID !== null && {
-        area: {
-          connect: {
-            id : newUser.areaID
-          }
+    try {
+      const userExists = await prisma.user.findFirst({
+        where: {
+          OR: [
+            { employeeNumber: newUser.employeeNumber },
+            { email: newUser.email },
+          ]
         }
       })
-      }
-    });
 
-    console.log("User Created")
-    return;
-  } catch (error) {
-    throw new Error(`Error: ${(error as Error).message}`);
-  }
+      if (userExists) {
+        throw new Error('User with the same employee number or email already exists');
+      }
+    
+      await prisma.user.create({
+        data: {
+          employeeNumber: newUser.employeeNumber,
+          fullName: newUser.fullName,
+          email: newUser.email,
+          jobPosition: newUser.jobPosition,
+          positionSeniority: newUser.positionSeniority,
+          companySeniority: newUser.companySeniority,
+          companyContribution: newUser.companyContribution,
+            ...(newUser.bossID !== null && {
+              boss: {
+                connect: {
+                  id: newUser.bossID
+                }
+              }
+            }),
+          ...(newUser.businessUnitID !== null && {
+            businessUnit: {
+              connect: {
+                id: newUser.businessUnitID
+              }
+            }
+          }),
+          ...(newUser.areaID !== null && {
+            area: {
+              connect: {
+                id : newUser.areaID
+              }
+            }
+          })
+        }
+      });
+
+      return "User Has been created";
+    } catch (error) {
+      throw new Error("Failed to create User");
+    }
 } 

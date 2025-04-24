@@ -105,7 +105,7 @@ model User {
   id Int @id @default(autoincrement())
   employeeNumber Int? @unique
   fullName String? 
-  email String? 
+  email String? @unique
   jobPosition String? 
   positionSeniority DateTime?
   companySeniority DateTime?

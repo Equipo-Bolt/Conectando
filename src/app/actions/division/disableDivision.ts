@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from '@/lib/prisma';
 
 export async function disableDivisionAction(divisionId : number) {
@@ -12,7 +14,7 @@ export async function disableDivisionAction(divisionId : number) {
         })
 
         return "Classification has been disabled";
-    } catch (error) {
+    } catch {
         throw new Error ("Failed to disable classification")
     }
 }

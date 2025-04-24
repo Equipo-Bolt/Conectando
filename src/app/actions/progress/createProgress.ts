@@ -1,24 +1,33 @@
-import { prisma } from '@/lib/prisma';
-import type { Progress } from '@prisma/client';
+"use server";
 
-export async function createProgress(data: Progress) {
-  try {
-    const progressExists = await prisma.progress.findFirst({
-      where: {
-        title: data.title 
-      }
-    });
+import { prisma } from "@/lib/prisma";
 
-    if (progressExists) {
-      throw new Error('Progress with the same title already exists');
+export async function createProgress(data: FormData) {
+    const newTitle = data.get("title") as string | null;
+
+    if (!newTitle) {
+        throw new Error("No title given to new progress");
     }
 
-    await prisma.progress.create({
-      data : data,
-    });
+    try {
+        const progressExists = await prisma.progress.findUnique({
+            where: { 
+                title : newTitle,
+            }
+        })
     
-    return "New progress has been registered";
-  } catch (error) {
-    throw new Error('Failed to create progress');
-  }
-} 
+        if (progressExists) {
+            throw new Error ("Progress with same title already exists");
+        }
+
+        await prisma.progress.create({
+            data: {
+                title: newTitle
+            }
+        })
+
+        return "Progress created";
+    } catch {
+        throw new Error("Failed to create progress");
+    }
+}

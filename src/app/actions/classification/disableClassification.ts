@@ -12,7 +12,7 @@ export async function disableClassificationAction(classificationId : number) {
         })
 
         return "Classification has been disabled";
-    } catch (error) {
+    } catch {
         throw new Error ("Failed to disable classification")
     }
 }

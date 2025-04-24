@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from '@/lib/prisma';
 
 export async function disablePeriodAction(periodId : number) {
@@ -9,10 +11,10 @@ export async function disablePeriodAction(periodId : number) {
         await prisma.period.update({
             where: { id : periodId },
             data: { deactived : true }
-        })
+        });
 
         return "Period has been disabled";
-    } catch (error) {
-        throw new Error ("Failed to disable period")
+    } catch {
+        throw new Error ("Failed to disable period");
     }
 }
