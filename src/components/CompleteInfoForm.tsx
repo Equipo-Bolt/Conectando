@@ -89,19 +89,25 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
     return (
         <Form {...form}>
             <form 
-                action={async (formData) => {
-                    //! This literally regrabs the values of the form and sends it to the action
-                    const values = form.getValues();
-                    const data = new FormData();
-
-                    Object.entries(values).forEach(([key, value]) => {
-                        if (value) {
-                            data.append(key, value);
-                        }
-                    });
-
-                    await createUserAction(data);
-                }}
+                onSubmit = {
+                    /**
+                     * ? Francisco Note: I am doing this because there was an issue receiving data to action
+                     * ? so my solution was creating an object of FormData to assure all data is included, 
+                     * ? but why do this if front could create instead an object of TypeUser here
+                     * ! TLDR: Created FormData object in Front to send to Back, maybe create TypeUser instead
+                    */
+                    form.handleSubmit(async (values) => {
+                        const data = new FormData();
+                    
+                        Object.entries(values).forEach(([key, value]) => {
+                            if (value !== undefined && value !== null) {
+                                data.append(key, value);
+                            }
+                        });
+                    
+                        await createUserAction(data);
+                    })
+                }
                 className="space-y-4"
             >
                 <div className="flex flex-row items-start justify-between mb-4 gap-12">
