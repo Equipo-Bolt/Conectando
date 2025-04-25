@@ -10,12 +10,15 @@ import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessU
 import { TypeDivision } from "@/types/TypeDivision";
 import { TypeArea } from "@/types/TypeArea";
 import { TypeBusinessUnit } from "@/types/TypeBusinessUnit";
+import { TypeUser } from "@/types/TypeUser";
+import { getAllBosses } from "@/lib/fetches/user/boss/getAllBosses";
 //! Changed page into async function page
 async function Page() {
     //* load data from page, which is a server component
     const divisions : TypeDivision[] = await getAllDivisions(); 
     const areas : TypeArea[] = await getAllAreas();
     const bus : TypeBusinessUnit[] = await getAllBusinessUnits();
+    const bosses : TypeUser[] = await getAllBosses();
 
     return (
         <div className="p-[3rem] h-screen">
@@ -25,6 +28,7 @@ async function Page() {
                     divisions = { divisions }
                     areas = { areas }
                     businessUnits = { bus }
+                    bosses = { bosses }
                 />
             </div>
         </div>

@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from '@/lib/prisma'; //! Changed path to use @ shortcut
 import type { Comment } from '@prisma/client';
 //! Cannot use type of prisma because it forces frontend to know or access

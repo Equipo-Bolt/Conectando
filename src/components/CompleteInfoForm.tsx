@@ -47,25 +47,25 @@ import { format } from "date-fns";
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
 
-//! new
+//* Types
 import { TypeDivision } from "@/types/TypeDivision";
 import { TypeArea } from "@/types/TypeArea";
 import { TypeBusinessUnit } from "@/types/TypeBusinessUnit";
+import { TypeUser } from "@/types/TypeUser";
 
-//* prop interface
+//* Interface
 interface CompleteInfoFormProps {
     divisions : TypeDivision[],
     areas : TypeArea[],
-    businessUnits : TypeBusinessUnit[]
+    businessUnits : TypeBusinessUnit[],
+    bosses : TypeUser[]
 }
-//! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
-export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteInfoFormProps ) {
-  
-    const bosses = [
-        { id: "1", name: "Juan Pérez" },
-        { id: "2", name: "María González" },
-        { id: "3", name: "Carlos Rodríguez" }
-    ];
+
+//* Action
+import { createUserAction } from "@/app/actions/user/createUser";
+
+                                //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
+export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : CompleteInfoFormProps ) {
 
     const form = useForm<z.infer<typeof completeInfoSchema>>({
         resolver: zodResolver(completeInfoSchema),
@@ -84,15 +84,35 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
         }
     });
 
-    function onSubmit(data: z.infer<typeof completeInfoSchema>) {
-        console.log("Form submitted:");
-        console.log(data);
-    }
 
     return (
         <Form {...form}>
-            <div className="flex flex-col gap-8">
-                <form onSubmit={form.handleSubmit(onSubmit)}>
+                <form 
+                    onSubmit = {
+                        /**
+                         * ? Francisco Note: I am doing this because there was an issue receiving data to action
+                         * ? so my solution was creating an object of FormData to assure all data is included, 
+                         * ? but why do this if front could create instead an object of TypeUser here
+                         * ! TLDR: Created FormData object in Front to send to Back, maybe create TypeUser instead
+                        */
+                        form.handleSubmit(async (values) => {
+                            const data = new FormData();
+                        
+                            Object.entries(values).forEach(([key, value]) => {
+                                if (value !== undefined && value !== null) {
+                                    data.append(key, value);
+                                }
+                            });
+                            
+                            console.log("Form values JSON:", JSON.stringify(values));
+
+                            console.log("Creating...")
+                            await createUserAction(data);
+                            console.log("Created!")
+                        })
+                    }
+                    className="space-y-4 flex flex-col gap-8"
+                >
                     <div className="flex flex-row items-start justify-between gap-[6rem]">
                         <div className="flex flex-col gap-4 w-1/3  justify-between">
                             <FormField
@@ -134,6 +154,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                         <FormLabel>División<p className="text-gemso-red"> *</p></FormLabel>
                                         <Select 
                                             onValueChange={field.onChange} 
+                                            value={field.value}
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
@@ -143,7 +164,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                             </FormControl>
                                             <SelectContent>
                                                 {divisions.map((division ) => (
-                                                    <SelectItem key={division.id} value={division.title}>
+                                                    <SelectItem key={division.id} value={String(division.id)}>
                                                         {division.title}
                                                     </SelectItem>
                                                 ))}
@@ -161,6 +182,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                         <FormLabel>Área de Trabajo<p className="text-gemso-red"> *</p></FormLabel>
                                         <Select 
                                             onValueChange={field.onChange} 
+                                            value={field.value}
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
@@ -170,7 +192,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                             </FormControl>
                                             <SelectContent>
                                                 {areas.map((area) => (
-                                                    <SelectItem key={area.id} value={area.title}>
+                                                    <SelectItem key={area.id} value={String(area.id)}>
                                                         {area.title}
                                                     </SelectItem>
                                                 ))}
@@ -223,7 +245,8 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                     <FormItem>
                                         <FormLabel>Jefe Directo<p className="text-gemso-red"> *</p></FormLabel>
                                         <Select 
-                                            onValueChange={field.onChange} 
+                                            onValueChange={field.onChange}
+                                            value={field.value} 
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
@@ -233,8 +256,8 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                             </FormControl>
                                             <SelectContent>
                                                 {bosses.map((boss) => (
-                                                    <SelectItem key={boss.id} value={boss.id}>
-                                                        {boss.name}
+                                                    <SelectItem key={boss.id} value={String(boss.id)}>
+                                                        {boss.fullName}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -250,7 +273,8 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                     <FormItem>
                                         <FormLabel>Unidad de Negocio<p className="text-gemso-red"> *</p></FormLabel>
                                         <Select 
-                                            onValueChange={field.onChange} 
+                                            onValueChange={field.onChange}
+                                            value={field.value} 
                                             defaultValue={field.value}
                                         >
                                             <FormControl>
@@ -260,7 +284,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                             </FormControl>
                                             <SelectContent>
                                                 {businessUnits.map((bu) => (
-                                                    <SelectItem key={bu.id} value={bu.title}>
+                                                    <SelectItem key={bu.id} value={String(bu.id)}>
                                                         {bu.title}
                                                     </SelectItem>
                                                 ))}
@@ -302,7 +326,11 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                                 <Calendar
                                                     mode="single"
                                                     selected={field.value ? new Date(field.value) : undefined}
-                                                    onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
+                                                    onSelect={(date) => {
+                                                        if (date) { 
+                                                            field.onChange(date.toISOString());
+                                                        }
+                                                    }}
                                                     disabled={(date) =>
                                                         date > new Date() || date < new Date("1900-01-01")
                                                     }
@@ -343,7 +371,11 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                                 <Calendar
                                                     mode="single"
                                                     selected={field.value ? new Date(field.value) : undefined}
-                                                    onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
+                                                    onSelect={(date) => {
+                                                        if (date) { 
+                                                            field.onChange(date.toISOString());
+                                                        }
+                                                    }}
                                                     disabled={(date) =>
                                                         date > new Date() || date < new Date("1900-01-01")
                                                     }
@@ -376,12 +408,11 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
 
                         </div>
                     </div>
+                    
+                    <div className="flex flex-row justify-end w-full">
+                        <Button type="submit" className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-lg hover:bg-gemso-blue/90" onClick={() => console.log(form.getValues())}>Aceptar</Button>
+                    </div>
                 </form>
-                
-                <div className="flex flex-row justify-end w-full">
-                    <Button type="submit" className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-lg hover:bg-gemso-blue/90">Aceptar</Button>
-                </div>
-            </div>
         </Form>
     );
 }

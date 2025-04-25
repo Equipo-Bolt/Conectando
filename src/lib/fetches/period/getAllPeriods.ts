@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { TypePeriod } from "@/types/TypePeriod";
 
 export async function getAllPeriods() {
     try {
@@ -10,12 +11,7 @@ export async function getAllPeriods() {
             throw new Error ("There are no periods")
         }
 
-        return periods.map(({ deactived, updatedAt, ...p }) => ({
-            ...p,
-            startsAt: p.startsAt.toISOString(),
-            endsAt: p.endsAt.toISOString(),
-            createdAt: p.createdAt.toISOString()
-        }));
+        return periods as TypePeriod[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

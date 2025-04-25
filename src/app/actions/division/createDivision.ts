@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from '@/lib/prisma';
 
 export async function createDivisionAction(data : FormData) {
@@ -8,14 +10,24 @@ export async function createDivisionAction(data : FormData) {
     }
 
     try {
+        const divisionsExists = await prisma.division.findUnique({
+            where: { 
+                title : newTitle 
+            }
+        });
+    
+        if (divisionsExists) {
+            throw new Error ("Division with same title already exists");
+        }
+
         await prisma.division.create({
             data: {
                 title: newTitle
             }
-        })
+        });
 
         return "Division created";
-    } catch (error) {
+    } catch {
         throw new Error ("Failed to create division")
     }
 }

@@ -1,8 +1,10 @@
+"use server";
+
 import { prisma } from '@/lib/prisma';
 
 export async function updateDivisionAction(divisionId : number, data : FormData) {
     if (!divisionId){
-        throw new Error ("No id given to disable division");
+        throw new Error ("No id given to division");
     }
 
     const newTitle = data.get("title") as string | null;
@@ -11,22 +13,27 @@ export async function updateDivisionAction(divisionId : number, data : FormData)
         throw new Error ("No title given to division");
     }
 
-    const divisionsExists = await prisma.division.findUnique({
-        where: { title : newTitle }
-    })
-
-    if (divisionsExists) {
-        throw new Error ("Division with same title already exists");
-    }
-
     try {
+        const divisionsExists = await prisma.division.findUnique({
+            where: { 
+                NOT: {
+                    id: divisionId
+                },
+                title : newTitle 
+            }
+        });
+
+        if (divisionsExists) {
+            throw new Error ("Division with same title already exists");
+        }
+
         await prisma.division.update({
             where: { id : divisionId },
             data: { title: newTitle }
-        })
+        });
 
         return "Division has been updated";
-    } catch (error) {
+    } catch {
         throw new Error ("Failed to update division");
     }
 }
