@@ -84,8 +84,8 @@ async function main() {
       fullName: "Daniel Fernández",
       email: "daniel@gmail.com",
       jobPosition: "Manager de Software",
-      positionSeniority: 12,
-      companySeniority: 36,
+      positionSeniority: new Date("2025-04-20"),
+      companySeniority: new Date("2025-02-01"),
       companyContribution: "Mi puesto como manager de software " +
         "contribuye a la empresa en lograr estar siempre " +
         "actualizados en ámbitos tecnológicos.",
@@ -110,8 +110,8 @@ async function main() {
       fullName: "Daniel Fernández",
       email: "daniel@gmail.com",
       jobPosition: "Manager de Software",
-      positionSeniority: 12,
-      companySeniority: 36,
+      positionSeniority: new Date("2025-04-20"),
+      companySeniority: new Date("2025-02-01"),
       companyContribution: "Mi puesto como manager de software " +
         "contribuye a la empresa en lograr estar siempre " +
         "actualizados en ámbitos tecnológicos.",
@@ -147,8 +147,8 @@ async function main() {
       fullName: "Andrés Sandoval Ibarra",
       email: "andres@gmail.com",
       jobPosition: "Coordinado de Puesto TI",
-      positionSeniority: 1,
-      companySeniority: 1,
+      positionSeniority: new Date("2025-04-20"),
+      companySeniority: new Date("2025-02-01"),
       companyContribution: "",
       boss: { //* Boss of Andres (daniel)
         connect: {
@@ -176,8 +176,8 @@ async function main() {
       fullName: "Andrés Sandoval Ibarra",
       email: "andres@gmail.com",
       jobPosition: "Coordinador de Puesto TI",
-      positionSeniority: 1,
-      companySeniority: 1,
+      positionSeniority: new Date("2025-04-20"),
+      companySeniority: new Date("2025-02-01"),
       companyContribution: "",
       boss: {
         connect: {
