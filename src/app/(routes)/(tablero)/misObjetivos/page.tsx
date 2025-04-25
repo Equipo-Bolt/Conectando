@@ -19,9 +19,9 @@ export default function Page() {
   }
 
   return (
-    <>
+    <div>
       <h1 className="text-4xl font-bold mb-1.5">Mis Objetivos</h1>
       {content}
-    </>
+    </div>
   );
 }
