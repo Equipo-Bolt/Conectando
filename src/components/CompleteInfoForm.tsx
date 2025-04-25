@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -59,7 +58,7 @@ interface CompleteInfoFormProps {
     areas : TypeArea[],
     businessUnits : TypeBusinessUnit[]
 }
-                                //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
+//! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteInfoFormProps ) {
   
     const bosses = [
@@ -86,20 +85,21 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
     });
 
     function onSubmit(data: z.infer<typeof completeInfoSchema>) {
+        console.log("Form submitted:");
         console.log(data);
     }
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <div className="flex flex-row items-start justify-between mb-4 gap-12">
-                    <div className="flex flex-col gap-6 mb-4 w-1/3">
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="flex flex-row items-start justify-between gap-[6rem]">
+                    <div className="flex flex-col gap-4 w-1/3  justify-between">
                         <FormField
                             control={form.control}
                             name="employeeNumber"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Número de Empleado</FormLabel>
+                                    <FormLabel>Número de Empleado<p className="text-gemso-red"> *</p></FormLabel>
                                     <FormControl>
                                         <Input 
                                             placeholder="Escribe tu número de empleado" 
@@ -117,7 +117,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                             name="fullName"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nombre Completo</FormLabel>
+                                    <FormLabel>Nombre Completo<p className="text-gemso-red"> *</p></FormLabel>
                                     <FormControl>
                                         <Input placeholder="Escribe tu nombre completo" {...field} />
                                     </FormControl>
@@ -130,7 +130,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                             name="division"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>División</FormLabel>
+                                    <FormLabel>División<p className="text-gemso-red"> *</p></FormLabel>
                                     <Select 
                                         onValueChange={field.onChange} 
                                         defaultValue={field.value}
@@ -154,55 +154,10 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                         />
                         <FormField
                             control={form.control}
-                            name="companySeniority"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-col">
-                                    <FormLabel>Antigüedad en la Empresa</FormLabel>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    variant="outline"
-                                                    className={cn(
-                                                        "w-full pl-3 text-left font-normal bg-gray-50 py-3 px-5 border-gray-400 h-12 text-xs","focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[1px]",
-                                                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-                                                        !field.value && "text-muted-foreground"
-                                                    )}
-                                                >
-                                                    {field.value ? (
-                                                        format(new Date(field.value), "dd/MM/yyyy")
-                                                    ) : (
-                                                        <span>Selecciona una fecha</span>
-                                                    )}
-                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0" align="start">
-                                            <Calendar
-                                                mode="single"
-                                                selected={field.value ? new Date(field.value) : undefined}
-                                                onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
-                                                disabled={(date) =>
-                                                    date > new Date() || date < new Date("1900-01-01")
-                                                }
-                                                initialFocus
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                    <FormDescription>
-                                        Selecciona la fecha de inicio en la empresa
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
                             name="areaId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Área de Trabajo</FormLabel>
+                                    <FormLabel>Área de Trabajo<p className="text-gemso-red"> *</p></FormLabel>
                                     <Select 
                                         onValueChange={field.onChange} 
                                         defaultValue={field.value}
@@ -224,15 +179,56 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                 </FormItem>
                             )}
                         />
+                        
+                        <FormField
+                            control={form.control}
+                            name="companySeniority"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                    <FormLabel>Fecha de inicio en la Empresa<p className="text-gemso-red"> *</p></FormLabel>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    className={cn(
+                                                        "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-base focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
+                                                        !field.value && "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {field.value ? (
+                                                        format(new Date(field.value), "dd/MM/yyyy")
+                                                    ) : (
+                                                        <span>Selecciona una fecha</span>
+                                                    )}
+                                                    <CalendarIcon className="text-primary"/>
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={field.value ? new Date(field.value) : undefined}
+                                                onSelect={(date) => field.onChange(date ? date.toISOString() : "")}
+                                                disabled={(date) =>
+                                                    date > new Date() || date < new Date("1900-01-01")
+                                                }
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
 
-                    <div className="flex flex-col gap-6 mb-4 w-1/3">
+                    <div className="flex flex-col  gap-4 w-1/3  justify-between">
                         <FormField
                             control={form.control}
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Correo</FormLabel>
+                                    <FormLabel>Correo<p className="text-gemso-red"> *</p></FormLabel>
                                     <FormControl>
                                         <Input 
                                             type="email"
@@ -244,12 +240,27 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                 </FormItem>
                             )}
                         />
+                        
+                        <FormField
+                            control={form.control}
+                            name="position"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Puesto<p className="text-gemso-red"> *</p></FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Escribe el nombre de tu puesto" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                         <FormField
                             control={form.control}
                             name="bossId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Jefe Directo</FormLabel>
+                                    <FormLabel>Jefe Directo<p className="text-gemso-red"> *</p></FormLabel>
                                     <Select 
                                         onValueChange={field.onChange} 
                                         defaultValue={field.value}
@@ -276,7 +287,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                             name="businessUnitId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Unidad de Negocio</FormLabel>
+                                    <FormLabel>Unidad de Negocio<p className="text-gemso-red"> *</p></FormLabel>
                                     <Select 
                                         onValueChange={field.onChange} 
                                         defaultValue={field.value}
@@ -303,15 +314,14 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                             name="positionSeniority"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Antigüedad en el puesto</FormLabel>
+                                    <FormLabel>Fecha de inicio en el puesto<p className="text-gemso-red"> *</p></FormLabel>
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <FormControl>
                                                 <Button
                                                     variant="outline"
                                                     className={cn(
-                                                        "w-full pl-3 text-left font-normal bg-gray-50 py-3 px-5 border-gray-400 h-12 text-xs","focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[1px]",
-                                                        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+                                                        "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-base focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
                                                         !field.value && "text-muted-foreground"
                                                     )}
                                                 >
@@ -320,7 +330,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                                     ) : (
                                                         <span>Selecciona una fecha</span>
                                                     )}
-                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                                    <CalendarIcon className="text-primary"/>
                                                 </Button>
                                             </FormControl>
                                         </PopoverTrigger>
@@ -336,51 +346,34 @@ export function CompleteInfoForm({ divisions, areas, businessUnits } : CompleteI
                                             />
                                         </PopoverContent>
                                     </Popover>
-                                    <FormDescription>
-                                        Selecciona la fecha de inicio en tu puesto actual
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="position"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Puesto</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Escribe el nombre de tu puesto" {...field} />
-                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
 
-                    <div className="w-1/3">
+                    <div className="gap-4 w-1/3 h-[29rem] flex flex-col justify-between items-end">
                         <FormField
                             control={form.control}
                             name="companyContribution"
                             render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Contribución</FormLabel>
+                                <FormItem className="w-full">
+                                    <FormLabel>Contribución<p className="text-gemso-red"> *</p></FormLabel>
                                     <FormControl>
                                         <Textarea 
-                                            placeholder="Escribe cómo contribuye tu puesto a la estrategia de GEMSO" 
+                                            placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO" 
                                             {...field}
-                                            className="min-h-32" 
+                                            className="min-h-[9rem] max-h-[15rem] w-full resize-none"
                                         />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                    </div>
-                </div>
 
-                <div className="flex justify-end">
-                    <Button type="submit">Guardar Información</Button>
+                        <Button type="submit" className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-lg hover:bg-gemso-blue/90">Aceptar</Button>
+
+                    </div>
                 </div>
             </form>
         </Form>
