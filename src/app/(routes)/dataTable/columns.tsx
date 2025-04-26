@@ -1,29 +1,78 @@
 "use client"
 
-//! Esto es codigo de shadcn de prueba
-
 import { ColumnDef } from "@tanstack/react-table"
+import { DetailButton } from "@/components/DetailButton"
+import { DeleteButton } from "@/components/DeleteButton"
+import { DocumentTextIcon } from "@heroicons/react/24/solid";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
+//! Datos dentro de un Objetivo de un tabla de objetivos
+export type Objectives = {
+  id: number
+  objectiveTitle: string
+  //* goal es el icono que indica si la meta fue revisada o no
+  goal: "pending" | "done"
+  //* peso que tiene este objetivo dentro de la clasificacion
+  weight: number
+  //* calificacion que tiene este objetivo dentro de la clasificacion
+  score: number | null // Permitimos que score sea nulo cuando no tenga califiacacion
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Objectives>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "objective",
+    header: "Objetivo",
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    //* Este es el icono que indica si la meta fue declarada o no
+    accessorKey: "goal",
+    header: "Meta",
+    cell: ({ row }) => {
+      const goalStatus = row.original.goal;
+      return (
+        //! corregir esto
+        <div>
+          {goalStatus === "done" ? (
+            <DocumentTextIcon className="w-5 h-5 text-red-500 " />
+          ) : (
+            <DocumentTextIcon className="w-5 h-5 text-green-800" />
+          )}
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
+    //* Se agrega porcentaje al peso para que se vea mas chilo
+    accessorKey: "weight",
+    header: "Peso",
+    cell: ({ row }) => {
+      const weightValue = row.original.weight;
+      return <span>{weightValue}%</span>;
+    },
   },
-]
+  {
+    accessorKey: "score",
+    header: "Calificación",
+    cell: ({ row }) => {
+      const scoreValue = row.original.score;
+      //! este return esta comentado monas para ver el caso en el que no se tenga calificaicones
+      //! cambiar esto cuando se tenga datos reales de la DB
+      // return <span>{scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}</span>;
+      return "S/C"
+
+    },
+  },
+  {
+    //* Estos son los botones de opciones que se ven en la tabla
+    accessorKey: "options",
+    header: "Opciones",
+    cell: ({ row }) => {
+      const id = row.original.id
+      return (
+        <div className="flex items-center gap-2">
+          <DetailButton id={id} />
+          <DeleteButton id={id} />
+        </div>
+      )
+    },
+  },
+];
