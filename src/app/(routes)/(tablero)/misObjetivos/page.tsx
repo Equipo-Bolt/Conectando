@@ -1,8 +1,10 @@
 import Borrador from "../../../../components/Borrador";
-import EsperandoRevision from "../../../../components/EsperandoRevision";
+import EsperandoRevision from "@/components/EsperandoRevision";
+import IniciarPropuesta from "@/components/IniciarPropuesta";
 
-export default function Page() {
-  const state: "borrador" | "esperandoRevision" = "borrador";
+export default function MisObjetivosPage() {
+  const state: "IniciarPropuesta" | "borrador" | "esperandoRevision" =
+    "IniciarPropuesta"; // Cambia esto según el estado que desees mostrar
 
   let content;
 
@@ -13,6 +15,9 @@ export default function Page() {
     case "esperandoRevision":
       content = <EsperandoRevision />;
       break;
+    case "IniciarPropuesta":
+      content = <IniciarPropuesta />;
+      break;
     default:
       content = <p>No content available</p>;
       break;
@@ -20,8 +25,16 @@ export default function Page() {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-1.5">Mis Objetivos</h1>
+      {/* Título principal */}
+      <h1 className="text-3xl font-bold mb-2">Mis Objetivos</h1>
+      {/* Subtítulo con dos líneas: Colaborador y Estado */}
+      <p className="text-lg mb-4">
+        Colaborador: Cristian Peralta<br/>
+        Estado: <span className="text-blue-600">Sin iniciar</span>
+      </p>
       {content}
     </div>
+
   );
 }
+
