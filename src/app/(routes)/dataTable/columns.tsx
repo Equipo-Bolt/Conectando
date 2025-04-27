@@ -5,6 +5,8 @@ import { DetailButton } from "@/components/DetailButton"
 import { DeleteButton } from "@/components/DeleteButton"
 import { DocumentTextIcon } from "@heroicons/react/24/solid";
 
+//! Ese columns.tsx esta abierto a cambios para adaptar los datos que se necesitan de la DB
+
 //! Datos dentro de un Objetivo de un tabla de objetivos
 export type Objectives = {
   id: number
@@ -19,7 +21,7 @@ export type Objectives = {
 
 export const columns: ColumnDef<Objectives>[] = [
   {
-    accessorKey: "objective",
+    accessorKey: "objectiveTitle",
     header: "Objetivo",
   },
   {
@@ -68,7 +70,7 @@ export const columns: ColumnDef<Objectives>[] = [
     cell: ({ row }) => {
       const id = row.original.id
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-6">
           <DetailButton id={id} />
           <DeleteButton id={id} />
         </div>

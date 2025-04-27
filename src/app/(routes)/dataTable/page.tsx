@@ -1,3 +1,4 @@
+"use server";
 
 import { Objectives, columns } from "./columns"
 import { DataTable } from "./data-table"
@@ -16,5 +17,6 @@ export default async function Page() {
       <h1 className="text-2xl font-bold pb-5">Objetivos de Negocio/División</h1>
       <DataTable columns={columns} data={data} />
     </div>
+    
   )
 }
