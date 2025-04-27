@@ -5,7 +5,7 @@ export default function IniciarPropuesta() {
     return (
         <div>
           {/* Caja centrada con mensaje de bienvenida */}
-          <div className="shadow-md rounded-lg p-[1rem] text-center">
+          <div className="shadow-md rounded-lg p-[1rem] text-center w-3/4 mx-auto">
             <p className="mb-2">Bienvenido al nuevo inicio de año 2026.</p>
             <p>Para iniciar tu nueva propuesta de objetivo, presione el siguiente botón.</p>
           </div>

@@ -63,6 +63,8 @@ interface CompleteInfoFormProps {
 
 //* Action
 import { createUserAction } from "@/app/actions/user/createUser";
+import SubmitButton from "./SubmitButton";
+import CancelButton from "./CancelButton";
 
                                 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : CompleteInfoFormProps ) {
@@ -409,8 +411,11 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                         </div>
                     </div>
                     
-                    <div className="flex flex-row justify-end w-full">
-                        <Button type="submit" className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-lg hover:bg-gemso-blue/90" onClick={() => console.log(form.getValues())}>Aceptar</Button>
+                    <div className="grid grid-cols-3">
+                        <div className="col-start-3 col-end-4 w-full justify-around flex pl-[4rem]">
+                            <CancelButton route="/" text="Cancelar" />
+                            <SubmitButton onSubmit={() => console.log(form.getValues())} text="Aceptar" />
+                        </div>
                     </div>
                 </form>
         </Form>
