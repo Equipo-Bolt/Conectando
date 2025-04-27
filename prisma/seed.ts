@@ -278,6 +278,344 @@ async function main() {
       }
     }
   })
+
+  //* ObjectiveClassification
+  const objectiveClassificationDivision = await prisma.objectiveClassification.upsert({
+    where: { id: 1 },
+    update: {
+        weight: 70,
+        classificationTitle: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 70,
+        classificationTitle: {
+            connect: {
+                id: 1
+            }
+        }
+    }
+  })
+
+  const objectiveClassificationPerBusiness = await prisma.objectiveClassification.upsert({
+    where: { id: 2 },
+    update: {
+        weight: 70,
+        classificationTitle: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 10,
+        classificationTitle: {
+            connect: {
+                id: 2
+            }
+        }
+    }
+  })
+
+  const objectiveClassificationPeople = await prisma.objectiveClassification.upsert({
+    where: { id: 3 },
+    update: {
+        weight: 70,
+        classificationTitle: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 10,
+        classificationTitle: {
+            connect: {
+                id: 3
+            }
+        }
+    }
+  })
+
+  const objectiveClassificationDevelopment = await prisma.objectiveClassification.upsert({
+    where: { id: 4 },
+    update: {
+        weight: 70,
+        classificationTitle: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 10,
+        classificationTitle: {
+            connect: {
+                id: 4
+            }
+        }
+    }
+  })
+
+  //* Objectives
+  const objective1_1 = await prisma.objective.upsert({
+    where: { id: 1 },
+    update: {
+        weight: 20,
+        title: "Conseguir mejorar mi nivel de negocio",
+        classification: {
+            connect: {
+                id: 1
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create:  {
+        weight: 20,
+        title: "Conseguir mejorar mi nivel de negocio",
+        classification: {
+            connect: {
+                id: 1
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+  });
+
+  const objective1_2 = await prisma.objective.upsert({
+    where: { id: 2 },
+    update: {
+        weight: 20,
+        title: "Crear aportes clavo en el éxito del proyecto",
+        classification: {
+            connect: {
+                id: 1
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create:  {
+        weight: 20,
+        title: "Crear aportes clave en el éxito del proyecto",
+        classification: {
+            connect: {
+                id: 1
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+  });
+
+  const objective1_3 = await prisma.objective.upsert({
+    where: { id: 3 },
+    update: {
+        weight: 30,
+        title: "Conocer diferentes colaboradores",
+        classification: {
+            connect: {
+                id: 1
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create:  {
+        weight: 30,
+        title: "Conocer diferentes colaboradores",
+        classification: {
+            connect: {
+                id: 1
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+  });
+
+  const objective1_4 = await prisma.objective.upsert({
+    where: { id: 4 },
+    update: {
+        weight: 30,
+        title: "Diseñar un buen UI/UX",
+        classification: {
+            connect: {
+                id: 1
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create:  {
+        weight: 30,
+        title: "Diseñar un buen UI/UX",
+        classification: {
+            connect: {
+                id: 1
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+  });
+
+  const objective2_1 = await prisma.objective.upsert({
+    where: { id: 5 },
+    update: {
+        weight: 50,
+        title: "Optimización de Algoritmo",
+        classification: {
+            connect: {
+                id: 2
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 50,
+        title: "Optimización de Algoritmo",
+        classification: {
+            connect: {
+                id: 2
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+  });
+
+  const objective2_2 = await prisma.objective.upsert({
+    where: { id: 6 },
+    update: {
+        weight: 50,
+        title: "Mejora en el Programa Conectado",
+        classification: {
+            connect: {
+                id: 2
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 50,
+        title: "Mejora en el Programa Conectado",
+        classification: {
+            connect: {
+                id: 2
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+  });
+
+  const objective3_1 = await prisma.objective.upsert({
+    where: { id: 7 },
+    update: {
+        weight: 100,
+        title: "Capacitación de Equipo",
+        classification: {
+            connect: {
+                id: 3
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 100,
+        title: "Capacitación de Equipo",
+        classification: {
+            connect: {
+                id: 3
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+  });
+
+  const objective4_1 = await prisma.objective.upsert({
+    where: { id: 8 },
+    update: {
+        weight: 100,
+        title: "Capacitación en Azure",
+        classification: {
+            connect: {
+                id: 4
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 100,
+        title: "Capacitación en Azure",
+        classification: {
+            connect: {
+                id: 4
+            }
+        },
+        form: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+  });
   
   //! ------------------------- Dummy Data -------------------------------
   console.log("Catalogs and Dummy data seeded.");
