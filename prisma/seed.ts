@@ -303,7 +303,7 @@ async function main() {
   const objectiveClassificationPerBusiness = await prisma.objectiveClassification.upsert({
     where: { id: 2 },
     update: {
-        weight: 70,
+        weight: 10,
         classificationTitle: {
             connect: {
                 id: 1
@@ -323,7 +323,7 @@ async function main() {
   const objectiveClassificationPeople = await prisma.objectiveClassification.upsert({
     where: { id: 3 },
     update: {
-        weight: 70,
+        weight: 10,
         classificationTitle: {
             connect: {
                 id: 1
@@ -343,7 +343,7 @@ async function main() {
   const objectiveClassificationDevelopment = await prisma.objectiveClassification.upsert({
     where: { id: 4 },
     update: {
-        weight: 70,
+        weight: 10,
         classificationTitle: {
             connect: {
                 id: 1
@@ -368,12 +368,12 @@ async function main() {
         title: "Conseguir mejorar mi nivel de negocio",
         classification: {
             connect: {
-                id: 1
+                id: (await objectiveClassificationDivision).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -382,12 +382,12 @@ async function main() {
         title: "Conseguir mejorar mi nivel de negocio",
         classification: {
             connect: {
-                id: 1
+                id: (await objectiveClassificationDivision).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -400,12 +400,12 @@ async function main() {
         title: "Crear aportes clavo en el éxito del proyecto",
         classification: {
             connect: {
-                id: 1
+                id: (await objectiveClassificationDivision).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -414,12 +414,12 @@ async function main() {
         title: "Crear aportes clave en el éxito del proyecto",
         classification: {
             connect: {
-                id: 1
+                id: (await objectiveClassificationDivision).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -432,12 +432,12 @@ async function main() {
         title: "Conocer diferentes colaboradores",
         classification: {
             connect: {
-                id: 1
+                id: (await objectiveClassificationDivision).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -446,12 +446,12 @@ async function main() {
         title: "Conocer diferentes colaboradores",
         classification: {
             connect: {
-                id: 1
+                id: (await objectiveClassificationDivision).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -464,12 +464,12 @@ async function main() {
         title: "Diseñar un buen UI/UX",
         classification: {
             connect: {
-                id: 1
+                id: (await objectiveClassificationDivision).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -478,12 +478,12 @@ async function main() {
         title: "Diseñar un buen UI/UX",
         classification: {
             connect: {
-                id: 1
+                id: (await objectiveClassificationDivision).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -496,12 +496,12 @@ async function main() {
         title: "Optimización de Algoritmo",
         classification: {
             connect: {
-                id: 2
+                id: (await objectiveClassificationPerBusiness).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -510,12 +510,12 @@ async function main() {
         title: "Optimización de Algoritmo",
         classification: {
             connect: {
-                id: 2
+                id: (await objectiveClassificationPerBusiness).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -528,12 +528,12 @@ async function main() {
         title: "Mejora en el Programa Conectado",
         classification: {
             connect: {
-                id: 2
+                id: (await objectiveClassificationPerBusiness).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -542,12 +542,12 @@ async function main() {
         title: "Mejora en el Programa Conectado",
         classification: {
             connect: {
-                id: 2
+                id: (await objectiveClassificationPerBusiness).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -560,12 +560,12 @@ async function main() {
         title: "Capacitación de Equipo",
         classification: {
             connect: {
-                id: 3
+                id: (await objectiveClassificationPeople).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -574,12 +574,12 @@ async function main() {
         title: "Capacitación de Equipo",
         classification: {
             connect: {
-                id: 3
+                id: (await objectiveClassificationPeople).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -592,12 +592,12 @@ async function main() {
         title: "Capacitación en Azure",
         classification: {
             connect: {
-                id: 4
+                id: (await objectiveClassificationDevelopment).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
@@ -606,12 +606,12 @@ async function main() {
         title: "Capacitación en Azure",
         classification: {
             connect: {
-                id: 4
+                id: (await objectiveClassificationDevelopment).id
             }
         },
         form: {
             connect: {
-                id: 1
+                id: (await formCollaborator).id
             }
         }
     },
