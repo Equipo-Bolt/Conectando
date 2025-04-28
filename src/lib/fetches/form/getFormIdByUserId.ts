@@ -2,13 +2,13 @@ import { getFormsOfUser } from "./getFormsOfUser";
 import { getCurrentPeriod } from "../period/getCurrentPeriod";
 
 /**
- * * getCurrentFormIdOfUser
+ * * getFormIdByUserId
  * its name could change to be more understable
 
  * @param userId The id of the user to find their current form 
  * @returns id of the form as string, cuz consistency (because it could also send "Nothing found")
  */
-export async function getCurrentFormIdOfUser( userId : number ) {
+export async function getFormIdByUserId( userId : number ) {
     try {
         const forms = await getFormsOfUser(userId);
 
