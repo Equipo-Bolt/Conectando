@@ -3,6 +3,8 @@
 import { Objectives, columns } from "./columns"
 import { DataTable } from "./data-table"
 
+//! Este componente tabla esta sujeto a volverse una tabla universal para que se use en diferentes pantallas
+
 async function getData(): Promise<Objectives[]> {
   const res = await fetch("https://680d2f49c47cb8074d8fcdd8.mockapi.io/Objectives")
   const data = await res.json()

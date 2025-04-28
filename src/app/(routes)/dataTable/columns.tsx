@@ -5,18 +5,30 @@ import { DetailButton } from "@/components/DetailButton"
 import { DeleteButton } from "@/components/DeleteButton"
 import { DocumentTextIcon } from "@heroicons/react/24/solid";
 
-//! Ese columns.tsx esta abierto a cambios para adaptar los datos que se necesitan de la DB
+//? Ese columns.tsx esta abierto a cambios para adaptar los datos que se necesitan de la DB
 
-//! Datos dentro de un Objetivo de un tabla de objetivos
+//TODO IMPOERTANTE: importar el TypeObjective.ts que hizo el Francisco
+
+// Datos dentro de un Objetivo de un tabla de objetivos
 export type Objectives = {
   id: number
   objectiveTitle: string
-  //* goal es el icono que indica si la meta fue revisada o no
-  goal: "pending" | "done"
+  //* goal es el icono que indica si la meta fue revisada o no, verde o rojo
+  goal: "written" | "null"
   //* peso que tiene este objetivo dentro de la clasificacion
   weight: number
   //* calificacion que tiene este objetivo dentro de la clasificacion
   score: number | null // Permitimos que score sea nulo cuando no tenga califiacacion
+
+  // id: number
+  // result: string | null
+  // grade: number | null
+  // weight: number
+  // title: string
+  // goal: string | null
+  // formID: number
+  // createdAt: Date
+  // objectiveClassificationID: number
 }
 
 export const columns: ColumnDef<Objectives>[] = [
@@ -31,9 +43,9 @@ export const columns: ColumnDef<Objectives>[] = [
     cell: ({ row }) => {
       const goalStatus = row.original.goal;
       return (
-        //! corregir esto
+        //! corregir esto al color verde cuando este redactada la meta
         <div>
-          {goalStatus === "done" ? (
+          {goalStatus === "written" ? (
             <DocumentTextIcon className="w-5 h-5 text-red-500 " />
           ) : (
             <DocumentTextIcon className="w-5 h-5 text-green-800" />
@@ -72,7 +84,16 @@ export const columns: ColumnDef<Objectives>[] = [
       return (
         <div className="flex items-center gap-6">
           <DetailButton id={id} />
-          <DeleteButton id={id} />
+          <DeleteButton
+            id={id}
+            title="Eliminar objetivo"
+            description="¿Seguro que deseas eliminar este objetivo? Esta acción no se puede deshacer."
+            handleConfirm={(id) => {
+              console.log("Aquí podrías eliminar el objetivo con ID:", id);
+              // Aquí podrías meter una llamada a la API, o cualquier otra acción específica
+            }}
+          />
+
         </div>
       )
     },

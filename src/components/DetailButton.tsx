@@ -17,7 +17,7 @@ export function DetailButton({ id }: DetailButtonProps) {
   return (
     <button
       onClick={handleClick}
-      className="text-gemso-blue hover:text-gemso-dark-blue"
+      className="cursor-pointer text-gemso-blue hover:text-gemso-dark-blue"
     >
       <ArrowRightEndOnRectangleIcon className="w-5 h-5" />
     </button>
