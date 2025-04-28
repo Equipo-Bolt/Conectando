@@ -5,35 +5,12 @@ import { DetailButton } from "@/components/DetailButton"
 import { DeleteButton } from "@/components/DeleteButton"
 import { DocumentTextIcon } from "@heroicons/react/24/solid";
 
-//? Ese columns.tsx esta abierto a cambios para adaptar los datos que se necesitan de la DB
+import { TypeObjective } from "@/types/TypeObjective";
 
-//TODO IMPOERTANTE: importar el TypeObjective.ts que hizo el Francisco
 
-// Datos dentro de un Objetivo de un tabla de objetivos
-export type Objectives = {
-  id: number
-  objectiveTitle: string
-  //* goal es el icono que indica si la meta fue revisada o no, verde o rojo
-  goal: "written" | "null"
-  //* peso que tiene este objetivo dentro de la clasificacion
-  weight: number
-  //* calificacion que tiene este objetivo dentro de la clasificacion
-  score: number | null // Permitimos que score sea nulo cuando no tenga califiacacion
-
-  // id: number
-  // result: string | null
-  // grade: number | null
-  // weight: number
-  // title: string
-  // goal: string | null
-  // formID: number
-  // createdAt: Date
-  // objectiveClassificationID: number
-}
-
-export const columns: ColumnDef<Objectives>[] = [
+export const columns: ColumnDef<TypeObjective>[] = [
   {
-    accessorKey: "objectiveTitle",
+    accessorKey: "title",
     header: "Objetivo",
   },
   {
@@ -43,9 +20,8 @@ export const columns: ColumnDef<Objectives>[] = [
     cell: ({ row }) => {
       const goalStatus = row.original.goal;
       return (
-        //! corregir esto al color verde cuando este redactada la meta
         <div>
-          {goalStatus === "written" ? (
+          {goalStatus === null ? (
             <DocumentTextIcon className="w-5 h-5 text-red-500 " />
           ) : (
             <DocumentTextIcon className="w-5 h-5 text-green-800" />
@@ -67,11 +43,10 @@ export const columns: ColumnDef<Objectives>[] = [
     accessorKey: "score",
     header: "Calificación",
     cell: ({ row }) => {
-      const scoreValue = row.original.score;
-      //! este return esta comentado monas para ver el caso en el que no se tenga calificaicones
-      //! cambiar esto cuando se tenga datos reales de la DB
-      // return <span>{scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}</span>;
-      return "S/C"
+      const scoreValue = row.original.grade;
+      //* Si es dato nulo o indefinido, se muestra "S/C" (Sin Calificación)
+      return <span>{scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}</span>;
+    
 
     },
   },

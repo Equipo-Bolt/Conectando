@@ -2,10 +2,7 @@
 
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
 
-//! El objetivo de este componente es hacerlo universal para usarlo en diferentes pantallas
-//! La intencion es adaptar la interface y los campos de titulo, descripcion y botones para que sean 
-//! props en los cuales se pueda introudcir la informacion o funcion de cada pantalla en donde se use
-
+//* Este es universal modal de eliminar, se le pueden pasar los props que necesite el modal
 interface DeleteModalProps {
     id: number
     icon: React.ReactNode

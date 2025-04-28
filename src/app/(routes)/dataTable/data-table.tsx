@@ -30,8 +30,6 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   })
 
-
-  
   return (
     <div className="rounded-md overflow-hidden">
       <Table>
