@@ -1,27 +1,35 @@
+"use server";
+
 import Borrador from "../../../../components/Borrador";
 import EsperandoRevision from "@/components/EsperandoRevision";
 import IniciarPropuesta from "@/components/IniciarPropuesta";
 
-export default function MisObjetivosPage() {
-  const state: "IniciarPropuesta" | "borrador" | "esperandoRevision" =
-    "IniciarPropuesta"; // Cambia esto según el estado que desees mostrar
+import { getCurrentFormIdOfUser } from "@/lib/fetches/form/getCurrentFormIdOfUser";
+import { getFormById } from "@/lib/fetches/form/getFormById";
+import { getProgressById } from "@/lib/fetches/progress/getProgressById";
+import { getUserById } from "@/lib/fetches/user/getUserById";
 
-  let content;
+import { TypeForm } from "@/types/TypeForm";
+import { TypeProgress } from "@/types/TypeProgress";
+import { TypeUser } from "@/types/TypeUser";
 
-  switch (state) {
-    case "borrador":
-      content = <Borrador />;
-      break;
-    case "esperandoRevision":
-      content = <EsperandoRevision />;
-      break;
-    case "IniciarPropuesta":
-      content = <IniciarPropuesta />;
-      break;
-    default:
-      content = <p>No content available</p>;
-      break;
-  }
+const stateComponentMap: { [key: string]: React.ReactNode } = {
+  "Borrador": <Borrador />,
+  "Enviado": <EsperandoRevision />,
+  "Aprobado": <p> Aprobado </p>,
+  "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>,
+  "Calificado": <p> Calificado </p>,
+  "Sin iniciar": <IniciarPropuesta />,
+};
+
+
+async function MisObjetivosPage() {
+  const formId : string =  await getCurrentFormIdOfUser(2);
+  const form : TypeForm = await getFormById(parseInt(formId));
+  const state : TypeProgress = await getProgressById(form.progressID);
+  const user : TypeUser = await getUserById(form.collaboratorID);
+
+  const content = stateComponentMap[state.title] ?? <p> Hubo en error al cargar tu formulario... </p>;
 
   return (
     <div>
@@ -29,8 +37,8 @@ export default function MisObjetivosPage() {
       <h1 className="text-3xl font-bold mb-2">Mis Objetivos</h1>
       {/* Subtítulo con dos líneas: Colaborador y Estado */}
       <p className="text-lg mb-4">
-        Colaborador: Cristian Peralta<br/>
-        Estado: <span className="text-blue-600">Sin iniciar</span>
+        Colaborador: {user.fullName}<br/>
+        Estado: <span className="text-blue-600">{state.title}</span>
       </p>
       {content}
     </div>
@@ -38,3 +46,4 @@ export default function MisObjetivosPage() {
   );
 }
 
+export default MisObjetivosPage;

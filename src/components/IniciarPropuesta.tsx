@@ -13,7 +13,7 @@ export default function IniciarPropuesta() {
           {/* Botón amarillo con estilo y animación hover */}
           <div className="text-center mt-6">
             <Button className="bg-gemso-yellow hover:bg-gemso-yellow/90 text-white font-bold py-2 px-4 rounded shadow-md">
-              <Link href="/propuestaObjetivo" className="text-white font-bold">
+              <Link href="/misObjetivos/crear" className="text-white font-bold">
                 Iniciar mi propuesta de objetivos
               </Link>
             </Button>

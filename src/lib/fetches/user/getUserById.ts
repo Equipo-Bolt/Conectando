@@ -1,14 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { TypeUser } from "@/types/TypeUser";
 
-export async function getAllUsers(userId : number) {
+export async function getUserById(userId : number) {
     try {
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: { id : userId, deactived : false },
-            select: { 
-                updatedAt : false, 
-                deactived : false
-            }
         });
 
         if (!user) {
