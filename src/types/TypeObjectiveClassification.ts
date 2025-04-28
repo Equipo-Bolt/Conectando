@@ -4,4 +4,5 @@ export interface TypeObjectiveClassification {
     weight: number | null
     classificationID: number
     createdAt: Date
+    classificationTitle : string
 }
