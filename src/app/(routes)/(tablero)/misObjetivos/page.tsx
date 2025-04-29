@@ -1,27 +1,67 @@
+"use server";
+
 import Borrador from "../../../../components/Borrador";
-import EsperandoRevision from "../../../../components/EsperandoRevision";
+import EsperandoRevision from "@/components/EsperandoRevision";
+import IniciarPropuesta from "@/components/IniciarPropuesta";
 
-export default function Page() {
-  const state: "borrador" | "esperandoRevision" = "borrador";
+import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
+import { getFormById } from "@/lib/fetches/form/getFormById";
+import { getProgressById } from "@/lib/fetches/progress/getProgressById";
+import { getUserById } from "@/lib/fetches/user/getUserById";
 
-  let content;
+import { TypeForm } from "@/types/TypeForm";
+import { TypeProgress } from "@/types/TypeProgress";
+import { TypeUser } from "@/types/TypeUser";
 
-  switch (state) {
-    case "borrador":
-      content = <Borrador />;
-      break;
-    case "esperandoRevision":
-      content = <EsperandoRevision />;
-      break;
-    default:
-      content = <p>No content available</p>;
-      break;
+const stateComponentMap: { [key: string]: React.ReactNode } = {
+  "Borrador": <Borrador />,
+  "Enviado": <EsperandoRevision />,
+  "Aprobado": <p> Aprobado </p>,
+  "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>,
+  "Calificado": <p> Calificado </p>,
+};
+
+/** 
+ * * EJEMPLO DE USO DE CREAR OBJETIVO
+import { TypeObjective } from "@/types/TypeObjective";
+import { createObjectiveAction } from "@/app/actions/objective/createObjective";
+const newOBJ: TypeObjective = {
+  goal: null,
+  result: null,
+  grade: null,
+  weight: 70,
+  title: "Nuevo Nuevo Objetivo",
+  formID: 2,
+};
+
+const message = await createObjectiveAction(null, "1", newOBJ) 
+console.log(message)
+
+*/
+async function MisObjetivosPage() {
+  const formId : string =  await getFormIdByUserId(1);
+  if (formId === "No Current Form") {
+    return <IniciarPropuesta/>
   }
+  const form : TypeForm = await getFormById(parseInt(formId));
+  const state : TypeProgress = await getProgressById(form.progressID);
+  const user : TypeUser = await getUserById(form.collaboratorID);
+
+  const content = stateComponentMap[state.title] ?? <p> Hubo en error al cargar tu formulario... </p>;
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-1.5">Mis Objetivos</h1>
+      {/* Título principal */}
+      <h1 className="text-3xl font-bold mb-2">Mis Objetivos</h1>
+      {/* Subtítulo con dos líneas: Colaborador y Estado */}
+      <p className="text-lg mb-4">
+        Colaborador: {user.fullName}<br/>
+        Estado: <span className="text-blue-600">{state.title}</span>
+      </p>
       {content}
     </div>
+
   );
 }
+
+export default MisObjetivosPage;

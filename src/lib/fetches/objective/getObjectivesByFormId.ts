@@ -17,7 +17,7 @@ export async function getObjectivesByFormId( formId : number ) {
         });
 
         if (objectives.length === 0) {
-            throw new Error ("There are no objectives for this objective")
+            return [] as TypeFormObjectives[]; //! Cambiado para que ya no mande error innecesario
         }
 
         const uniqueClassificationObjectivesIds = Array.from(new Set(objectives.map(objective => objective.classification.id)));
@@ -48,7 +48,7 @@ export async function getObjectivesByFormId( formId : number ) {
                         formID,
                         objectiveClassificationID,
                         classification, 
-                        ...o }) => o) //! Excluir datos que no sirven
+                        ...o }) => o) //! Excluir datos que no se usan
             });
         }
 
