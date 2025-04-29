@@ -4,7 +4,7 @@ import Borrador from "../../../../components/Borrador";
 import EsperandoRevision from "@/components/EsperandoRevision";
 import IniciarPropuesta from "@/components/IniciarPropuesta";
 
-import { getCurrentFormIdOfUser } from "@/lib/fetches/form/getCurrentFormIdOfUser";
+import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
 import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { getUserById } from "@/lib/fetches/user/getUserById";
@@ -19,12 +19,14 @@ const stateComponentMap: { [key: string]: React.ReactNode } = {
   "Aprobado": <p> Aprobado </p>,
   "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>,
   "Calificado": <p> Calificado </p>,
-  "Sin iniciar": <IniciarPropuesta />,
 };
 
 
 async function MisObjetivosPage() {
-  const formId : string =  await getCurrentFormIdOfUser(2);
+  const formId : string =  await getFormIdByUserId(1);
+  if (formId === "No Current Form") {
+    return <IniciarPropuesta/>
+  }
   const form : TypeForm = await getFormById(parseInt(formId));
   const state : TypeProgress = await getProgressById(form.progressID);
   const user : TypeUser = await getUserById(form.collaboratorID);

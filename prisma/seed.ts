@@ -17,6 +17,7 @@ async function main() {
   const rawDivisions = fs.readFileSync("./secure/divisions.json", "utf-8");
   const rawProgresses = fs.readFileSync("./secure/progresses.json", "utf-8");
   const rawRoles = fs.readFileSync("./secure/roles.json", "utf-8");
+  const rawPeriods =  fs.readFileSync("./secure/periods.json", "utf-8");
 
   const catalogAreas: string[] = JSON.parse(rawAreas);
   const catalogBusinessUnits: { title: string; divisionID: number }[] = JSON.parse(rawBusinessUnits);
@@ -24,6 +25,7 @@ async function main() {
   const catalogDivisions: string[] = JSON.parse(rawDivisions);
   const catalogProgresses: string[] = JSON.parse(rawProgresses);
   const catalogRoles: string[] = JSON.parse(rawRoles);
+  const catalogsPeriods : { id : number, startsAt : string, endsAt : string, isCurrent : boolean }[] = JSON.parse(rawPeriods);
 
   for (const title of catalogAreas) { //! using for to insert in order
     await prisma.area.upsert({
@@ -73,6 +75,21 @@ async function main() {
       });
   }
 
+  for (const period of catalogsPeriods) {
+    await prisma.period.upsert({
+      where: { id : period.id },
+      create: {
+        startsAt: new Date(period.startsAt),
+        endsAt: new Date(period.endsAt),
+        isCurrent: period.isCurrent,
+      },
+      update: {
+        startsAt: new Date(period.startsAt),
+        endsAt: new Date(period.endsAt),
+        isCurrent: period.isCurrent
+      },
+    });
+  }
   //! ------------------------- Catalogs --------------------------------------
 
   //! ------------------------- Dummy Data -------------------------------}

@@ -1,5 +1,6 @@
 import { getFormsOfUser } from "./getFormsOfUser";
 import { getCurrentPeriod } from "../period/getCurrentPeriod";
+import { TypeForm } from "@/types/TypeForm";
 
 /**
  * * getFormIdByUserId
@@ -10,7 +11,11 @@ import { getCurrentPeriod } from "../period/getCurrentPeriod";
  */
 export async function getFormIdByUserId( userId : number ) {
     try {
-        const forms = await getFormsOfUser(userId);
+        const forms = await getFormsOfUser(userId) as TypeForm[];
+
+        if (forms.length === 0) {
+            return "No Current Form"; //! change
+        }
 
         const currentPeriod = await getCurrentPeriod();
 
@@ -22,7 +27,7 @@ export async function getFormIdByUserId( userId : number ) {
         if (!currentForm) {
             //// throw new Error("No form found for the current period");
             //* Instead return message, SUBJECT TO CHANGES
-            return "No Current Form"
+            return "No Current Form";
         }
 
         return String(currentForm.id);
