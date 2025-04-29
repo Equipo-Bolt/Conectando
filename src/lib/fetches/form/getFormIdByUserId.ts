@@ -1,0 +1,32 @@
+import { getFormsOfUser } from "./getFormsOfUser";
+import { getCurrentPeriod } from "../period/getCurrentPeriod";
+
+/**
+ * * getFormIdByUserId
+ * its name could change to be more understable
+
+ * @param userId The id of the user to find their current form 
+ * @returns id of the form as string, cuz consistency (because it could also send "Nothing found")
+ */
+export async function getFormIdByUserId( userId : number ) {
+    try {
+        const forms = await getFormsOfUser(userId);
+
+        const currentPeriod = await getCurrentPeriod();
+
+        const currentForm = forms.find(form => 
+            form.createdAt >= currentPeriod.startsAt && form.createdAt <= currentPeriod.endsAt
+        );
+
+        //! not necesarrily an error because then the app freezes and you cant create one
+        if (!currentForm) {
+            //// throw new Error("No form found for the current period");
+            //* Instead return message, SUBJECT TO CHANGES
+            return "No Current Form"
+        }
+
+        return String(currentForm.id);
+    } catch(err) {
+        throw new Error(`Error: ${ (err as Error).message }`)
+    }
+}
