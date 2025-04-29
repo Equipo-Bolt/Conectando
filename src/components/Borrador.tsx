@@ -1,10 +1,4 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import InfoHover from "./infoHover";
+import InfoHover from "@/components/InfoHover";
 
 export default function Borrador() {
   return (

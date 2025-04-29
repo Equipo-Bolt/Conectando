@@ -1,18 +1,9 @@
-<<<<<<< HEAD
 "use client";
 
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn } from "@/lib/utils";
-=======
-"use client"
-
-import * as React from "react"
-import * as TooltipPrimitive from "@radix-ui/react-tooltip"
-
-import { cn } from "@/lib/utils"
->>>>>>> 44d1b4b1108300cb6cdc7be7965a43666a061501
 
 function TooltipProvider({
   delayDuration = 0,
@@ -24,11 +15,7 @@ function TooltipProvider({
       delayDuration={delayDuration}
       {...props}
     />
-<<<<<<< HEAD
   );
-=======
-  )
->>>>>>> 44d1b4b1108300cb6cdc7be7965a43666a061501
 }
 
 function Tooltip({
@@ -38,21 +25,13 @@ function Tooltip({
     <TooltipProvider>
       <TooltipPrimitive.Root data-slot="tooltip" {...props} />
     </TooltipProvider>
-<<<<<<< HEAD
   );
-=======
-  )
->>>>>>> 44d1b4b1108300cb6cdc7be7965a43666a061501
 }
 
 function TooltipTrigger({
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
-<<<<<<< HEAD
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
-=======
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
->>>>>>> 44d1b4b1108300cb6cdc7be7965a43666a061501
 }
 
 function TooltipContent({
@@ -73,7 +52,6 @@ function TooltipContent({
         {...props}
       >
         {children}
-<<<<<<< HEAD
         <TooltipPrimitive.Arrow className="bg-white fill-white z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
@@ -81,12 +59,3 @@ function TooltipContent({
 }
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
-=======
-        <TooltipPrimitive.Arrow className="bg-primary fill-primary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
-      </TooltipPrimitive.Content>
-    </TooltipPrimitive.Portal>
-  )
-}
-
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
->>>>>>> 44d1b4b1108300cb6cdc7be7965a43666a061501
