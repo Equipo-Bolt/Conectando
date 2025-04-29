@@ -1,6 +1,6 @@
 //! Frontend mandate this
 export interface TypeObjective {
-    id?: number
+    id: number
     result: string | null
     grade: number | null
     weight: number //? Francisco: I consider this Mandatory in form, change if not

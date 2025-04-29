@@ -60,8 +60,8 @@ export async function createObjectiveAction(
       (ofo) => ofo.classificationTitle === classification.title
     )?.objectiveClassificationID;
 
-    //! sacar formId de data, nombre feo pero se entiende
-    const { formID, ...dataWithoutFormId } = data; 
+    //! sacar id y formId de data, nombre feo pero se entiende
+    const { id, formID, ...dataWithoutIds } = data; 
     //* 3.5 Creamos la relación si es la primera vez que hacemos un objetivo y creamos el objetivo
     if (objectivesFromObjectives.length === 0 || !relationId) {
       //*primero la objectiveClassification
@@ -82,7 +82,7 @@ export async function createObjectiveAction(
         data: {
           objectives: {
             create: {
-              ...dataWithoutFormId,
+              ...dataWithoutIds,
               objectiveClassificationID: newObjectiveClassification.id
             },
           },
@@ -95,8 +95,8 @@ export async function createObjectiveAction(
     //* 4. Existe relación? Va ahora checa que no este repetido el obj
     const duplicateObjective = await prisma.objective.findFirst({
       where: { 
-        ...data,
-        deactived : false
+        ...dataWithoutIds,
+        deactived: false
       }
     })
 
@@ -109,7 +109,7 @@ export async function createObjectiveAction(
       data: {
         objectives: {
           create: {
-            ...dataWithoutFormId,
+            ...dataWithoutIds,
             objectiveClassificationID: relationId,
           },
         },
