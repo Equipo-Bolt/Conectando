@@ -21,7 +21,23 @@ const stateComponentMap: { [key: string]: React.ReactNode } = {
   "Calificado": <p> Calificado </p>,
 };
 
+/** 
+ * * EJEMPLO DE USO DE CREAR OBJETIVO
+import { TypeObjective } from "@/types/TypeObjective";
+import { createObjectiveAction } from "@/app/actions/objective/createObjective";
+const newOBJ: TypeObjective = {
+  goal: null,
+  result: null,
+  grade: null,
+  weight: 70,
+  title: "Nuevo Nuevo Objetivo",
+  formID: 2,
+};
 
+const message = await createObjectiveAction(null, "1", newOBJ) 
+console.log(message)
+
+*/
 async function MisObjetivosPage() {
   const formId : string =  await getFormIdByUserId(1);
   if (formId === "No Current Form") {
