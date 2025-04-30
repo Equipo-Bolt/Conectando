@@ -1,0 +1,76 @@
+"use client"
+
+import { ColumnDef } from "@tanstack/react-table"
+import { DetailButton } from "@/components/DetailButton"
+import { DeleteButton } from "@/components/DeleteButton"
+import { DocumentTextIcon } from "@heroicons/react/24/solid";
+
+import { TypeObjective } from "@/types/TypeObjective";
+
+
+export const columns: ColumnDef<TypeObjective>[] = [
+  {
+    accessorKey: "title",
+    header: "Objetivo",
+  },
+  {
+    //* Este es el icono que indica si la meta fue declarada o no
+    accessorKey: "goal",
+    header: "Meta",
+    cell: ({ row }) => {
+      const goalStatus = row.original.goal;
+      return (
+        <div>
+          {goalStatus === null ? (
+            <DocumentTextIcon className="w-5 h-5 text-red-500 " />
+          ) : (
+            <DocumentTextIcon className="w-5 h-5 text-green-800" />
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    //* Se agrega porcentaje al peso para que se vea mas chilo
+    accessorKey: "weight",
+    header: "Peso",
+    cell: ({ row }) => {
+      const weightValue = row.original.weight;
+      return <span>{weightValue}%</span>;
+    },
+  },
+  {
+    accessorKey: "score",
+    header: "Calificación",
+    cell: ({ row }) => {
+      const scoreValue = row.original.grade;
+      //* Si es dato nulo o indefinido, se muestra "S/C" (Sin Calificación)
+      return <span>{scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}</span>;
+    
+
+    },
+  },
+  {
+    //* Estos son los botones de opciones que se ven en la tabla
+    accessorKey: "options",
+    header: "Opciones",
+    cell: ({ row }) => {
+      const id = row.original.id
+      return (
+        <div className="flex items-center gap-6">
+          <DetailButton id={id} />
+          <DeleteButton
+            id={id}
+            title="Eliminar objetivo"
+            description="¿Seguro que deseas eliminar este objetivo? Esta acción no se puede deshacer."
+            handleConfirm={(id) => {
+              console.log("Aquí podrías eliminar el objetivo con ID:", id);
+              // Aquí podrías meter una llamada a la API, o cualquier otra acción específica
+            }}
+          />
+
+        </div>
+      )
+    },
+  },
+];
