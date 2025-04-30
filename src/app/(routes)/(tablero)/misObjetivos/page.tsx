@@ -14,11 +14,11 @@ import { TypeProgress } from "@/types/TypeProgress";
 import { TypeUser } from "@/types/TypeUser";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
-  "Borrador": <Borrador />,
-  "Enviado": <EsperandoRevision />,
-  "Aprobado": <p> Aprobado </p>,
+  Borrador: <Borrador />,
+  Enviado: <EsperandoRevision />,
+  Aprobado: <p> Aprobado </p>,
   "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>,
-  "Calificado": <p> Calificado </p>,
+  Calificado: <p> Calificado </p>,
 };
 
 async function MisObjetivosPage() {
@@ -39,7 +39,9 @@ async function MisObjetivosPage() {
   const form : TypeForm = await getFormById(parseInt(formId));
   const state : TypeProgress = await getProgressById(form.progressID);
 
-  const content = stateComponentMap[state.title] ?? <p> Hubo en error al cargar tu formulario... </p>;
+  const content = stateComponentMap[state.title] ?? (
+    <p> Hubo en error al cargar tu formulario... </p>
+  );
 
   return (
     <div>
@@ -52,7 +54,6 @@ async function MisObjetivosPage() {
       </p>
       {content}
     </div>
-
   );
 }
 

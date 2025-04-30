@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
-import { DetailButton } from "@/components/DetailButton"
-import { DeleteButton } from "@/components/DeleteButton"
+import { ColumnDef } from "@tanstack/react-table";
+import { DetailButton } from "@/components/DetailButton";
+import { DeleteButton } from "@/components/DeleteButton";
 import { DocumentTextIcon } from "@heroicons/react/24/solid";
-
+import IconTooltip from "@/components/IconTooltip";
 import { TypeObjective } from "@/types/TypeObjective";
-
 
 export const columns: ColumnDef<TypeObjective>[] = [
   {
     accessorKey: "title",
     header: "Objetivo",
+    size: 100,
   },
   {
     //* Este es el icono que indica si la meta fue declarada o no
@@ -21,11 +21,7 @@ export const columns: ColumnDef<TypeObjective>[] = [
       const goalStatus = row.original.goal;
       return (
         <div>
-          {goalStatus === null ? (
-            <DocumentTextIcon className="w-5 h-5 text-red-500 " />
-          ) : (
-            <DocumentTextIcon className="w-5 h-5 text-green-800" />
-          )}
+          <IconTooltip>{goalStatus}</IconTooltip>
         </div>
       );
     },
@@ -45,9 +41,11 @@ export const columns: ColumnDef<TypeObjective>[] = [
     cell: ({ row }) => {
       const scoreValue = row.original.grade;
       //* Si es dato nulo o indefinido, se muestra "S/C" (Sin Calificación)
-      return <span>{scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}</span>;
-    
-
+      return (
+        <span>
+          {scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}
+        </span>
+      );
     },
   },
   {
@@ -55,7 +53,7 @@ export const columns: ColumnDef<TypeObjective>[] = [
     accessorKey: "options",
     header: "Opciones",
     cell: ({ row }) => {
-      const id = row.original.id
+      const id = row.original.id;
       return (
         <div className="flex items-center gap-6">
           <DetailButton id={id} />
@@ -68,9 +66,8 @@ export const columns: ColumnDef<TypeObjective>[] = [
               // Aquí podrías meter una llamada a la API, o cualquier otra acción específica
             }}
           />
-
         </div>
-      )
+      );
     },
   },
 ];
