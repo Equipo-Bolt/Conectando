@@ -1,5 +1,9 @@
 "use client";
 
+// React
+import { useState, useEffect } from "react";
+
+
 // Cn is a utility function for conditional class names
 import { cn } from "@/lib/utils";
 
@@ -20,7 +24,6 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
@@ -63,6 +66,8 @@ interface CompleteInfoFormProps {
 
 //* Action
 import { createUserAction } from "@/app/actions/user/createUser";
+import SubmitButton from "./SubmitButton";
+import CancelButton from "./CancelButton";
 
                                 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : CompleteInfoFormProps ) {
@@ -84,6 +89,17 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
         }
     });
 
+    const currentDivision = form.watch("division");
+
+    // Here we are using the useState hook to manage the state of the filtered business units
+    const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<TypeBusinessUnit[]>([]);
+
+    useEffect(() => {
+        // This effect will run whenever the currentDivision changes
+        const filtered = businessUnits.filter((bu) => bu.divisionID === parseInt(currentDivision));
+        setFilteredBusinessUnits(filtered);
+    }, [currentDivision, businessUnits]);
+
 
     return (
         <Form {...form}>
@@ -96,19 +112,23 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                          * ! TLDR: Created FormData object in Front to send to Back, maybe create TypeUser instead
                         */
                         form.handleSubmit(async (values) => {
-                            const data = new FormData();
-                        
-                            Object.entries(values).forEach(([key, value]) => {
-                                if (value !== undefined && value !== null) {
-                                    data.append(key, value);
-                                }
-                            });
+                            // Create a TypeUser object from the form values without using FormData
+                            const user = {
+                                employeeNumber: parseInt(values.employeeNumber),
+                                email: values.email,
+                                fullName: values.fullName,
+                                bossId: parseInt(values.bossId),
+                                businessUnitId: parseInt(values.businessUnitId),
+                                companySeniority: format(new Date(values.companySeniority), "dd/MM/yyyy"),
+                                positionSeniority: format(new Date(values.positionSeniority), "dd/MM/yyyy"),
+                                areaId: parseInt(values.areaId),
+                                position: parseInt(values.position),
+                                companyContribution: values.companyContribution
+                            };
                             
                             console.log("Form values JSON:", JSON.stringify(values));
 
-                            console.log("Creating...")
-                            await createUserAction(data);
-                            console.log("Created!")
+                            await createUserAction(user);
                         })
                     }
                     className="space-y-4 flex flex-col gap-8"
@@ -129,7 +149,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 min="1"
                                             />
                                         </FormControl>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -142,7 +162,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                         <FormControl>
                                             <Input placeholder="Escribe tu nombre completo" {...field} />
                                         </FormControl>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -170,7 +190,6 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -198,7 +217,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -219,7 +238,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 {...field} 
                                             />
                                         </FormControl>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -233,7 +252,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                         <FormControl>
                                             <Input placeholder="Escribe el nombre de tu puesto" {...field} />
                                         </FormControl>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -262,7 +281,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -283,14 +302,14 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {businessUnits.map((bu) => (
+                                                {filteredBusinessUnits.map((bu) => (
                                                     <SelectItem key={bu.id} value={String(bu.id)}>
                                                         {bu.title}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -338,7 +357,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 />
                                             </PopoverContent>
                                         </Popover>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -383,7 +402,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 />
                                             </PopoverContent>
                                         </Popover>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -401,7 +420,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 className="min-h-[9rem] max-h-[15rem] w-full resize-none"
                                             />
                                         </FormControl>
-                                        <FormMessage />
+                                        
                                     </FormItem>
                                 )}
                             />
@@ -409,8 +428,11 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                         </div>
                     </div>
                     
-                    <div className="flex flex-row justify-end w-full">
-                        <Button type="submit" className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-lg hover:bg-gemso-blue/90" onClick={() => console.log(form.getValues())}>Aceptar</Button>
+                    <div className="grid grid-cols-3">
+                        <div className="col-start-3 col-end-4 w-full justify-around flex pl-[4rem]">
+                            <CancelButton route="/" text="Cancelar" />
+                            <SubmitButton onSubmit={() => console.log(form.getValues())} text="Aceptar" />
+                        </div>
                     </div>
                 </form>
         </Form>
