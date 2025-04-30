@@ -1,5 +1,5 @@
 export interface TypeClassification {
     id: number;
-    createdAt: Date;
+    createdAt: string;
     title: string;
 }

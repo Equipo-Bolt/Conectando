@@ -22,22 +22,31 @@ const stateComponentMap: { [key: string]: React.ReactNode } = {
 };
 
 async function MisObjetivosPage() {
-  const formId : string =  await getFormIdByUserId(1);
+  const user : TypeUser = await getUserById(2);
+  const formId : string =  await getFormIdByUserId(2);
   if (formId === "No Current Form") {
-    return <IniciarPropuesta/>
+    return (
+      <div>
+        <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
+        <p className="text-lg mb-[2rem]">
+          Colaborador: {user.fullName}<br/>
+          Estado: <span className="text-blue-600">Sin Iniciar</span>
+        </p>
+        <IniciarPropuesta />
+      </div>
+    );
   }
   const form : TypeForm = await getFormById(parseInt(formId));
   const state : TypeProgress = await getProgressById(form.progressID);
-  const user : TypeUser = await getUserById(form.collaboratorID);
 
   const content = stateComponentMap[state.title] ?? <p> Hubo en error al cargar tu formulario... </p>;
 
   return (
     <div>
       {/* Título principal */}
-      <h1 className="text-3xl font-bold mb-2">Mis Objetivos</h1>
+      <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
       {/* Subtítulo con dos líneas: Colaborador y Estado */}
-      <p className="text-lg mb-4">
+      <p className="text-lg mb-[2rem]">
         Colaborador: {user.fullName}<br/>
         Estado: <span className="text-blue-600">{state.title}</span>
       </p>
