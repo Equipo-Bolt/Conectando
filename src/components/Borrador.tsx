@@ -9,12 +9,8 @@ export default async function Borrador() {
   const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[];
   return (
     <div>
-      <div className="font-semibold text-lg text-gemso-blue">
-        Estado: Borrador
-      </div>
-
       <InfoHover>
-        <div className="text-sm mb-2">
+        <div className="text-sm mb-[1rem]">
           Para habilitar el envío de tus objetivos a revisión es necesario:
         </div>
         <div className="text-sm ml-2 space-y-1">

@@ -26,9 +26,9 @@ async function MisObjetivosPage() {
   const formId : string =  await getFormIdByUserId(2);
   if (formId === "No Current Form") {
     return (
-      <div>
+      <div className="container mx-auto py-10">
         <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
-        <p className="text-lg mb-[2rem]">
+        <p className="text-lg">
           Colaborador: {user.fullName}<br/>
           Estado: <span className="text-blue-600">Sin Iniciar</span>
         </p>
@@ -48,7 +48,7 @@ async function MisObjetivosPage() {
       {/* Título principal */}
       <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
       {/* Subtítulo con dos líneas: Colaborador y Estado */}
-      <p className="text-lg mb-[2rem]">
+      <p className="text-lg">
         Colaborador: {user.fullName}<br/>
         Estado: <span className="text-blue-600">{state.title}</span>
       </p>
