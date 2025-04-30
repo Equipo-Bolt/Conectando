@@ -383,7 +383,7 @@ async function main() {
     update: {
         weight: 20,
         title: "Conseguir mejorar mi nivel de negocio",
-        classification: {
+        goal: "Al realizar este objetivo tengo como meta llegar a las 100 ventas en 50 dias en los dos departamentos relacionados con mi área.",        classification: {
             connect: {
                 id: (await objectiveClassificationDivision).id
             }
@@ -397,6 +397,7 @@ async function main() {
     create:  {
         weight: 20,
         title: "Conseguir mejorar mi nivel de negocio",
+        goal: "Al realizar este objetivo tengo como meta llegar a las 100 ventas en 50 dias en los dos departamentos relacionados con mi área.",
         classification: {
             connect: {
                 id: (await objectiveClassificationDivision).id
