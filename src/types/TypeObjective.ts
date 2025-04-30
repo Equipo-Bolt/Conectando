@@ -12,6 +12,7 @@ export interface TypeObjective {
 }
 //! Este interface se utiliza para crear o editar Objetivos, (createObjetive & updateObjective)
 export interface MutateObjectiveInfo //* Con Pick<> podemos agarrar solo la info útil
-    extends Pick<TypeObjective, "formID" | "title" | "goal" | "result" | "weight"> {  
+    extends Pick<TypeObjective, "formID" | "title" | "goal" | "result" | "weight"> {
+    id?: number,
     classificationCatalogID: number; //? Este es el id del menú desplegable de clasificaciones
 }

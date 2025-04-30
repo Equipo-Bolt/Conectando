@@ -15,15 +15,17 @@ import { useActionState, useTransition } from "react";
 import SubmitButton from "@/components/SubmitButton" //! el boton que gustes
 import { MutateObjectiveInfo } from "@/types/TypeObjective";
 import { createObjectiveAction } from "@/app/actions/objective/createObjective";
+import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
 
 //* con la data del form deberas crear un objetivo con esta data
 const newOBJ : MutateObjectiveInfo= {
-  goal: null, //! cambias el valor por el del form
+  //* id: 11, lo puse para probar update
+  goal: null, //! cambias los valores por los del form
   result: null,
   weight: 70,
-  title: "Mi Objetivo",
+  title: "Nada",
   classificationCatalogID: 2, //! este será el id de la clasificacion del dropdown
-  formID: 2,
+  formID: 1,
 };
 
 
@@ -31,7 +33,7 @@ const PaginaParaCrearObjetivo = () => {
 
   //!Usando useActionState y useTransition link a la doc: https://es.react.dev/reference/react/useActionState y https://es.react.dev/reference/react/useTransition
 
-  //* const [ state, formAction, isPending] = useActionState(createObjectiveAction, null);
+  //*const [ state, newAction ] = useActionState(updateObjectiveAction, null);
 
   const [ state, newAction] = useActionState(createObjectiveAction, null) //* pones la action aqui
   const [isPending, startTransition] = useTransition();

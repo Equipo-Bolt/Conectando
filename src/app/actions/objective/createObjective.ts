@@ -59,7 +59,7 @@ export async function createObjectiveAction(
     )?.objectiveClassificationID;
 
     //! sacar id y formId de data, nombre feo pero se entiende
-    const { formID, classificationCatalogID, ...dataWithoutIds } = data; 
+    const { id, formID, classificationCatalogID, ...dataWithoutIds } = data; 
     //* 3.5 Creamos la relación si es la primera vez que hacemos un objetivo y creamos el objetivo
     if (objectivesFromObjectives.length === 0 || !relationId) {
       //*primero la objectiveClassification
@@ -95,6 +95,9 @@ export async function createObjectiveAction(
       where: { 
         ...dataWithoutIds,
         deactived: false
+      },
+      select:{
+        id: true
       }
     })
 
