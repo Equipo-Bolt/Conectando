@@ -8,7 +8,7 @@ export async function getFormsOfUser( userId : number ) {
         })
 
         if (forms.length === 0) {
-            throw new Error("User has no forms.")
+            return forms; //! REGRESARLO VACIO POR CONSITENCIA
         }
 
         return forms.map( ( { deactived, updatedAt, ...f} ) => f ) as TypeForm[];
