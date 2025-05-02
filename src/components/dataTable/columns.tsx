@@ -3,9 +3,10 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DetailButton } from "@/components/DetailButton";
 import { DeleteButton } from "@/components/DeleteButton";
-import { DocumentTextIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/navigation";
 import IconTooltip from "@/components/IconTooltip";
 import { TypeObjective } from "@/types/TypeObjective";
+import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 
 export const columns: ColumnDef<TypeObjective>[] = [
   {
@@ -53,6 +54,7 @@ export const columns: ColumnDef<TypeObjective>[] = [
     accessorKey: "options",
     header: "Opciones",
     cell: ({ row }) => {
+      const router = useRouter();
       const id = row.original.id;
       return (
         <div className="flex items-center gap-6">
@@ -61,9 +63,9 @@ export const columns: ColumnDef<TypeObjective>[] = [
             id={id}
             title="Eliminar objetivo"
             description="¿Seguro que deseas eliminar este objetivo? Esta acción no se puede deshacer."
-            handleConfirm={(id) => {
-              console.log("Aquí podrías eliminar el objetivo con ID:", id);
-              // Aquí podrías meter una llamada a la API, o cualquier otra acción específica
+            handleConfirm={async (id) => {
+              await disableObjectiveAction(id);
+              router.refresh();
             }}
           />
         </div>

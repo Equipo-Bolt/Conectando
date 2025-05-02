@@ -12,7 +12,7 @@ interface InfoHoverProps {
 const InfoHover: React.FC<InfoHoverProps> = ({ children }) => {
   return (
     <div className="flex items-center">
-      <div className="italic text-sm mr-2">Mas información</div>
+      <div className="italic font-medium text-sm mr-2">Mas información</div>
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="relative inline-block">

@@ -22,22 +22,23 @@ const stateComponentMap: { [key: string]: React.ReactNode } = {
 };
 
 async function MisObjetivosPage() {
-  const user : TypeUser = await getUserById(2);
-  const formId : string =  await getFormIdByUserId(2);
+  const user: TypeUser = await getUserById(2);
+  const formId: string = await getFormIdByUserId(2);
   if (formId === "No Current Form") {
     return (
       <div className="container mx-auto py-10">
         <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
         <p className="text-lg">
-          Colaborador: {user.fullName}<br/>
+          Colaborador: {user.fullName}
+          <br />
           Estado: <span className="text-blue-600">Sin Iniciar</span>
         </p>
         <IniciarPropuesta />
       </div>
     );
   }
-  const form : TypeForm = await getFormById(parseInt(formId));
-  const state : TypeProgress = await getProgressById(form.progressID);
+  const form: TypeForm = await getFormById(parseInt(formId));
+  const state: TypeProgress = await getProgressById(form.progressID);
 
   const content = stateComponentMap[state.title] ?? (
     <p> Hubo en error al cargar tu formulario... </p>
@@ -45,14 +46,16 @@ async function MisObjetivosPage() {
 
   return (
     <div>
-      {/* Título principal */}
-      <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
-      {/* Subtítulo con dos líneas: Colaborador y Estado */}
-      <p className="text-lg">
-        Colaborador: {user.fullName}<br/>
-        Estado: <span className="text-blue-600">{state.title}</span>
-      </p>
-      {content}
+      <h1 className="text-3xl font-bold mb-2">Mis Objetivos</h1>
+
+      <div className="space-y-0.5">
+        <p className="text-lg font-medium">Colaborador: {user.fullName}</p>
+        <p className="text-lg text-gemso-blue font-semibold ">
+          Estado: {state.title}
+        </p>
+
+        {content}
+      </div>
     </div>
   );
 }
