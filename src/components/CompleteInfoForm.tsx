@@ -328,7 +328,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                 <FormControl>
                                                     <Button
                                                         className={cn(
-                                                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-base focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
+                                                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
                                                             !field.value && "text-muted-foreground"
                                                         )}
                                                     >
@@ -373,7 +373,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                                                     <Button
                                                         variant="outline"
                                                         className={cn(
-                                                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-base focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
+                                                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
                                                             !field.value && "text-muted-foreground"
                                                         )}
                                                     >

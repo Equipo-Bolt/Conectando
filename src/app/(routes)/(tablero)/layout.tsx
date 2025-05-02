@@ -5,7 +5,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="w-full flex-none md:w-64">
         <SideNav />
       </div>
-      <div className="flex-grow p-[3rem] md:overflow-y-auto ">{children}</div>
+      <div className="flex-grow p-[3rem] overflow-y-auto h-screen">{children}</div>
     </div>
   );
 }

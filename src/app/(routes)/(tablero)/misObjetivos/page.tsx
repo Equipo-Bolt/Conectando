@@ -14,55 +14,46 @@ import { TypeProgress } from "@/types/TypeProgress";
 import { TypeUser } from "@/types/TypeUser";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
-  "Borrador": <Borrador />,
-  "Enviado": <EsperandoRevision />,
-  "Aprobado": <p> Aprobado </p>,
+  Borrador: <Borrador />,
+  Enviado: <EsperandoRevision />,
+  Aprobado: <p> Aprobado </p>,
   "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>,
-  "Calificado": <p> Calificado </p>,
+  Calificado: <p> Calificado </p>,
 };
-
-/** 
- * * EJEMPLO DE USO DE CREAR OBJETIVO
- 
-import { TypeObjective } from "@/types/TypeObjective";
-import { createObjectiveAction } from "@/app/actions/objective/createObjective";
-const newOBJ: TypeObjective = {
-  id: 0,
-  goal: null,
-  result: null,
-  grade: null,
-  weight: 70,
-  title: "Nuevo Objetivo",
-  formID: 2,
-};
-
-const message = await createObjectiveAction(null, "1", newOBJ) 
-console.log(message)
-* */
 
 async function MisObjetivosPage() {
-  const formId : string =  await getFormIdByUserId(1);
+  const user : TypeUser = await getUserById(2);
+  const formId : string =  await getFormIdByUserId(2);
   if (formId === "No Current Form") {
-    return <IniciarPropuesta/>
+    return (
+      <div className="container mx-auto py-10">
+        <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
+        <p className="text-lg">
+          Colaborador: {user.fullName}<br/>
+          Estado: <span className="text-blue-600">Sin Iniciar</span>
+        </p>
+        <IniciarPropuesta />
+      </div>
+    );
   }
   const form : TypeForm = await getFormById(parseInt(formId));
   const state : TypeProgress = await getProgressById(form.progressID);
-  const user : TypeUser = await getUserById(form.collaboratorID);
 
-  const content = stateComponentMap[state.title] ?? <p> Hubo en error al cargar tu formulario... </p>;
+  const content = stateComponentMap[state.title] ?? (
+    <p> Hubo en error al cargar tu formulario... </p>
+  );
 
   return (
     <div>
       {/* Título principal */}
-      <h1 className="text-3xl font-bold mb-2">Mis Objetivos</h1>
+      <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
       {/* Subtítulo con dos líneas: Colaborador y Estado */}
-      <p className="text-lg mb-4">
+      <p className="text-lg">
         Colaborador: {user.fullName}<br/>
         Estado: <span className="text-blue-600">{state.title}</span>
       </p>
       {content}
     </div>
-
   );
 }
 

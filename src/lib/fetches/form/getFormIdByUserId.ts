@@ -14,7 +14,7 @@ export async function getFormIdByUserId( userId : number ) {
         const forms = await getFormsOfUser(userId) as TypeForm[];
 
         if (forms.length === 0) {
-            return "No Current Form"; //! change
+            return "No Current Form";
         }
 
         const currentPeriod = await getCurrentPeriod();
@@ -23,10 +23,7 @@ export async function getFormIdByUserId( userId : number ) {
             form.createdAt >= currentPeriod.startsAt && form.createdAt <= currentPeriod.endsAt
         );
 
-        //! not necesarrily an error because then the app freezes and you cant create one
         if (!currentForm) {
-            //// throw new Error("No form found for the current period");
-            //* Instead return message, SUBJECT TO CHANGES
             return "No Current Form";
         }
 
