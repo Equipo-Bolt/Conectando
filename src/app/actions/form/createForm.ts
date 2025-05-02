@@ -20,49 +20,60 @@ export async function createFormAction(
 ) {
 
   try {
-    // Checks if the user exists or is not deactivated
-    const userExists = getUserById(userId);
-    //! NOT SURE IF THIS IS NECESSARY SINCE getUserById THROWS AN ERROR IF IT DOESNT FIND ONE
-    if(!userExists){
-      return('User does not exist.')
+    // Checa si el usuario existe o no está desactivado
+    const userExists = await getUserById(userId);
+    if(!userExists.id){
+      return('No se encontró el usuario.')
     }
-    // Checks if there is a current period
+
+    // Checa que hay un periodo activo
     const currentPeriod = await getCurrentPeriod();
-    //! SAME FOR getCurrentPeriod
-    if(!currentPeriod){
-      return("A new period has not started yet.")
+    if(!currentPeriod.startsAt){
+      return('No ha iniciado un nuevo periodo.')
     }
 
-    // Checks if the user has a form and if it was created in the current period
+    // Checa si el usuario tiene un formulario activo y que se creó durante el periodo actual
     const form = await getFormIdByUserId(userId);
-    if(form !== "No Current Form"){
-      return ('User already has an active form.')
+    if(form !== "Sin Formulario Activo"){
+      return ('El usuario ya tiene un formulario de objetivos activo')
     }
 
-    // Checks if the user has a boss linked to them
-    const evaluatorId = (await getUserById(userId)).bossID;
+    // Checa si el usuario tiene un jefe directo
+    const evaluatorId = userExists.bossID;
     if(!evaluatorId){
-      return ('User must have a registered boss.')
+      return ('El usuario debe tener un jefe directo.')
     }
 
-    // Checks if the boss exists or is not deactivated
+    // Checa si el jefe directo existe o no está desactivado
     const evaluatorExists = await getUserById(Number(evaluatorId))
-    if(!evaluatorExists){
-      return ("User's boss does not exist.")
+    if(!evaluatorExists.id){
+      return ('No se encontró el usuario del jefe directo.')
     }
 
     await prisma.form.create({
       data: {
         approvedAt: null,
         gradedAt: null,
-        collaboratorID: userId,
-        evaluatorID: Number(evaluatorId),
-        progressID: 1
+        collaborator: {
+          connect: {
+            id: userId
+          }
+        },
+        evaluator: {
+          connect: {
+            id: evaluatorId
+          }
+        },
+        progress: {
+          connect: {
+            id: 1
+          }
+        }
       }
     })
 
-    return ("Form created for user");
+    return ("Formulario de objetivos creado.");
   } catch (error) {
-    throw new Error(`Failed to create form: ${(error as Error).message}`);
+    throw new Error(`Error al crear formulario: ${(error as Error).message}`);
   }
 }

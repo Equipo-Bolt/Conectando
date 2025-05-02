@@ -14,7 +14,7 @@ export async function getFormIdByUserId( userId : number ) {
         const forms = await getFormsOfUser(userId) as TypeForm[];
 
         if (forms.length === 0) {
-            return "No Current Form"; //! change
+            return "Sin Formulario Activo"; //! change
         }
 
         const currentPeriod = await getCurrentPeriod();
@@ -27,7 +27,7 @@ export async function getFormIdByUserId( userId : number ) {
         if (!currentForm) {
             //// throw new Error("No form found for the current period");
             //* Instead return message, SUBJECT TO CHANGES
-            return "No Current Form";
+            return "Sin Formulario Activo";
         }
 
         return String(currentForm.id);

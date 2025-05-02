@@ -8,7 +8,7 @@ export async function getUserById(userId : number) {
         });
 
         if (!user) {
-            throw new Error ("User was not found");
+            return ({} as TypeUser);
         }
 
         

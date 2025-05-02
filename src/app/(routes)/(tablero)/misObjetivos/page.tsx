@@ -42,7 +42,7 @@ console.log(message)
 
 async function MisObjetivosPage() {
   const formId : string =  await getFormIdByUserId(1);
-  if (formId === "No Current Form") {
+  if (formId === "Sin Formulario Activo") {
     return <IniciarPropuesta/>
   }
   const form : TypeForm = await getFormById(parseInt(formId));
