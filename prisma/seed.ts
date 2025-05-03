@@ -31,7 +31,7 @@ async function main() {
     await prisma.area.upsert({
       where: { title },
       create: { title },
-      update: { title },
+      update: { title, deactived: false, },
     });
   }
 
@@ -39,7 +39,7 @@ async function main() {
     await prisma.division.upsert({
       where: { title },
       create: { title },
-      update: { title },
+      update: { title, deactived: false, },
     });
   }
 
@@ -47,7 +47,7 @@ async function main() {
     await prisma.businessUnit.upsert({
       where: { title: bu.title },
       create: { title: bu.title, divisionID: bu.divisionID },
-      update: { title: bu.title },
+      update: { title: bu.title, divisionID: bu.divisionID, deactived: false,},
       });
   }
 
@@ -55,7 +55,7 @@ async function main() {
       await prisma.classification.upsert({
         where: { title },
         create: { title },
-        update: { title },
+        update: { title, deactived: false, },
       });
   }
 
@@ -63,7 +63,7 @@ async function main() {
       await prisma.progress.upsert({
         where: { title },
         create: { title },
-        update: { title },
+        update: { title, deactived: false,},
       });
   }
 
@@ -71,7 +71,7 @@ async function main() {
       await prisma.role.upsert({
         where: { title },
         create: { title },
-        update: { title },
+        update: { title, deactived: false, },
       });
   }
 
@@ -86,7 +86,8 @@ async function main() {
       update: {
         startsAt: new Date(period.startsAt),
         endsAt: new Date(period.endsAt),
-        isCurrent: period.isCurrent
+        isCurrent: period.isCurrent,
+        deactived: false
       },
     });
   }
@@ -99,13 +100,14 @@ async function main() {
     where: { employeeNumber: 22222 }, //* We can use the employee number field to search the user
     update: {
       fullName: "Daniel Fernández",
-      email: "daniel@gmail.com",
+      email: "daniel@gemso.com",
       jobPosition: "Manager de Software",
       positionSeniority: new Date("2025-04-20"),
       companySeniority: new Date("2025-02-01"),
       companyContribution: "Mi puesto como manager de software " +
         "contribuye a la empresa en lograr estar siempre " +
         "actualizados en ámbitos tecnológicos.",
+      deactived: false,
       role: {
         connect: { //* connect allows to relate to an entry with unique field
           id: 4 //* connect Daniel to the role with id 4
@@ -125,7 +127,7 @@ async function main() {
     create: {
       employeeNumber: 22222,
       fullName: "Daniel Fernández",
-      email: "daniel@gmail.com",
+      email: "daniel@gemso.com",
       jobPosition: "Manager de Software",
       positionSeniority: new Date("2025-04-20"),
       companySeniority: new Date("2025-02-01"),
@@ -157,16 +159,17 @@ async function main() {
       },
     },
   });
-  
+
   const userCollaborator = await prisma.user.upsert({
     where: { employeeNumber: 33333 },
     update: {
       fullName: "Andrés Sandoval Ibarra",
-      email: "andres@gmail.com",
+      email: "andres@gemso.com",
       jobPosition: "Coordinado de Puesto TI",
       positionSeniority: new Date("2025-04-20"),
       companySeniority: new Date("2025-02-01"),
-      companyContribution: "",
+      companyContribution: "Soy muy chilo",
+      deactived: false,
       boss: { //* Boss of Andres (daniel)
         connect: {
           id: (await userBoss).id //* since boss was created above we can access its id
@@ -191,11 +194,11 @@ async function main() {
     create: {
       employeeNumber: 33333,
       fullName: "Andrés Sandoval Ibarra",
-      email: "andres@gmail.com",
+      email: "andres@gemso.com",
       jobPosition: "Coordinador de Puesto TI",
       positionSeniority: new Date("2025-04-20"),
       companySeniority: new Date("2025-02-01"),
-      companyContribution: "",
+      companyContribution: "Soy muy chilo",
       boss: {
         connect: {
           id: (await userBoss).id
@@ -218,11 +221,260 @@ async function main() {
       },
     },
   });
-  
+
+  const userCollaborator2 = await prisma.user.upsert({
+    where: { employeeNumber: 44444 },
+    update: {
+      fullName: "Colaborador Dos",
+      email: "colab2@gemso.com",
+      jobPosition: "Lider de Redes Sociales",
+      positionSeniority: new Date("2025-02-01"),
+      companySeniority: new Date("2023-01-26"),
+      companyContribution: "Chambeo muy padre",
+      deactived: false,
+      boss: { //* Boss of Colaborador 2 (daniel)
+        connect: {
+          id: (await userBoss).id //* since boss was created above we can access its id
+        }
+      },
+      role: {
+        connect: {
+          id: 1
+        }
+      },
+      businessUnit: {
+        connect: {
+          id: 12
+        }
+      },
+      area: {
+        connect: {
+          id: 8
+        }
+      },
+    },
+    create: {
+      employeeNumber: 4444,
+      fullName: "Colaborador Dos",
+      email: "colab2@gemso.com",
+      jobPosition: "Lider de Redes Sociales",
+      positionSeniority: new Date("2025-02-01"),
+      companySeniority: new Date("2023-01-26"),
+      companyContribution: "Chambeo muy padre",
+      boss: { 
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      role: {
+        connect: {
+          id: 1
+        }
+      },
+      businessUnit: {
+        connect: {
+          id: 12
+        }
+      },
+      area: {
+        connect: {
+          id: 8
+        }
+      },
+    },
+  });
+
+  const userCollaborator3 = await prisma.user.upsert({
+    where: { employeeNumber: 55555 },
+    update: {
+      fullName: "Colaborador Tress",
+      email: "colab3@gemso.com",
+      jobPosition: "Intern",
+      positionSeniority: new Date("2025-02-01"),
+      companySeniority: new Date("2025-02-01"),
+      companyContribution: "Aprendo y aprendo",
+      deactived: false,
+      boss: { //* Boss of Colaborador 3 (daniel)
+        connect: {
+          id: (await userBoss).id //* since boss was created above we can access its id
+        }
+      },
+      role: {
+        connect: {
+          id: 1
+        }
+      },
+      businessUnit: {
+        connect: {
+          id: 6
+        }
+      },
+      area: {
+        connect: {
+          id: 11
+        }
+      },
+    },
+    create: {
+      employeeNumber: 55555,
+      fullName: "Colaborador Tress",
+      email: "colab3@gemso.com",
+      jobPosition: "Intern",
+      positionSeniority: new Date("2025-02-01"),
+      companySeniority: new Date("2025-02-01"),
+      companyContribution: "Aprendo y aprendo",
+      boss: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      role: {
+        connect: {
+          id: 1
+        }
+      },
+      businessUnit: {
+        connect: {
+          id: 6
+        }
+      },
+      area: {
+        connect: {
+          id: 11
+        }
+      },
+    },
+  });
+
+  const userCollaborator4 =  await prisma.user.upsert({
+    where: { employeeNumber: 66666 },
+    update: {
+      fullName: "Colaborador Quack",
+      email: "colab4@gemso.com",
+      jobPosition: "Tester de Producto",
+      positionSeniority: new Date("2025-02-01"),
+      companySeniority: new Date("2024-08-11"),
+      companyContribution: "Aseguro la calidad",
+      deactived: false,
+      boss: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      role: {
+        connect: {
+          id: 1
+        }
+      },
+      businessUnit: {
+        connect: {
+          id: 6
+        }
+      },
+      area: {
+        connect: {
+          id: 12
+        }
+      },
+    },
+    create: {
+      employeeNumber: 66666,
+      fullName: "Colaborador Quack",
+      email: "colab4@gemso.com",
+      jobPosition: "Tester de Producto",
+      positionSeniority: new Date("2025-02-01"),
+      companySeniority: new Date("2024-08-11"),
+      companyContribution: "Aseguro la calidad",
+      boss: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      role: {
+        connect: {
+          id: 1
+        }
+      },
+      businessUnit: {
+        connect: {
+          id: 6
+        }
+      },
+      area: {
+        connect: {
+          id: 12
+        }
+      },
+    },
+  });
+
+  const userCollaborator5 =  await prisma.user.upsert({
+    where: { employeeNumber: 77777 },
+    update: {
+      fullName: "Colaborador Sin Formulario",
+      email: "colab5@gemso.com",
+      jobPosition: "Ayudante de intern",
+      positionSeniority: new Date("2025-04-01"),
+      companySeniority: new Date("2024-04-01"),
+      companyContribution: "Soy nuevo nuevo nuevo",
+      deactived: false,
+      boss: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      role: {
+        connect: {
+          id: 1
+        }
+      },
+      businessUnit: {
+        connect: {
+          id: 6
+        }
+      },
+      area: {
+        connect: {
+          id: 11
+        }
+      },
+    },
+    create: {
+      employeeNumber: 77777,
+      fullName: "Colaborador Sin Formulario",
+      email: "colab5@gemso.com",
+      jobPosition: "Ayudante de intern",
+      positionSeniority: new Date("2025-04-01"),
+      companySeniority: new Date("2024-04-01"),
+      companyContribution: "Soy nuevo nuevo nuevo",
+      boss: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      role: {
+        connect: {
+          id: 1
+        }
+      },
+      businessUnit: {
+        connect: {
+          id: 6
+        }
+      },
+      area: {
+        connect: {
+          id: 11
+        }
+      },
+    },
+  });
+
   //*Forms
   const formCollaborator = await prisma.form.upsert({
     where: { id : 1 },
     update: {
+      deactived: false,
       collaborator: {
         connect: {
           id: (await userCollaborator).id
@@ -261,6 +513,7 @@ async function main() {
   const formBoss = await prisma.form.upsert({
     where: { id : 2 },
     update: {
+      deactived: false,
       collaborator: {
         connect: {
           id: (await userBoss).id
@@ -273,7 +526,7 @@ async function main() {
       },
       progress: {
         connect: {
-          id: 1
+          id: 2
         }
       }
     },
@@ -290,7 +543,124 @@ async function main() {
       },
       progress: {
         connect: {
-          id: 1
+          id: 2
+        }
+      }
+    }
+  })
+
+  const formCollaborator2 = await prisma.form.upsert({
+    where: { id : 3 },
+    update: {
+      deactived: false,
+      collaborator: {
+        connect: {
+          id: (await userCollaborator2).id
+        }
+      },
+      evaluator: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      progress: {
+        connect: {
+          id: 3
+        }
+      }
+    },
+    create: {
+      collaborator: {
+        connect: {
+          id: (await userCollaborator2).id
+        }
+      },
+      evaluator: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      progress: {
+        connect: {
+          id: 3
+        }
+      }
+    }
+  })
+
+  const formCollaborator3 = await prisma.form.upsert({
+    where: { id : 4 },
+    update: {
+      deactived: false,
+      collaborator: {
+        connect: {
+          id: (await userCollaborator3).id
+        }
+      },
+      evaluator: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      progress: {
+        connect: {
+          id: 4
+        }
+      }
+    },
+    create: {
+      collaborator: {
+        connect: {
+          id: (await userCollaborator3).id
+        }
+      },
+      evaluator: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      progress: {
+        connect: {
+          id: 4
+        }
+      }
+    }
+  })
+
+  const formCollaborator4 = await prisma.form.upsert({
+    where: { id : 5 },
+    update: {
+      deactived: false,
+      collaborator: {
+        connect: {
+          id: (await userCollaborator4).id
+        }
+      },
+      evaluator: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      progress: {
+        connect: {
+          id: 5
+        }
+      }
+    },
+    create: {
+      collaborator: {
+        connect: {
+          id: (await userCollaborator4).id
+        }
+      },
+      evaluator: {
+        connect: {
+          id: (await userBoss).id
+        }
+      },
+      progress: {
+        connect: {
+          id: 5
         }
       }
     }
@@ -301,6 +671,7 @@ async function main() {
     where: { id: 1 },
     update: {
         weight: 70,
+        deactived: false,
         classificationTitle: {
             connect: {
                 id: 1
@@ -321,6 +692,7 @@ async function main() {
     where: { id: 2 },
     update: {
         weight: 10,
+        deactived: false,
         classificationTitle: {
             connect: {
                 id: 1
@@ -341,6 +713,7 @@ async function main() {
     where: { id: 3 },
     update: {
         weight: 10,
+        deactived: false,
         classificationTitle: {
             connect: {
                 id: 1
@@ -361,6 +734,7 @@ async function main() {
     where: { id: 4 },
     update: {
         weight: 10,
+        deactived: false,
         classificationTitle: {
             connect: {
                 id: 1
@@ -383,7 +757,9 @@ async function main() {
     update: {
         weight: 20,
         title: "Conseguir mejorar mi nivel de negocio",
-        goal: "Al realizar este objetivo tengo como meta llegar a las 100 ventas en 50 dias en los dos departamentos relacionados con mi área.",        classification: {
+        goal: "Al realizar este objetivo tengo como meta llegar a las 100 ventas en 50 dias en los dos departamentos relacionados con mi área.",
+        deactived: false,
+        classification: {
             connect: {
                 id: (await objectiveClassificationDivision).id
             }
@@ -416,6 +792,7 @@ async function main() {
     update: {
         weight: 20,
         title: "Crear aportes clavo en el éxito del proyecto",
+        deactived: false,
         classification: {
             connect: {
                 id: (await objectiveClassificationDivision).id
@@ -448,6 +825,7 @@ async function main() {
     update: {
         weight: 30,
         title: "Conocer diferentes colaboradores",
+        deactived: false,
         classification: {
             connect: {
                 id: (await objectiveClassificationDivision).id
@@ -480,6 +858,7 @@ async function main() {
     update: {
         weight: 30,
         title: "Diseñar un buen UI/UX",
+        deactived: false,
         classification: {
             connect: {
                 id: (await objectiveClassificationDivision).id
@@ -512,6 +891,7 @@ async function main() {
     update: {
         weight: 50,
         title: "Optimización de Algoritmo",
+        deactived: false,
         classification: {
             connect: {
                 id: (await objectiveClassificationPerBusiness).id
@@ -544,6 +924,7 @@ async function main() {
     update: {
         weight: 50,
         title: "Mejora en el Programa Conectado",
+        deactived: false,
         classification: {
             connect: {
                 id: (await objectiveClassificationPerBusiness).id
@@ -576,6 +957,7 @@ async function main() {
     update: {
         weight: 100,
         title: "Capacitación de Equipo",
+        deactived: false,
         classification: {
             connect: {
                 id: (await objectiveClassificationPeople).id
@@ -608,6 +990,7 @@ async function main() {
     update: {
         weight: 100,
         title: "Capacitación en Azure",
+        deactived: false,
         classification: {
             connect: {
                 id: (await objectiveClassificationDevelopment).id

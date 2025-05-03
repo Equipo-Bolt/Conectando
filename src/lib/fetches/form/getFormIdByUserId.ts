@@ -18,6 +18,9 @@ export async function getFormIdByUserId( userId : number ) {
         }
 
         const currentPeriod = await getCurrentPeriod();
+        if(!currentPeriod.startsAt){
+            return "Sin Formulario Activo.";
+        }
 
         const currentForm = forms.find(form => 
             form.createdAt >= currentPeriod.startsAt && form.createdAt <= currentPeriod.endsAt
