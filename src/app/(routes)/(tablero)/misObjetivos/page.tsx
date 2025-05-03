@@ -28,12 +28,17 @@ async function MisObjetivosPage() {
     return (
       <div className="container mx-auto py-10">
         <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
-        <p className="text-lg">
-          Colaborador: {user.fullName}
-          <br />
-          Estado: <span className="text-blue-600">Sin Iniciar</span>
-        </p>
-        <IniciarPropuesta />
+
+        <div className="text-lg">
+          <p className="font-medium">
+            Colaborador: {user.fullName}
+          </p>
+          <p className="text-gemso-blue font-semibold ">
+            Estado: Sin Iniciar
+          </p>
+
+          <IniciarPropuesta />
+        </div>
       </div>
     );
   }
@@ -41,16 +46,18 @@ async function MisObjetivosPage() {
   const state: TypeProgress = await getProgressById(form.progressID);
 
   const content = stateComponentMap[state.title] ?? (
-    <p> Hubo en error al cargar tu formulario... </p>
+    <p> Hubo un error al cargar tu formulario... </p>
   );
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">Mis Objetivos</h1>
+      <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
 
-      <div className="space-y-0.5">
-        <p className="text-lg font-medium">Colaborador: {user.fullName}</p>
-        <p className="text-lg text-gemso-blue font-semibold ">
+      <div className="text-lg">
+        <p className="font-medium">
+          Colaborador: {user.fullName}
+        </p>
+        <p className="text-gemso-blue font-semibold ">
           Estado: {state.title}
         </p>
 

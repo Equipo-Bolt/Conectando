@@ -11,10 +11,10 @@ export default async function Borrador() {
   return (
     <div>
       <InfoHover>
-        <div className="text-sm mb-[1rem]">
+        <div className="text-sm mb-[0.5rem]">
           Para habilitar el envío de tus objetivos a revisión es necesario:
         </div>
-        <div className="text-sm ml-2 space-y-1">
+        <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
           <div>1. Tener tu información de usuario completa.</div>
           <div>
             2. Que la suma de los pesos de las clasificaciones de objetivos sea
@@ -30,14 +30,13 @@ export default async function Borrador() {
         </div>
       </InfoHover>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"}>Agregar Objetivo</Button>
       </div>
-      <div className="container space-y-8">
+      <div className="container mx-auto">
         {data.map((item, index) => (
           <div key={index}>
-            <h1 className="text-2xl font-bold pb-5"></h1>
-            <h1 className="text-2xl font-bold pb-5">
+            <h1 className="text-2xl font-bold pb-[1.5rem]">
               {item.classificationTitle}
             </h1>
             {item.objectives.length > 0 ? (
@@ -49,7 +48,7 @@ export default async function Borrador() {
         ))}
       </div>
 
-      <div className="flex justify-end mt-10">
+      <div className="flex justify-end mt-[1rem]">
         <Button variant={"gemso_yellow"}>Enviar a Retroalimentación</Button>
       </div>
     </div>
