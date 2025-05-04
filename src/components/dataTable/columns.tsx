@@ -6,6 +6,7 @@ import { DeleteButton } from "@/components/DeleteButton";
 import { DocumentTextIcon } from "@heroicons/react/24/solid";
 import IconTooltip from "@/components/IconTooltip";
 import { TypeObjective } from "@/types/TypeObjective";
+import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 
 export const columns: ColumnDef<TypeObjective>[] = [
   {
@@ -62,8 +63,7 @@ export const columns: ColumnDef<TypeObjective>[] = [
             title="Eliminar objetivo"
             description="¿Seguro que deseas eliminar este objetivo? Esta acción no se puede deshacer."
             handleConfirm={(id) => {
-              console.log("Aquí podrías eliminar el objetivo con ID:", id);
-              // Aquí podrías meter una llamada a la API, o cualquier otra acción específica
+              disableObjectiveAction(id);
             }}
           />
         </div>

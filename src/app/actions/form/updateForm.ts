@@ -9,8 +9,8 @@ export async function updateForm(formId: number, data: Form) {
       where: { id: formId },
       data,
     });
-    return "Form has been updated";
+    return "Formulario ha sido actualizado";
   } catch (error) {
-    throw new Error('Failed to update form');
+    throw new Error('Error al actualizar Formulario');
   }
 } 

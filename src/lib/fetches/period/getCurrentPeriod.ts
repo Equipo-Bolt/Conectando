@@ -8,7 +8,7 @@ export async function getCurrentPeriod() {
         });
 
         if (!period) {
-            throw new Error ("There are no current periods")
+            return ({} as TypePeriod)
         }
 
         return period as TypePeriod;

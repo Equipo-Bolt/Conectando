@@ -6,7 +6,8 @@ import { DataTable } from "@/components/dataTable/data-table";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 export default async function Borrador() {
-  const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[];
+  const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[]; //! default 1
+
   return (
     <div>
       <InfoHover>

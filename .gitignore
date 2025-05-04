@@ -45,3 +45,5 @@ next-env.d.ts
 
 # secure, sensitive data
 /secure 
+
+.zip*

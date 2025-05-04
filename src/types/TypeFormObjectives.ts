@@ -3,8 +3,8 @@ import { TypeObjective } from "./TypeObjective"
 
 export interface TypeFormObjectives {
     classificationTitle : string,
-    weight : number,
-    objectiveClassificationID : number,
+    weight : number | 0, //! Cero si hay relaciones creadas para los objs
+    objectiveClassificationID : number | null,
     objectives : TypeObjective[]
 }
 
