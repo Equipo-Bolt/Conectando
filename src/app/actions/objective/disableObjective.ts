@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 
-export async function disableObjective(objectiveId: number) {
+export async function disableObjectiveAction(objectiveId: number) {
   try {
     await prisma.objective.update({
       where: { id: objectiveId },
