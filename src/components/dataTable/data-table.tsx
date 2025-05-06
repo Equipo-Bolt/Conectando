@@ -13,7 +13,6 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-  TableHead,
 } from "@/components/ui/table";
 
 interface DataTableProps<TData, TValue> {
@@ -66,7 +65,7 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                className="text-sm border-b border-gray-500"
+                className="text-sm border-b bg-white border-gray-500"
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (

@@ -2,6 +2,7 @@
 
 // React and Next.js
 import { useActionState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 
 // Form Validation
@@ -35,6 +36,8 @@ type ObjectiveFormData = z.infer<typeof createObjectiveSchema>;
 
                                 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProps) { {
+    const router = useRouter();
+
     const form = useForm<ObjectiveFormData>({
       resolver: zodResolver(createObjectiveSchema),
       defaultValues: {
@@ -68,8 +71,12 @@ export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProp
                     goal: data.goal,
                     result: null,
                 };
-  
-              await startTransition(() => newAction(objectiveData));
+                // Call the action to create the objective
+                await startTransition(() => newAction(objectiveData));
+
+                if (state === "Objetivo Creado") {
+                    router.push("/misObjetivos"); // Redirect to the objectives page
+                }
             }
           )}
           className="space-y-6">

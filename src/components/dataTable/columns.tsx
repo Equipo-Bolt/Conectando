@@ -3,7 +3,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DetailButton } from "@/components/DetailButton";
 import { DeleteButton } from "@/components/DeleteButton";
-import { DocumentTextIcon } from "@heroicons/react/24/solid";
 import IconTooltip from "@/components/IconTooltip";
 import { TypeObjective } from "@/types/TypeObjective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
