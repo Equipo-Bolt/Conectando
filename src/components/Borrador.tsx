@@ -5,15 +5,16 @@ import { DataTable } from "@/components/dataTable/data-table";
 
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+import { Button } from "./ui/button";
 export default async function Borrador() {
   const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[];
   return (
     <div>
       <InfoHover>
-        <div className="text-sm mb-[1rem]">
+        <div className="text-sm mb-[0.5rem]">
           Para habilitar el envío de tus objetivos a revisión es necesario:
         </div>
-        <div className="text-sm ml-2 space-y-1">
+        <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
           <div>1. Tener tu información de usuario completa.</div>
           <div>
             2. Que la suma de los pesos de las clasificaciones de objetivos sea
@@ -28,11 +29,15 @@ export default async function Borrador() {
           </div>
         </div>
       </InfoHover>
-      <div className="container mx-auto py-10">
+
+      <div className="flex justify-end mb-[1rem]">
+        <Button variant={"gemso_blue"}>Agregar Objetivo</Button>
+      </div>
+      <div className="container mx-auto">
         {data.map((item, index) => (
           <div key={index}>
-            <h1 className="text-2xl font-bold pb-5">
-              {item.classificationTitle || "Objetivos de Negocio/División"}
+            <h1 className="text-2xl font-bold pb-[1.5rem]">
+              {item.classificationTitle}
             </h1>
             {item.objectives.length > 0 ? (
               <DataTable columns={columns} data={item.objectives} />
@@ -41,6 +46,10 @@ export default async function Borrador() {
             )}
           </div>
         ))}
+      </div>
+
+      <div className="flex justify-end mt-[1rem]">
+        <Button variant={"gemso_yellow"}>Enviar a Retroalimentación</Button>
       </div>
     </div>
   );
