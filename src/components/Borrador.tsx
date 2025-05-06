@@ -6,6 +6,7 @@ import { DataTable } from "@/components/dataTable/data-table";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 import { Button } from "./ui/button";
+import Link from "next/link";
 export default async function Borrador() {
   const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[]; //! default 1
 
@@ -32,7 +33,11 @@ export default async function Borrador() {
       </InfoHover>
 
       <div className="flex justify-end mb-[1rem]">
-        <Button variant={"gemso_blue"}>Agregar Objetivo</Button>
+        <Button variant={"gemso_blue"} asChild>
+          <Link href={"/misObjetivos/crear"}>
+            Agregar Objetivo
+          </Link>
+        </Button>
       </div>
       <div className="container mx-auto">
         {data.map((item, index) => (

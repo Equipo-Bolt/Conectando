@@ -1,9 +1,8 @@
 "use client";
 
 // React and Next.js
-import { useActionState, useTransition } from "react";
+import { useActionState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
 
 // Form Validation
 import { useForm } from "react-hook-form";
@@ -26,6 +25,7 @@ import { TypeClassification } from "@/types/TypeClassification";
 
 // Actions
 import { createObjectiveAction } from "@/app/actions/objective/createObjective";
+
 
 //* Interface
 interface CreateObjectiveFormProps {
@@ -50,35 +50,42 @@ export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProp
   
     const [state, newAction] = useActionState(createObjectiveAction, null) //* pones la action aqui
     const [isPending, startTransition] = useTransition();
-  
+
+    async function handleSubmit(data: ObjectiveFormData) {
+      const parsedData = createObjectiveSchema.safeParse(data);
+      if (!parsedData.success) {
+          console.error("Validation errors:", parsedData.error.format());
+          return;
+      }
+
+      const objectiveData: MutateObjectiveInfo = {
+          formID: 1, //! default 1, form6 no tiene objs
+          title: data.title,
+          weight: parseInt(data.weight),
+          classificationCatalogID: parseInt(data.classification),
+          goal: data.goal,
+          result: null,
+      };
+      
+      await startTransition(() => {
+          newAction(objectiveData);
+      });
+    }
+
+    useEffect(() => {
+      if (state === null) return;
+      else if (state === "Objetivo Creado") {
+        router.push("/misObjetivos"); // Redirigir a la página de objetivos
+      } else {
+        console.error("Error creating objective:", state);
+      }
+    }, [state, router]);
   
     return (
         <Form {...form}>
           <form onSubmit={
-            form.handleSubmit(async (data) => {
-                // Validate the form data
-                const parsedData = createObjectiveSchema.safeParse(data);
-                if (!parsedData.success) {
-                    console.error("Validation errors:", parsedData.error.format());
-                    return;
-                }
-
-                const objectiveData: MutateObjectiveInfo = {
-                    formID: 1, //! default 1, form6 no tiene objs
-                    title: data.title,
-                    weight: parseInt(data.weight),
-                    classificationCatalogID: parseInt(data.classification),
-                    goal: data.goal,
-                    result: null,
-                };
-                // Call the action to create the objective
-                await startTransition(() => newAction(objectiveData));
-
-                if (state === "Objetivo Creado") {
-                    router.push("/misObjetivos"); // Redirect to the objectives page
-                }
-            }
-          )}
+            form.handleSubmit(handleSubmit)
+          }
           className="space-y-6">
             {isPending ? <p className="text-blue-600">Enviando...</p> : <h1>Resultado: {state}</h1>}
             {/* Título del objetivo */}
@@ -161,7 +168,7 @@ export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProp
             {/* Botones */}
             <div className="flex justify-end gap-4 pt-2">
                 <CancelButton route="./" text="Cancelar" />
-                <SubmitButton text="Crear Objetivo" />
+                <SubmitButton text="Crear Objetivo" isPending={isPending} />
             </div>
           </form>
         </Form>
