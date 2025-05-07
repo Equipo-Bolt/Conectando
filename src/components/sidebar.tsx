@@ -1,4 +1,3 @@
-import { PowerIcon } from "@heroicons/react/24/outline";
 import NavLinks from "./navlinks";
 import Image from "next/image";
 import GemsoBlanco from "../../public/GemsoBlanco.png";
