@@ -17,7 +17,7 @@ export default function SideNav() {
       </div>
 
       {/* Primera línea divisoria */}
-      <hr className="border-gemso-light-blue mb-4 mt-10" />
+      <hr className="border-blue-400/70 my-4" />
 
       {/* Título */}
       <h2 className="text-white text-xl font-bold mb-3 px-2">
@@ -46,7 +46,7 @@ export default function SideNav() {
       </nav>
 
       {/* Segunda línea divisoria */}
-      <hr className="border-gemso-light-blue my-4" />
+      <hr className="border-blue-400/70 my-4" />
 
       {/* Espacio vacío al final */}
       <div className="flex-grow" />
