@@ -23,21 +23,21 @@ export async function createObjectiveAction(
   prevState: string | null,
   data: MutateObjectiveInfo //* TypeObjective ya incluye los ids de form y de clasificacion
 ) {
-  //! Considero que los siguientes si son errores por si Front manda info incompleta
+  //! ERRORES para debugeo
   if (!data.formID) {
-    throw new Error("collaboratorID is required in data");
+    throw new Error("formID es requerida en data");
   }
 
   if (!data.classificationCatalogID) {
-    throw new Error("classicationId is required")
+    throw new Error("classicationId is es requerida en data")
   }
 
   if (!data.title) {
-    throw new Error("title is required in data")
+    throw new Error("title es requerida en data")
   }
 
   if(!data.weight) {
-    throw new Error("weight is required in data")
+    throw new Error("weight es requerida en data")
   }
 
   try {
@@ -47,7 +47,7 @@ export async function createObjectiveAction(
     const classification = await getClassificationById(Number(data.classificationCatalogID));
 
     if (!classification) {
-      throw new Error ("Could not find Classification in Catalogs")
+      throw new Error ("La clasificación no se encuentra en los catalogos")
     }
 
     //* 2. Conseguimos los demas Objetivos del Formulario
@@ -102,7 +102,7 @@ export async function createObjectiveAction(
     })
 
     if (duplicateObjective) {
-      return "Ya existe un Objetivo identico." //! Fail
+      return "Ya existe un Objetivo identico" //! Fail
     }
 
     await prisma.form.update({

@@ -8,8 +8,8 @@ export async function disableForm(formId: number) {
       where: { id : formId },
       data: { deactived: true },
     });
-    return "Form has been disabled";
+    return "Formulario ha sido desactivado";
   } catch (error) {
-    throw new Error('Failed to disable form');
+    throw new Error('Error al desactivar Formulario');
   }
 } 

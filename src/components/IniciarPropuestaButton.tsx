@@ -10,10 +10,10 @@ export default function IniciarPropuestaButton () {
 
     const handleClick = async () => {
         // Call the action to create a form
-        const userId = 6; // Replace with the actual user ID
+        const userId = 1; // Replace with the actual user ID
         const result = await createFormAction(null, userId);
         
-        if (result === "Form created for user") {
+        if (result === "Formulario de objetivos creado") {
             // Redirect to the form creation page
             router.refresh();
         } else {
@@ -26,7 +26,7 @@ export default function IniciarPropuestaButton () {
     };
 
     return (
-        <Button className="bg-gemso-yellow hover:bg-gemso-yellow/90 text-white font-bold py-2 px-4 rounded shadow-md" onClick={handleClick}>
+        <Button className="bg-gemso-yellow hover:bg-gemso-yellow/90 text-white font-bold py-2 px-4 rounded shadow-md cursor cursor-pointer" onClick={handleClick}>
             Iniciar mi propuesta de objetivos
         </Button>
     );

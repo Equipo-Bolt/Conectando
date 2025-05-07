@@ -1,6 +1,15 @@
 "use client"
 
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
+import { 
+  AlertDialog, 
+  AlertDialogContent, 
+  AlertDialogHeader, 
+  AlertDialogFooter, 
+  AlertDialogTitle, 
+  AlertDialogDescription, 
+  AlertDialogCancel, 
+  AlertDialogAction 
+} from "@/components/ui/alert-dialog"
 
 //* Este es universal modal de eliminar, se le pueden pasar los props que necesite el modal
 interface DeleteModalProps {

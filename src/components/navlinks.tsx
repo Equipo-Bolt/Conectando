@@ -5,12 +5,18 @@ import clsx from "clsx";
 import { usePathname } from "next/navigation";
 
 // Map of links to display in the side navigation.
-const links = [
-  { name: "Mis Objetivos", href: "/misObjetivos", icon: UsersIcon },
+const sections = [
   {
-    name: "Mis Colaboradores",
-    href: "/misColaboradores",
-    icon: ClipboardDocumentIcon,
+    title: "Creación de Metas",
+    links: [
+      { name: "Mis Objetivos", href: "/misObjetivos", icon: ClipboardDocumentIcon },
+    ],
+  },
+  {
+    title: "Evaluación",
+    links: [
+      { name: "Mis Colaboradores", href: "/misColaboradores", icon: UsersIcon },
+    ],
   },
 ];
 
@@ -20,24 +26,35 @@ export default function NavLinks() {
 
   return (
     <>
-      {links.map(({ name, href, icon }) => {
-        const LinkIcon = icon;
-        return (
-          <Link
-            key={name}
-            href={href}
-            className={clsx(
-              "flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium md:flex-none md:justify-start md:p-2 md:px-3",
-              pathname.startsWith(href)
-                ? "bg-selected-blue text-white"
-                : "bg-gemso-dark-blue text-white hover:bg-sky-100 hover:text-blue-600"
-            )}
-          >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{name}</p>
-          </Link>
-        );
-      })}
+      <hr className="border-selected-blue" />
+      {sections.map((section) => (
+        <div key={section.title}>
+          <h2 className="text-white text-xl font-bold mb-[1rem] px-[0.5rem]">
+            {section.title}
+          </h2>
+          <nav className="px-2 gap-[0.5rem] mb-[1rem]">
+            {section.links.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={clsx(
+                    "flex items-center text-white rounded-lg p-[0.625em]",
+                    isActive
+                      ? "bg-selected-blue"
+                      : "hover:bg-gemso-blue"
+                  )}
+                >
+                  <link.icon className="w-[1.5rem] h-[1.5rem] mr-[0.5rem]" />
+                  <span className="text-sm font-medium">{link.name}</span>
+                </Link>
+              );
+            })}
+          </nav>
+          <hr className="border-selected-blue " />
+        </div>
+      ))}
     </>
   );
 }

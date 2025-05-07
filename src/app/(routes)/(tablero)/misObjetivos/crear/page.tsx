@@ -12,7 +12,7 @@ import { TypeClassification } from "@/types/TypeClassification";
 import { TypeUser } from "@/types/TypeUser";
 
 async function PaginaParaCrearObjetivo() {
-  const user: TypeUser = await getUserById(2); // Cambia el ID según sea necesario
+  const user: TypeUser = await getUserById(8); //! default 1, Cambia el ID según sea necesario
   const classifications: TypeClassification[] = await getAllClassifications(); // Cambia el ID según sea necesario
   return (
     <div>

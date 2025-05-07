@@ -16,8 +16,9 @@ export async function updateObjectiveAction(
   data: MutateObjectiveInfo
 ) {
 
+  //! Errores para debugeo
   if (!data.id) {
-    throw new Error("id of Objective is required in data");
+    throw new Error("id es requerido en data");
   }
 
   try {
@@ -33,7 +34,7 @@ export async function updateObjectiveAction(
     })
 
     if (duplicateObjective) {
-      return "Ya existe un Objetivo identico." //! Fail
+      return "Ya existe un Objetivo identico" //! Fail
     }
 
     await prisma.objective.update({
@@ -43,6 +44,6 @@ export async function updateObjectiveAction(
 
     return "Se ha Actualizado el Objetivo"; //! Success
   } catch (error) {
-    throw new Error(`Failed to update objective: ${(error as Error).message}`);
+    throw new Error(`Error al actualizar objetivo: ${(error as Error).message}`);
   }
 } 

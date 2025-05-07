@@ -16,15 +16,15 @@ import { TypeUser } from "@/types/TypeUser";
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Borrador />,
   Enviado: <EsperandoRevision />,
+  "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>, //! Fran: que este en este orden plz
   Aprobado: <p> Aprobado </p>,
-  "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>,
   Calificado: <p> Calificado </p>,
 };
 
 async function MisObjetivosPage() {
-  const user: TypeUser = await getUserById(2);
-  const formId: string = await getFormIdByUserId(2);
-  if (formId === "No Current Form") {
+  const user : TypeUser = await getUserById(1); //! default 2
+  const formId : string =  await getFormIdByUserId(user.id);
+  if (formId === "Sin Formulario Activo") {
     return (
       <div className="container mx-auto py-10">
         <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>

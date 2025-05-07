@@ -4,7 +4,6 @@ import { TypeForm } from "@/types/TypeForm";
 
 /**
  * * getFormIdByUserId
- * its name could change to be more understable
 
  * @param userId The id of the user to find their current form 
  * @returns id of the form as string, cuz consistency (because it could also send "Nothing found")
@@ -14,17 +13,20 @@ export async function getFormIdByUserId( userId : number ) {
         const forms = await getFormsOfUser(userId) as TypeForm[];
 
         if (forms.length === 0) {
-            return "No Current Form";
+            return "Sin Formulario Activo";
         }
 
         const currentPeriod = await getCurrentPeriod();
+        if(!currentPeriod.startsAt){
+            return "Sin Formulario Activo";
+        }
 
         const currentForm = forms.find(form => 
             form.createdAt >= currentPeriod.startsAt && form.createdAt <= currentPeriod.endsAt
         );
 
         if (!currentForm) {
-            return "No Current Form";
+            return "Sin Formulario Activo";
         }
 
         return String(currentForm.id);
