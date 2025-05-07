@@ -22,7 +22,7 @@ const stateComponentMap: { [key: string]: React.ReactNode } = {
 };
 
 async function MisObjetivosPage() {
-  const user : TypeUser = await getUserById(2); //! default 2
+  const user : TypeUser = await getUserById(1); //! default 2
   const formId : string =  await getFormIdByUserId(user.id);
   if (formId === "Sin Formulario Activo") {
     return (
