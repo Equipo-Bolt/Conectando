@@ -31,7 +31,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md overflow-hidden">
+    <div className="rounded-md overflow-hidden mb-[2rem]">
       <Table>
         <TableHeader className="rounded-t-md">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -61,7 +61,7 @@ export function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {data.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
@@ -70,8 +70,6 @@ export function DataTable<TData, TValue>({
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="py-3 px-4">
-                    {" "}
-                    {/* Modificamos el padding vertical a py-3 */}
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -79,8 +77,11 @@ export function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+              <TableCell
+                colSpan={columns.length}
+                className="text-center bg-white py-3 px-4"
+              >
+                No hay objetivos en esta clasificación
               </TableCell>
             </TableRow>
           )}

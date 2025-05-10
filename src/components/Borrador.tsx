@@ -34,9 +34,7 @@ export default async function Borrador() {
 
       <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"} asChild>
-          <Link href={"/misObjetivos/crear"}>
-            Agregar Objetivo
-          </Link>
+          <Link href={"/misObjetivos/crear"}>Agregar Objetivo</Link>
         </Button>
       </div>
       <div className="container mx-auto">
@@ -45,11 +43,8 @@ export default async function Borrador() {
             <h1 className="text-2xl font-bold pb-[1.5rem]">
               {item.classificationTitle}
             </h1>
-            {item.objectives.length > 0 ? (
-              <DataTable columns={columns} data={item.objectives} />
-            ) : (
-              <p>No hay datos</p>
-            )}
+
+            <DataTable columns={columns} data={item.objectives} />
           </div>
         ))}
       </div>

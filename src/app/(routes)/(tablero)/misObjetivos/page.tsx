@@ -30,12 +30,8 @@ async function MisObjetivosPage() {
         <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
 
         <div className="text-lg">
-          <p className="font-medium">
-            Colaborador: {user.fullName}
-          </p>
-          <p className="text-gemso-blue font-semibold ">
-            Estado: Sin Iniciar
-          </p>
+          <p className="font-medium">Colaborador: {user.fullName}</p>
+          <p className="text-gemso-blue font-semibold ">Estado: Sin Iniciar</p>
 
           <IniciarPropuesta />
         </div>
@@ -51,15 +47,11 @@ async function MisObjetivosPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-[1rem]">Mis Objetivos</h1>
+      <h1 className="text-3xl  font-bold mb-[1rem]">Mis Objetivos</h1>
 
       <div className="text-lg">
-        <p className="font-medium">
-          Colaborador: {user.fullName}
-        </p>
-        <p className="text-gemso-blue font-semibold ">
-          Estado: {state.title}
-        </p>
+        <p className="font-medium">Colaborador: {user.fullName}</p>
+        <p className="text-gemso-blue font-semibold ">Estado: {state.title}</p>
 
         {content}
       </div>
