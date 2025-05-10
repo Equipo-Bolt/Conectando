@@ -2,32 +2,38 @@
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { createFormAction } from "@/app/actions/form/createForm";
 
-export default function IniciarPropuestaButton () {
+export default function IniciarPropuestaButton() {
     const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
 
     const handleClick = async () => {
-        // Call the action to create a form
-        const userId = 1; // Replace with the actual user ID
+        const userId = 7; // Reemplaza con el ID real del usuario
         const result = await createFormAction(null, userId);
-        
+
         if (result === "Formulario de objetivos creado") {
-            // Redirect to the form creation page
             router.refresh();
         } else {
-            return (
-                <div className="text-red-500 text-center mt-4">
-                    {result}
-                </div>
-            );
+            setError(result); // Guarda el error para mostrarlo en pantalla
         }
     };
 
     return (
-        <Button className="bg-gemso-yellow hover:bg-gemso-yellow/90 text-white font-bold py-2 px-4 rounded shadow-md cursor cursor-pointer" onClick={handleClick}>
-            Iniciar mi propuesta de objetivos
-        </Button>
+        <div className="flex flex-col items-center">
+            <Button
+                className="bg-gemso-yellow hover:bg-gemso-yellow/90 text-white font-bold py-2 px-4 rounded shadow-md"
+                onClick={handleClick}
+            >
+                Iniciar mi propuesta de objetivos
+            </Button>
+            {error && (
+                <div className="text-red-500 text-center mt-4">
+                    {error}
+                </div>
+            )}
+        </div>
     );
 }
