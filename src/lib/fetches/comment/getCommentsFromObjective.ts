@@ -8,7 +8,7 @@ export async function getCommentsFromObjective( objectiveId : number ) {
         });
 
         if (comments.length === 0) {
-            throw new Error ("There are no Comments for this objective")
+            return [] as TypeComment[];
         }
 
         return comments.map(({ deactived, updatedAt, ...c }) => ( c )) as TypeComment[];

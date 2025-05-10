@@ -1,13 +1,16 @@
 import InfoHover from "@/components/InfoHover";
 
-import { columns } from "@/components/dataTableMisObjetivos/columns";
-import { DataTableMisObjetivos } from "@/components/dataTableMisObjetivos/data-table";
+import { columns } from "@/components/dataTableObjetivosColaborador/columns";
+import { DataTableObjColaborador } from "@/components/dataTableObjetivosColaborador/data-table";
 
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
+
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+
 import { Button } from "./ui/button";
 import Link from "next/link";
-export default async function Borrador() {
+
+export default async function Revision() {
   const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[]; //! default 1
 
   return (
@@ -38,19 +41,19 @@ export default async function Borrador() {
         </Button>
       </div>
       <div className="container mx-auto">
-        {data.map((item, index) => (
-          <div key={index}>
+        {data.map((item) => (
+          <div key={item.objectiveClassificationID}>
             <h1 className="text-2xl font-bold pb-[1.5rem]">
               {item.classificationTitle}
             </h1>
 
-            <DataTableMisObjetivos columns={columns} data={item.objectives} />
+            <DataTableObjColaborador columns={columns} data={item.objectives} />
           </div>
         ))}
       </div>
 
       <div className="flex justify-end mt-[1rem]">
-        <Button variant={"gemso_yellow"}>Enviar a Retroalimentación</Button>
+        <Button variant={"gemso_yellow"}>Aprobar Objetivos</Button>
       </div>
     </div>
   );
