@@ -62,7 +62,7 @@ export default async function Retroalimentación() {
           <UpdateProgressButton
             text="Aprobar Objetivos"
             form={form}
-            objectives={data}
+            formObjectives={data}
             progressID={3}
           />
       </div>
