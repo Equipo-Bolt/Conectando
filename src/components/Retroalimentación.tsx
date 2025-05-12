@@ -5,6 +5,7 @@ import { DataTableObjColaborador } from "@/components/dataTableObjetivosColabora
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
+import { getFormById } from "@/lib/fetches/form/getFormById";
 
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 
@@ -15,8 +16,8 @@ import UpdateProgressButton from "./UpdateProgressButton";
 export default async function Retroalimentación() {
   const userId = 3;
   const userFormId = await getFormIdByUserId(userId);
-  console.log(userFormId);
-  const data = (await getObjectivesByFormId(parseInt(userFormId))) as TypeFormObjectives[]; //! default 1
+  const form = await getFormById(parseInt(userFormId));
+  const data = (await getObjectivesByFormId(parseInt(userFormId))) as TypeFormObjectives[];
 
   return (
     <div>
@@ -60,7 +61,8 @@ export default async function Retroalimentación() {
       <div className="flex justify-end mt-[1rem]">
           <UpdateProgressButton
             text="Aprobar Objetivos"
-            formID={parseInt(userFormId)}
+            form={form}
+            objectives={data}
             progressID={3}
           />
       </div>
