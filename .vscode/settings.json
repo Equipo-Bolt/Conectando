@@ -1,3 +1,22 @@
 {
-    "prisma.fileWatcher": true
+    "prisma.fileWatcher": true,
+    "sqltools.connections": [
+        {
+            "connectionTimeout": 15,
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true,
+                "trustServerCertificate": true
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 1433,
+            "driver": "MSSQL",
+            "name": "ConectandoLocal",
+            "username": "sa",
+            "password": "TUTISWOMBAT",
+            "database": "ConectandoLocal"
+        }
+    ]
 }

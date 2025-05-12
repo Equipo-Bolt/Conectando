@@ -3,15 +3,20 @@ import InfoHover from "@/components/InfoHover";
 import { columns } from "@/components/dataTableObjetivosColaborador/columns";
 import { DataTableObjColaborador } from "@/components/dataTableObjetivosColaborador/data-table";
 
+import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 
 import { Button } from "./ui/button";
 import Link from "next/link";
+import UpdateProgressButton from "./UpdateProgressButton";
 
-export default async function Revision() {
-  const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[]; //! default 1
+export default async function Retroalimentación() {
+  const userId = 3;
+  const userFormId = await getFormIdByUserId(userId);
+  console.log(userFormId);
+  const data = (await getObjectivesByFormId(parseInt(userFormId))) as TypeFormObjectives[]; //! default 1
 
   return (
     <div>
@@ -53,7 +58,12 @@ export default async function Revision() {
       </div>
 
       <div className="flex justify-end mt-[1rem]">
-        <Button variant={"gemso_yellow"}>Aprobar Objetivos</Button>
+          <UpdateProgressButton
+            text="Aprobar Objetivos"
+            isPending={false}
+            formID={parseInt(userFormId)}
+            progressID={4}
+          />
       </div>
     </div>
   );

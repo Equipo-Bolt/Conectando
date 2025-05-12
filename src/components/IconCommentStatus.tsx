@@ -1,23 +1,44 @@
+"use client";
+
 import { XMarkIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { useState, useEffect } from "react";
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
+
+import { TypeComment } from "@/types/TypeComment";
 
 interface IconCommentStatusProps {
   objectiveId: number;
 }
 
-async function IconCommentStatus({ objectiveId }: IconCommentStatusProps) {
-  const comments = await getCommentsFromObjective(objectiveId);
-  const hasComments = comments.length > 0;
+export default function IconCommentStatus({ objectiveId }: IconCommentStatusProps) {
+  const [hasComments, setHasComments] = useState<TypeComment[] | null>(null);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const result = await getCommentsFromObjective(objectiveId);
+        setHasComments(result);
+      } catch (error) {
+        console.error('Error checking comments:', error);
+        setHasComments(null);
+      }
+    };
+    
+    fetchStatus();
+  }, [objectiveId]);
+
+  // Show a loading state while fetching status
+  if (hasComments === null) {
+    return <div className="animate-pulse w-[1.5rem] h-[1.5rem] bg-gray-200 rounded-full"></div>;
+  }
 
   return (
     <div>
       {hasComments ? (
-        <CheckIcon className="w-[1.5rem] h-[1.5rem]" />
+        <XMarkIcon className="w-[1.5rem] h-[1.5rem] text-gemso-red" />
       ) : (
-        <XMarkIcon className="w-[1.5rem] h-[1.5rem]" />
+        <CheckIcon className="w-[1.5rem] h-[1.5rem] text-green-800" />
       )}
     </div>
   );
 }
-
-export default IconCommentStatus;

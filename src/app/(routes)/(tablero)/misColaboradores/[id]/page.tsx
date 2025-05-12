@@ -1,7 +1,7 @@
 "use server";
 
 import Borrador from "@/components/Borrador";
-import Revision from "@/components/Revision";
+import Retroalimentación from "@/components/Retroalimentación";
 import IniciarPropuesta from "@/components/IniciarPropuesta";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
@@ -15,7 +15,7 @@ import { TypeUser } from "@/types/TypeUser";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Borrador />,
-  "Esperando Retroalimentación": <Revision />,
+  "Esperando Retroalimentación": <Retroalimentación />,
   "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>, //! Fran: que este en este orden plz
   Aprobado: <p> Aprobado </p>,
   Calificado: <p> Calificado </p>,
