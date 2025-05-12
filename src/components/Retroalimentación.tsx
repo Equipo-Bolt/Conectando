@@ -1,14 +1,23 @@
 import InfoHover from "@/components/InfoHover";
 
-import { columns } from "@/components/dataTableMisObjetivos/columns";
-import { DataTableMisObjetivos } from "@/components/dataTableMisObjetivos/data-table";
+import { columns } from "@/components/dataTableObjetivosColaborador/columns";
+import { DataTableObjColaborador } from "@/components/dataTableObjetivosColaborador/data-table";
 
+import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
+import { getFormById } from "@/lib/fetches/form/getFormById";
+
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+
 import { Button } from "./ui/button";
 import Link from "next/link";
-export default async function Borrador() {
-  const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[]; //! default 1
+import UpdateProgressButton from "./UpdateProgressButton";
+
+export default async function Retroalimentación() {
+  const userId = 3;
+  const userFormId = await getFormIdByUserId(userId);
+  const form = await getFormById(parseInt(userFormId));
+  const data = (await getObjectivesByFormId(parseInt(userFormId))) as TypeFormObjectives[];
 
   return (
     <div>
@@ -38,19 +47,24 @@ export default async function Borrador() {
         </Button>
       </div>
       <div className="container mx-auto">
-        {data.map((item, index) => (
-          <div key={index}>
+        {data.map((item) => (
+          <div key={item.objectiveClassificationID}>
             <h1 className="text-2xl font-bold pb-[1.5rem]">
               {item.classificationTitle}
             </h1>
 
-            <DataTableMisObjetivos columns={columns} data={item.objectives} />
+            <DataTableObjColaborador columns={columns} data={item.objectives} />
           </div>
         ))}
       </div>
 
       <div className="flex justify-end mt-[1rem]">
-        <Button variant={"gemso_yellow"}>Enviar a Retroalimentación</Button>
+          <UpdateProgressButton
+            text="Aprobar Objetivos"
+            form={form}
+            formObjectives={data}
+            progressID={3}
+          />
       </div>
     </div>
   );

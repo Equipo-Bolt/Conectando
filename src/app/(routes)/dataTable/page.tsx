@@ -1,7 +1,7 @@
 "use server";
 
-import { columns } from "../../../components/dataTable/columns";
-import { DataTable } from "../../../components/dataTable/data-table";
+import { columns } from "../../../components/dataTableMisObjetivos/columns";
+import { DataTable } from "../../../components/dataTableMisObjetivos/data-table";
 
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
