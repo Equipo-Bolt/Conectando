@@ -8,7 +8,7 @@ import { cookies } from "next/headers"
  * @param cookieName<string> nombre de la cookie
  * @param value<string> nombre del valor de la cookie
  */ 
-export async function setCustomCookie(cookieName : string, value : string) {
+export async function setCustomCookieAction(cookieName : string, value : string) {
     if (!cookieName) {
         throw new Error("No se introdujo cookieName")
     }
@@ -23,7 +23,5 @@ export async function setCustomCookie(cookieName : string, value : string) {
         cookieStore.set(cookieName, value, { secure: true })
     } catch {
         throw new Error("Al crear cookie")
-    } finally {
-        alert("cookie creada")
     }
 }

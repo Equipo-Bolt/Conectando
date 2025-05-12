@@ -1,5 +1,8 @@
 "use server";
 
+//* Next Cookies
+import { cookies } from "next/headers";
+
 // Load Data
 import { getAllClassifications } from "@/lib/fetches/classification/getAllClassifications";
 import { getUserById } from "@/lib/fetches/user/getUserById";
@@ -12,7 +15,10 @@ import { TypeClassification } from "@/types/TypeClassification";
 import { TypeUser } from "@/types/TypeUser";
 
 async function PaginaParaCrearObjetivo() {
-  const user: TypeUser = await getUserById(2); //! default 1, Cambia el ID según sea necesario
+  //* Usando cookies
+  const cookieStore = await cookies();
+  const userId = cookieStore.get('userId')?.value;
+  const user: TypeUser = await getUserById(Number(userId)); //! default 1, Cambia el ID según sea necesario
   const classifications: TypeClassification[] = await getAllClassifications(); // Cambia el ID según sea necesario
   return (
     <div>
