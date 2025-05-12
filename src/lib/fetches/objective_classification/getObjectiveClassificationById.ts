@@ -9,7 +9,7 @@ export async function getObjectiveClassificationById(objectiveClassificationId :
         })
 
         if (!objectiveClassification) {
-            throw new Error ("Objective-Classification does not exist");
+            return ({} as TypeObjectiveClassification);
         }
 
         return {

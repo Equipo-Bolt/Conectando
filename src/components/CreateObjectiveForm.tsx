@@ -87,7 +87,7 @@ export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProp
             form.handleSubmit(handleSubmit)
           }
           className="space-y-6">
-            {isPending ? <p className="text-blue-600">Enviando...</p> : <h1>Resultado: {state}</h1>}
+            {isPending ? (<p className="text-blue-600">Enviando...</p>) : (state? (<h1>Resultado: {state} </h1>) : (<></>)) }
             {/* Título del objetivo */}
             <FormField
               control={form.control}
