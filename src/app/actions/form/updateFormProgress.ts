@@ -1,64 +1,82 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { TypeForm } from "@/types/TypeForm";
+import { MutateFormInfo } from "@/types/TypeForm";
 
 /**
- * Updates the progress status of a form instance.
- * @param formId - ID of the form to update.
- * @param newProgressId - ID of the target progress status.
- * @returns A success message or throws an error.
+ * * updateFormProgress  Updates the progress status of a form instance. 
+ * @param prevState<string | null> Estado inicial para el useActionState hook.
+ * @param data<MutateFormInfo> Solamente debe contener la id del form y del NUEVO progreso
+ * @returns<string> Retorna un mensaje de exito o de fallo.
  */
-export async function updateFormProgress(
-    formId: number,
-    newProgressId: number
+export async function updateFormProgressAction(
+    prevState : null | string,
+    data : MutateFormInfo
 ) {
-    if (!formId) {
-        throw new Error("No id given to form");
+
+    //! Errores para debugeo
+    if (!data.id) {
+       throw new Error("data debe contener en id el id del form a actualizar");
     }
 
-    if (!newProgressId) {
-        throw new Error("No id given to progress");
+    if (!data.progressID) {
+        throw new Error("data debe contener progressID para el nuevo progreso");
     }
 
     try {
-        const form = await prisma.form.findUnique({ where: { id: formId } });
+        const targetForm = await prisma.form.findUnique({ where: { id: data.id, deactived : false } }) as TypeForm;
 
-        if (!form) {
-            throw new Error("Form not found");
+        if (!targetForm) {
+            return("Formulario de Objetivos no encontrado");
+        }
+
+        if (targetForm.progressID === data.progressID){
+            return("No se inicieron cambios, el nuevo progreso no es distinto")
         }
 
         const targetProgress = await prisma.progress.findUnique({
-          where: { id: newProgressId },
-          select: { title: true },
-        });  
+          where: { id: data.progressID, deactived : false },
+          select: { id : true, title: true },
+            });  
 
         if (!targetProgress) {
-          throw new Error("Progress not found");
+          return("No es encontró el progreso que se quiere asignar");
         }
 
-        // Create Form Instance
-        const updateFormData: any = { progressID: newProgressId }
-
-        // Business-Logic Validations
-        if (form.progressID >= newProgressId) {
-            throw new Error("Invalid progress state: The current form progress is more avanced than the new progress");
+        //! POSIBLE CAMBIO POR PETICION DE FRONt
+        //* si el progreso actual se salta un progreso de más no se puede hacer el cambio
+        if ((data.progressID - targetForm.progressID) >= 2) {
+            throw new Error("Se están saltando 1 o más estados para el cambio de estado de formulario.");
         }
-
-        if (targetProgress?.title === "Aprobado") {
-            updateFormData.approvedAt = new Date();
-        }
-
-        if (targetProgress?.title === "Calificado") {
-          updateFormData.gradedAt = new Date();
+        
+        switch (data.progressID) {
+            case 3:
+                data.approvedAt = new Date();
+                break;
+               
+            case 4:
+                data.gradedAt = new Date();
+                break;  
+            
+            default:
+                data.approvedAt = null;
+                data.gradedAt = null;
         }
         
         await prisma.form.update({
-            where: { id: formId },
-            data: { progressID: newProgressId },
+            where: { id: data.id },
+            data: {
+                progress: {
+                    connect: { id: data.progressID }
+                },
+                approvedAt: data.approvedAt,
+                gradedAt: data.gradedAt,
+            },
         });
 
-        return "Form progress updated successfully";
-    } catch {
-        throw new Error("Failed to update form");
+        return ("Estado del Formulario ha sido actualizado");
+    } catch(err) {
+        throw new Error(`Al cambiar estado de formulario: ${(err as Error).message}`);
     }
 }

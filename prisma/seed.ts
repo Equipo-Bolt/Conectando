@@ -690,6 +690,8 @@ async function main() {
     }
   })
 
+  /** 
+   * ! Cambiado porque solo hay 4 progresos
   const formCollaborator4 = await prisma.form.upsert({
     where: { id : 5 },
     update: {
@@ -728,7 +730,8 @@ async function main() {
       }
     }
   })
-
+    */
+   
   const formCollaborator5 = await prisma.form.upsert({
     where: { id : 6 },
     update: {
