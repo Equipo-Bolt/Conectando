@@ -1,41 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useTransition, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { updateFormProgress } from "@/app/actions/form/updateFormProgress";
+
+import { updateFormProgressAction } from "@/app/actions/form/updateFormProgress";
+
+import { validObjectivesSchema } from "@/lib/formSchemas/validObjectivesSchema";
 
 export interface ButtonProps {
     text: string;
-    isPending: boolean;
     formID: number;
     progressID: number;
 }
 
-export default function UpdateProgressButton({ text, isPending: externalIsPending, formID, progressID }: ButtonProps) {
-    const [internalIsPending, setInternalIsPending] = useState(false);
-    
-    // Combined pending state (from props or internal state)
-    const isButtonDisabled = externalIsPending || internalIsPending;
+export default function UpdateProgressButton({ text, formID, progressID }: ButtonProps) {
+    const [state, newAction] = useActionState(updateFormProgressAction, null) //* pones la action aqui
+    const [isPending, startTransition] = useTransition();
+
 
     const handleClick = () => {
-        setInternalIsPending(true);
+        if (isPending) return; // Prevent multiple clicks
         
-        updateFormProgress(formID, progressID)
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                console.error("Error updating form:", error);
-            })
-            .finally(() => {
-                setInternalIsPending(false);
-            });
-    };
+        startTransition(() => {
+            newAction({ id: formID, progressID: progressID});
+        });
+    }
+
+    useEffect(() => {
+        if (state === null) return;
+        if (state === "Estado del Formulario ha sido actualizado") {
+            window.location.reload();
+        } else {
+            console.error("Error updating progress:", state);
+        }
+    }, [state]);
 
     return (
         <Button 
             variant={"gemso_yellow"}
-            disabled={isButtonDisabled} 
+            disabled={isPending}
             onClick={handleClick}
         >
             {text}

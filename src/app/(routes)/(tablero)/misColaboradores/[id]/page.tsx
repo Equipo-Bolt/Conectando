@@ -15,8 +15,7 @@ import { TypeUser } from "@/types/TypeUser";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Borrador />,
-  "Esperando Retroalimentación": <Retroalimentación />,
-  "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>, //! Fran: que este en este orden plz
+  Enviado: <Retroalimentación />,
   Aprobado: <p> Aprobado </p>,
   Calificado: <p> Calificado </p>,
 };

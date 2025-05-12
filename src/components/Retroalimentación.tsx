@@ -60,9 +60,8 @@ export default async function Retroalimentación() {
       <div className="flex justify-end mt-[1rem]">
           <UpdateProgressButton
             text="Aprobar Objetivos"
-            isPending={false}
             formID={parseInt(userFormId)}
-            progressID={4}
+            progressID={3}
           />
       </div>
     </div>
