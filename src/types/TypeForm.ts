@@ -8,3 +8,9 @@ export interface TypeForm {
     progressID: number
     createdAt: Date
 }
+
+export interface MutateFormInfo
+    extends Pick<TypeForm, "id" | "progressID"> {
+    approvedAt?: Date | null
+    gradedAt?: Date | null
+}
