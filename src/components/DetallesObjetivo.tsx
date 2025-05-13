@@ -54,6 +54,9 @@ export default function DetallesObjetivoClient({
     comments,
 }: DetailObjectivesProps) {
     const router = useRouter();
+    console.log("id: " + String(classifications[
+        objective.classificationCatalogID - 1
+    ].id))
 
     const form = useForm<ObjectiveFormData>({
         resolver: zodResolver(updateObjectiveSchema),
@@ -61,10 +64,7 @@ export default function DetallesObjetivoClient({
             id: objective.id,
             title: objective.title,
             weight: objective.weight.toString(),
-            classification:
-                classifications[
-                    objective.classificationCatalogID - 1
-                ].id.toString(),
+            classification: String(objective.classificationCatalogID),
             goal: objective.goal ?? "",
         },
     });
@@ -77,7 +77,7 @@ export default function DetallesObjetivoClient({
 
         const parsedData = updateObjectiveSchema.safeParse(data);
         if (!parsedData.success) {
-            console.error("Validation errors:", parsedData.error.format());
+            console.log("Validation errors:", parsedData.error.format());
             return;
         }
 
@@ -101,7 +101,7 @@ export default function DetallesObjetivoClient({
         else if (state === "Se ha Actualizado el Objetivo") {
             router.push("/misObjetivos"); // Redirigir a la página de objetivos
         } else {
-            console.error("Error updating objective:", state);
+            console.log("Error updating objective:", state);
         }
     }, [state, router]);
 
@@ -215,7 +215,7 @@ export default function DetallesObjetivoClient({
                                     <FormItem>
                                         <FormLabel>Meta</FormLabel>
                                         <FormControl>
-                                            <Textarea {...field} />
+                                            <Textarea {...field} value={field.value || ""} />
                                         </FormControl>
                                     </FormItem>
                                 )}

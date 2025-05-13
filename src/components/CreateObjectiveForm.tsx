@@ -30,12 +30,13 @@ import { createObjectiveAction } from "@/app/actions/objective/createObjective";
 //* Interface
 interface CreateObjectiveFormProps {
     classifications: TypeClassification[];
+    formId: number;
 }
 
 type ObjectiveFormData = z.infer<typeof createObjectiveSchema>;
 
-//! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
-export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProps) { {
+                                //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
+export function CreateObjectiveForm( props : CreateObjectiveFormProps) { {
     const router = useRouter();
 
     const form = useForm<ObjectiveFormData>({
@@ -59,7 +60,7 @@ export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProp
       }
 
       const objectiveData: MutateObjectiveInfo = {
-          formID: 2, //! default 1, form6 no tiene objs
+          formID: props.formId,
           title: data.title,
           weight: parseInt(data.weight),
           classificationCatalogID: parseInt(data.classification),
@@ -138,9 +139,9 @@ export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProp
                             </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                            {classifications.map((classification) => (
+                            {props.classifications.map((classification) => (
                                 <SelectItem key={classification.id} value={classification.id.toString()}>
-                                {classification.title}
+                                    {classification.title}
                                 </SelectItem>
                             ))}
                         </SelectContent>

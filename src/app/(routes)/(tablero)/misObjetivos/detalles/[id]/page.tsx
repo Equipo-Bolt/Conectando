@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { TypeClassification } from "@/types/TypeClassification";
 import { getAllClassifications } from "@/lib/fetches/classification/getAllClassifications";
 import { MutateObjectiveInfo } from "@/types/TypeObjective";
+import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 
 export default async function VerMasObjetivo({
     params,
@@ -13,6 +14,7 @@ export default async function VerMasObjetivo({
     const objectiveId = await params;
     const objetivo = await getObjectiveById(parseInt(objectiveId.id));
     const objectiveClassification = objetivo.objectiveClassificationID;
+    const classification = getObjectiveClassificationById(objectiveClassification)
     const classifications: TypeClassification[] = await getAllClassifications();
     if (!objetivo) return notFound();
 
@@ -23,7 +25,7 @@ export default async function VerMasObjetivo({
         goal: objetivo.goal,
         result: objetivo.result,
         weight: objetivo.weight,
-        classificationCatalogID: objectiveClassification
+        classificationCatalogID: (await classification).classificationID
     };
 
     return (

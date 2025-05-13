@@ -16,7 +16,7 @@ export default function IconCommentStatus({ objectiveId }: IconCommentStatusProp
   useEffect(() => {
     const fetchStatus = async () => {
       try {
-        const result = await getCommentsFromObjective(objectiveId);
+        const result = await getCommentsFromObjective(objectiveId); //! CHANGE
         setHasComments(result);
       } catch (error) {
         console.error('Error checking comments:', error);
@@ -34,7 +34,7 @@ export default function IconCommentStatus({ objectiveId }: IconCommentStatusProp
 
   return (
     <div>
-      {hasComments ? (
+      {hasComments.length === 0 ? (
         <XMarkIcon className="w-[1.5rem] h-[1.5rem] text-gemso-red" />
       ) : (
         <CheckIcon className="w-[1.5rem] h-[1.5rem] text-green-800" />

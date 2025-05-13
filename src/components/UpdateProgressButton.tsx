@@ -41,8 +41,6 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
         if (state === null) return;
         if (state === "Estado del Formulario ha sido actualizado") {
             window.location.reload();
-        } else {
-            console.error("Error updating progress:", state);
         }
     }, [state]);
 
