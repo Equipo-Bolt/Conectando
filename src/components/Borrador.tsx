@@ -3,18 +3,27 @@ import { cookies } from "next/headers";
 import InfoHover from "@/components/InfoHover";
 
 import { columns } from "@/components/dataTableMisObjetivos/columns";
+
+import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
+import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
+import { getFormById } from "@/lib/fetches/form/getFormById";
+
+import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+
+import { Button } from "./ui/button";
+import UpdateProgressButton from "./UpdateProgressButton";
+import WeightField from "./WeightField";
 import { DataTableMisObjetivos } from "@/components/dataTableMisObjetivos/data-table";
 
-import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
-import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
-import { TypeFormObjectives } from "@/types/TypeFormObjectives";
-import { Button } from "./ui/button";
 import Link from "next/link";
+
+
 export default async function Borrador() {
   //* Usando cookies
   const cookieStore = await cookies();
   const userId = cookieStore.get('userId')?.value;
   const formId : string =  await getFormIdByUserId(Number(userId)); //? maybe avoid calling func again and just set cookie?
+  const form = await getFormById(Number(formId));
   const data = (await getObjectivesByFormId(Number(formId))) as TypeFormObjectives[]; 
 
   return (
@@ -39,6 +48,11 @@ export default async function Borrador() {
         </div>
       </InfoHover>
 
+      <p className="text-xs">
+        * En caso de actualizar el peso de la clasificación, es necesario
+        refrescar la pagina para poder enviar los objetivos a revisión.
+      </p>
+
       <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"} asChild>
           <Link href={"/misObjetivos/crear"}>Agregar Objetivo</Link>
@@ -50,6 +64,11 @@ export default async function Borrador() {
             <h1 className="text-2xl font-bold pb-[1.5rem]">
               {item.classificationTitle}
             </h1>
+            <div className= "flex flex-row mb-[1rem] w-full">
+                <div className="w-2/3">
+                  <WeightField id={item.objectiveClassificationID as number} initialWeight={item.weight || 1}/>
+                </div>
+            </div>
 
             <DataTableMisObjetivos columns={columns} data={item.objectives} />
           </div>
@@ -57,7 +76,12 @@ export default async function Borrador() {
       </div>
 
       <div className="flex justify-end mt-[1rem]">
-        <Button variant={"gemso_yellow"}>Enviar a Retroalimentación</Button>
+          <UpdateProgressButton
+            text="Aprobar Objetivos"
+            form={form}
+            formObjectives={data}
+            progressID={2}
+          />
       </div>
     </div>
   );
