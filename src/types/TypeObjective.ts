@@ -1,3 +1,5 @@
+import { TypeComment } from "./TypeComment";
+
 //! El primer interface se utiliza en DataTables
 export interface TypeObjective {
     id: number;
@@ -9,6 +11,7 @@ export interface TypeObjective {
     formID?: number;
     createdAt?: Date;
     objectiveClassificationID?: number;
+    comments?: TypeComment[];
 }
 //! Este interface se utiliza para crear o editar Objetivos, (createObjetive & updateObjective)
 export interface MutateObjectiveInfo //* Con Pick<> podemos agarrar solo la info útil
