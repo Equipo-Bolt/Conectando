@@ -11,7 +11,7 @@ export const DetailButton = ({ id }: DetailButtonProps) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/misObjetivos/${id}/detalles`);
+    router.push(`/misObjetivos/detalles/${id}`);
   };
 
   return (

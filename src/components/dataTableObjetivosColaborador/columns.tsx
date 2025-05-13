@@ -43,7 +43,7 @@ export const columns: ColumnDef<TypeObjective>[] = [
     header: "Calificación",
     cell: ({ row }) => {
       const scoreValue = row.original.grade;
-      //* Si es dato nulo o indefinido, se muestra "S/C" (Sin Calificación)
+   
       return (
         <span>
           {scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}

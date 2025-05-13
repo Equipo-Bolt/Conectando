@@ -34,7 +34,7 @@ interface CreateObjectiveFormProps {
 
 type ObjectiveFormData = z.infer<typeof createObjectiveSchema>;
 
-                                //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
+//! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProps) { {
     const router = useRouter();
 
