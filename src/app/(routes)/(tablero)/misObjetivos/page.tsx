@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 
 import Borrador from "../../../../components/Borrador";
-import EsperandoRevision from "@/components/EsperandoRevision";
+import Enviado from "@/components/Enviado";
 import IniciarPropuesta from "@/components/IniciarPropuesta";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
@@ -17,7 +17,7 @@ import { TypeUser } from "@/types/TypeUser";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Borrador />,
-  Enviado: <EsperandoRevision />,
+  Enviado: <Enviado />,
   "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>, //! Fran: que este en este orden plz
   Aprobado: <p> Aprobado </p>,
   Calificado: <p> Calificado </p>,
