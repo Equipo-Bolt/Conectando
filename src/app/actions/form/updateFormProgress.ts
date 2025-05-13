@@ -45,7 +45,6 @@ export async function updateFormProgressAction(
           return("No es encontró el progreso que se quiere asignar");
         }
 
-      
         if ((data.progressID - targetForm.progressID) >= 2) {
             throw new Error("Se están saltando 1 o más estados para el cambio de estado de formulario.");
         }
@@ -60,7 +59,7 @@ export async function updateFormProgressAction(
           },0);
 
           if (sumWeight !== 100) {
-            throw new Error("La suma de pesos no da 100%");
+            return "La suma de pesos no da 100%";
           }
         }
         
