@@ -139,7 +139,7 @@ async function main() {
           employeeNumber: 11111,
           fullName: "Juan Gutierrez",
           jobPosition: "Jefe del sector agrícola",
-          roleID: 4
+          roleID: 2
         }
       },
       role: {
@@ -733,7 +733,7 @@ async function main() {
     */
    
   const formCollaborator5 = await prisma.form.upsert({
-    where: { id : 6 },
+    where: { id : 5 },
     update: {
       deactived: false,
       collaborator: {
@@ -848,6 +848,92 @@ async function main() {
     },
     create: {
         weight: 10,
+        classificationTitle: {
+            connect: {
+                id: 4
+            }
+        }
+    }
+  })
+
+  //* PARA FORMULARIO DE COLABORADOR CON ID 3: ANDRES
+
+  const objectiveClassificationDivisionA = await prisma.objectiveClassification.upsert({
+    where: { id: 5 },
+    update: {
+        weight: 25,
+        deactived: false,
+        classificationTitle: {
+            connect: {
+                id: 1
+            }
+        }
+    },
+    create: {
+        weight: 25,
+        classificationTitle: {
+            connect: {
+                id: 1
+            }
+        }
+    }
+  })
+
+  const objectiveClassificationPerBusinessA = await prisma.objectiveClassification.upsert({
+    where: { id: 6 },
+    update: {
+        weight: 50,
+        deactived: false,
+        classificationTitle: {
+            connect: {
+                id: 2
+            }
+        }
+    },
+    create: {
+        weight: 50,
+        classificationTitle: {
+            connect: {
+                id: 2
+            }
+        }
+    }
+  })
+
+  const objectiveClassificationPeopleA = await prisma.objectiveClassification.upsert({
+    where: { id: 7 },
+    update: {
+        weight: 10,
+        deactived: false,
+        classificationTitle: {
+            connect: {
+                id: 3
+            }
+        }
+    },
+    create: {
+        weight: 10,
+        classificationTitle: {
+            connect: {
+                id: 3
+            }
+        }
+    }
+  })
+
+  const objectiveClassificationDevelopmentA = await prisma.objectiveClassification.upsert({
+    where: { id: 8 },
+    update: {
+        weight: 15,
+        deactived: false,
+        classificationTitle: {
+            connect: {
+                id: 4
+            }
+        }
+    },
+    create: {
+        weight: 15,
         classificationTitle: {
             connect: {
                 id: 4
@@ -1120,6 +1206,195 @@ async function main() {
                 id: (await formBoss).id
             }
         }
+    },
+  });
+
+  //* OBJETIVOS DE FORMULARIO DE ANDRES
+  const objective1_1A = await prisma.objective.upsert({
+    where: { id: 9 },
+    update: {
+        weight: 100,
+        title: "Mejorar la eficiencia para realizar más ventas",
+        goal: "Mejorar la eficiencia en un 10%.",
+        deactived: false,
+        classification: {
+            connect: {
+                id: (await objectiveClassificationDivisionA).id
+            }
+        },
+        form: {
+            connect: {
+                id: (await formCollaborator).id
+            }
+        }
+    },
+    create: {
+        weight: 100,
+        title: "Mejorar la eficiencia para realizar más ventas",
+        goal: "Mejorar la eficiencia en un 10%.",
+        classification: {
+            connect: {
+                id: (await objectiveClassificationDivisionA).id
+            }
+        },
+        form: {
+            connect: {
+                id: (await formBoss).id
+            }
+        }
+    },
+  });
+
+  const objective2_1A = await prisma.objective.upsert({
+    where: { id: 10 },
+    update: {
+        weight: 100,
+        title: "Referir personas para crecimiento de unidad de negocio",
+        goal: "Conseguir referir a 15 personas.",
+        deactived: false,
+        classification: {
+            connect: {
+                id: (await objectiveClassificationPerBusinessA).id
+            }
+        },
+        form: {
+            connect: {
+                id: (await formCollaborator).id
+            }
+        }
+    },
+    create: {
+        weight: 100,
+        title: "Referir personas para crecimiento de unidad de negocio",
+        goal: "Conseguir referir a 15 personas.",
+        classification: {
+            connect: {
+                id: (await objectiveClassificationPerBusinessA).id
+            }
+        },
+        form: {
+            connect: {
+                id: (await formCollaborator).id
+            }
+        }
+    },
+  });
+
+  const objective3_1A = await prisma.objective.upsert({
+    where: { id: 11 },
+    update: {
+        weight: 100,
+        title: "Capacitar a compañeros de equipo en actividades de liderazgo",
+        goal: "Dedicar 120 horas de actividades de liderazgo.",
+        deactived: false,
+        classification: {
+            connect: {
+                id: (await objectiveClassificationPeopleA).id
+            }
+        },
+        form: {
+            connect: {
+                id: (await formCollaborator).id
+            }
+        }
+    },
+    create: {
+        weight: 100,
+        title: "Capacitar a compañeros de equipo en actividades de liderazgo",
+        goal: "Dedicar 120 horas de actividades de liderazgo.",
+        classification: {
+            connect: {
+                id: (await objectiveClassificationPeopleA).id
+            }
+        },
+        form: {
+            connect: {
+                id: (await formCollaborator).id
+            }
+        }
+    },
+  });
+
+  const objective4_1A = await prisma.objective.upsert({
+    where: { id: 12 },
+    update: {
+        weight: 100,
+        title: "Completar curso de ciberseguridad",
+        goal: "Dedicar 30 horas totales al curso.",
+        deactived: false,
+        classification: {
+            connect: {
+                id: (await objectiveClassificationDevelopmentA).id
+            }
+        },
+        form: {
+            connect: {
+                id: (await formCollaborator).id
+            }
+        }
+    },
+    create: {
+        weight: 100,
+        title: "Completar curso de ciberseguridad",
+        goal: "Dedicar 30 horas totales al curso.",
+        classification: {
+            connect: {
+                id: (await objectiveClassificationDevelopmentA).id
+            }
+        },
+        form: {
+            connect: {
+                id: (await formCollaborator).id
+            }
+        }
+    },
+  });
+
+  const comment1 = await prisma.comment.upsert({
+    where: {id: 1},
+    update: {
+      description: "Excelente objetivo de negocio Andrés",
+      deactived: false,
+      objective: {
+        connect: {
+          id: objective1_1A.id
+        }
+      },
+      //* Al añadir lo del usuario que lo comentó aquí iría formBoss.id */
+    },
+    create: {
+      description: "Excelente objetivo de negocio Andrés",
+      commentedAt: new Date(),
+      objective: {
+        connect: {
+          id: objective1_1A.id
+        }
+      },
+      //* Al añadir lo del usuario que lo comentó aquí iría formBoss.id */
+    },
+  });
+
+  const comment2 = await prisma.comment.upsert({
+    where: {id: 2},
+    update: {
+      description: "Considera que tu meta sea de 12 en lugar de 15.",
+      deactived: false,
+      objective: {
+        connect: {
+          id: objective2_1A.id
+        }
+      },
+      //* Al añadir lo del usuario que lo comentó aquí iría formBoss.id */
+    },
+    create: {
+      description: "Considera que tu meta sea de 12 en lugar de 15.",
+      commentedAt: new Date(),
+      objective: {
+        connect: {
+          id: objective2_1A.id
+        }
+      },
+      //* Al añadir lo del usuario que lo comentó aquí iría formBoss.id */
     },
   });
   
