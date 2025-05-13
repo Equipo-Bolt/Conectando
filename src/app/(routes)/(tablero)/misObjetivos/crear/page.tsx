@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 // Load Data
 import { getAllClassifications } from "@/lib/fetches/classification/getAllClassifications";
 import { getUserById } from "@/lib/fetches/user/getUserById";
+import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 
 // Custom Components
 import CreateObjectiveForm from "@/components/CreateObjectiveForm";
@@ -18,7 +19,8 @@ async function PaginaParaCrearObjetivo() {
   //* Usando cookies
   const cookieStore = await cookies();
   const userId = cookieStore.get('userId')?.value;
-  const user: TypeUser = await getUserById(Number(userId)); //! default 1, Cambia el ID según sea necesario
+  const user: TypeUser = await getUserById(Number(userId));
+  const formId : string =  await getFormIdByUserId(user.id);
   const classifications: TypeClassification[] = await getAllClassifications(); // Cambia el ID según sea necesario
   return (
     <div>
@@ -26,7 +28,7 @@ async function PaginaParaCrearObjetivo() {
       <p className="text-base mb-6">
         Colaborador: {user ? user.fullName : "N/A"}
       </p>
-      <CreateObjectiveForm classifications={classifications} />
+      <CreateObjectiveForm classifications={classifications} formId = { Number(formId) }/>
     </div>
   );
 }

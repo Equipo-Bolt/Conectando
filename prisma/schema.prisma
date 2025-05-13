@@ -68,6 +68,8 @@ model Comment {
   commentedAt DateTime?
   objective Objective @relation(fields: [objectiveID], references: [id])
   objectiveID Int
+  commenter User @relation("WrittenComments", fields: [commenterID], references: [id])
+  commenterID Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
@@ -121,6 +123,7 @@ model User {
   collaborators User[] @relation("SubordinateOf")
   writtenForms Form[] @relation("WrittenForms")
   evaluatedForms Form[] @relation("EvaluatedForms")
+  comments Comment[] @relation("WrittenComments")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
   deactived Boolean @default(false)
