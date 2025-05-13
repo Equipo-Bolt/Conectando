@@ -38,7 +38,7 @@ export async function updateObjectiveClassificationAction(
     }
 
     //* Checar si no es un peso invalido
-    if(data.weight > 100 || data.weight < 0){
+    if(data.weight > 100 || data.weight <= 0){
       return("Peso inválido")
     }
 

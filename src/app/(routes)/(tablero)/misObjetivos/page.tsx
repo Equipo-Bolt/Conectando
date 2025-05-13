@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 
 import Borrador from "../../../../components/Borrador";
-import EsperandoRevision from "@/components/EsperandoRevision";
+import Enviado from "@/components/Enviado";
 import IniciarPropuesta from "@/components/IniciarPropuesta";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
@@ -17,7 +17,7 @@ import { TypeUser } from "@/types/TypeUser";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Borrador />,
-  Enviado: <EsperandoRevision />,
+  Enviado: <Enviado />,
   "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>, //! Fran: que este en este orden plz
   Aprobado: <p> Aprobado </p>,
   Calificado: <p> Calificado </p>,
@@ -27,7 +27,6 @@ async function MisObjetivosPage() {
   //* Usando cookies
   const cookieStore = await cookies();
   const userId = cookieStore.get('userId')?.value;
-  console.log("userid" + userId)
   const user : TypeUser = await getUserById((Number(userId))); 
   const formId : string =  await getFormIdByUserId(user.id);
   if (formId === "Sin Formulario Activo") {
