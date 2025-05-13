@@ -81,7 +81,7 @@ export function DataTableMisColaboradores<TData, TValue>({
                 colSpan={columns.length}
                 className="text-center bg-white py-3 px-4"
               >
-                No hay objetivos en esta clasificación
+                No tiene colaboradores
               </TableCell>
             </TableRow>
           )}

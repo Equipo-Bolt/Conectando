@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { TypeMyColaborator } from "@/types/TypeMyColaborator";
 
 import {ArrowRightEndOnRectangleIcon} from "@heroicons/react/24/outline";
+import { setCustomCookieAction } from "@/app/actions/cookies/setCustomCookie";
 
 export const columns: ColumnDef<TypeMyColaborator>[] = [
   {
@@ -35,10 +36,11 @@ export const columns: ColumnDef<TypeMyColaborator>[] = [
     size: 100,
     cell: ({ row }) => {
       const userId = row.original.user.id;
+
       return (
         <div className="flex items-center">
           <a href={`/misColaboradores/${userId}`}>
-            <ArrowRightEndOnRectangleIcon className="w-5 h-5 text-gemso-blue" />
+            <ArrowRightEndOnRectangleIcon onClick={() => { setTimeout(() => setCustomCookieAction("collaboratorId", String(userId)), 3000); }} className="w-5 h-5 text-gemso-blue" />
           </a>
         </div>
       );

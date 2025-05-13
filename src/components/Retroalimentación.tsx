@@ -9,14 +9,18 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
 
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 
+import { cookies } from "next/headers";
+
 import { Button } from "./ui/button";
 import Link from "next/link";
 import UpdateProgressButton from "./UpdateProgressButton";
 import WeightField from "./WeightField";
 
 export default async function Retroalimentación() {
-  const userId = 2;
-  const userFormId = await getFormIdByUserId(userId);
+  const cookieStore = await cookies();
+  const collaboratorId = cookieStore.get('collaboratorId')?.value;
+  console.log("colab " + collaboratorId)
+  const userFormId = await getFormIdByUserId(Number(collaboratorId));
   const form = await getFormById(parseInt(userFormId));
   const data = (await getObjectivesByFormId(parseInt(userFormId))) as TypeFormObjectives[];
 

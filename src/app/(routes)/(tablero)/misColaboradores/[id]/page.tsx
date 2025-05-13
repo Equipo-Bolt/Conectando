@@ -2,7 +2,6 @@
 
 import Borrador from "@/components/Borrador";
 import Retroalimentación from "@/components/Retroalimentación";
-import IniciarPropuesta from "@/components/IniciarPropuesta";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
@@ -23,7 +22,8 @@ const stateComponentMap: { [key: string]: React.ReactNode } = {
 async function ObjetivosColaboradorPage({ params }: { params: { id: string } }) {
 const userId = await params;
 const user: TypeUser = await getUserById(parseInt(userId.id));
-  const formId : string =  await getFormIdByUserId(user.id);
+const formId : string =  await getFormIdByUserId(user.id);
+
   if (formId === "Sin Formulario Activo") {
     return (
       <div className="container mx-auto py-10">
@@ -32,8 +32,6 @@ const user: TypeUser = await getUserById(parseInt(userId.id));
         <div className="text-lg">
           <p className="font-medium">Colaborador: {user.fullName}</p>
           <p className="text-gemso-blue font-semibold ">Estado: Sin Iniciar</p>
-
-          <IniciarPropuesta />
         </div>
       </div>
     );
