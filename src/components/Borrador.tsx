@@ -1,14 +1,21 @@
+import { cookies } from "next/headers";
+
 import InfoHover from "@/components/InfoHover";
 
 import { columns } from "@/components/dataTableMisObjetivos/columns";
 import { DataTableMisObjetivos } from "@/components/dataTableMisObjetivos/data-table";
 
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
+import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 import { Button } from "./ui/button";
 import Link from "next/link";
 export default async function Borrador() {
-  const data = (await getObjectivesByFormId(1)) as TypeFormObjectives[]; //! default 1
+  //* Usando cookies
+  const cookieStore = await cookies();
+  const userId = cookieStore.get('userId')?.value;
+  const formId : string =  await getFormIdByUserId(Number(userId)); //? maybe avoid calling func again and just set cookie?
+  const data = (await getObjectivesByFormId(Number(formId))) as TypeFormObjectives[]; 
 
   return (
     <div>

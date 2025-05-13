@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { getObjectiveClassificationById } from '@/lib/fetches/objective_classification/getObjectiveClassificationById';
-import { MutateObjectiveClassitionInfo } from '@/types/TypeObjectiveClassification';
+import { MutateObjectiveClassificationInfo } from '@/types/TypeObjectiveClassification';
 
 /**
  * * updateObjectiveClassificationAction -> Esta función modifica el peso de una clasificación de objetivos.
@@ -15,7 +15,7 @@ import { MutateObjectiveClassitionInfo } from '@/types/TypeObjectiveClassificati
 
 export async function updateObjectiveClassificationAction(
   prevState: string | null,
-  data: MutateObjectiveClassitionInfo) {
+  data: MutateObjectiveClassificationInfo) {
 
   //! Errores de debug
   if (!data.id) {
