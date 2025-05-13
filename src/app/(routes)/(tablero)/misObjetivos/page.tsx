@@ -27,7 +27,6 @@ async function MisObjetivosPage() {
   //* Usando cookies
   const cookieStore = await cookies();
   const userId = cookieStore.get('userId')?.value;
-  console.log("userid" + userId)
   const user : TypeUser = await getUserById((Number(userId))); 
   const formId : string =  await getFormIdByUserId(user.id);
   if (formId === "Sin Formulario Activo") {

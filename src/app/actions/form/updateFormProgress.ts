@@ -1,5 +1,6 @@
 "use server";
 
+import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { prisma } from "@/lib/prisma";
 import { TypeForm } from "@/types/TypeForm";
 import { MutateFormInfo } from "@/types/TypeForm";
@@ -44,10 +45,22 @@ export async function updateFormProgressAction(
           return("No es encontró el progreso que se quiere asignar");
         }
 
-        //! POSIBLE CAMBIO POR PETICION DE FRONt
-        //* si el progreso actual se salta un progreso de más no se puede hacer el cambio
         if ((data.progressID - targetForm.progressID) >= 2) {
             throw new Error("Se están saltando 1 o más estados para el cambio de estado de formulario.");
+        }
+
+        if (
+          (targetForm.progressID === 1 && data.progressID === 2) || 
+          (targetForm.progressID === 2 && data.progressID === 3)
+        ) {
+          const allObjectives = await getObjectivesByFormId(targetForm.id) || [];
+          const sumWeight = allObjectives.reduce((acc, currVal) => {
+            return acc + currVal.weight
+          },0);
+
+          if (sumWeight !== 100) {
+            return "La suma de pesos no da 100%";
+          }
         }
         
         switch (data.progressID) {

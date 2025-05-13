@@ -121,7 +121,7 @@ export default function DetallesObjetivoClient({ objetivo, classificationTitle }
         <button className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-m text-white hover:bg-gemso-blue/90">
           Editar Objetivo
         </button>
-        <CancelButton route="/misObjetivos" text="Regresar" />
+        <CancelButton route="/misObjetivos" text="Regresar" /> {/* //!deberia usar pushback de router */}
       </div>
     </div>
   );

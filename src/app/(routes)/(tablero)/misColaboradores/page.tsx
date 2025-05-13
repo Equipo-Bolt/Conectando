@@ -6,23 +6,28 @@ import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { DataTableMisColaboradores } from "@/components/dataTableMisColaboradores/data-table";
 import { columns } from "@/components/dataTableMisColaboradores/columns";
 
-
 import { cookies } from "next/headers";
 
 import { TypeUser } from "@/types/TypeUser";
+import { getFormById } from "@/lib/fetches/form/getFormById";
 
 async function MisColaboradoresPage() {
     //* Usando cookies
     const cookieStore = await cookies();
     const userId = cookieStore.get('userId')?.value;
-    const user : TypeUser = await getUserById((Number(userId))); 
 
-
-    const collaborators = await getAllCollaboratorsOfBoss(user.bossID as number);
+    const collaborators = await getAllCollaboratorsOfBoss(Number(userId));
     const progresses = await Promise.all(
       collaborators.map(async (collaborator) => {
         const formId = await getFormIdByUserId(collaborator.id);
-        const progress = await getProgressById(parseInt(formId));
+        if (formId === "Sin Formulario Activo") {
+          return {
+            user: collaborator,
+            progress: {id: 5, title: "Sin Formulario", createdAt: "today"}, //!neeeds change
+          };
+        }
+        const form = await getFormById(parseInt(formId))
+        const progress = await getProgressById(form.progressID);
         return {
           user: collaborator,
           progress: progress,
