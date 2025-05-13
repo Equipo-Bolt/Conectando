@@ -1,25 +1,26 @@
-"use client"
+"use client";
 
-import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline"
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 interface DetailButtonProps {
-  id: number
+  id: number;
 }
 
-export function DetailButton({ id }: DetailButtonProps) {
-  const router = useRouter()
+export const DetailButton = ({ id }: DetailButtonProps) => {
+  const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/detalles/${id}`)
-  }
+    router.push(`/misObjetivos/detalles/${id}`);
+  };
 
   return (
     <button
       onClick={handleClick}
-      className="cursor-pointer text-gemso-blue hover:text-gemso-dark-blue"
+      className="text-blue-600 hover:text-blue-800 transition-colors"
+      aria-label="Ver detalles"
     >
-      <ArrowRightEndOnRectangleIcon className="w-5 h-5" />
+      <InformationCircleIcon className="h-5 w-5" />
     </button>
-  )
-}
+  );
+};

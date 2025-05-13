@@ -1,7 +1,7 @@
 "use server";
 
 import { columns } from "../../../components/dataTableMisObjetivos/columns";
-import { DataTable } from "../../../components/dataTableMisObjetivos/data-table";
+import { DataTableMisObjetivos } from "../../../components/dataTableMisObjetivos/data-table";
 
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
@@ -19,7 +19,7 @@ export default async function Page() {
             {item.classificationTitle || "Objetivos de Negocio/División"}
           </h1>
           {item.objectives.length > 0 ? (
-            <DataTable columns={columns} data={item.objectives} />
+            <DataTableMisObjetivos columns={columns} data={item.objectives} />
           ) : (
             <p>No hay datos</p>
           )}
