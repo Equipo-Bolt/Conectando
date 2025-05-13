@@ -7,5 +7,5 @@ export interface TypeObjectiveClassification {
     classificationTitle : string
 }
 
-export interface MutateObjectiveClassitionInfo 
+export interface MutateObjectiveClassificationInfo 
     extends Pick<TypeObjectiveClassification, "id" | "weight"> {}

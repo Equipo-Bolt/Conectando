@@ -6,12 +6,11 @@ import { useState } from "react";
 
 import { createFormAction } from "@/app/actions/form/createForm";
 
-export default function IniciarPropuestaButton() {
+export default function IniciarPropuestaButton( {userId} : {userId : number}) {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
 
     const handleClick = async () => {
-        const userId = 7; // Reemplaza con el ID real del usuario
         const result = await createFormAction(null, userId);
 
         if (result === "Formulario de objetivos creado") {
