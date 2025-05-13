@@ -58,18 +58,14 @@ export default function DetallesObjetivoClient({ objetivo, classificationTitle }
                 name="classification"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Clasificación<p className="text-gemso-red"> </p></FormLabel>
-                    <Select 
-                        defaultValue={classificationTitle}
-                        value={classificationTitle}
-                        disabled={true}
-                    >
-                        <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="" />
-                            </SelectTrigger>
-                        </FormControl>
-                    </Select>
+                    <FormLabel>Clasificación</FormLabel>
+                    <FormControl>
+                      <Select disabled>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder={classificationTitle} />
+                        </SelectTrigger>
+                      </Select>
+                    </FormControl>
                   </FormItem>
                 )}
               />
