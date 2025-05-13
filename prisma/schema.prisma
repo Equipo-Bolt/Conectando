@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+//* Convention:
+//* 1. Declare model name using PascalCase and add @@map with plural equivalent
+//* 2. First declare primary key, named "id" with Int type
+//* 3. Next declare all colums that are not foreign keys
+//* 4. Then declare all sets of foreign keys and  relations --
+//*    first one-to-one relations, then one-to-many
+//*    *When there is more then one relation between the same models
+//*    *Add a name to the relation to disambiguate the relation 
+//*    (Disambiguating relations section: https://www.prisma.io/docs/orm/prisma-schema/data-model/relations#disambiguating-relations)
+//* 5. After that, add both following colums: createdAt and updatedAt --
+//*    for createdAt at use atribute @now() and for updatedAt us @updatedAt @default(now())
+//*    Both colums are DateTime type
+//* 6. Lastly add the colum "deactived" with Boolean type (equals to Bit) --
+//*    and with default value of "false" 
+
+model Objective {
+  id Int @id @default(autoincrement())
+  grade Int?
+  weight Int
+  title String 
+  goal String?
+  result String? 
+  classification ObjectiveClassification @relation(fields: [objectiveClassificationID], references: [id])
+  objectiveClassificationID Int
+  form Form @relation(fields: [formID], references: [id])
+  formID Int
+  comments Comment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Objectives")
+}
+
+model ObjectiveClassification {
+  id Int @id @default(autoincrement())
+  weight Int?
+  classificationTitle Classification @relation(fields: [classificationID], references: [id])
+  classificationID Int
+  objectives Objective[] //one-to-many
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("ObjectiveClassifications")
+}
+
+model Classification {
+  id Int @id @default(autoincrement())
+  title String @unique 
+  objectiveClassifications ObjectiveClassification[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Classifications")
+}
+
+model Comment {
+  id Int @id @default(autoincrement())
+  description String 
+  commentedAt DateTime?
+  objective Objective @relation(fields: [objectiveID], references: [id])
+  objectiveID Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Comments")
+}
+
+model Form {
+  id Int @id @default(autoincrement())
+  approvedAt DateTime?
+  gradedAt DateTime?
+  collaborator User @relation("WrittenForms", fields: [collaboratorID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  collaboratorID Int
+  evaluator User @relation("EvaluatedForms", fields: [evaluatorID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  evaluatorID Int
+  progress Progress @relation(fields: [progressID], references: [id])
+  progressID Int
+  objectives Objective[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Forms")
+}
+
+model Progress {
+  id Int @id @default(autoincrement())
+  title String @unique 
+  forms Form[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Progresses")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  employeeNumber Int? @unique
+  fullName String? 
+  email String? @unique
+  jobPosition String? 
+  positionSeniority DateTime?
+  companySeniority DateTime?
+  companyContribution String?
+  boss User? @relation("SubordinateOf", fields: [bossID], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  bossID Int?
+  role Role? @relation(fields: [roleID], references: [id])
+  roleID Int?
+  businessUnit BusinessUnit? @relation(fields: [businessUnitID], references: [id])
+  businessUnitID Int?
+  area Area? @relation(fields: [areaID], references: [id])
+  areaID Int?
+  collaborators User[] @relation("SubordinateOf")
+  writtenForms Form[] @relation("WrittenForms")
+  evaluatedForms Form[] @relation("EvaluatedForms")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Users")
+}
+
+model Role {
+  id Int @id @default(autoincrement())
+  title String @unique 
+  users User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Roles")
+}
+
+model Division {
+  id Int @id @default(autoincrement())
+  title String @unique 
+  businessUnits BusinessUnit[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Divisions")
+}
+
+model BusinessUnit {
+  id Int @id @default(autoincrement())
+  title String @unique 
+  division Division @relation(fields: [divisionID], references: [id])
+  divisionID Int
+  users User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("BusinessUnits")
+}
+
+model Area {
+  id Int @id @default(autoincrement())
+  title String @unique 
+  users User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Areas")
+}
+
+model Period {
+  id Int @id @default(autoincrement())
+  startsAt DateTime
+  endsAt DateTime
+  isCurrent Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactived Boolean @default(false)
+  @@map("Periods")
+}
