@@ -6,3 +6,6 @@ export interface TypeObjectiveClassification {
     createdAt: Date
     classificationTitle : string
 }
+
+export interface MutateObjectiveClassitionInfo 
+    extends Pick<TypeObjectiveClassification, "id" | "weight"> {}

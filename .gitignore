@@ -47,3 +47,6 @@ next-env.d.ts
 /secure 
 
 .zip*
+
+# vscode extensions
+/.vscode/

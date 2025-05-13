@@ -1,9 +1,10 @@
 import DetallesObjetivo from "@/components/DetallesObjetivo";
-import { getObjectiveById } from "@/app/actions/objective/getObjectiveById";
+import { getObjectiveById } from "@/lib/fetches/objective/getObjectiveById"
 import { notFound } from "next/navigation";
 
 export default async function VerMasObjetivo({ params }: { params: { id: string } }) {
-  const objetivo = await getObjectiveById(Number(params.id));
+  const objectiveId = await params
+  const objetivo = await getObjectiveById(Number(objectiveId));
   if (!objetivo) return notFound();
 
   return <DetallesObjetivo objetivo={objetivo} />;

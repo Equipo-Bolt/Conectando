@@ -5,11 +5,13 @@ export async function getObjectiveClassificationById(objectiveClassificationId :
     try {
         const objectiveClassification = await prisma.objectiveClassification.findUnique({
             where: { id : objectiveClassificationId },
-            include: { classificationTitle : true }
+            include: { 
+                classificationTitle : true
+             }
         })
 
         if (!objectiveClassification) {
-            throw new Error ("Objective-Classification does not exist");
+            return ({} as TypeObjectiveClassification);
         }
 
         return {

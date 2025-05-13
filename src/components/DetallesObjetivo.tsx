@@ -1,4 +1,6 @@
+import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 import { TypeObjective } from "@/types/TypeObjective";
+import { TypeObjectiveClassification } from "@/types/TypeObjectiveClassification";
 
 interface Comentario {
   autor: string;
@@ -7,13 +9,11 @@ interface Comentario {
 }
 
 interface Props {
-  objetivo: TypeObjective & {
-    classification: string;
-    comentarios: Comentario[];
-  };
+  objetivo: TypeObjective
 }
 
-const DetallesObjetivo = ({ objetivo }: Props) => {
+export default async function DetallesObjetivo({ objetivo }: Props) {
+    const classification  : TypeObjectiveClassification=  await getObjectiveClassificationById(objetivo.objectiveClassificationID as number)
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-4">Detalles del Objetivo</h1>
@@ -27,7 +27,7 @@ const DetallesObjetivo = ({ objetivo }: Props) => {
 
         <div>
           <label className="text-sm text-gray-500">Clasificación</label>
-          <input disabled value={objetivo.classification} className="border rounded p-2 w-full" />
+          <input disabled value={classification.classificationTitle} className="border rounded p-2 w-full" />
         </div>
       </div>
 
@@ -45,11 +45,11 @@ const DetallesObjetivo = ({ objetivo }: Props) => {
 
       <div className="border-l-2 pl-4">
         <h2 className="font-semibold mb-2">Comentarios</h2>
-        {objetivo.comentarios?.length > 0 ? (
-          objetivo.comentarios.map((c, i) => (
+        {objetivo.comments && objetivo.comments?.length > 0 ? (
+          objetivo.comments.map((c, i) => (
             <div key={i} className="mb-4 text-sm">
-              <strong>{c.autor}</strong> <span className="text-gray-500">{c.fecha}</span>
-              <p>{c.texto}</p>
+              <strong>{"John"}</strong> <span className="text-gray-500">{c.commentedAt?.toDateString()}</span>
+              <p>{c.description}</p>
             </div>
           ))
         ) : (
@@ -65,4 +65,3 @@ const DetallesObjetivo = ({ objetivo }: Props) => {
   );
 };
 
-export default DetallesObjetivo;

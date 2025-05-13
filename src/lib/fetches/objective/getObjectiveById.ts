@@ -4,7 +4,8 @@ import { TypeObjective } from "@/types/TypeObjective";
 export async function getObjectiveById(objectiveId : number) {
     try {
         const objective = await prisma.objective.findUnique({
-            where: { id : objectiveId }
+            where: { id : objectiveId },
+            include: { comments : true}
         })
 
         if (!objective) {
