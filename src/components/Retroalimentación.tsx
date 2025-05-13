@@ -12,6 +12,7 @@ import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import UpdateProgressButton from "./UpdateProgressButton";
+import WeightField from "./WeightField";
 
 export default async function Retroalimentación() {
   const userId = 3;
@@ -41,6 +42,11 @@ export default async function Retroalimentación() {
         </div>
       </InfoHover>
 
+      <p className="text-xs">
+        * En caso de actualizar el peso de la clasificación, es necesario
+        refrescar la pagina para poder enviar los objetivos a revisión.
+      </p>
+
       <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"} asChild>
           <Link href={"/misObjetivos/crear"}>Agregar Objetivo</Link>
@@ -49,10 +55,16 @@ export default async function Retroalimentación() {
       <div className="container mx-auto">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
-            <h1 className="text-2xl font-bold pb-[1.5rem]">
-              {item.classificationTitle}
-            </h1>
-
+            <div>
+              <h1 className="text-2xl font-bold pb-[1.5rem]">
+                {item.classificationTitle}
+              </h1>
+              <div className= "flex flex-row mb-[1rem] w-full">
+                  <div className="w-2/3">
+                    <WeightField id={item.objectiveClassificationID as number} initialWeight={item.weight || 1}/>
+                  </div>
+              </div>
+            </div>
             <DataTableObjColaborador columns={columns} data={item.objectives} />
           </div>
         ))}
