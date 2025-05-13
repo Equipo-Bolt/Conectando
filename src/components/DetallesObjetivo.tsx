@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import CancelButton from "./CancelButton";
 import { TypeObjective } from "@/types/TypeObjective";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Props {
   objetivo: TypeObjective;
@@ -56,7 +56,7 @@ export default function DetallesObjetivoClient({ objetivo, classificationTitle }
                 <FormField
                 control={form.control}
                 name="classification"
-                render={({ field }) => (
+                render={({ }) => (
                   <FormItem>
                     <FormLabel>Clasificación</FormLabel>
                     <FormControl>
