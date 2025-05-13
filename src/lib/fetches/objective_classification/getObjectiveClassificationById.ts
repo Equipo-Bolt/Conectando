@@ -6,8 +6,8 @@ export async function getObjectiveClassificationById(objectiveClassificationId :
         const objectiveClassification = await prisma.objectiveClassification.findUnique({
             where: { id : objectiveClassificationId },
             include: { 
-                classificationTitle : true
-             }
+              classificationTitle : true
+           }
         })
 
         if (!objectiveClassification) {
