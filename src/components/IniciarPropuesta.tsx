@@ -1,6 +1,11 @@
 import IniciarPropuestaButton from "./IniciarPropuestaButton";
 
-export default function IniciarPropuesta() {
+import { cookies } from "next/headers";
+
+export default async function IniciarPropuesta() {
+    //* Usando cookies
+    const cookieStore = await cookies();
+    const userId = cookieStore.get('userId')?.value;
     return (
         <div>
           {/* Caja centrada con mensaje de bienvenida */}
@@ -11,7 +16,7 @@ export default function IniciarPropuesta() {
 
           {/* Botón amarillo con estilo y animación hover */}
           <div className="text-center mt-6">
-            <IniciarPropuestaButton />
+            <IniciarPropuestaButton userId={Number(userId)}/>
           </div>
       </div>
       );
