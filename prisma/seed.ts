@@ -306,7 +306,7 @@ async function main() {
   const userCollaborator3 = await prisma.user.upsert({
     where: { employeeNumber: 55555 },
     update: {
-      fullName: "Colaborador Tress",
+      fullName: "Colaborador Tres",
       email: "colab3@gemso.com",
       jobPosition: "Intern",
       positionSeniority: new Date("2025-02-01"),
@@ -337,7 +337,7 @@ async function main() {
     },
     create: {
       employeeNumber: 55555,
-      fullName: "Colaborador Tress",
+      fullName: "Colaborador Tres",
       email: "colab3@gemso.com",
       jobPosition: "Intern",
       positionSeniority: new Date("2025-02-01"),
@@ -369,7 +369,7 @@ async function main() {
   const userCollaborator4 = await prisma.user.upsert({
     where: { employeeNumber: 66666 },
     update: {
-      fullName: "Colaborador Quack",
+      fullName: "Colaborador Cuatro",
       email: "colab4@gemso.com",
       jobPosition: "Tester de Producto",
       positionSeniority: new Date("2025-02-01"),
@@ -399,7 +399,7 @@ async function main() {
     },
     create: {
       employeeNumber: 66666,
-      fullName: "Colaborador Quack",
+      fullName: "Colaborador Cuatro",
       email: "colab4@gemso.com",
       jobPosition: "Tester de Producto",
       positionSeniority: new Date("2025-02-01"),
