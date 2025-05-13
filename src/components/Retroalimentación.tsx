@@ -70,7 +70,7 @@ export default async function Retroalimentación() {
 
       <div className="flex justify-end mt-[1rem]">
           <UpdateProgressButton
-            text="Enviar a revisión"
+            text="Aprobar Objetivos"
             form={form}
             formObjectives={data}
             progressID={3}

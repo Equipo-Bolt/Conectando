@@ -1,25 +1,14 @@
-"use client"
+"use server"
 
 import Image from "next/image";
 
-//! Frandebug
-import { Button } from "@/components/ui/button";
-import { updateFormProgressAction } from "./actions/form/updateFormProgress";
-import { updateObjectiveClassificationAction } from "./actions/objective_classification/updateObjectiveClassification";
-import { MutateFormInfo } from "@/types/TypeForm";
-import { MutateObjectiveClassitionInfo } from "@/types/TypeObjectiveClassification";
-import { useActionState, useTransition } from "react";
+import { ClientComponent } from "@/components/ClientComponent";
 
-export default function Home() {
-  //!Probando cmabiar de estado de form
-  // const newInfo : MutateFormInfo = { id : 2, progressID : 1}
-  // const [state, newAction] = useActionState(updateFormProgressAction, null)
-  // const [isPending, startTransition] = useTransition();
+import { getAllUsers } from "@/lib/fetches/user/getAllUsers";
 
-  //!Probando cmabiar de peso
-  const newInfo : MutateObjectiveClassitionInfo = { id : 1, weight : 70}
-  const [state, newAction] = useActionState(updateObjectiveClassificationAction, null)
-  const [isPending, startTransition] = useTransition();
+//! cambiado a async para pruebas de cookies
+export default async function Home() {
+  //!Probando cookies en ClientComponent.tsx
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -33,11 +22,7 @@ export default function Home() {
           height={38}
           priority
         />
-        <Button 
-          title="hola"
-          onClick={ () => startTransition( () => { newAction(newInfo)})}
-        />
-        {isPending ? "cargando..." : state}
+        <ClientComponent users = {await getAllUsers()}/>
         <h1> Welcome to Conectando+</h1>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">

@@ -1,5 +1,7 @@
 "use server";
 
+import { cookies } from "next/headers";
+
 import Borrador from "../../../../components/Borrador";
 import EsperandoRevision from "@/components/EsperandoRevision";
 import IniciarPropuesta from "@/components/IniciarPropuesta";
@@ -22,7 +24,11 @@ const stateComponentMap: { [key: string]: React.ReactNode } = {
 };
 
 async function MisObjetivosPage() {
-  const user : TypeUser = await getUserById(2); //! default 2
+  //* Usando cookies
+  const cookieStore = await cookies();
+  const userId = cookieStore.get('userId')?.value;
+  console.log("userid" + userId)
+  const user : TypeUser = await getUserById((Number(userId))); 
   const formId : string =  await getFormIdByUserId(user.id);
   if (formId === "Sin Formulario Activo") {
     return (
