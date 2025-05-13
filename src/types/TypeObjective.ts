@@ -10,7 +10,7 @@ export interface TypeObjective {
     goal: string | null;
     formID?: number;
     createdAt?: Date;
-    objectiveClassificationID?: number;
+    objectiveClassificationID: number;
     comments?: TypeComment[];
 }
 //! Este interface se utiliza para crear o editar Objetivos, (createObjetive & updateObjective)
