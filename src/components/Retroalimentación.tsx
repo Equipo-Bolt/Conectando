@@ -15,7 +15,7 @@ import UpdateProgressButton from "./UpdateProgressButton";
 import WeightField from "./WeightField";
 
 export default async function Retroalimentación() {
-  const userId = 3;
+  const userId = 2;
   const userFormId = await getFormIdByUserId(userId);
   const form = await getFormById(parseInt(userFormId));
   const data = (await getObjectivesByFormId(parseInt(userFormId))) as TypeFormObjectives[];
@@ -55,15 +55,13 @@ export default async function Retroalimentación() {
       <div className="container mx-auto">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
-            <div>
-              <h1 className="text-2xl font-bold pb-[1.5rem]">
-                {item.classificationTitle}
-              </h1>
-              <div className= "flex flex-row mb-[1rem] w-full">
-                  <div className="w-2/3">
-                    <WeightField id={item.objectiveClassificationID as number} initialWeight={item.weight || 1}/>
-                  </div>
-              </div>
+            <h1 className="text-2xl font-bold pb-[1.5rem]">
+              {item.classificationTitle}
+            </h1>
+            <div className= "flex flex-row mb-[1rem] w-full">
+                <div className="w-2/3">
+                  <WeightField id={item.objectiveClassificationID as number} initialWeight={item.weight || 1}/>
+                </div>
             </div>
             <DataTableObjColaborador columns={columns} data={item.objectives} />
           </div>
@@ -72,7 +70,7 @@ export default async function Retroalimentación() {
 
       <div className="flex justify-end mt-[1rem]">
           <UpdateProgressButton
-            text="Aprobar Objetivos"
+            text="Enviar a revisión"
             form={form}
             formObjectives={data}
             progressID={3}

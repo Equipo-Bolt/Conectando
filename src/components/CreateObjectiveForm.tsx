@@ -59,7 +59,7 @@ export function CreateObjectiveForm({ classifications }: CreateObjectiveFormProp
       }
 
       const objectiveData: MutateObjectiveInfo = {
-          formID: 1, //! default 1, form6 no tiene objs
+          formID: 2, //! default 1, form6 no tiene objs
           title: data.title,
           weight: parseInt(data.weight),
           classificationCatalogID: parseInt(data.classification),
