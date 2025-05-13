@@ -1,60 +1,117 @@
-import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
-import { TypeObjective } from "@/types/TypeObjective";
-import { TypeObjectiveClassification } from "@/types/TypeObjectiveClassification";
-import CancelButton from "./CancelButton";
+"use client";
 
-interface Comentario {
-  autor: string;
-  fecha: string;
-  texto: string;
-}
+import { useForm } from "react-hook-form";
+import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import CancelButton from "./CancelButton";
+import { TypeObjective } from "@/types/TypeObjective";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 
 interface Props {
   objetivo: TypeObjective;
+  classificationTitle: string;
 }
 
-export default async function DetallesObjetivo({ objetivo }: Props) {
-  const classification: TypeObjectiveClassification = await getObjectiveClassificationById(objetivo.objectiveClassificationID as number);
+export default function DetallesObjetivoClient({ objetivo, classificationTitle }: Props) {
+  const form = useForm({
+    defaultValues: {
+      title: objetivo.title,
+      weight: objetivo.weight.toString(),
+      classification: objetivo.title,
+      goal: objetivo.goal ?? "",
+    },
+  });
 
   return (
     <div className="p-8 space-y-10">
       <h1 className="text-3xl font-bold">Detalles del Objetivo</h1>
-      <p className="text-base"><strong>Colaborador:</strong> Daniel Fernández</p>
+      <p className="text-base">
+        <strong>Colaborador:</strong> Daniel Fernández
+      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Parte izquierda: formulario */}
         <div className="md:col-span-2 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">Título del Objetivo</label>
-              <input disabled value={objetivo.title} className="border rounded p-2 w-full bg-gray-100" />
-            </div>
+          <Form {...form}>
+            <form className="space-y-6">
+              <div className="grid grid-cols-1 gap-6">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Título del Objetivo</FormLabel>
+                      <FormControl>
+                        <Input {...field} disabled />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
 
-            <div>
-              <label className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">Clasificación</label>
-              <input disabled value={classification.classificationTitle} className="border rounded p-2 w-full bg-gray-100" />
-            </div>
-          </div>
+                
+              </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">Peso</label>
-              <input disabled value={objetivo.weight} className="border rounded p-2 w-full bg-gray-100" />
-            </div>
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                control={form.control}
+                name="classification"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Clasificación<p className="text-gemso-red"> </p></FormLabel>
+                    <Select 
+                        defaultValue={classificationTitle}
+                        value={classificationTitle}
+                        disabled={true}
+                    >
+                        <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="" />
+                            </SelectTrigger>
+                        </FormControl>
+                    </Select>
+                  </FormItem>
+                )}
+              />
 
-          <div>
-            <label className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4 ">Meta</label>
-            <textarea disabled value={objetivo.goal ?? ""} className="border rounded p-2 w-full bg-gray-100" />
-          </div>
+                <FormField
+                  control={form.control}
+                  name="weight"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Peso (%)</FormLabel>
+                      <FormControl>
+                        <Input {...field} disabled />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="goal"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Meta</FormLabel>
+                    <FormControl>
+                      <Textarea {...field} disabled />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
         </div>
 
-
+        {/* Parte derecha: comentarios */}
         <div className="space-y-4 border-l pl-4">
           <h2 className="text-lg font-semibold">Comentarios</h2>
-          {objetivo.comments && objetivo.comments?.length > 0 ? (
+          {objetivo.comments && objetivo.comments.length > 0 ? (
             objetivo.comments.map((c, i) => (
               <div key={i} className="border rounded p-3 bg-gray-50 text-sm">
-                <strong>{"John"}</strong> <span className="text-gray-500">{c.commentedAt?.toDateString()}</span>
+                <strong>John</strong>{" "}
+                <span className="text-gray-500">{c.commentedAt?.toDateString()}</span>
                 <p>{c.description}</p>
               </div>
             ))
@@ -65,8 +122,10 @@ export default async function DetallesObjetivo({ objetivo }: Props) {
       </div>
 
       <div className="flex justify-end gap-4 w-full">
-        <button className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-m text-white hover:bg-gemso-blue/90">Editar Objetivo</button>
-        <CancelButton route="/misObjetivos" text="Regresar"></CancelButton>
+        <button className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-m text-white hover:bg-gemso-blue/90">
+          Editar Objetivo
+        </button>
+        <CancelButton route="/misObjetivos" text="Regresar" />
       </div>
     </div>
   );
