@@ -77,7 +77,7 @@ export default async function Borrador() {
 
       <div className="flex justify-end mt-[1rem]">
           <UpdateProgressButton
-            text="Mandar A Revisión"
+            text="Enviar A Revisión"
             form={form}
             formObjectives={data}
             progressID={2}

@@ -39,7 +39,7 @@ export function DataTableMisColaboradores<TData, TValue>({
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="bg-gemso-blue text-white font-bold text-base first:rounded-tl-md last:rounded-tr-md py-2 px-4 text-left"
+                  className="w-1/3 bg-gemso-blue text-white font-bold text-base first:rounded-tl-md last:rounded-tr-md py-2 px-4 text-left"
                 >
                   <div
                     className={

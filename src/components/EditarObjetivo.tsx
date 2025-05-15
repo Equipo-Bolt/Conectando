@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/form";
 
 // Custom Components
+import SubmitButton from "@/components/SubmitButton";
 import CancelButton from "@/components/CancelButton";
 
 // Types
@@ -38,8 +39,6 @@ import { TypeComment } from "@/types/TypeComment";
 
 // Actions
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
-import { Button } from "./ui/button";
-import Link from "next/link";
 
 interface DetailObjectivesProps {
     objective: MutateObjectiveInfo;
@@ -49,7 +48,7 @@ interface DetailObjectivesProps {
 
 type ObjectiveFormData = z.infer<typeof updateObjectiveSchema>;
 
-export default function DetallesObjetivoClient({
+export default function EditarObjetivoClient({
     objective,
     classifications,
     comments,
@@ -134,7 +133,6 @@ export default function DetallesObjetivoClient({
                             <div className="grid grid-cols-1 gap-6">
                                 {/* Título del objetivo */}
                                 <FormField
-                                    disabled
                                     control={form.control}
                                     name="title"
                                     render={({ field }) => (
@@ -165,7 +163,6 @@ export default function DetallesObjetivoClient({
                                                 </p>
                                             </FormLabel>
                                             <Select
-                                                disabled
                                                 onValueChange={field.onChange}
                                                 value={field.value}
                                             >
@@ -197,7 +194,6 @@ export default function DetallesObjetivoClient({
 
                                 {/* Peso del objetivo */}
                                 <FormField
-                                    disabled
                                     control={form.control}
                                     name="weight"
                                     render={({ field }) => (
@@ -213,7 +209,6 @@ export default function DetallesObjetivoClient({
 
                             {/* Meta del objetivo */}
                             <FormField
-                                disabled
                                 control={form.control}
                                 name="goal"
                                 render={({ field }) => (
@@ -226,11 +221,10 @@ export default function DetallesObjetivoClient({
                                 )}
                             />
                             <div className="flex justify-end gap-4 w-full">
-                                <Button className="bg-gemso-blue w-[10rem] h-[3rem] rounded-lg font-bold text-lg hover:bg-gemso-blue/90" asChild>
-                                    <Link href={`/misObjetivos/editar/${objective.id} `}>
-                                        Editar Objetivo
-                                    </Link>
-                                </Button>
+                                <SubmitButton
+                                    text="Guardar"
+                                    isPending={isPending}
+                                />
                                 <CancelButton
                                     route="/misObjetivos"
                                     text="Regresar"

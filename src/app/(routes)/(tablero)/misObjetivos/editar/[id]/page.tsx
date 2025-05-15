@@ -1,4 +1,4 @@
-import DetallesObjetivo from "@/components/DetallesObjetivo";
+import EditarObjetivo from "@/components/EditarObjetivo";
 import { getObjectiveById } from "@/lib/fetches/objective/getObjectiveById";
 import { notFound } from "next/navigation";
 import { TypeClassification } from "@/types/TypeClassification";
@@ -29,12 +29,10 @@ export default async function VerMasObjetivo({
     };
 
     return (
-        <>
-            <DetallesObjetivo
-                objective={mutatedObjective}
-                classifications={classifications}
-                comments={objetivo.comments}
-            />
-        </>
+        <EditarObjetivo
+            objective={mutatedObjective}
+            classifications={classifications}
+            comments={objetivo.comments}
+        />
     );
 }
