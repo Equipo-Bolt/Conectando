@@ -1,6 +1,6 @@
 import NavLinks from "@/components/bolt/Sidebars/navlinks";
 import Image from "next/image";
-import GemsoBlanco from "../../../../public/GemsoBlanco.png";
+import GemsoBlanco from "@/../public/GemsoBlanco.png";
 
 export default function SideNav() {
   return (

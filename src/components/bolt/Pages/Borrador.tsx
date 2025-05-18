@@ -10,7 +10,7 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
 
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 
-import { Button } from "../../ui/button";
+import { Button } from "@/components/ui/button";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
 import WeightField from "@/components/bolt/Inputs/WeightField";
 import { DataTableMisObjetivos } from "@/components/bolt/DataTables/dataTableMisObjetivos/data-table";
