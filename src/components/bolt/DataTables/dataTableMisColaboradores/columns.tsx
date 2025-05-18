@@ -7,7 +7,7 @@ import { TypeMyColaborator } from "@/types/TypeMyColaborator";
 import {ArrowRightEndOnRectangleIcon} from "@heroicons/react/24/outline";
 import { setCustomCookieAction } from "@/app/actions/cookies/setCustomCookie";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
 export const columns: ColumnDef<TypeMyColaborator>[] = [
   {

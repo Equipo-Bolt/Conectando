@@ -66,8 +66,8 @@ interface CompleteInfoFormProps {
 
 //* Action
 import { createUserAction } from "@/app/actions/user/createUser";
-import SubmitButton from "./SubmitButton";
-import CancelButton from "./CancelButton";
+import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
+import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
                                 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : CompleteInfoFormProps ) {

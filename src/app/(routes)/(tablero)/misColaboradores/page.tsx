@@ -1,14 +1,12 @@
 import { getAllCollaboratorsOfBoss } from "@/lib/fetches/user/collaborators_of_boss/getAllCollaboratorsOfBoss";
-import { getUserById } from "@/lib/fetches/user/getUserById";
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 
-import { DataTableMisColaboradores } from "@/components/dataTableMisColaboradores/data-table";
-import { columns } from "@/components/dataTableMisColaboradores/columns";
+import { DataTableMisColaboradores } from "@/components/bolt/DataTables/dataTableMisColaboradores/data-table";
+import { columns } from "@/components/bolt/DataTables/dataTableMisColaboradores/columns";
 
 import { cookies } from "next/headers";
 
-import { TypeUser } from "@/types/TypeUser";
 import { getFormById } from "@/lib/fetches/form/getFormById";
 
 async function MisColaboradoresPage() {

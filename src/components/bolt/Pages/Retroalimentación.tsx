@@ -1,7 +1,7 @@
-import InfoHover from "@/components/InfoHover";
+import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { columns } from "@/components/dataTableObjetivosColaborador/columns";
-import { DataTableObjColaborador } from "@/components/dataTableObjetivosColaborador/data-table";
+import { columns } from "@/components/bolt/DataTables/dataTableMisObjetivos/columns";
+import { DataTableObjColaborador } from "@/components/bolt/DataTables/dataTableObjetivosColaborador/data-table";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
@@ -11,10 +11,10 @@ import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 
 import { cookies } from "next/headers";
 
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import UpdateProgressButton from "./UpdateProgressButton";
-import WeightField from "./WeightField";
+import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
+import WeightField from "@/components/bolt/Inputs/WeightField";
 
 export default async function Retroalimentación() {
   const cookieStore = await cookies();

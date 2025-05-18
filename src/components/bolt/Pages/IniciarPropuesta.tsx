@@ -1,4 +1,4 @@
-import IniciarPropuestaButton from "./IniciarPropuestaButton";
+import IniciarPropuestaButton from "@/components/bolt/Buttons/IniciarPropuestaButton";
 
 import { cookies } from "next/headers";
 

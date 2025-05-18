@@ -17,8 +17,8 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 
 // Custom Components
-import SubmitButton from "@/components/SubmitButton";
-import CancelButton from "@/components/CancelButton"; 
+import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
+import CancelButton from "@/components/bolt/Buttons/CancelButton"; 
 // Types
 import { MutateObjectiveInfo } from "@/types/TypeObjective";
 import { TypeClassification } from "@/types/TypeClassification";

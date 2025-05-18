@@ -1,6 +1,7 @@
-import NavLinks from "./navlinks";
+import NavLinks from "@/components/bolt/Sidebars/navlinks";
 import Image from "next/image";
-import GemsoBlanco from "../../public/GemsoBlanco.png";
+import GemsoBlanco from "../../../../public/GemsoBlanco.png";
+
 export default function SideNav() {
   return (
     <div className="bg-gemso-dark-blue flex h-full flex-col px-3 py-4 md:px-2">

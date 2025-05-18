@@ -1,7 +1,7 @@
 "use server";
 
-import Borrador from "@/components/Borrador";
-import Retroalimentación from "@/components/Retroalimentación";
+import Borrador from "@/components/bolt/Pages/Borrador";
+import Retroalimentación from "@/components/bolt/Pages/Retroalimentación";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getFormById } from "@/lib/fetches/form/getFormById";

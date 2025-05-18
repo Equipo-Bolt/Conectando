@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { TrashIcon } from "@heroicons/react/24/outline"
 import { TrashIcon as TrashSolid} from "@heroicons/react/24/solid" 
-import { DeleteModal } from "@/components/DeleteModal"
+import { DeleteModal } from "@/components/bolt/Modals/DeleteModal"
 
 //! A este boton se le va a introducir los props como titulo, descripcion, botones y funcion
 //!  para que le mande esto mismo al delete modal y se muestre y realice lo que necesite ese modal

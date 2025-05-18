@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/form";
 
 // Custom Components
-import CancelButton from "@/components/CancelButton";
+import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
 import { MutateObjectiveInfo } from "@/types/TypeObjective";
@@ -38,7 +38,7 @@ import { TypeComment } from "@/types/TypeComment";
 
 // Actions
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 interface DetailObjectivesProps {

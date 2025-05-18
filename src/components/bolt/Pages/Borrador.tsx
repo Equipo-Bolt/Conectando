@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 
-import InfoHover from "@/components/InfoHover";
+import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { columns } from "@/components/dataTableMisObjetivos/columns";
+import { columns } from "@/components/bolt/DataTables/dataTableMisObjetivos/columns";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
@@ -10,10 +10,10 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
 
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 
-import { Button } from "./ui/button";
-import UpdateProgressButton from "./UpdateProgressButton";
-import WeightField from "./WeightField";
-import { DataTableMisObjetivos } from "@/components/dataTableMisObjetivos/data-table";
+import { Button } from "../../ui/button";
+import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
+import WeightField from "@/components/bolt/Inputs/WeightField";
+import { DataTableMisObjetivos } from "@/components/bolt/DataTables/dataTableMisObjetivos/data-table";
 
 import Link from "next/link";
 
