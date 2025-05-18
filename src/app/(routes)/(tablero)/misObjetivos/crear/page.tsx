@@ -9,7 +9,7 @@ import { getUserById } from "@/lib/fetches/user/getUserById";
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 
 // Custom Components
-import CreateObjectiveForm from "@/components/CreateObjectiveForm";
+import CreateObjectiveForm from "@/components/bolt/Inputs/CreateObjectiveForm";
 
 // Types
 import { TypeClassification } from "@/types/TypeClassification";

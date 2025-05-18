@@ -1,6 +1,6 @@
 "use server";
 
-import { CompleteInfoForm } from "@/components/CompleteInfoForm";
+import { CompleteInfoForm } from "@/components/bolt/Inputs/CompleteInfoForm";
 
 //!new 
 import { getAllDivisions } from "@/lib/fetches/division/getAllDivisions";

@@ -1,4 +1,4 @@
-import EditarObjetivo from "@/components/EditarObjetivo";
+import EditarObjetivo from "@/components/bolt/Inputs/EditarObjetivo";
 import { getObjectiveById } from "@/lib/fetches/objective/getObjectiveById";
 import { notFound } from "next/navigation";
 import { TypeClassification } from "@/types/TypeClassification";

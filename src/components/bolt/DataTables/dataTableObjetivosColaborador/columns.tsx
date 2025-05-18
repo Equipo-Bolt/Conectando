@@ -1,11 +1,14 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { DetailButton } from "@/components/DetailButton";
-import { DeleteButton } from "@/components/DeleteButton";
-import IconTooltip from "@/components/IconTooltip";
+import { DetailButton } from "@/components/bolt/Buttons/DetailButton";
+import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
+import IconTooltip from "@/components/bolt/Icons/IconTooltip";
 import { TypeObjective } from "@/types/TypeObjective";
+
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
+
+import IconCommentStatus from "@/components/bolt/Icons/IconCommentStatus";
 
 export const columns: ColumnDef<TypeObjective>[] = [
   {
@@ -40,13 +43,21 @@ export const columns: ColumnDef<TypeObjective>[] = [
     header: "Calificación",
     cell: ({ row }) => {
       const scoreValue = row.original.grade;
-      //* Si es dato nulo o indefinido, se muestra "S/C" (Sin Calificación)
+   
       return (
         <span>
           {scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}
         </span>
       );
     },
+  },
+  {
+    //* Esta es la columna que indica si el objetivo fue comentado o no
+    accessorKey: "comment",
+    header: "Comentario",
+    cell: ({ row }) => 
+      <IconCommentStatus objectiveId={row.original.id} />
+    ,
   },
   {
     //* Estos son los botones de opciones que se ven en la tabla

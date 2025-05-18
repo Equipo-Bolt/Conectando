@@ -1,8 +1,7 @@
-import { cookies } from "next/headers";
+import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import InfoHover from "@/components/InfoHover";
-
-import { columns } from "@/components/dataTableMisObjetivos/columns";
+import { columns } from "@/components/bolt/DataTables/dataTableMisObjetivos/columns";
+import { DataTableObjColaborador } from "@/components/bolt/DataTables/dataTableObjetivosColaborador/data-table";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
@@ -10,21 +9,20 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
 
 import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 
-import { Button } from "./ui/button";
-import UpdateProgressButton from "./UpdateProgressButton";
-import WeightField from "./WeightField";
-import { DataTableMisObjetivos } from "@/components/dataTableMisObjetivos/data-table";
+import { cookies } from "next/headers";
 
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
+import WeightField from "@/components/bolt/Inputs/WeightField";
 
-
-export default async function Borrador() {
-  //* Usando cookies
+export default async function Retroalimentación() {
   const cookieStore = await cookies();
-  const userId = cookieStore.get('userId')?.value;
-  const formId : string =  await getFormIdByUserId(Number(userId)); //? maybe avoid calling func again and just set cookie?
-  const form = await getFormById(Number(formId));
-  const data = (await getObjectivesByFormId(Number(formId))) as TypeFormObjectives[]; 
+  const collaboratorId = cookieStore.get('collaboratorId')?.value;
+  console.log("colab " + collaboratorId)
+  const userFormId = await getFormIdByUserId(Number(collaboratorId));
+  const form = await getFormById(parseInt(userFormId));
+  const data = (await getObjectivesByFormId(parseInt(userFormId))) as TypeFormObjectives[];
 
   return (
     <div>
@@ -59,8 +57,8 @@ export default async function Borrador() {
         </Button>
       </div>
       <div className="container mx-auto">
-        {data.map((item, index) => (
-          <div key={index}>
+        {data.map((item) => (
+          <div key={item.objectiveClassificationID}>
             <h1 className="text-2xl font-bold pb-[1.5rem]">
               {item.classificationTitle}
             </h1>
@@ -69,18 +67,17 @@ export default async function Borrador() {
                   <WeightField id={item.objectiveClassificationID as number} initialWeight={item.weight || 1}/>
                 </div>
             </div>
-
-            <DataTableMisObjetivos columns={columns} data={item.objectives} />
+            <DataTableObjColaborador columns={columns} data={item.objectives} />
           </div>
         ))}
       </div>
 
       <div className="flex justify-end mt-[1rem]">
           <UpdateProgressButton
-            text="Enviar A Revisión"
+            text="Aprobar Objetivos"
             form={form}
             formObjectives={data}
-            progressID={2}
+            progressID={3}
           />
       </div>
     </div>

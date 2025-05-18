@@ -1,4 +1,4 @@
-import DetallesObjetivo from "@/components/DetallesObjetivo";
+import DetallesObjetivo from "@/components/bolt/Inputs/DetallesObjetivo";
 import { getObjectiveById } from "@/lib/fetches/objective/getObjectiveById";
 import { notFound } from "next/navigation";
 import { TypeClassification } from "@/types/TypeClassification";

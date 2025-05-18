@@ -2,9 +2,9 @@
 
 import { cookies } from "next/headers";
 
-import Borrador from "../../../../components/Borrador";
-import Enviado from "@/components/Enviado";
-import IniciarPropuesta from "@/components/IniciarPropuesta";
+import Borrador from "@/components/bolt/Pages/Borrador";
+import Enviado from "@/components/bolt/Pages/Enviado";
+import IniciarPropuesta from "@/components/bolt/Pages/IniciarPropuesta";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getFormById } from "@/lib/fetches/form/getFormById";

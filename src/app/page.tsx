@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { ClientComponent } from "@/components/ClientComponent";
+import { ClientComponent } from "@/components/bolt/Pages/ClientComponent";
 
 import { getAllUsers } from "@/lib/fetches/user/getAllUsers";
 
