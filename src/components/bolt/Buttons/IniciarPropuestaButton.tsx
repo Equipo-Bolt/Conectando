@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { ServerActionResponse } from "@/types/ServerActionResponse";
+
 import { createFormAction } from "@/app/actions/form/createForm";
 
 export default function IniciarPropuestaButton( {userId} : {userId : number}) {
@@ -11,12 +13,12 @@ export default function IniciarPropuestaButton( {userId} : {userId : number}) {
     const [error, setError] = useState<string | null>(null);
 
     const handleClick = async () => {
-        const result = await createFormAction(null, userId);
+        const result : ServerActionResponse= await createFormAction(null, userId);
 
-        if (result === "Formulario de objetivos creado") {
+        if (result.success) {
             router.refresh();
         } else {
-            setError(result); // Guarda el error para mostrarlo en pantalla
+            setError(result.error); //! Now uses ServerActionResponse tu read error message
         }
     };
 

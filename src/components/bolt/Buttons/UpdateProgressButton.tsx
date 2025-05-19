@@ -18,7 +18,7 @@ export interface ButtonProps {
 }
 
 export default function UpdateProgressButton({ text, form, formObjectives, progressID }: ButtonProps) {
-    const [state, newAction] = useActionState(updateFormProgressAction, null) //* pones la action aqui
+    const [state, newAction] = useActionState(updateFormProgressAction, null)
     const [isPending, startTransition] = useTransition();
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
@@ -39,7 +39,7 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
 
     useEffect(() => {
         if (state === null) return;
-        if (state === "Estado del Formulario ha sido actualizado") {
+        if (state.success) {
             window.location.reload();
         }
     }, [state]);
@@ -56,10 +56,10 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
             
             {/* Mensaje de Estado */}
             <div>
-                {state === "Estado del Formulario ha sido actualizado" ? (
+                {state?.success ? (
                         <p className="text-green-500 mt-2">Estado del Formulario ha sido actualizado</p>
                     ) : (
-                        <p className="text-red-500 mt-2">{state}</p>
+                        <p className="text-red-500 mt-2">{state?.error}</p>
                     )
                 }
             </div>
