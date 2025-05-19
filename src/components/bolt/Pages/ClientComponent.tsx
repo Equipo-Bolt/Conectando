@@ -9,9 +9,9 @@ import { useState} from "react";
 
 import { setUserIdAction } from "@/app/actions/cookies/setUserId";
 
-import { TypeUser } from "@/types/TypeUser";
+import { User } from "@/types/User";
 
-export function ClientComponent( { users } : { users : TypeUser[] }) {
+export function ClientComponent( { users } : { users : User[] }) {
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
     

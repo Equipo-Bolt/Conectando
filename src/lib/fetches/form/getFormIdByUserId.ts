@@ -1,6 +1,6 @@
 import { getFormsOfUser } from "./getFormsOfUser";
 import { getCurrentPeriod } from "../period/getCurrentPeriod";
-import { TypeForm } from "@/types/TypeForm";
+import { Form } from "@/types/Form";
 
 /**
  * * getFormIdByUserId
@@ -10,7 +10,7 @@ import { TypeForm } from "@/types/TypeForm";
  */
 export async function getFormIdByUserId( userId : number ) {
     try {
-        const forms = await getFormsOfUser(userId) as TypeForm[];
+        const forms = await getFormsOfUser(userId) as Form[];
 
         if (forms.length === 0) {
             return "Sin Formulario Activo";

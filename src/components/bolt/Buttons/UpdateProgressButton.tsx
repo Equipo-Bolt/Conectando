@@ -7,13 +7,13 @@ import { updateFormProgressAction } from "@/app/actions/form/updateFormProgress"
 
 import { validObjectivesSchema } from "@/lib/formSchemas/validObjectivesSchema";
 
-import { TypeForm } from "@/types/TypeForm";
-import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+import { Form } from "@/types/Form";
+import { FormObjectives } from "@/types/FormObjectives";
 
 export interface ButtonProps {
     text: string;
-    form: TypeForm;
-    formObjectives: TypeFormObjectives[];
+    form: Form;
+    formObjectives: FormObjectives[];
     progressID: number;
 }
 

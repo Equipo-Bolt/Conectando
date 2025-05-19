@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { TypeComment } from "@/types/TypeComment";
+import { Comment } from "@/types/Comment";
 
 export async function getCommentsFromObjective( objectiveId : number ) {
     try {
@@ -10,10 +10,10 @@ export async function getCommentsFromObjective( objectiveId : number ) {
         });
 
         if (comments.length === 0) {
-            return [] as TypeComment[];
+            return [] as Comment[];
         }
 
-        return comments.map(({ deactived, updatedAt, ...c }) => ( c )) as TypeComment[];
+        return comments.map(({ deactived, updatedAt, ...c }) => ( c )) as Comment[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

@@ -43,7 +43,7 @@ npm run dev
 
 $~$
 
-## VSCODE Extensions: :pencil2:
+## VSCODE Extensions :pencil2:
 Install the following VSCODE Extensions:
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [BetterComments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
@@ -95,7 +95,7 @@ Backend/ft/CreateUser   Frontend/ft/Collaborator   Frontend/ft/HomePage
 $~$
 
 ### Hotfix Branches 
-- Similar to Feature Branches, these branches will be created from `staging` and named following the pattern: `{layer}/hotfix/{feature name}`.
+- Similar to Feature Branches, these branches will be created from `staging` and named following the pattern: `{layer}/hotfix/{fix name}`.
 - If no new functionality is developed or the main purpose is to refactor or redo a large amount of code, it should be done in a Hotfix branch.
 
 **Examples of Hotfix branch names:**

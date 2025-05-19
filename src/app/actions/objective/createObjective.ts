@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getClassificationById } from "@/lib/fetches/classification/getClassificationById";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 
-import { MutateObjectiveInfo } from "@/types/TypeObjective";
+import { MutateObjectiveInfo } from "@/types/Objective";
 
 /**
  * * createObjectiveAction() -> Esta función crea un objetivo y puede (debe) usarse con useActionSate

@@ -7,7 +7,7 @@ import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
 
-import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+import { FormObjectives } from "@/types/FormObjectives";
 
 import { cookies } from "next/headers";
 
@@ -22,7 +22,7 @@ export default async function Retroalimentación() {
   console.log("colab " + collaboratorId)
   const userFormId = await getFormIdByUserId(Number(collaboratorId));
   const form = await getFormById(parseInt(userFormId));
-  const data = (await getObjectivesByFormId(parseInt(userFormId))) as TypeFormObjectives[];
+  const data = (await getObjectivesByFormId(parseInt(userFormId))) as FormObjectives[];
 
   return (
     <div>

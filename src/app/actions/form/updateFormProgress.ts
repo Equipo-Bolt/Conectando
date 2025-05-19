@@ -2,8 +2,8 @@
 
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { prisma } from "@/lib/prisma";
-import { TypeForm } from "@/types/TypeForm";
-import { MutateFormInfo } from "@/types/TypeForm";
+import { Form } from "@/types/Form";
+import { MutateForm } from "@/types/Form";
 
 /**
  * * updateFormProgress  Updates the progress status of a form instance. 
@@ -13,7 +13,7 @@ import { MutateFormInfo } from "@/types/TypeForm";
  */
 export async function updateFormProgressAction(
     prevState : null | string,
-    data : MutateFormInfo
+    data : MutateForm
 ) {
 
     //! Errores para debugeo
@@ -26,7 +26,7 @@ export async function updateFormProgressAction(
     }
 
     try {
-        const targetForm = await prisma.form.findUnique({ where: { id: data.id, deactived : false } }) as TypeForm;
+        const targetForm = await prisma.form.findUnique({ where: { id: data.id, deactived : false } }) as Form;
 
         if (!targetForm) {
             return("Formulario de Objetivos no encontrado");

@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 
-import { MutateObjectiveInfo } from '@/types/TypeObjective';
+import { MutateObjectiveInfo } from '@/types/Objective';
 
 /**
  * * updateObjectiveAction Esta función modifica la información de un objetivo.

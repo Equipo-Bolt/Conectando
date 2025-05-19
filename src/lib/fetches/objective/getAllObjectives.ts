@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeObjective } from "@/types/TypeObjective";
+import { Objective } from "@/types/Objective";
 
 export async function getAllObjectives() {
     try {
@@ -11,7 +11,7 @@ export async function getAllObjectives() {
             throw new Error ("There are no Objectives")
         }
 
-        return objectives.map(({ deactived, updatedAt, ...o }) => o) as TypeObjective[];
+        return objectives.map(({ deactived, updatedAt, ...o }) => o) as Objective[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

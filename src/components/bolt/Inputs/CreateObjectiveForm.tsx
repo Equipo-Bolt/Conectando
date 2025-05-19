@@ -20,8 +20,8 @@ import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/
 import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton"; 
 // Types
-import { MutateObjectiveInfo } from "@/types/TypeObjective";
-import { TypeClassification } from "@/types/TypeClassification";
+import { MutateObjectiveInfo } from "@/types/Objective";
+import { Classification } from "@/types/Classification";
 
 // Actions
 import { createObjectiveAction } from "@/app/actions/objective/createObjective";
@@ -29,7 +29,7 @@ import { createObjectiveAction } from "@/app/actions/objective/createObjective";
 
 //* Interface
 interface CreateObjectiveFormProps {
-    classifications: TypeClassification[];
+    classifications: Classification[];
     formId: number;
 }
 

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeObjectiveClassification } from "@/types/TypeObjectiveClassification";
+import { ObjectiveClassification } from "@/types/ObjectiveClassification";
 
 export async function getAllObjectiveClassifications() {
     try {
@@ -19,7 +19,7 @@ export async function getAllObjectiveClassifications() {
             ...oc }) => ({ 
                 ...oc, 
                 classificationTitle: classificationTitle?.title //! Include Classification title
-            })) as TypeObjectiveClassification[];
+            })) as ObjectiveClassification[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

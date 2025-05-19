@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeObjective } from "@/types/TypeObjective";
+import { Objective } from "@/types/Objective";
 
 export async function getObjectiveById(objectiveId : number) {
     try {
@@ -12,7 +12,7 @@ export async function getObjectiveById(objectiveId : number) {
             throw new Error ("Objective does not exist");
         }
 
-        return objective as TypeObjective;
+        return objective as Objective;
         } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

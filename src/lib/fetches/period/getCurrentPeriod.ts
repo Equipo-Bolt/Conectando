@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypePeriod } from "@/types/TypePeriod";
+import { Period } from "@/types/Period";
 
 export async function getCurrentPeriod() {
     try {
@@ -8,10 +8,10 @@ export async function getCurrentPeriod() {
         });
 
         if (!period) {
-            return ({} as TypePeriod)
+            return ({} as Period)
         }
 
-        return period as TypePeriod;
+        return period as Period;
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

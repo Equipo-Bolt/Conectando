@@ -33,17 +33,17 @@ import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { MutateObjectiveInfo } from "@/types/TypeObjective";
-import { TypeClassification } from "@/types/TypeClassification";
-import { TypeComment } from "@/types/TypeComment";
+import { MutateObjectiveInfo } from "@/types/Objective";
+import { Classification } from "@/types/Classification";
+import { Comment } from "@/types/Comment";
 
 // Actions
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
 
 interface DetailObjectivesProps {
     objective: MutateObjectiveInfo;
-    classifications: TypeClassification[];
-    comments: TypeComment[] | undefined;
+    classifications: Classification[];
+    comments: Comment[] | undefined;
 }
 
 type ObjectiveFormData = z.infer<typeof updateObjectiveSchema>;

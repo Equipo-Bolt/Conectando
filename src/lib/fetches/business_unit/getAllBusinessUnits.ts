@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeBusinessUnit } from "@/types/TypeBusinessUnit";
+import { BusinessUnit } from "@/types/BusinessUnit";
 
 export async function getAllBusinessUnits() {
     try {
@@ -14,7 +14,7 @@ export async function getAllBusinessUnits() {
         return businessUnits.map(({ deactived, updatedAt, ...bu }) => ({
             ...bu,
             createdAt: bu.createdAt.toISOString()
-        })) as TypeBusinessUnit[];
+        })) as BusinessUnit[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

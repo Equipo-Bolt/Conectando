@@ -1,9 +1,9 @@
 import DetallesObjetivo from "@/components/bolt/Inputs/DetallesObjetivo";
 import { getObjectiveById } from "@/lib/fetches/objective/getObjectiveById";
 import { notFound } from "next/navigation";
-import { TypeClassification } from "@/types/TypeClassification";
+import { Classification } from "@/types/Classification";
 import { getAllClassifications } from "@/lib/fetches/classification/getAllClassifications";
-import { MutateObjectiveInfo } from "@/types/TypeObjective";
+import { MutateObjectiveInfo } from "@/types/Objective";
 import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 
 export default async function VerMasObjetivo({
@@ -15,7 +15,7 @@ export default async function VerMasObjetivo({
     const objetivo = await getObjectiveById(parseInt(objectiveId.id));
     const objectiveClassification = objetivo.objectiveClassificationID;
     const classification = getObjectiveClassificationById(objectiveClassification)
-    const classifications: TypeClassification[] = await getAllClassifications();
+    const classifications: Classification[] = await getAllClassifications();
     if (!objetivo) return notFound();
 
     const mutatedObjective: MutateObjectiveInfo = {

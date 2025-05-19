@@ -8,7 +8,7 @@ import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
 
-import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+import { FormObjectives } from "@/types/FormObjectives";
 
 import { Button } from "@/components/ui/button";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
@@ -24,7 +24,7 @@ export default async function Borrador() {
   const userId = cookieStore.get('userId')?.value;
   const formId : string =  await getFormIdByUserId(Number(userId)); //? maybe avoid calling func again and just set cookie?
   const form = await getFormById(Number(formId));
-  const data = (await getObjectivesByFormId(Number(formId))) as TypeFormObjectives[]; 
+  const data = (await getObjectivesByFormId(Number(formId))) as FormObjectives[]; 
 
   return (
     <div>

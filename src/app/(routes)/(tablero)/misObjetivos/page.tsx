@@ -11,9 +11,9 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
 import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { getUserById } from "@/lib/fetches/user/getUserById";
 
-import { TypeForm } from "@/types/TypeForm";
-import { TypeProgress } from "@/types/TypeProgress";
-import { TypeUser } from "@/types/TypeUser";
+import { Form } from "@/types/Form";
+import { Progress } from "@/types/Progress";
+import { User } from "@/types/User";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Borrador />,
@@ -27,7 +27,7 @@ async function MisObjetivosPage() {
   //* Usando cookies
   const cookieStore = await cookies();
   const userId = cookieStore.get('userId')?.value;
-  const user : TypeUser = await getUserById((Number(userId))); 
+  const user : User = await getUserById((Number(userId))); 
   const formId : string =  await getFormIdByUserId(user.id);
   if (formId === "Sin Formulario Activo") {
     return (
@@ -43,8 +43,8 @@ async function MisObjetivosPage() {
       </div>
     );
   }
-  const form: TypeForm = await getFormById(parseInt(formId));
-  const state: TypeProgress = await getProgressById(form.progressID);
+  const form: Form = await getFormById(parseInt(formId));
+  const state: Progress = await getProgressById(form.progressID);
 
   const content = stateComponentMap[state.title] ?? (
     <p> Hubo un error al cargar tu formulario... </p>

@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { TypeMyColaborator } from "@/types/TypeMyColaborator";
+import { TypeMyColaborator } from "@/types/MyColaborator";
 
 import {ArrowRightEndOnRectangleIcon} from "@heroicons/react/24/outline";
 import { setCustomCookieAction } from "@/app/actions/cookies/setCustomCookie";

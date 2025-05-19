@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypePeriod } from "@/types/TypePeriod";
+import { Period } from "@/types/Period";
 
 export async function getPeriodById(periodId : number) {
     try {
@@ -18,7 +18,7 @@ export async function getPeriodById(periodId : number) {
             throw new Error ("Period does not exist");
         }
 
-        return period as TypePeriod;
+        return period as Period;
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }
