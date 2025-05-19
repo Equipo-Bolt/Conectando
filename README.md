@@ -54,7 +54,7 @@ $~$
 
 ## General Branch Naming Conventions :mag:
 - All branch names must be in English.
-- Each branch name should have a maximum of three words after the branch divition, like Backend/
+- Each branch name should have a maximum of three words after the branch division, like Backend/
 - Each word must start with an uppercase letter, except for the main branches (`main` and `staging`).
 
 $~$

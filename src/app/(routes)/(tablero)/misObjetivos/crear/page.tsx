@@ -15,22 +15,30 @@ import CreateObjectiveForm from "@/components/bolt/Inputs/CreateObjectiveForm";
 import { Classification } from "@/types/Classification";
 import { User } from "@/types/User";
 
-async function PaginaParaCrearObjetivo() {
-  //* Usando cookies
+/**
+ * @description This page is used to create a new objective for a user.
+ * It fetches the user's information, their associated form ID, and a list of classifications
+ * to populate the form. The page displays the user's name and renders a form for creating objectives.
+ */
+async function CreateObjectivePage() {
+  //* Using Cookies
   const cookieStore = await cookies();
-  const userId = cookieStore.get('userId')?.value;
+  const userId = cookieStore.get("userId")?.value;
   const user: User = await getUserById(Number(userId));
-  const formId : string =  await getFormIdByUserId(user.id);
-  const classifications: Classification[] = await getAllClassifications(); // Cambia el ID según sea necesario
+  const formId: string = await getFormIdByUserId(user.id);
+  const classifications: Classification[] = await getAllClassifications();
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2">Crear Objetivo</h1>
       <p className="text-base mb-6">
         Colaborador: {user ? user.fullName : "N/A"}
       </p>
-      <CreateObjectiveForm classifications={classifications} formId = { Number(formId) }/>
+      <CreateObjectiveForm
+        classifications={classifications}
+        formId={Number(formId)}
+      />
     </div>
   );
 }
 
-export default PaginaParaCrearObjetivo;
+export default CreateObjectivePage;
