@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 
 import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { columns } from "@/components/bolt/DataTables/dataTableMisObjetivos/columns";
+import { columns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
@@ -13,18 +13,19 @@ import { TypeFormObjectives } from "@/types/TypeFormObjectives";
 import { Button } from "@/components/ui/button";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
 import WeightField from "@/components/bolt/Inputs/WeightField";
-import { DataTableMisObjetivos } from "@/components/bolt/DataTables/dataTableMisObjetivos/data-table";
+import { DataTableMyObjectives } from "@/components/bolt/DataTables/dataTableMyObjectives/data-table";
 
 import Link from "next/link";
 
-
-export default async function Borrador() {
-  //* Usando cookies
+export default async function Draft() {
+  //* Using cookies
   const cookieStore = await cookies();
-  const userId = cookieStore.get('userId')?.value;
-  const formId : string =  await getFormIdByUserId(Number(userId)); //? maybe avoid calling func again and just set cookie?
+  const userId = cookieStore.get("userId")?.value;
+  const formId: string = await getFormIdByUserId(Number(userId)); //? maybe avoid calling func again and just set cookie?
   const form = await getFormById(Number(formId));
-  const data = (await getObjectivesByFormId(Number(formId))) as TypeFormObjectives[]; 
+  const data = (await getObjectivesByFormId(
+    Number(formId)
+  )) as TypeFormObjectives[];
 
   return (
     <div>
@@ -64,24 +65,27 @@ export default async function Borrador() {
             <h1 className="text-2xl font-bold pb-[1.5rem]">
               {item.classificationTitle}
             </h1>
-            <div className= "flex flex-row mb-[1rem] w-full">
-                <div className="w-2/3">
-                  <WeightField id={item.objectiveClassificationID as number} initialWeight={item.weight || 1}/>
-                </div>
+            <div className="flex flex-row mb-[1rem] w-full">
+              <div className="w-2/3">
+                <WeightField
+                  id={item.objectiveClassificationID as number}
+                  initialWeight={item.weight || 1}
+                />
+              </div>
             </div>
 
-            <DataTableMisObjetivos columns={columns} data={item.objectives} />
+            <DataTableMyObjectives columns={columns} data={item.objectives} />
           </div>
         ))}
       </div>
 
       <div className="flex justify-end mt-[1rem]">
-          <UpdateProgressButton
-            text="Enviar A Revisión"
-            form={form}
-            formObjectives={data}
-            progressID={2}
-          />
+        <UpdateProgressButton
+          text="Enviar A Revisión"
+          form={form}
+          formObjectives={data}
+          progressID={2}
+        />
       </div>
     </div>
   );
