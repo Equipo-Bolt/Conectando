@@ -17,7 +17,6 @@ export const columns: ColumnDef<TypeObjective>[] = [
     size: 100,
   },
   {
-    //* Este es el icono que indica si la meta fue declarada o no
     accessorKey: "goal",
     header: "Meta",
     cell: ({ row }) => {
@@ -30,7 +29,6 @@ export const columns: ColumnDef<TypeObjective>[] = [
     },
   },
   {
-    //* Se agrega porcentaje al peso para que se vea mas chilo
     accessorKey: "weight",
     header: "Peso",
     cell: ({ row }) => {
@@ -43,7 +41,7 @@ export const columns: ColumnDef<TypeObjective>[] = [
     header: "Calificación",
     cell: ({ row }) => {
       const scoreValue = row.original.grade;
-   
+
       return (
         <span>
           {scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}
@@ -52,15 +50,11 @@ export const columns: ColumnDef<TypeObjective>[] = [
     },
   },
   {
-    //* Esta es la columna que indica si el objetivo fue comentado o no
     accessorKey: "comment",
     header: "Comentario",
-    cell: ({ row }) => 
-      <IconCommentStatus objectiveId={row.original.id} />
-    ,
+    cell: ({ row }) => <IconCommentStatus objectiveId={row.original.id} />,
   },
   {
-    //* Estos son los botones de opciones que se ven en la tabla
     accessorKey: "options",
     header: "Opciones",
     cell: ({ row }) => {
@@ -74,7 +68,7 @@ export const columns: ColumnDef<TypeObjective>[] = [
             description="¿Seguro que deseas eliminar este objetivo? Esta acción no se puede deshacer."
             handleConfirm={async (id) => {
               await disableObjectiveAction(id);
-              window.location.reload(); // Recargar la página después de eliminar el objetivo
+              window.location.reload();
             }}
           />
         </div>

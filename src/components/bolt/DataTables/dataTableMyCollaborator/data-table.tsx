@@ -20,7 +20,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTableMisObjetivos<TData, TValue>({
+export function DataTableMyCollaborators<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -39,7 +39,7 @@ export function DataTableMisObjetivos<TData, TValue>({
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="bg-gemso-blue text-white font-bold text-base first:rounded-tl-md last:rounded-tr-md py-2 px-4 text-left"
+                  className="w-1/3 bg-gemso-blue text-white font-bold text-base first:rounded-tl-md last:rounded-tr-md py-2 px-4 text-left"
                 >
                   <div
                     className={
@@ -69,7 +69,7 @@ export function DataTableMisObjetivos<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="py-3 px-4">
+                  <TableCell key={cell.id} className="py-3 px-4 items-center">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -81,7 +81,7 @@ export function DataTableMisObjetivos<TData, TValue>({
                 colSpan={columns.length}
                 className="text-center bg-white py-3 px-4"
               >
-                No hay objetivos en esta clasificación
+                No tiene colaboradores
               </TableCell>
             </TableRow>
           )}
