@@ -8,6 +8,7 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
  * @returns Promise of type {@link ServerActionResponse}
  */
 export async function disableForm(
+  prevState: ServerActionResponse | null,
   formId: number
 ): Promise<ServerActionResponse> {
   try {
@@ -16,10 +17,10 @@ export async function disableForm(
       data: { deactived: true },
     });
     return { success: true, message: "Formulario ha sido desactivado" };
-  } catch (err) {
+  } catch (error) {
     console.error(
-      `Error when disabling objectives form: ${(err as Error).message}`
+      `Error when disabling objectives form: ${(error as Error).message}`
     );
-    return { success: false, error: `${(err as Error).message}` };
+    return { success: false, error: `${(error as Error).message}` };
   }
 }

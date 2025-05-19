@@ -32,7 +32,7 @@ import {
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { MutateObjectiveInfo } from "@/types/Objective";
+import { MutateObjective } from "@/types/Objective";
 import { Classification } from "@/types/Classification";
 import { Comment } from "@/types/Comment";
 
@@ -42,7 +42,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 interface DetailObjectivesProps {
-    objective: MutateObjectiveInfo;
+    objective: MutateObjective;
     classifications: Classification[];
     comments: Comment[] | undefined;
 }
@@ -70,7 +70,8 @@ export default function DetallesObjetivoClient({
         },
     });
 
-    const [state, newAction] = useActionState(updateObjectiveAction, null); //* pones la action aqui
+    //TODO Remove all edit logic in this page
+    const [state, newAction] = useActionState(updateObjectiveAction, null);
     const [isPending, startTransition] = useTransition();
 
     async function handleSubmit(data: ObjectiveFormData) {
@@ -82,7 +83,7 @@ export default function DetallesObjetivoClient({
             return;
         }
 
-        const objectiveData: MutateObjectiveInfo = {
+        const objectiveData: MutateObjective = {
             id: data.id,
             formID: 2,
             title: data.title,

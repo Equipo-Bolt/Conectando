@@ -33,7 +33,7 @@ import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { MutateObjectiveInfo } from "@/types/Objective";
+import { MutateObjective } from "@/types/Objective";
 import { Classification } from "@/types/Classification";
 import { Comment } from "@/types/Comment";
 
@@ -41,7 +41,7 @@ import { Comment } from "@/types/Comment";
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
 
 interface DetailObjectivesProps {
-    objective: MutateObjectiveInfo;
+    objective: MutateObjective;
     classifications: Classification[];
     comments: Comment[] | undefined;
 }
@@ -69,7 +69,7 @@ export default function EditarObjetivoClient({
         },
     });
 
-    const [state, newAction] = useActionState(updateObjectiveAction, null); //* pones la action aqui
+    const [state, newAction] = useActionState(updateObjectiveAction, null);
     const [isPending, startTransition] = useTransition();
 
     async function handleSubmit(data: ObjectiveFormData) {
@@ -81,7 +81,7 @@ export default function EditarObjetivoClient({
             return;
         }
 
-        const objectiveData: MutateObjectiveInfo = {
+        const objectiveData: MutateObjective = {
             id: data.id,
             formID: 2,
             title: data.title,
@@ -98,7 +98,7 @@ export default function EditarObjetivoClient({
 
     useEffect(() => {
         if (state === null) return;
-        else if (state === "Se ha Actualizado el Objetivo") {
+        else if (state.success) {
             router.push("/misObjetivos"); // Redirigir a la página de objetivos
         } else {
             console.log("Error updating objective:", state);
@@ -125,8 +125,8 @@ export default function EditarObjetivoClient({
                         >
                             {isPending ? (
                                 <p className="text-blue-600">Guardando...</p>
-                            ) : state ? (
-                                <h1>Resultado: {state} </h1>
+                            ) : state?.success ? (
+                                <h1>Resultado: {state.message} </h1>
                             ) : (
                                 <></>
                             )}

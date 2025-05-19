@@ -11,14 +11,14 @@ import { getCurrentPeriod } from "@/lib/fetches/period/getCurrentPeriod";
 /**
  * * createFormAction() Creates an objectives form with initial progress for logged user
 
- * @param prevState<string> Initial state of action, must null or loading string in Spanish
+ * @param prevState<string> Initial state of action, set this parameter to null
  * @param userId<number> ID of the logged in user
  * 
  * @returns Promise of type {@link ServerActionResponse}
  */
 
 export async function createFormAction(
-  prevState: string | null,
+  prevState: ServerActionResponse | null,
   userId: number
 ): Promise<ServerActionResponse> {
   try {
@@ -76,8 +76,8 @@ export async function createFormAction(
     
     return { success: true, message: "Formulario de Objetivos Creado"};
 
-  } catch (err) {
-    console.error(`Error when creating objectives form: ${(err as Error).message}`);
-    return { success: false, error: `${(err as Error).message}` };
+  } catch (error) {
+    console.error(`Error when creating objectives form: ${(error as Error).message}`);
+    return { success: false, error: `${(error as Error).message}` };
   } 
 }

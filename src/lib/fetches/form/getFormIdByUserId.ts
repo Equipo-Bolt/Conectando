@@ -30,7 +30,7 @@ export async function getFormIdByUserId( userId : number ) {
         }
 
         return String(currentForm.id);
-    } catch(err) {
-        throw new Error(`Error: ${ (err as Error).message }`)
+    } catch(error) {
+        throw new Error(`Error: ${ (error as Error).message }`)
     }
 }

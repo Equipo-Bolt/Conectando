@@ -19,7 +19,7 @@ export async function setCustomCookieAction(cookieName: string, value: string) {
     const cookieStore = await cookies();
 
     cookieStore.set(cookieName, value, { secure: true });
-  } catch (err) {
-    console.error(`Error: ${(err as Error).message}`);
+  } catch (error) {
+    console.error(`Error: ${(error as Error).message}`);
   }
 }

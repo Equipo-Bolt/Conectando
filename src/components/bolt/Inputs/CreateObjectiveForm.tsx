@@ -20,7 +20,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/
 import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton"; 
 // Types
-import { MutateObjectiveInfo } from "@/types/Objective";
+import { MutateObjective } from "@/types/Objective";
 import { Classification } from "@/types/Classification";
 
 // Actions
@@ -49,7 +49,7 @@ export function CreateObjectiveForm( props : CreateObjectiveFormProps) { {
       },
     });
   
-    const [state, newAction] = useActionState(createObjectiveAction, null) //* pones la action aqui
+    const [state, newAction] = useActionState(createObjectiveAction, null)
     const [isPending, startTransition] = useTransition();
 
     async function handleSubmit(data: ObjectiveFormData) {
@@ -59,7 +59,7 @@ export function CreateObjectiveForm( props : CreateObjectiveFormProps) { {
           return;
       }
 
-      const objectiveData: MutateObjectiveInfo = {
+      const objectiveData: MutateObjective = {
           formID: props.formId,
           title: data.title,
           weight: parseInt(data.weight),
@@ -75,7 +75,7 @@ export function CreateObjectiveForm( props : CreateObjectiveFormProps) { {
 
     useEffect(() => {
       if (state === null) return;
-      else if (state === "Objetivo Creado") {
+      else if (state.success) {
         router.push("/misObjetivos"); // Redirigir a la página de objetivos
       } else {
         console.error("Error creating objective:", state);
@@ -88,7 +88,7 @@ export function CreateObjectiveForm( props : CreateObjectiveFormProps) { {
             form.handleSubmit(handleSubmit)
           }
           className="space-y-6">
-            {isPending ? (<p className="text-blue-600">Enviando...</p>) : (state? (<h1>Resultado: {state} </h1>) : (<></>)) }
+            {isPending ? (<p className="text-blue-600">Enviando...</p>) : (state?.success ? (<h1>Resultado: { state.message } </h1>) : (<></>)) }
             {/* Título del objetivo */}
             <FormField
               control={form.control}

@@ -11,7 +11,7 @@ export async function setUserIdAction(userId : number) {
         const cookieStore = await cookies();
 
         cookieStore.set("userId", (String(userId)), { secure: true })
-    } catch(err) {
-        console.log(`Error when creating cookie: ${(err as Error).message}`)
+    } catch(error) {
+        console.log(`Error when creating cookie: ${(error as Error).message}`)
     }
 }

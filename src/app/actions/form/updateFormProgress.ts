@@ -10,16 +10,16 @@ import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFo
 
 /**
  * * updateFormProgress()  Updates the progress status of a form instance. 
- * @param prevState<string> Initial state of action, must null or loading string in Spanish
+ * @param prevState<string> Initial state of action, set this parameter to null
  * @param data<{@link MutateForm}> Contains ID of the form to update and the porgress ID of from the catalog
  * @returns Promise of type {@link ServerActionResponse}
  */
 export async function updateFormProgressAction(
-    prevState : null | ServerActionResponse,
+    prevState : ServerActionResponse | null,
     data : MutateForm
 ) : Promise<ServerActionResponse> {
     try {
-        //!Debugging errors should not appear for user
+        //!Debugging errors, should not appear for user
         if (!data.id) {
             throw new Error("Data debe contener en id el id del form a actualizar");
         }
@@ -91,8 +91,8 @@ export async function updateFormProgressAction(
         });
 
         return ( {success: true, message : "Estado del Formulario ha sido actualizado"});
-    } catch(err) {
-        console.error(`Error when updating form progress: ${(err as Error).message}`);
-        return {success: false, error :`${(err as Error).message}`}
+    } catch(error) {
+        console.error(`Error when updating form progress: ${(error as Error).message}`);
+        return {success: false, error :`${(error as Error).message}`}
     }
 }

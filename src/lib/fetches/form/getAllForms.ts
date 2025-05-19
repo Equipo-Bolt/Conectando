@@ -12,7 +12,7 @@ export async function getAllForms() {
         }
 
         return forms.map( ( { deactived, updatedAt, ...f} ) => f ) as Form[];
-    } catch(err) {
-        throw new Error(`Error: ${ (err as Error).message }`)
+    } catch(error) {
+        throw new Error(`Error: ${ (error as Error).message }`)
     }
 }

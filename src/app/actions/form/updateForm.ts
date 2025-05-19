@@ -10,7 +10,7 @@ export async function updateForm(formId: number, data: Form) {
       data,
     });
     return "Formulario ha sido actualizado";
-  } catch (err) {
-    throw new Error(`Error al actualizar Formulario: ${(err as Error).message}`);
+  } catch (error) {
+    throw new Error(`Error al actualizar Formulario: ${(error as Error).message}`);
   }
 } 

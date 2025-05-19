@@ -16,8 +16,8 @@ export interface Objective {
  * ! In the future this type should be replaced by Zod schemas
  * * Currently being used in CreateObjectiveAction and misObjetivos/crear/page.tsx and also in UpdateObjectiveAction and misObjetivos/editar/page.tsx
  */
-export interface MutateObjectiveInfo
+export interface MutateObjective
   extends Pick<Objective, "formID" | "title" | "goal" | "result" | "weight"> {
   id?: number;
-  classificationCatalogID: number; // * This is the id to be used in the Classification Dropdown Menu
+  classificationCatalogID: number;
 }
