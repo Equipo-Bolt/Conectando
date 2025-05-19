@@ -47,6 +47,6 @@ export async function updateObjectiveAction(
     return { success: true, message: "Se ha Actualizado el Objetivo" };
   } catch (error) {
     console.error(`Failed to update Objective: ${(error as Error).message}`);
-    return { success: false, error: "Se ha Actualizado el Objetivo" };
+    return { success: false, error: (error as Error).message };
   }
 }

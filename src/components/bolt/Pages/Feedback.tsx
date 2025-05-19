@@ -1,7 +1,7 @@
 import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { columns } from "@/components/bolt/DataTables/dataTableMisObjetivos/columns";
-import { DataTableObjColaborador } from "@/components/bolt/DataTables/dataTableObjetivosColaborador/data-table";
+import { columns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
+import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/data-table";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
@@ -16,13 +16,15 @@ import Link from "next/link";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
 import WeightField from "@/components/bolt/Inputs/WeightField";
 
-export default async function Retroalimentación() {
+export default async function Feedback() {
   const cookieStore = await cookies();
-  const collaboratorId = cookieStore.get('collaboratorId')?.value;
-  console.log("colab " + collaboratorId)
+  const collaboratorId = cookieStore.get("collaboratorId")?.value;
+  console.log("colab " + collaboratorId);
   const userFormId = await getFormIdByUserId(Number(collaboratorId));
   const form = await getFormById(parseInt(userFormId));
-  const data = (await getObjectivesByFormId(parseInt(userFormId))) as FormObjectives[];
+  const data = (await getObjectivesByFormId(
+    parseInt(userFormId)
+  )) as FormObjectives[];
 
   return (
     <div>
@@ -62,23 +64,29 @@ export default async function Retroalimentación() {
             <h1 className="text-2xl font-bold pb-[1.5rem]">
               {item.classificationTitle}
             </h1>
-            <div className= "flex flex-row mb-[1rem] w-full">
-                <div className="w-2/3">
-                  <WeightField id={item.objectiveClassificationID as number} initialWeight={item.weight || 1}/>
-                </div>
+            <div className="flex flex-row mb-[1rem] w-full">
+              <div className="w-2/3">
+                <WeightField
+                  id={item.objectiveClassificationID as number}
+                  initialWeight={item.weight || 1}
+                />
+              </div>
             </div>
-            <DataTableObjColaborador columns={columns} data={item.objectives} />
+            <DataTableCollaboratorObjectives
+              columns={columns}
+              data={item.objectives}
+            />
           </div>
         ))}
       </div>
 
       <div className="flex justify-end mt-[1rem]">
-          <UpdateProgressButton
-            text="Aprobar Objetivos"
-            form={form}
-            formObjectives={data}
-            progressID={3}
-          />
+        <UpdateProgressButton
+          text="Aprobar Objetivos"
+          form={form}
+          formObjectives={data}
+          progressID={3}
+        />
       </div>
     </div>
   );

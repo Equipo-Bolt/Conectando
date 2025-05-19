@@ -1,7 +1,7 @@
 "use server";
 
-import Borrador from "@/components/bolt/Pages/Borrador";
-import Retroalimentación from "@/components/bolt/Pages/Retroalimentación";
+import Draft from "@/components/bolt/Pages/Draft";
+import Feedback from "@/components/bolt/Pages/Feedback";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
@@ -13,16 +13,32 @@ import { Progress } from "@/types/Progress";
 import { User } from "@/types/User";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
-  Borrador: <Borrador />,
-  Enviado: <Retroalimentación />,
+  Borrador: <Draft />,
+  Enviado: <Feedback />,
   Aprobado: <p> Aprobado </p>,
   Calificado: <p> Calificado </p>,
 };
 
-async function ObjetivosColaboradorPage({ params }: { params: { id: string } }) {
-const userId = await params;
-const user: User = await getUserById(parseInt(userId.id));
-const formId : string =  await getFormIdByUserId(user.id);
+/**
+ * @description This page displays the objectives of a collaborator based on their progress state.
+ * It fetches user, form, and progress data asynchronously using the provided `id` parameter.
+ * If no active form is found, it displays a "Sin Iniciar" state message.
+ * Otherwise, it renders the collaborator's objectives and their current progress state.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.params - The route parameters.
+ * @param {string} props.params.id - The ID of the collaborator.
+ *
+ * @returns {JSX.Element} The rendered component displaying the collaborator's objectives and progress state.
+ */
+async function CollaboratorObjectivesPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const userId = await params;
+  const user: User = await getUserById(parseInt(userId.id));
+  const formId: string = await getFormIdByUserId(user.id);
 
   if (formId === "Sin Formulario Activo") {
     return (
@@ -57,4 +73,4 @@ const formId : string =  await getFormIdByUserId(user.id);
   );
 }
 
-export default ObjetivosColaboradorPage;
+export default CollaboratorObjectivesPage;

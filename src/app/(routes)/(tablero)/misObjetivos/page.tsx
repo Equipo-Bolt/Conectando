@@ -2,9 +2,9 @@
 
 import { cookies } from "next/headers";
 
-import Borrador from "@/components/bolt/Pages/Borrador";
-import Enviado from "@/components/bolt/Pages/Enviado";
-import IniciarPropuesta from "@/components/bolt/Pages/IniciarPropuesta";
+import Draft from "@/components/bolt/Pages/Draft";
+import Sent from "@/components/bolt/Pages/Sent";
+import StartProposal from "@/components/bolt/Pages/StartProposal";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
@@ -16,19 +16,23 @@ import { Progress } from "@/types/Progress";
 import { User } from "@/types/User";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
-  Borrador: <Borrador />,
-  Enviado: <Enviado />,
-  "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>, //! Fran: que este en este orden plz
+  Borrador: <Draft />,
+  Enviado: <Sent />,
+  "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>,
   Aprobado: <p> Aprobado </p>,
   Calificado: <p> Calificado </p>,
 };
 
-async function MisObjetivosPage() {
-  //* Usando cookies
+/**
+ * @description This is where the objectives of a user with the collaborator role are displayed.
+ * The page displays a different component depending on the Objectives state.
+ */
+async function MyObjectivesPage() {
+  //* Using cookies
   const cookieStore = await cookies();
-  const userId = cookieStore.get('userId')?.value;
-  const user : User = await getUserById((Number(userId))); 
-  const formId : string =  await getFormIdByUserId(user.id);
+  const userId = cookieStore.get("userId")?.value;
+  const user: User = await getUserById(Number(userId));
+  const formId: string = await getFormIdByUserId(user.id);
   if (formId === "Sin Formulario Activo") {
     return (
       <div className="container mx-auto py-10">
@@ -38,7 +42,7 @@ async function MisObjetivosPage() {
           <p className="font-medium">Colaborador: {user.fullName}</p>
           <p className="text-gemso-blue font-semibold ">Estado: Sin Iniciar</p>
 
-          <IniciarPropuesta />
+          <StartProposal />
         </div>
       </div>
     );
@@ -64,4 +68,4 @@ async function MisObjetivosPage() {
   );
 }
 
-export default MisObjetivosPage;
+export default MyObjectivesPage;
