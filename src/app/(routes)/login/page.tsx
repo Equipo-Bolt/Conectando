@@ -1,26 +1,36 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import { LoginForm } from "@/components/bolt/Inputs/LoginForm"
+import Image from "next/image"
+import LogoGemso from "@/../public/Logo-GEMSO.png"
+import LoginGemso from "@/../public/Login-GEMSO.png"
 
-const LoginPage = () => {
+export default function LoginPage() {
   return (
-    <div>
-      <h1>Login</h1>
-      <form>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name="email" required />
+    <div className="grid lg:grid-cols-2 py-[3rem]">
+      <div className="flex flex-col gap-4 pl-[8rem] pr-[4rem] items-start justify-center">
+        <div className="flex h-auto w-full">
+            <Image
+                src={LogoGemso}
+                alt="Gemso Logo"
+                width={2000}
+                height={691}
+                className="w-1/3"
+            >
+            </Image>
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" required />
+        <div className="flex flex-1 w-full  items-center">
+          <div className="w-full">
+            <LoginForm />
+          </div>
         </div>
-        <button type="submit">Login</button>
-      </form>
-      <div>
-        <Button variant={"gemso_yellow"}>Click me</Button>
+      </div>
+      <div className="flex flex-col pl-[4rem] pr-[8rem] items-start justify-center hidden lg:flex">
+        <Image
+          src={LoginGemso}
+          alt="Login"
+          className="max-h-[50rem] max-w-[50rem] w-full rounded-lg"
+        >
+        </Image>
       </div>
     </div>
-  );
-};
-
-export default LoginPage;
+  )
+}
