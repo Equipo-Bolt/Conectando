@@ -10,8 +10,8 @@ pattern='^(ADD|DELETE|MERGE|FIX|REFACTOR|CHORE|DOCS|REVERT|CONFIG|STYLE|TEST)(\(
 if ! [[ $commit_msg =~ $pattern ]]; then
   echo "ERROR: The commit message does not match the Conventional Commits format."
   echo ""
-  echo "       --$commit_msg-- is not a keyword in declared convention"
-  echo "       Example: ADD: new client component"
+  echo "       Written keyword is not a keyword in declared convention"
+  echo "       Example: "ADD: new client component""
   echo "       Opening Convention..."
   code -g README.md:115
 
