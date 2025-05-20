@@ -1,15 +1,29 @@
 "use server";
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 
-export async function disableObjectiveAction(objectiveId: number) {
+import { ServerActionResponse } from "@/types/ServerActionResponse";
+
+/**
+ * * disableObjective This function disables one Objective
+ * @param prevState<string | null> Initial state of action, set this parameter to null
+ * @param objectiveId<int> ID of objective to disable
+ * @returns Promise of type {@link ServerActionResponse}
+ */
+export async function disableObjectiveAction(
+  prevState: ServerActionResponse | null,
+  objectiveId: number
+): Promise<ServerActionResponse> {
   try {
     await prisma.objective.update({
       where: { id: objectiveId },
       data: { deactived: true },
     });
-    return "Objective has been disabled";
+    return { success: true, message: "Objective has been disabled" };
   } catch (error) {
-    throw new Error('Failed to disable objective');
+    console.error(
+      `Error when disabling objectives form: ${(error as Error).message}`
+    );
+    return { success: false, error: `${(error as Error).message}` };
   }
-} 
+}

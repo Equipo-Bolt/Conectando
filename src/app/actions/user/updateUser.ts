@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { TypeUser } from "@/types/TypeUser";
+import { User } from "@/types/User";
 
 export async function updateUser(userId: number, data: FormData) {
     if (!userId){

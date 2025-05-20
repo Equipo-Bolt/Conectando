@@ -7,10 +7,10 @@ import { getAllDivisions } from "@/lib/fetches/division/getAllDivisions";
 import { getAllAreas } from "@/lib/fetches/area/getAllAreas";
 import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
 
-import { TypeDivision } from "@/types/TypeDivision";
-import { TypeArea } from "@/types/TypeArea";
-import { TypeBusinessUnit } from "@/types/TypeBusinessUnit";
-import { TypeUser } from "@/types/TypeUser";
+import { Division } from "@/types/Division";
+import { Area } from "@/types/Area";
+import { BusinessUnit } from "@/types/BusinessUnit";
+import { User } from "@/types/User";
 import { getAllBosses } from "@/lib/fetches/user/boss/getAllBosses";
 //! Changed page into async function page
 /**
@@ -24,19 +24,19 @@ import { getAllBosses } from "@/lib/fetches/user/boss/getAllBosses";
  *
  * @remarks
  * This component fetches the following data:
- * - Divisions (`TypeDivision[]`) via `getAllDivisions`
- * - Areas (`TypeArea[]`) via `getAllAreas`
- * - Business Units (`TypeBusinessUnit[]`) via `getAllBusinessUnits`
- * - Bosses (`TypeUser[]`) via `getAllBosses`
+ * - Divisions (`Division[]`) via `getAllDivisions`
+ * - Areas (`Area[]`) via `getAllAreas`
+ * - Business Units (`BusinessUnit[]`) via `getAllBusinessUnits`
+ * - Bosses (`User[]`) via `getAllBosses`
  *
  * The fetched data is passed as props to the `CompleteInfoForm` component.
  */
 async function Page() {
   //* load data from page, which is a server component
-  const divisions: TypeDivision[] = await getAllDivisions();
-  const areas: TypeArea[] = await getAllAreas();
-  const bus: TypeBusinessUnit[] = await getAllBusinessUnits();
-  const bosses: TypeUser[] = await getAllBosses();
+  const divisions: Division[] = await getAllDivisions();
+  const areas: Area[] = await getAllAreas();
+  const bus: BusinessUnit[] = await getAllBusinessUnits();
+  const bosses: User[] = await getAllBosses();
 
   return (
     <div className="p-[3rem]">

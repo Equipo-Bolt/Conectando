@@ -1,40 +1,42 @@
 "use server";
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 
-import { MutateObjectiveInfo } from '@/types/TypeObjective';
+import { MutateObjective } from "@/types/Objective";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
 
 /**
- * * updateObjectiveAction Esta función modifica la información de un objetivo.
- * * Tambien se asegura de no crear dupes.
- * @param prevState estado inicial para el useActionState hook
- * @param data Data del form convertida a tipo MutateObjectiveInfo
- * @returns Retorna un mensaje de exito o de fallo
+ * * updateObjectiveAction() This function updates an objective
+ * * Checks for dupes
+ *
+ * @param prevState<ServerActionResponse | null> Initial state of action, set this parameter to null
+ * @param data<{@link MutateObjective}> Must include classificationCatalogID to assign new classification and new atributes for "id" "formID" | "title" | "goal" | "result" | "weight"
+ * @returns Promise of type {@link ServerActionResponse}
  */
 export async function updateObjectiveAction(
-  prevState: string | null,
-  data: MutateObjectiveInfo
-) {
-
-  //! Errores para debugeo
-  if (!data.id) {
-    throw new Error("id es requerido en data");
-  }
-
+  prevState: ServerActionResponse | null,
+  data: MutateObjective
+): Promise<ServerActionResponse> {
   try {
+    //! Debugging errors, should not appear for user
+    if (!data.id) {
+      throw new Error(
+        "Data debe contener en id el id del objetivo a modificar"
+      );
+    }
     const { id, formID, classificationCatalogID, ...dataWithoutIDs } = data;
     const duplicateObjective = await prisma.objective.findFirst({
-      where: { 
+      where: {
         ...dataWithoutIDs,
-        deactived: false
+        deactived: false,
       },
-      select:{
-        id: true
-      }
-    })
+      select: {
+        id: true,
+      },
+    });
 
     if (duplicateObjective) {
-      return "Ya existe un Objetivo identico" //! Fail
+      throw new Error("Ya existe un Objetivo identico");
     }
 
     await prisma.objective.update({
@@ -42,8 +44,9 @@ export async function updateObjectiveAction(
       data: dataWithoutIDs,
     });
 
-    return "Se ha Actualizado el Objetivo"; //! Success
+    return { success: true, message: "Se ha Actualizado el Objetivo" };
   } catch (error) {
-    throw new Error(`Error al actualizar objetivo: ${(error as Error).message}`);
+    console.error(`Failed to update Objective: ${(error as Error).message}`);
+    return { success: false, error: (error as Error).message };
   }
-} 
+}

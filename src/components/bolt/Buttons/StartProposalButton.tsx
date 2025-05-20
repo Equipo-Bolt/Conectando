@@ -13,10 +13,10 @@ export default function StartProposalButton({ userId }: { userId: number }) {
   const handleClick = async () => {
     const result = await createFormAction(null, userId);
 
-    if (result === "Formulario de objetivos creado") {
+    if (result.success) {
       router.refresh();
     } else {
-      setError(result); // Saves the error to display it
+      setError(result.error); // Saves the error to display it
     }
   };
 

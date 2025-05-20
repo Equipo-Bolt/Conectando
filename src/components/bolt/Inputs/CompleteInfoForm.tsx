@@ -51,17 +51,17 @@ import { format } from "date-fns";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 
 //* Types
-import { TypeDivision } from "@/types/TypeDivision";
-import { TypeArea } from "@/types/TypeArea";
-import { TypeBusinessUnit } from "@/types/TypeBusinessUnit";
-import { TypeUser } from "@/types/TypeUser";
+import { Division } from "@/types/Division";
+import { Area } from "@/types/Area";
+import { BusinessUnit } from "@/types/BusinessUnit";
+import { User } from "@/types/User";
 
 //* Interface
 interface CompleteInfoFormProps {
-    divisions : TypeDivision[],
-    areas : TypeArea[],
-    businessUnits : TypeBusinessUnit[],
-    bosses : TypeUser[]
+    divisions : Division[],
+    areas : Area[],
+    businessUnits : BusinessUnit[],
+    bosses : User[]
 }
 
 //* Action
@@ -92,7 +92,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
     const currentDivision = form.watch("division");
 
     // Here we are using the useState hook to manage the state of the filtered business units
-    const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<TypeBusinessUnit[]>([]);
+    const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<BusinessUnit[]>([]);
 
     useEffect(() => {
         // This effect will run whenever the currentDivision changes

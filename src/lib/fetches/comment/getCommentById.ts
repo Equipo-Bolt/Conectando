@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeComment } from "@/types/TypeComment";
+import { Comment } from "@/types/Comment";
 
 export async function getCommnentById(commentId : number) {
     try {
@@ -18,7 +18,7 @@ export async function getCommnentById(commentId : number) {
             throw new Error ("Comment does not exist");
         }
 
-        return comment as TypeComment;
+        return comment as Comment;
         } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

@@ -7,7 +7,7 @@ import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
 
-import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+import { FormObjectives } from "@/types/FormObjectives";
 
 import { cookies } from "next/headers";
 
@@ -24,7 +24,7 @@ export default async function Feedback() {
   const form = await getFormById(parseInt(userFormId));
   const data = (await getObjectivesByFormId(
     parseInt(userFormId)
-  )) as TypeFormObjectives[];
+  )) as FormObjectives[];
 
   return (
     <div>

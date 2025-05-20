@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeArea } from "@/types/TypeArea";
+import { Area } from "@/types/Area";
 
 export async function getAreaById(areaId : number) {
     try {
@@ -19,7 +19,7 @@ export async function getAreaById(areaId : number) {
         return {
             ...area,
             createdAt: area.createdAt.toISOString()
-        } as TypeArea;
+        } as Area;
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

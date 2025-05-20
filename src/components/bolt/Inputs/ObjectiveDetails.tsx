@@ -32,9 +32,9 @@ import {
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { MutateObjectiveInfo } from "@/types/TypeObjective";
-import { TypeClassification } from "@/types/TypeClassification";
-import { TypeComment } from "@/types/TypeComment";
+import { MutateObjective } from "@/types/Objective";
+import { Classification } from "@/types/Classification";
+import { Comment } from "@/types/Comment";
 
 // Actions
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
@@ -42,9 +42,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 interface DetailObjectivesProps {
-  objective: MutateObjectiveInfo;
-  classifications: TypeClassification[];
-  comments: TypeComment[] | undefined;
+  objective: MutateObjective;
+  classifications: Classification[];
+  comments: Comment[] | undefined;
 }
 
 type ObjectiveFormData = z.infer<typeof updateObjectiveSchema>;
@@ -82,7 +82,7 @@ export default function ObjectiveDetails({
       return;
     }
 
-    const objectiveData: MutateObjectiveInfo = {
+    const objectiveData: MutateObjective = {
       id: data.id,
       formID: 2,
       title: data.title,
@@ -99,10 +99,10 @@ export default function ObjectiveDetails({
 
   useEffect(() => {
     if (state === null) return;
-    else if (state === "Se ha Actualizado el Objetivo") {
+    else if (state.success) {
       router.push("/misObjetivos");
     } else {
-      console.log("Error updating objective:", state);
+      console.log("Error updating objective:", state.error);
     }
   }, [state, router]);
 
@@ -126,8 +126,8 @@ export default function ObjectiveDetails({
             >
               {isPending ? (
                 <p className="text-blue-600">Guardando...</p>
-              ) : state ? (
-                <h1>Resultado: {state} </h1>
+              ) : state?.success ? (
+                <h1>Resultado: {state.message} </h1>
               ) : (
                 <></>
               )}

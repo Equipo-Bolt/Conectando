@@ -1,39 +1,41 @@
 "use server";
 
-import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { prisma } from "@/lib/prisma";
-import { TypeForm } from "@/types/TypeForm";
-import { MutateFormInfo } from "@/types/TypeForm";
+
+import { Form } from "@/types/Form";
+import { MutateForm } from "@/types/Form";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
+
+import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 
 /**
- * * updateFormProgress  Updates the progress status of a form instance. 
- * @param prevState<string | null> Estado inicial para el useActionState hook.
- * @param data<MutateFormInfo> Solamente debe contener la id del form y del NUEVO progreso
- * @returns<string> Retorna un mensaje de exito o de fallo.
+ * * updateFormProgress()  Updates the progress status of a form instance. 
+ * @param prevState<string> Initial state of action, set this parameter to null
+ * @param data<{@link MutateForm}> Contains ID of the form to update and the porgress ID of from the catalog
+ * @returns Promise of type {@link ServerActionResponse}
  */
 export async function updateFormProgressAction(
-    prevState : null | string,
-    data : MutateFormInfo
-) {
-
-    //! Errores para debugeo
-    if (!data.id) {
-       throw new Error("data debe contener en id el id del form a actualizar");
-    }
-
-    if (!data.progressID) {
-        throw new Error("data debe contener progressID para el nuevo progreso");
-    }
-
+    prevState : ServerActionResponse | null,
+    data : MutateForm
+) : Promise<ServerActionResponse> {
     try {
-        const targetForm = await prisma.form.findUnique({ where: { id: data.id, deactived : false } }) as TypeForm;
+        //!Debugging errors, should not appear for user
+        if (!data.id) {
+            throw new Error("Data debe contener en id el id del form a actualizar");
+        }
+
+        if (!data.progressID) {
+            throw new Error("Data debe contener progressID para el nuevo progreso");
+        }
+
+        const targetForm = await prisma.form.findUnique({ where: { id: data.id, deactived : false } }) as Form;
 
         if (!targetForm) {
-            return("Formulario de Objetivos no encontrado");
+            throw new Error("Formulario de Objetivos no encontrado");
         }
 
         if (targetForm.progressID === data.progressID){
-            return("No se inicieron cambios, el nuevo progreso no es distinto")
+            throw new Error("No se inicieron cambios, el nuevo progreso no es distinto")
         }
 
         const targetProgress = await prisma.progress.findUnique({
@@ -42,7 +44,7 @@ export async function updateFormProgressAction(
             });  
 
         if (!targetProgress) {
-          return("No es encontró el progreso que se quiere asignar");
+          throw new Error("No es encontró el progreso que se quiere asignar");
         }
 
         if ((data.progressID - targetForm.progressID) >= 2) {
@@ -59,7 +61,7 @@ export async function updateFormProgressAction(
           },0);
 
           if (sumWeight !== 100) {
-            return "La suma de pesos no da 100%";
+            throw new Error("La suma de pesos no da 100%");
           }
         }
         
@@ -88,8 +90,9 @@ export async function updateFormProgressAction(
             },
         });
 
-        return ("Estado del Formulario ha sido actualizado");
-    } catch(err) {
-        throw new Error(`Al cambiar estado de formulario: ${(err as Error).message}`);
+        return ( {success: true, message : "Estado del Formulario ha sido actualizado"});
+    } catch(error) {
+        console.error(`Error when updating form progress: ${(error as Error).message}`);
+        return {success: false, error :`${(error as Error).message}`}
     }
 }

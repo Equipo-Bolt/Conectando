@@ -4,13 +4,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DetailButton } from "@/components/bolt/Buttons/DetailButton";
 import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
 import IconTooltip from "@/components/bolt/Icons/IconTooltip";
-import { TypeObjective } from "@/types/TypeObjective";
+import { Objective } from "@/types/Objective";
 
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 
 import IconCommentStatus from "@/components/bolt/Icons/IconCommentStatus";
 
-export const columns: ColumnDef<TypeObjective>[] = [
+export const columns: ColumnDef<Objective>[] = [
   {
     accessorKey: "title",
     header: "Objetivo",

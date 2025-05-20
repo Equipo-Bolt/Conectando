@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getAllClassifications } from "../classification/getAllClassifications";
 import { getObjectiveClassificationById } from "../objective_classification/getObjectiveClassificationById";
 
-import { TypeFormObjectives } from "@/types/TypeFormObjectives";
+import { FormObjectives } from "@/types/FormObjectives";
 
 /**
  * * getObjectivesByFormId
@@ -20,7 +20,7 @@ export async function getObjectivesByFormId( formId : number ) {
         const classificationsCatalogs = await getAllClassifications();
 
         if (objectives.length === 0) {  
-            const emptyFormObjectives : TypeFormObjectives[] = classificationsCatalogs.map(classification => ({
+            const emptyFormObjectives : FormObjectives[] = classificationsCatalogs.map(classification => ({
                 classificationTitle: classification.title,
                 weight: 0,
                 objectiveClassificationID: null,
@@ -34,7 +34,7 @@ export async function getObjectivesByFormId( formId : number ) {
 
         const classifications = await Promise.all(uniqueClassificationObjectivesIds.map(ct => getObjectiveClassificationById(ct)));
 
-        const objectivesByClassifications : TypeFormObjectives[] = classificationsCatalogs.map(classificationCatalog => {
+        const objectivesByClassifications : FormObjectives[] = classificationsCatalogs.map(classificationCatalog => {
             //! Hacemos que respete el orden de las clasificaciones, si no encuentra de una crea el objeto vacio pero usable
             const matchingClassification = classifications.find(classification => classification.classificationTitle === classificationCatalog.title);
             if (matchingClassification) {
@@ -54,7 +54,7 @@ export async function getObjectivesByFormId( formId : number ) {
             };
         });
 
-        const formObjectives : TypeFormObjectives[] = [];
+        const formObjectives : FormObjectives[] = [];
         for (let i = 0; i < classificationsCatalogs.length; i++) {
             const objClf = objectivesByClassifications[i];
             formObjectives.push({

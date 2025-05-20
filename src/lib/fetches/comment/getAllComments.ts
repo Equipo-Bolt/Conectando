@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeComment } from "@/types/TypeComment";
+import { Comment } from "@/types/Comment";
 
 export async function getAllComments() {
     try {
@@ -11,7 +11,7 @@ export async function getAllComments() {
             throw new Error ("There are no Comments")
         }
 
-        return comments.map(({ deactived, updatedAt, ...c }) => c) as TypeComment[];
+        return comments.map(({ deactived, updatedAt, ...c }) => c) as Comment[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }
