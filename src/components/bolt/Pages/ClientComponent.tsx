@@ -1,20 +1,20 @@
 "use client"
 
-//! El proposito de este componente es probar actions en la home page
-
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { useState} from "react";
 
 import { setUserIdAction } from "@/app/actions/cookies/setUserId";
+import { sendOTPAction } from "@/app/actions/otp/sendOTP";
 
 import { User } from "@/types/User";
+import { Input } from "@/components/ui/input";
 
 export function ClientComponent( { users } : { users : User[] }) {
     const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+    const [userEmail, setUserEmail] = useState<string >("");
 
-    
     return(
     <>
         <Select onValueChange={(value) => setSelectedUserId(value)}>
@@ -33,11 +33,20 @@ export function ClientComponent( { users } : { users : User[] }) {
             variant={"gemso_yellow"}
             title="cookie"
 
-            //! cookie, aqui seteamos el usuario de la aplicaion
-            onClick={() => setUserIdAction(Number(selectedUserId)).finally( ()=>{ alert("cookie creada, user:" + selectedUserId)})}
-        
-            //* cambiar peso onClick={ () => startTransition( () => { newAction(newInfo)})}
+            onClick={() => setUserIdAction(Number(selectedUserId))}
         >Logear Usuario</Button>
+        <Input 
+            type="email"
+            placeholder="Escribe tu correo electrónico" 
+            value={userEmail}
+            onChange={((e) => setUserEmail(e.target.value))}
+        />
+        <Button
+            variant={"gemso_yellow"}
+            title="Send OTP"
+
+            onClick={() => sendOTPAction(null, userEmail)}
+        >Enviar OTP</Button>
         {/* {isPending ? "cargando..." : state} */}
     </>
     )
