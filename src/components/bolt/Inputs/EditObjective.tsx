@@ -33,17 +33,17 @@ import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { MutateObjectiveInfo } from "@/types/TypeObjective";
-import { TypeClassification } from "@/types/TypeClassification";
-import { TypeComment } from "@/types/TypeComment";
+import { MutateObjective } from "@/types/Objective";
+import { Classification } from "@/types/Classification";
+import { Comment } from "@/types/Comment";
 
 // Actions
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
 
 interface DetailObjectivesProps {
-  objective: MutateObjectiveInfo;
-  classifications: TypeClassification[];
-  comments: TypeComment[] | undefined;
+  objective: MutateObjective;
+  classifications: Classification[];
+  comments: Comment[] | undefined;
 }
 
 type ObjectiveFormData = z.infer<typeof updateObjectiveSchema>;
@@ -69,7 +69,7 @@ export default function EditObjective({
     },
   });
 
-  const [state, newAction] = useActionState(updateObjectiveAction, null); //* pones la action aqui
+  const [state, newAction] = useActionState(updateObjectiveAction, null);
   const [isPending, startTransition] = useTransition();
 
   async function handleSubmit(data: ObjectiveFormData) {
@@ -81,7 +81,7 @@ export default function EditObjective({
       return;
     }
 
-    const objectiveData: MutateObjectiveInfo = {
+    const objectiveData: MutateObjective = {
       id: data.id,
       formID: 2,
       title: data.title,
@@ -98,10 +98,10 @@ export default function EditObjective({
 
   useEffect(() => {
     if (state === null) return;
-    else if (state === "Se ha Actualizado el Objetivo") {
-      router.push("/misObjetivos"); // Redirigir a la página de objetivos
+    else if (state.success) {
+      router.push("/misObjetivos");
     } else {
-      console.log("Error updating objective:", state);
+      console.log("Error updating objective:", state.error);
     }
   }, [state, router]);
 
@@ -125,10 +125,10 @@ export default function EditObjective({
             >
               {isPending ? (
                 <p className="text-blue-600">Guardando...</p>
-              ) : state ? (
-                <h1>Resultado: {state} </h1>
+              ) : state?.success ? (
+                <h1>Resultado: {state.message} </h1>
               ) : (
-                <></>
+                <>Error: {state?.error}</> //! Added this should be change woth error pop up
               )}
               <div className="grid grid-cols-1 gap-6">
                 {/* Objective Title */}

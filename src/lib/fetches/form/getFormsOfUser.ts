@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeForm } from "@/types/TypeForm";
+import { Form } from "@/types/Form";
 
 export async function getFormsOfUser( userId : number ) {
     try {
@@ -11,8 +11,8 @@ export async function getFormsOfUser( userId : number ) {
             return forms; //! REGRESARLO VACIO POR CONSITENCIA
         }
 
-        return forms.map( ( { deactived, updatedAt, ...f} ) => f ) as TypeForm[];
-    } catch(err) {
-        throw new Error(`Error: ${ (err as Error).message }`)
+        return forms.map( ( { deactived, updatedAt, ...f} ) => f ) as Form[];
+    } catch(error) {
+        throw new Error(`Error: ${ (error as Error).message }`)
     }
 }

@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DetailButton } from "@/components/bolt/Buttons/DetailButton";
 import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
 import IconTooltip from "@/components/bolt/Icons/IconTooltip";
-import { TypeObjective } from "@/types/TypeObjective";
+import { Objective } from "@/types/Objective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 
-export const columns: ColumnDef<TypeObjective>[] = [
+export const columns: ColumnDef<Objective>[] = [
   {
     accessorKey: "title",
     header: "Objetivo",
@@ -62,7 +62,7 @@ export const columns: ColumnDef<TypeObjective>[] = [
             title="Eliminar objetivo"
             description="¿Seguro que deseas eliminar este objetivo? Esta acción no se puede deshacer."
             handleConfirm={async (id) => {
-              await disableObjectiveAction(id);
+              await disableObjectiveAction(null, id);
               window.location.reload(); // Recargar la página después de eliminar el objetivo
             }}
           />

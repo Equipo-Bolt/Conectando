@@ -8,9 +8,9 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
 import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { getUserById } from "@/lib/fetches/user/getUserById";
 
-import { TypeForm } from "@/types/TypeForm";
-import { TypeProgress } from "@/types/TypeProgress";
-import { TypeUser } from "@/types/TypeUser";
+import { Form } from "@/types/Form";
+import { Progress } from "@/types/Progress";
+import { User } from "@/types/User";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Draft />,
@@ -37,7 +37,7 @@ async function CollaboratorObjectivesPage({
   params: { id: string };
 }) {
   const userId = await params;
-  const user: TypeUser = await getUserById(parseInt(userId.id));
+  const user: User = await getUserById(parseInt(userId.id));
   const formId: string = await getFormIdByUserId(user.id);
 
   if (formId === "Sin Formulario Activo") {
@@ -52,8 +52,8 @@ async function CollaboratorObjectivesPage({
       </div>
     );
   }
-  const form: TypeForm = await getFormById(parseInt(formId));
-  const state: TypeProgress = await getProgressById(form.progressID);
+  const form: Form = await getFormById(parseInt(formId));
+  const state: Progress = await getProgressById(form.progressID);
 
   const content = stateComponentMap[state.title] ?? (
     <p> Hubo un error al cargar tu formulario... </p>

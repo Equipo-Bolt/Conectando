@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeObjectiveClassification } from "@/types/TypeObjectiveClassification";
+import { ObjectiveClassification } from "@/types/ObjectiveClassification";
 
 export async function getObjectiveClassificationById(objectiveClassificationId : number) {
     try {
@@ -11,13 +11,13 @@ export async function getObjectiveClassificationById(objectiveClassificationId :
         })
 
         if (!objectiveClassification) {
-            return ({} as TypeObjectiveClassification);
+            return ({} as ObjectiveClassification);
         }
 
         return {
             ...objectiveClassification,
             classificationTitle: objectiveClassification.classificationTitle.title
-        } as TypeObjectiveClassification;
+        } as ObjectiveClassification;
         } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

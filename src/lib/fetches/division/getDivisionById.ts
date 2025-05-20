@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeDivision } from "@/types/TypeDivision";
+import { Division } from "@/types/Division";
 
 export async function getDivisionById(divisionId : number) {
     try {
@@ -19,7 +19,7 @@ export async function getDivisionById(divisionId : number) {
         return {
             ...division,
             createdAt: division.createdAt.toISOString()
-        } as TypeDivision;
+        } as Division;
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeUser } from "@/types/TypeUser";
+import { User } from "@/types/User";
 
 export async function getUserById(userId : number) {
     try {
@@ -8,12 +8,12 @@ export async function getUserById(userId : number) {
         });
 
         if (!user) {
-            return ({} as TypeUser);
+            return ({} as User);
         }
 
         
         const { deactived, updatedAt, ...cleanUser } = user;
-        return { ...cleanUser } as TypeUser;
+        return { ...cleanUser } as User;
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

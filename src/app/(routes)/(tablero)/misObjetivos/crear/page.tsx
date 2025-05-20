@@ -12,8 +12,8 @@ import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import CreateObjectiveForm from "@/components/bolt/Inputs/CreateObjectiveForm";
 
 // Types
-import { TypeClassification } from "@/types/TypeClassification";
-import { TypeUser } from "@/types/TypeUser";
+import { Classification } from "@/types/Classification";
+import { User } from "@/types/User";
 
 /**
  * @description This page is used to create a new objective for a user.
@@ -24,9 +24,9 @@ async function CreateObjectivePage() {
   //* Using Cookies
   const cookieStore = await cookies();
   const userId = cookieStore.get("userId")?.value;
-  const user: TypeUser = await getUserById(Number(userId));
+  const user: User = await getUserById(Number(userId));
   const formId: string = await getFormIdByUserId(user.id);
-  const classifications: TypeClassification[] = await getAllClassifications();
+  const classifications: Classification[] = await getAllClassifications();
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2">Crear Objetivo</h1>

@@ -4,14 +4,14 @@ import { XMarkIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
 
-import { TypeComment } from "@/types/TypeComment";
+import { Comment } from "@/types/Comment";
 
 interface IconCommentStatusProps {
   objectiveId: number;
 }
 
 export default function IconCommentStatus({ objectiveId }: IconCommentStatusProps) {
-  const [hasComments, setHasComments] = useState<TypeComment[] | null>(null);
+  const [hasComments, setHasComments] = useState<Comment[] | null>(null);
 
   useEffect(() => {
     const fetchStatus = async () => {

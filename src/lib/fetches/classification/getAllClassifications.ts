@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 
-import { TypeClassification } from "@/types/TypeClassification";
+import { Classification } from "@/types/Classification";
 
 export async function getAllClassifications() {
     try {
@@ -17,7 +17,7 @@ export async function getAllClassifications() {
         return classifications.map(({ deactived, updatedAt, ...c }) => ({
             ...c,
             createdAt: c.createdAt.toISOString()
-        })) as TypeClassification[];
+        })) as Classification[];
     } catch(error) {
         throw new Error(`Error al cargar las clasificaiones del catalogo: ${(error as Error).message}`);
     }

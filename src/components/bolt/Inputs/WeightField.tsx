@@ -67,13 +67,13 @@ export default function WeightField({id, initialWeight}: WeightFieldProps) {
                 </FormControl>
                 <p>%</p>
                 <FormMessage />
-                    {state === "Clasificación de Objetivos modificada" ? (
+                    {state?.success ? (
                         <p className="text-green-500 text-xs ml-[0.5rem]">
-                            {state}
+                            {state.message}
                         </p>
                     ) : (
                         <p className="text-red-500 text-xs ml-[0.5rem]">
-                            {state}
+                            {state?.error}
                         </p>
                     )}
                 <FormMessage />

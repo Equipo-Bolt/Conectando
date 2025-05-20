@@ -1,9 +1,9 @@
 import EditObjective from "@/components/bolt/Inputs/EditObjective";
 import { getObjectiveById } from "@/lib/fetches/objective/getObjectiveById";
 import { notFound } from "next/navigation";
-import { TypeClassification } from "@/types/TypeClassification";
+import { Classification } from "@/types/Classification";
 import { getAllClassifications } from "@/lib/fetches/classification/getAllClassifications";
-import { MutateObjectiveInfo } from "@/types/TypeObjective";
+import { MutateObjective } from "@/types/Objective";
 import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 
 /**
@@ -28,10 +28,10 @@ export default async function EditObjectivePage({
   const classification = getObjectiveClassificationById(
     objectiveClassification
   );
-  const classifications: TypeClassification[] = await getAllClassifications();
+  const classifications: Classification[] = await getAllClassifications();
   if (!objetivo) return notFound();
 
-  const mutatedObjective: MutateObjectiveInfo = {
+  const mutatedObjective: MutateObjective = {
     id: objetivo.id,
     formID: objetivo.formID,
     title: objetivo.title,

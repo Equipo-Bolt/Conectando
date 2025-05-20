@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeUser } from "@/types/TypeUser";
+import { User } from "@/types/User";
 
 export async function getAllBosses() {
     try {
@@ -33,7 +33,7 @@ export async function getAllBosses() {
         return bosses.map(({ deactived, updatedAt, ...u }) => ({
             ...u,
             createdAt: u.createdAt
-        })) as TypeUser[];
+        })) as User[];
     } catch(error) {
         throw new Error(`Error: ${(error as Error).message}`);
     }

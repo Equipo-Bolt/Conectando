@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { TypeForm } from "@/types/TypeForm";
+import { Form } from "@/types/Form";
 
 export async function getFormById( formId : number ) {
     try {
@@ -11,8 +11,8 @@ export async function getFormById( formId : number ) {
             throw new Error("Form does not exist")
         }
 
-        return form as TypeForm;
-    } catch(err) {
-        throw new Error(`Error: ${ (err as Error).message }`)
+        return form as Form;
+    } catch(error) {
+        throw new Error(`Error: ${ (error as Error).message }`)
     }
 }

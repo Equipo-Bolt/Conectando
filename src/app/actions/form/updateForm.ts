@@ -11,6 +11,6 @@ export async function updateForm(formId: number, data: Form) {
     });
     return "Formulario ha sido actualizado";
   } catch (error) {
-    throw new Error('Error al actualizar Formulario');
+    throw new Error(`Error al actualizar Formulario: ${(error as Error).message}`);
   }
 } 

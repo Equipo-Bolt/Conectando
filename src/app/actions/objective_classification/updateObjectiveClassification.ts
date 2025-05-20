@@ -1,54 +1,57 @@
 "use server";
 
-import { prisma } from '@/lib/prisma';
-import { getObjectiveClassificationById } from '@/lib/fetches/objective_classification/getObjectiveClassificationById';
-import { MutateObjectiveClassificationInfo } from '@/types/TypeObjectiveClassification';
+import { prisma } from "@/lib/prisma";
+
+import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
+
+import { MutateObjectiveClassification } from "@/types/ObjectiveClassification";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
 
 /**
- * * updateObjectiveClassificationAction -> Esta función modifica el peso de una clasificación de objetivos.
+ * * updateObjectiveClassificationAction() This function modifies the weight of a classification of objectives
  *
- * *Parametros:
- * @param prevState<string> Estado inicial para el useActionState hook.
- * @param data<MutateObjectiveClassitionInfo> ID de la clasificacion de objetivos y Peso nuevo de la clasificación de objetivos.
- * @returns Retorna un mensaje de exito o de fallo.
+ * @param prevState<string | null> Initial state of action, set this parameter to null
+ * @param data<{@link MutateObjectiveClassification}> Must include id of the relation ObjectiveClassification and new weight
+ * @returns Promise of type {@link ServerActionResponse}
  */
-
 export async function updateObjectiveClassificationAction(
-  prevState: string | null,
-  data: MutateObjectiveClassificationInfo) {
-
-  //! Errores de debug
-  if (!data.id) {
-    throw Error ("data debe contener en id el id de la relación a actualizar")
-  }
-  if (!data.weight) {
-    throw Error ("data debe contener en weight el nuevo peso")
-  }
-
+  prevState: ServerActionResponse | null,
+  data: MutateObjectiveClassification
+): Promise<ServerActionResponse> {
   try {
-    //* Checa que la clasificacion de objetivos exista
-    const objectiveClassificationExists = await getObjectiveClassificationById(data.id)
-    if(!objectiveClassificationExists.id){
-      return("Clasificación de objetivos no existe")
+    //! Debugging errors, should not appear for user
+    if (!data.id) {
+      throw Error("Primero debes crear un objetivo en la clasificacion"); //*Data debe contener en id el id de la relación a actualizar
+    }
+    if (!data.weight) {
+      throw Error("Data debe contener en weight el nuevo peso");
     }
 
-    //* Antes de editarlo revisa si hubo un cambio en el peso
-    if(objectiveClassificationExists.weight === data.weight){
-      return("No se realizaron cambios, no se escogío diferente peso")
+    const objectiveClassificationExists = await getObjectiveClassificationById(
+      data.id
+    );
+    if (!objectiveClassificationExists.id) {
+      throw Error("Clasificación de objetivos no existe");
     }
 
-    //* Checar si no es un peso invalido
-    if(data.weight > 100 || data.weight <= 0){
-      return("Peso inválido")
+    if (objectiveClassificationExists.weight === data.weight) {
+      throw Error("No se realizaron cambios, no se escogío diferente peso");
+    }
+
+    if (data.weight > 100 || data.weight <= 0) {
+      throw Error("Peso inválido");
     }
 
     await prisma.objectiveClassification.update({
-      where: {id: data.id},
-      data: {weight: data.weight}
-    })
+      where: { id: data.id },
+      data: { weight: data.weight },
+    });
 
-    return ("Clasificación de Objetivos modificada");
+    return { success: true, message: "Clasificación de Objetivos modificada" };
   } catch (error) {
-    throw new Error(`Hubo un error al modificar la clasificación de objetivos ${(error as Error).message}.`);
+    console.error(
+      `Failed to update ObjectiveClassification ${(error as Error).message}.`
+    );
+    return { success: false, error: (error as Error).message };
   }
 }
