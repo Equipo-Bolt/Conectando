@@ -9,7 +9,7 @@ export async function getObjectiveById(objectiveId : number) {
         })
 
         if (!objective) {
-            throw new Error ("Objective does not exist");
+            return ({} as Objective);
         }
 
         return objective as Objective;
