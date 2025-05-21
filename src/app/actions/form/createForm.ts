@@ -11,7 +11,7 @@ import { getCurrentPeriod } from "@/lib/fetches/period/getCurrentPeriod";
 /**
  * * createFormAction() Creates an objectives form with initial progress for logged user
 
- * @param prevState<string> Initial state of action, set this parameter to null
+ * @param prevState<ServerActionResponse> Initial state of action, set this parameter to null
  * @param userId<number> ID of the logged in user
  * 
  * @returns Promise of type {@link ServerActionResponse}
