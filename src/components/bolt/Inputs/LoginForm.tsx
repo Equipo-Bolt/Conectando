@@ -1,29 +1,114 @@
-import { cn } from "@/lib/utils"
+"use client";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { 
+  Form, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"form">) {
+// React and Next.js
+import { useActionState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+
+
+// Form Validation
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginSchemaType } from "@/lib/formSchemas/loginSchema"
+
+// Actions
+//import { loginUserAction} from "@/app/actions/user/loginUser";
+import { createObjectiveAction } from "@/app/actions/objective/createObjective";
+
+// Assets
+import GemsoStacked from "@/../../public/Login-GEMSO.png";
+
+export default function LoginForm() {
+  const router = useRouter();
+
+  const form = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+    },
+  })
+
+  const [state, newAction] = useActionState(createObjectiveAction, null)
+  const [isPending, startTransition] = useTransition();
+
+  const onSubmit = async (data: LoginSchemaType) => {
+    // Validate the form data
+    const parsedData = loginSchema.safeParse(data);
+
+    startTransition(() => {
+      newAction(parsedData)
+    })
+    
+    // If the form data is valid, you navigate to the OTP page
+    if (state?.success === true) {
+      router.push("/otp");
+    } else {
+      console.error(parsedData.error);
+    }
+  }
+
   return (
-    <form className={cn("flex flex-col gap-[1.5rem]", className)} {...props}>
-        <div className="flex flex-col items-start gap-2 text-center">
-            <h1 className="text-2xl font-bold">Inicio de Sesión</h1>
-            <p className="text-balance text-sm text-muted-foreground">
-                Por favor ingresa tu correo electrónico para acceder a la página.
-            </p>
-        </div>
-        <div className="grid gap-6">
-            <div className="grid gap-2">
-                <Label htmlFor="email">Correo</Label>
-                <Input id="email" type="email" placeholder="m@example.com" required />
-            </div>
-            <Button type="submit" className="w-full h-[3rem] mb-[1.5rem]" variant={"gemso_blue"}>
-                Iniciar Sesión
-            </Button>
-        </div>
-    </form>
+    <Card className="md:w-1/3 w-2/3 flex flex-col items-center justify-center p-[2rem] opacity-150">
+      <CardHeader className="w-full text-center">
+        <Image
+          src={GemsoStacked}
+          alt="Gemso Logo"
+          width={200}
+          className="mx-auto mb-4"
+        />
+        <CardTitle className="text-4xl font-bold mb-[1rem]">Inicio de Sesión</CardTitle>
+        <CardDescription className="">Ingresa tu correo electrónico para acceder a CONECTANDO+.</CardDescription>
+      </CardHeader>
+      <CardContent className="w-full">
+        <Form {...form}>
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="email">
+                    Correo
+                  </FormLabel>
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="ejemplo@gemso.com"
+                    {...field}
+                  />
+                  <FormMessage className="text-gemso-red text-sm mt-1"/>
+                  {/* Display error message if there was an error with action */}
+                  {state?.success === false && (
+                    <p className="text-gemso-red text-sm mt-1">
+                      {state.error}
+                    </p>
+                  )}
+                </FormItem>
+              )}
+            />
+          <Button type="submit" className="w-full h-[3rem] mt-[0.5rem]" variant={"gemso_blue"} disabled={isPending}>
+            Iniciar Sesión
+          </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }

@@ -44,7 +44,7 @@ interface CreateObjectiveFormProps {
   formId: number;
 }
 
-type ObjectiveFormData = z.infer<typeof createObjectiveSchema>;
+type ObjectiveFormData = z.infer<typeof createObjectiveSchema>; //! This is wrong, we should have the ObjectiveFormData type in the schema file
 
 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
