@@ -1,4 +1,7 @@
+import { z } from "zod";
+
 import { Comment } from "./Comment";
+import { createObjectiveSchema, updateObjectiveSchema} from "@/lib/formSchemas/objectiveSchema";
 
 export interface Objective {
   id: number;
@@ -16,8 +19,6 @@ export interface Objective {
  * ! In the future this type should be replaced by Zod schemas
  * * Currently being used in CreateObjectiveAction and misObjetivos/crear/page.tsx and also in UpdateObjectiveAction and misObjetivos/editar/page.tsx
  */
-export interface MutateObjective
-  extends Pick<Objective, "formID" | "title" | "goal" | "result" | "weight"> {
-  id?: number;
-  classificationCatalogID: number;
-}
+
+export type CreateObjectiveFormData = z.infer<typeof createObjectiveSchema>;
+export type UpdateObjectiveFormData = z.infer<typeof updateObjectiveSchema>;

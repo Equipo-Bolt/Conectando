@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateObjectiveSchema } from "@/lib/formSchemas/createObjectiveSchema";
+import { updateObjectiveSchema } from "@/lib/formSchemas/objectiveSchema";
 
 // Shadcn Components
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,7 @@ import {
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { MutateObjective } from "@/types/Objective";
+import {UpdateObjectiveFormData } from "@/types/Objective";
 import { Classification } from "@/types/Classification";
 import { Comment } from "@/types/Comment";
 
@@ -42,7 +42,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 interface DetailObjectivesProps {
-  objective: MutateObjective;
+  objective: UpdateObjectiveFormData;
   classifications: Classification[];
   comments: Comment[] | undefined;
 }
@@ -56,7 +56,7 @@ export default function ObjectiveDetails({
 }: DetailObjectivesProps) {
   const router = useRouter();
   console.log(
-    "id: " + String(classifications[objective.classificationCatalogID - 1].id)
+    "id: " + String(classifications[Number(objective.classification) - 1].id)
   );
 
   const form = useForm<ObjectiveFormData>({
@@ -65,46 +65,10 @@ export default function ObjectiveDetails({
       id: objective.id,
       title: objective.title,
       weight: objective.weight.toString(),
-      classification: String(objective.classificationCatalogID),
+      classification: objective.classification,
       goal: objective.goal ?? "",
     },
   });
-
-  const [state, newAction] = useActionState(updateObjectiveAction, null); //* pones la action aqui
-  const [isPending, startTransition] = useTransition();
-
-  async function handleSubmit(data: ObjectiveFormData) {
-    console.log("handleSubmit triggered with data:", data);
-
-    const parsedData = updateObjectiveSchema.safeParse(data);
-    if (!parsedData.success) {
-      console.log("Validation errors:", parsedData.error.format());
-      return;
-    }
-
-    const objectiveData: MutateObjective = {
-      id: data.id,
-      formID: 2,
-      title: data.title,
-      weight: parseInt(data.weight),
-      classificationCatalogID: parseInt(data.classification),
-      goal: data.goal,
-      result: null,
-    };
-
-    await startTransition(() => {
-      newAction(objectiveData);
-    });
-  }
-
-  useEffect(() => {
-    if (state === null) return;
-    else if (state.success) {
-      router.push("/misObjetivos");
-    } else {
-      console.log("Error updating objective:", state.error);
-    }
-  }, [state, router]);
 
   return (
     <div className="p-8 space-y-10">
@@ -120,17 +84,9 @@ export default function ObjectiveDetails({
             <form
               onSubmit={(e) => {
                 console.log("Form submitted");
-                form.handleSubmit(handleSubmit)(e);
               }}
               className="space-y-6"
             >
-              {isPending ? (
-                <p className="text-blue-600">Guardando...</p>
-              ) : state?.success ? (
-                <h1>Resultado: {state.message} </h1>
-              ) : (
-                <></>
-              )}
               <div className="grid grid-cols-1 gap-6">
                 {/* Objective Title */}
                 <FormField
