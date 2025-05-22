@@ -1,5 +1,7 @@
 "use server";
 
+import { getClassificationById } from "@/lib/fetches/classification/getClassificationById";
+import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { prisma } from "@/lib/prisma";
 
 import { UpdateObjectiveFormData } from "@/types/Objective";
@@ -24,12 +26,72 @@ export async function updateObjectiveAction(
         "Data debe contener en id el id del objetivo a modificar"
       );
     }
+
+    if (!data.formID) {
+      throw new Error(
+        "Data debe contener en formID el id del form en el que esta el objetivo"
+      );
+    }
+
+    if (!data.classification) {
+      throw new Error(
+        "Data debe contener en classification el id de la nueva classificacion a modificar"
+      );
+    }
+
     const parsedData =  {  ...data, weight: Number(data.weight), classification : Number(data.classification)} 
     const { id, formID, classification, ...dataWithoutIDs } = parsedData;
+
+    const targetClassification = await getClassificationById(parsedData.classification);
+    
+    if (!targetClassification) {
+      throw new Error("La clasificación no se encuentra en los catalogos");
+    }
+
+    //TODO rework this logic, because it wont give past created relations
+    const objectivesFromObjectives = await getObjectivesByFormId(Number(parsedData.formID));
+
+    const relationId = objectivesFromObjectives.find(
+      (ofo) => ofo.classificationTitle === targetClassification.title
+    )?.objectiveClassificationID;
+
+    if (!relationId) {
+      const newObjectiveClassification =
+        await prisma.objectiveClassification.create({
+          data: {
+            weight: 0,
+            classificationTitle: {
+              connect: {
+                id: targetClassification.id,
+              },
+            },
+          },
+        });
+
+      await prisma.form.update({
+        where: { id: parsedData.formID, deactived: false },
+        data: {
+          objectives: {
+            create: {
+              ...dataWithoutIDs,
+              weight: Number(dataWithoutIDs.weight),
+              objectiveClassificationID: newObjectiveClassification.id,
+            },
+          },
+        },
+      });
+
+      return { success: true, message: "Se ha Actualizado el Objetivo" };
+    }
 
     const duplicateObjective = await prisma.objective.findFirst({
       where: {
         ...dataWithoutIDs,
+        classification: {
+          classificationID: {
+            equals: parsedData.classification
+          }
+        },
         deactived: false,
       },
       select: {
@@ -43,7 +105,14 @@ export async function updateObjectiveAction(
 
     await prisma.objective.update({
       where: { id: data.id },
-      data: dataWithoutIDs,
+      data: {
+        ...dataWithoutIDs,
+        classification: {
+          connect: {
+            id: Number(relationId),
+          },
+        },
+      }
     });
 
     return { success: true, message: "Se ha Actualizado el Objetivo" };
