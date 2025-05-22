@@ -3,7 +3,7 @@ import { getObjectiveById } from "@/lib/fetches/objective/getObjectiveById";
 import { notFound } from "next/navigation";
 import { Classification } from "@/types/Classification";
 import { getAllClassifications } from "@/lib/fetches/classification/getAllClassifications";
-import { MutateObjective } from "@/types/Objective";
+import { UpdateObjectiveFormData } from "@/types/Objective";
 import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 
 /**
@@ -34,14 +34,14 @@ export default async function ObjectiveDetailsPage({
   const classifications: Classification[] = await getAllClassifications();
   if (!objetivo) return notFound();
 
-  const mutatedObjective: MutateObjective = {
+  const mutatedObjective: UpdateObjectiveFormData = {
     id: objetivo.id,
     formID: objetivo.formID,
     title: objetivo.title,
     goal: objetivo.goal,
     result: objetivo.result,
-    weight: objetivo.weight,
-    classificationCatalogID: (await classification).classificationID,
+    weight: String(objetivo.weight),
+    classification: String((await classification).classificationID),
   };
 
   return (
