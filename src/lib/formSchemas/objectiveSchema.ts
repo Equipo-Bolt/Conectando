@@ -23,3 +23,14 @@ export const createObjectiveSchema = z.object({
 export const updateObjectiveSchema = createObjectiveSchema.extend({
   id: z.number(),
 });
+
+export const objectiveSchema = createObjectiveSchema.extend({
+  formID: z.number().optional(),
+  title: z.string().min(1, "El título del objetivo es requerido"),
+  weight: z.number().min(0).max(100, "El peso debe estar entre 0 y 100"),
+  classification: z.object({
+    weight: z.number().min(0).max(100, "El peso de la clasificación debe estar entre 0 y 100"),
+  }),
+  goal: z.string().nullable(),
+  result: z.string().nullable()
+});

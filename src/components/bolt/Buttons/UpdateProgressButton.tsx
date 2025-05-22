@@ -25,6 +25,8 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
     const handleClick = () => {
         if (isPending) return; // Prevent multiple clicks
 
+        console.log("formObjectives", formObjectives);
+
         const result = validObjectivesSchema.safeParse(formObjectives);
 
         if (result.success) {
