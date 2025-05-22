@@ -6,9 +6,8 @@ import { useRouter } from "next/navigation";
 
 // Form Validation
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateObjectiveSchema } from "@/lib/formSchemas/createObjectiveSchema";
+import { updateObjectiveSchema } from "@/lib/formSchemas/objectiveSchema";
 
 // Shadcn Components
 import { Input } from "@/components/ui/input";
@@ -33,7 +32,7 @@ import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { MutateObjective } from "@/types/Objective";
+import { UpdateObjectiveFormData } from "@/types/Objective";
 import { Classification } from "@/types/Classification";
 import { Comment } from "@/types/Comment";
 
@@ -41,12 +40,10 @@ import { Comment } from "@/types/Comment";
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
 
 interface DetailObjectivesProps {
-  objective: MutateObjective;
+  objective: UpdateObjectiveFormData;
   classifications: Classification[];
   comments: Comment[] | undefined;
 }
-
-type ObjectiveFormData = z.infer<typeof updateObjectiveSchema>;
 
 export default function EditObjective({
   objective,
@@ -54,25 +51,23 @@ export default function EditObjective({
   comments,
 }: DetailObjectivesProps) {
   const router = useRouter();
-  console.log(
-    "id: " + String(classifications[objective.classificationCatalogID - 1].id)
-  );
 
-  const form = useForm<ObjectiveFormData>({
+  const form = useForm<UpdateObjectiveFormData>({
     resolver: zodResolver(updateObjectiveSchema),
     defaultValues: {
       id: objective.id,
       title: objective.title,
       weight: objective.weight.toString(),
-      classification: String(objective.classificationCatalogID),
+      classification: objective.classification,
       goal: objective.goal ?? "",
+      result: objective.result ?? null,
     },
   });
 
   const [state, newAction] = useActionState(updateObjectiveAction, null);
   const [isPending, startTransition] = useTransition();
 
-  async function handleSubmit(data: ObjectiveFormData) {
+  async function handleSubmit(data: UpdateObjectiveFormData) {
     console.log("handleSubmit triggered with data:", data);
 
     const parsedData = updateObjectiveSchema.safeParse(data);
@@ -81,12 +76,12 @@ export default function EditObjective({
       return;
     }
 
-    const objectiveData: MutateObjective = {
+    const objectiveData: UpdateObjectiveFormData = {
       id: data.id,
       formID: 2,
       title: data.title,
-      weight: parseInt(data.weight),
-      classificationCatalogID: parseInt(data.classification),
+      weight: data.weight,
+      classification: data.classification,
       goal: data.goal,
       result: null,
     };
