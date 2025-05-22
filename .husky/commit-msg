@@ -11,6 +11,7 @@ if ! [[ $commit_msg =~ $pattern ]]; then
   echo "ERROR: The commit message does not match the Conventional Commits format."
   echo ""
   echo "       Written keyword is not a keyword in declared convention"
+  echo "       All commit messages should be in english"
   echo "       Example: "ADD: new client component""
   echo "       Opening Convention..."
   code -g README.md:115
@@ -18,5 +19,5 @@ if ! [[ $commit_msg =~ $pattern ]]; then
   exit 1
 fi
 
-# If the commit message matches the pattern, exit successfully
+# If the commit message matches the pattern, exit successfully hola
 exit 0

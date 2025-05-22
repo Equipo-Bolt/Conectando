@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState} from "react";
 
 import { setUserIdAction } from "@/app/actions/cookies/setUserId";
-import { sendOTPAction } from "@/app/actions/otp/sendOTP";
+import { sendOTP } from "@/utils/sendOTP";
 
 import { User } from "@/types/User";
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,7 @@ export function ClientComponent( { users } : { users : User[] }) {
             variant={"gemso_yellow"}
             title="Send OTP"
 
-            onClick={() => sendOTPAction(null, userEmail)}
+            onClick={() => sendOTP(userEmail)}
         >Enviar OTP</Button>
         {/* {isPending ? "cargando..." : state} */}
     </>
