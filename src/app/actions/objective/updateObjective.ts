@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 
-import { MutateObjective } from "@/types/Objective";
+import { UpdateObjectiveFormData } from "@/types/Objective";
 import { ServerActionResponse } from "@/types/ServerActionResponse";
 
 /**
@@ -10,12 +10,12 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
  * * Checks for dupes
  *
  * @param prevState<ServerActionResponse | null> Initial state of action, set this parameter to null
- * @param data<{@link MutateObjective}> Must include classificationCatalogID to assign new classification and new atributes for "id" "formID" | "title" | "goal" | "result" | "weight"
+ * @param data<{@link UpdateObjectiveFormData}> Must include classificationCatalogID to assign new classification and new atributes for "id" "formID" | "title" | "goal" | "result" | "weight"
  * @returns Promise of type {@link ServerActionResponse}
  */
 export async function updateObjectiveAction(
   prevState: ServerActionResponse | null,
-  data: MutateObjective
+  data: UpdateObjectiveFormData
 ): Promise<ServerActionResponse> {
   try {
     //! Debugging errors, should not appear for user
@@ -24,7 +24,9 @@ export async function updateObjectiveAction(
         "Data debe contener en id el id del objetivo a modificar"
       );
     }
-    const { id, formID, classificationCatalogID, ...dataWithoutIDs } = data;
+    const parsedData =  {  ...data, weight: Number(data.weight), classification : Number(data.classification)} 
+    const { id, formID, classification, ...dataWithoutIDs } = parsedData;
+
     const duplicateObjective = await prisma.objective.findFirst({
       where: {
         ...dataWithoutIDs,

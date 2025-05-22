@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getClassificationById } from "@/lib/fetches/classification/getClassificationById";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 
-import { MutateObjective } from "@/types/Objective";
+import { CreateObjectiveFormData } from "@/types/Objective";
 import { ServerActionResponse } from "@/types/ServerActionResponse";
 
 /**
@@ -14,49 +14,51 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
  * * to be added to, if there are no relations this function creates it.
  *
  * @param prevState<string | null> Initial state of action, set this parameter to null
- * @param data<{@link MutateObjective}> Must include classificationCatalogID to assign new classification and new atributes for "formID" | "title" | "goal" | "result" | "weight"
+ * @param data<{@link CreateObjectiveFormData}> Must include classificationCatalogID to assign new classification and new atributes for "formID" | "title" | "goal" | "result" | "weight"
  * @returns Promise of type {@link ServerActionResponse}
  */
 
 export async function createObjectiveAction(
   prevState: ServerActionResponse | null,
-  data: MutateObjective
+  data: CreateObjectiveFormData
 ): Promise<ServerActionResponse> {
   try {
     //! Debugging errors, should not appear for user
-    if (!data.formID) {
+    const parsedData =  {  ...data, weight: Number(data.weight), classification : Number(data.classification)} 
+
+    if (!parsedData.formID) {
       throw new Error(
         "Data debe contener en formID el id del formulario del objetivo"
       );
     }
 
-    if (!data.classificationCatalogID) {
+    if (!parsedData.classification) {
       throw new Error(
         "Data debe contener en classificationCatalogID el id de la classificación del catalogo, no de a relación"
       );
     }
 
-    if (!data.title) {
+    if (!parsedData.title) {
       throw new Error("Data debe contener en title el titulo del objetivo");
     }
 
-    if (!data.weight) {
+    if (!parsedData.weight) {
       throw new Error("Data debe contener en weight el peso del objetivo");
     }
 
-    const classification = await getClassificationById(Number(data.classificationCatalogID));
+    const targetClassification = await getClassificationById(parsedData.classification);
 
-    if (!classification) {
+    if (!targetClassification) {
       throw new Error("La clasificación no se encuentra en los catalogos");
     }
 
-    const objectivesFromObjectives = await getObjectivesByFormId(data.formID);
+    const objectivesFromObjectives = await getObjectivesByFormId(parsedData.formID);
 
     const relationId = objectivesFromObjectives.find(
-      (ofo) => ofo.classificationTitle === classification.title
+      (ofo) => ofo.classificationTitle === targetClassification.title
     )?.objectiveClassificationID;
 
-    const { id, formID, classificationCatalogID, ...dataWithoutIds } = data;
+    const { id, formID, classification, ...dataWithoutIds } = parsedData;
    
     if (objectivesFromObjectives.length === 0 || !relationId) {
       const newObjectiveClassification =
@@ -65,25 +67,26 @@ export async function createObjectiveAction(
             weight: 0,
             classificationTitle: {
               connect: {
-                id: classification.id,
+                id: targetClassification.id,
               },
             },
           },
         });
 
       await prisma.form.update({
-        where: { id: data.formID, deactived: false },
+        where: { id: parsedData.formID, deactived: false },
         data: {
           objectives: {
             create: {
               ...dataWithoutIds,
+              weight: Number(dataWithoutIds.weight),
               objectiveClassificationID: newObjectiveClassification.id,
             },
           },
         },
       });
 
-      return { success: true,  message:"Objetivo Creado"};
+      return {success: true, message:"Objetivo Creado"};
     }
 
     const duplicateObjective = await prisma.objective.findFirst({
@@ -101,7 +104,7 @@ export async function createObjectiveAction(
     }
 
     await prisma.form.update({
-      where: { id: data.formID, deactived: false },
+      where: { id: parsedData.formID, deactived: false },
       data: {
         objectives: {
           create: {
