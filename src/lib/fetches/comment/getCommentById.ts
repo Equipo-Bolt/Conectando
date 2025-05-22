@@ -1,7 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { Comment } from "@/types/Comment";
 
-export async function getCommnentById(commentId : number) {
+/**
+ * * getCommentById() gets a comment by its id
+ * 
+ * @param commentId<number> id of the comment to search
+ * @returns Promise of type {@link Comment}
+ */
+
+export async function getCommentById(commentId : number) {
     try {
         const comment = await prisma.comment.findUnique({
             where: { id : commentId },
@@ -15,11 +22,12 @@ export async function getCommnentById(commentId : number) {
         })
 
         if (!comment) {
-            throw new Error ("Comment does not exist");
+            throw new Error ("El Comentario no existe");
         }
 
         return comment as Comment;
-        } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+    } catch(error) {
+        console.error(`Error fetching comment: ${(error as Error).message}`);
+        return ({} as Comment);
     }
 }

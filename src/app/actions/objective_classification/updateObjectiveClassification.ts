@@ -10,7 +10,7 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
 /**
  * * updateObjectiveClassificationAction() This function modifies the weight of a classification of objectives
  *
- * @param prevState<string | null> Initial state of action, set this parameter to null
+ * @param prevState<{@link ServerActionResponse} | null> Initial state of action, set this parameter to null
  * @param data<{@link MutateObjectiveClassification}> Must include id of the relation ObjectiveClassification and new weight
  * @returns Promise of type {@link ServerActionResponse}
  */

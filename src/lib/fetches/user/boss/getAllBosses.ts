@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { User } from "@/types/User";
 
+/**
+ * * getAllBosses() gets all created and not deactivated users that are bosses
+ *
+ * @returns Promise of type {@link User}[]
+ */
+
 export async function getAllBosses() {
     try {
         const bosses = await prisma.user.findMany({
@@ -27,7 +33,7 @@ export async function getAllBosses() {
         });
 
         if (bosses.length === 0) {
-            throw new Error ("There are no Bosses")
+            throw new Error ("No hay Jefes Directos")
         }
 
         return bosses.map(({ deactived, updatedAt, ...u }) => ({
@@ -35,6 +41,7 @@ export async function getAllBosses() {
             createdAt: u.createdAt
         })) as User[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching bosses: ${(error as Error).message}`);
+        return ([] as User[]);
     }
 }

@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { Period } from "@/types/Period";
 
+/**
+ * * getAllPeriods() gets all created and not deactivated periods
+ *
+ * @returns Promise of type {@link Period}[]
+ */
+
 export async function getAllPeriods() {
     try {
         const periods = await prisma.period.findMany({
@@ -8,11 +14,12 @@ export async function getAllPeriods() {
         });
 
         if (periods.length === 0) {
-            throw new Error ("There are no periods")
+            throw new Error ("No hay Periodos")
         }
 
         return periods as Period[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching periods: ${(error as Error).message}`);
+        return ([] as Period[]);
     }
 }

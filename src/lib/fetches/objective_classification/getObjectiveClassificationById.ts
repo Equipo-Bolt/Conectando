@@ -1,6 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { ObjectiveClassification } from "@/types/ObjectiveClassification";
 
+/**
+ * * getObjectiveClassificationById() gets an objective classification by its id
+ * 
+ * @param objectiveClassificationId<number> id of the objective classification to search
+ * @returns Promise of type {@link ObjectiveClassification}
+ */
+
 export async function getObjectiveClassificationById(objectiveClassificationId : number) {
     try {
         const objectiveClassification = await prisma.objectiveClassification.findUnique({
@@ -11,7 +18,7 @@ export async function getObjectiveClassificationById(objectiveClassificationId :
         })
 
         if (!objectiveClassification) {
-            return ({} as ObjectiveClassification);
+            throw new Error("La Clasificación de Objetivos no existe")
         }
 
         return {
@@ -19,6 +26,7 @@ export async function getObjectiveClassificationById(objectiveClassificationId :
             classificationTitle: objectiveClassification.classificationTitle.title
         } as ObjectiveClassification;
         } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+            console.error(`Error fetching objective classification: ${(error as Error).message}`);
+            return ({} as ObjectiveClassification);
     }
 }

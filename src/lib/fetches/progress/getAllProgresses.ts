@@ -1,4 +1,11 @@
 import { prisma } from "@/lib/prisma";
+import { Progress } from "@/types/Progress";
+
+/**
+ * * getAllProgresses() gets all created and not deactivated progresses
+ *
+ * @returns Promise of type {@link Progress}[]
+ */
 
 export async function getAllProgresses() {
     try {
@@ -7,14 +14,15 @@ export async function getAllProgresses() {
         });
 
         if (progresses.length === 0) {
-            throw new Error ("There are no progresses")
+            throw new Error ("No hay Progresos");
         }
 
         return progresses.map(({ deactived, updatedAt, ...p }) => ({
             ...p,
             createdAt: p.createdAt.toISOString()
-        }));
+        })) as Progress[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching periods: ${(error as Error).message}`);
+        return ([] as Progress[]);
     }
 }

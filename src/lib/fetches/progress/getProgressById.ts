@@ -1,4 +1,12 @@
 import { prisma } from "@/lib/prisma";
+import { Progress } from "@/types/Progress";
+
+/**
+ * * getProgressById() gets a period by its id
+ * 
+ * @param progressId<number> id of the progress to search
+ * @returns Promise of type {@link Progress}
+ */
 
 export async function getProgressById(progressId : number) {
     try {
@@ -12,14 +20,15 @@ export async function getProgressById(progressId : number) {
         })
 
         if (!progress) {
-            throw new Error ("Progress does not exist");
+            throw new Error ("El Progreso no existe");
         }
 
         return {
             ...progress,
             createdAt: progress.createdAt.toISOString()
-        };
+        } as Progress;
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching progress: ${(error as Error).message}`);
+        return ({} as Progress);
     }
 }
