@@ -65,7 +65,7 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="md:w-1/3 w-2/3 flex flex-col items-center justify-center p-[2rem] opacity-150">
+    <Card className="md:w-1/3 w-1/2 flex flex-col items-center justify-center p-[2rem] opacity-150">
       <CardHeader className="w-full text-center">
         <Image
           src={GemsoStacked}
@@ -73,8 +73,7 @@ export default function LoginForm() {
           width={200}
           className="mx-auto mb-4"
         />
-        <CardTitle className="text-4xl font-bold mb-[1rem]">Inicio de Sesión</CardTitle>
-        <CardDescription className="">Ingresa tu correo electrónico para acceder a CONECTANDO+.</CardDescription>
+        <CardDescription>Ingresa tu correo electrónico <br/>para acceder a CONECTANDO+.</CardDescription>
       </CardHeader>
       <CardContent className="w-full">
         <Form {...form}>
