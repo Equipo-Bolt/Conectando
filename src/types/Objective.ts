@@ -18,9 +18,7 @@ export interface Objective {
 /**
  * ! In the future this type should be replaced by Zod schemas
  * * Currently being used in CreateObjectiveAction and misObjetivos/crear/page.tsx and also in UpdateObjectiveAction and misObjetivos/editar/page.tsx
- * ! IT WAS ALSO BEING USED IN misObjetivos/detalles/[id]/page AND ObjectiveDetails
  */
-
 
 export type CreateObjectiveFormData = z.infer<typeof createObjectiveSchema>;
 export type UpdateObjectiveFormData = z.infer<typeof updateObjectiveSchema>;
