@@ -16,6 +16,7 @@ import WeightField from "@/components/bolt/Inputs/WeightField";
 import { DataTableMyObjectives } from "@/components/bolt/DataTables/dataTableMyObjectives/data-table";
 
 import Link from "next/link";
+import WeightSum from "@/components/bolt/DataTables/WeightSum";
 
 export default async function Draft() {
   //* Using cookies
@@ -72,6 +73,7 @@ export default async function Draft() {
                   initialWeight={item.weight || 1}
                 />
               </div>
+              <WeightSum objectives={item.objectives} />
             </div>
 
             <DataTableMyObjectives columns={columns} data={item.objectives} />
