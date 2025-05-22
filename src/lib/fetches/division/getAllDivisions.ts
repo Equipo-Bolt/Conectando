@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { Division } from "@/types/Division";
 
+/**
+ * * getAllDivisions() gets all created and not deactivated divisions
+ *
+ * @returns Promise of type {@link Division}[]
+ */
+
 export async function getAllDivisions() {
     try {
         const divisions = await prisma.division.findMany({
@@ -8,7 +14,7 @@ export async function getAllDivisions() {
         });
 
         if (divisions.length === 0) {
-            throw new Error ("There are no divisions")
+            throw new Error ("No hay divisiones")
         }
 
         return divisions.map(({ deactived, updatedAt, ...d }) => ({
@@ -16,6 +22,7 @@ export async function getAllDivisions() {
             createdAt: d.createdAt.toISOString()
         })) as Division[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching divisions: ${(error as Error).message}`);
+        return ([] as Division[]);
     }
 }

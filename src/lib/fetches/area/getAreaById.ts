@@ -1,6 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { Area } from "@/types/Area";
 
+/**
+ * * getAreaById() gets an area by its id
+ * 
+ * @param areaId<number> id of the area to search
+ * @returns Promise of type {@link Area}
+ */
+
 export async function getAreaById(areaId : number) {
     try {
         const area = await prisma.area.findUnique({
@@ -13,7 +20,7 @@ export async function getAreaById(areaId : number) {
         })
 
         if (!area) {
-            throw new Error ("Area does not exist");
+            throw new Error ("El Area no existe")
         }
 
         return {
@@ -21,6 +28,7 @@ export async function getAreaById(areaId : number) {
             createdAt: area.createdAt.toISOString()
         } as Area;
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching area: ${(error as Error).message}`);
+        return ({} as Area);
     }
 }

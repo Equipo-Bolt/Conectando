@@ -9,10 +9,10 @@ import { getObjectiveById } from '@/lib/fetches/objective/getObjectiveById';
 import { getUserById } from '@/lib/fetches/user/getUserById';
 
 /**
- * * createFormAction() Creates a comment
+ * * createCommentAction() Creates a comment
 
- * @param prevState<ServerActionResponse> Initial state of action, set this parameter to null
- * @param data<MutateComment> ID of the logged in user
+ * @param prevState<{@link ServerActionResponse}> Initial state of action, set this parameter to null
+ * @param data<{@link MutateComment}> Must include objectiveID, commenterID, and description of the comment.
  * 
  * @returns Promise of type {@link ServerActionResponse}
  */
@@ -33,7 +33,7 @@ export async function createCommentAction(
     }
 
     if(!data.description){
-      throw new Error("No se puede crear un comentario vacío.")
+      throw new Error("No se puede crear un comentario vacío")
     }
 
     const objectiveExists = await getObjectiveById(data.objectiveID)
