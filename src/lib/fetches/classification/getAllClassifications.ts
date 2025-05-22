@@ -1,8 +1,11 @@
-
-
 import { prisma } from "@/lib/prisma";
-
 import { Classification } from "@/types/Classification";
+
+/**
+ * * getAllClassifications() gets all created and not deactivated classifications
+ *
+ * @returns Promise of type {@link Classification}[]
+ */
 
 export async function getAllClassifications() {
     try {
@@ -11,7 +14,7 @@ export async function getAllClassifications() {
         });
 
         if (classifications.length === 0) {
-            throw new Error ("No hay clasificaciones en los catalogos, checa tu db")
+            throw new Error ("No hay clasificaciones")
         }
 
         return classifications.map(({ deactived, updatedAt, ...c }) => ({
@@ -19,6 +22,7 @@ export async function getAllClassifications() {
             createdAt: c.createdAt.toISOString()
         })) as Classification[];
     } catch(error) {
-        throw new Error(`Error al cargar las clasificaiones del catalogo: ${(error as Error).message}`);
+        console.error(`Error fetching classifications: ${(error as Error).message}`);
+        return ([] as Classification[]);
     }
 }

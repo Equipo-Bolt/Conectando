@@ -30,11 +30,12 @@ import { loginSchema } from "@/lib/formSchemas/loginSchema"
 import { Login } from "@/types/Login";
 
 // * Actions
-import { findUserAction } from "@/app/actions/auth/findUser";
+import { loginAction } from "@/app/actions/auth/login";
 
 // * Assets
 import GemsoStacked from "@/../../public/Login-GEMSO.png";
 
+//! NOT OFFICIAL NOR FINAL PAGE JUST TESTING OTP
 export default function LoginForm() {
   const router = useRouter();
 
@@ -45,7 +46,7 @@ export default function LoginForm() {
     },
   })
 
-  const [state, newAction] = useActionState(findUserAction, null)
+  const [state, newAction] = useActionState(loginAction, null)
   const [isPending, startTransition] = useTransition();
 
   const onSubmit = async (data: Login) => {
@@ -53,16 +54,16 @@ export default function LoginForm() {
     const parsedData = loginSchema.safeParse(data);
 
     startTransition(() => {
-      newAction(String(parsedData.data?.email))
+      newAction( { email : String(parsedData.data?.email), otp: Number(111111) })
     })
   }
 
-  // If the form data is valid, you navigate to the OTP page
-  useEffect(() => {
+  // * If User matched otp, enter app
+  useEffect(()=> {
     if (state?.success === true) {
-      router.push("/otp");
+      router.push("/misObjetivos");
     }
-  }, [state, router]);
+  }, [state, router])
 
   return (
     <Card className="md:w-1/3 w-1/2 flex flex-col items-center justify-center p-[2rem] opacity-150">
@@ -103,7 +104,7 @@ export default function LoginForm() {
               )}
             />
           <Button type="submit" className="w-full h-[3rem] mt-[0.5rem]" variant={"gemso_blue"} disabled={isPending}>
-            Iniciar Sesión
+            Verificar OTP
           </Button>
           </form>
         </Form>

@@ -125,4 +125,5 @@ $~$
 | **REVERT** | When reverting to a previous commit. |
 | **CONFIG** | When making configuration-related changes or adding packages to the project. |
 | **STYLE**  | When making changes that do not affect code functionality, such as fixing white spaces, missing semicolons, etc. |
+| **TEST** | When unit tests or implementations of QA are commited. |
 

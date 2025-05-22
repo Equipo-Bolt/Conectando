@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { Area } from "@/types/Area";
 
+/**
+ * * getAllAreas() gets all created and not deactivated areas
+ *
+ * @returns Promise of type {@link Area}[]
+ */
+
 export async function getAllAreas() {
     try {
         const areas = await prisma.area.findMany({
@@ -8,8 +14,8 @@ export async function getAllAreas() {
         });
 
         if (areas.length === 0) {
-            throw new Error ("There are no areas")
-        }
+            throw new Error("No hay Areas")
+        };
 
         //! Since we use Date type, we must convert to string
         return areas.map(({ deactived, updatedAt, ...a }) => ({ //! will be omiting updatedAt and deactived
@@ -17,6 +23,7 @@ export async function getAllAreas() {
             createdAt: a.createdAt.toISOString() //* into ISO format
         })) as Area[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching areas: ${(error as Error).message}`);
+        return ([] as Area[]);
     }
 }

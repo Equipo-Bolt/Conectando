@@ -6,9 +6,9 @@ import { getObjectiveClassificationById } from "../objective_classification/getO
 import { FormObjectives } from "@/types/FormObjectives";
 
 /**
- * * getObjectivesByFormId
- * @param formId = id del formulario (propuesta de objetivos), se consigue con getCurrentFormIdOfUser
- * @returns arreglo de TypeFormObjectives
+ * * getObjectivesByFormId gets all objectives and objective classifications needed to construct a form
+ * @param formId<number> id del formulario (propuesta de objetivos), se consigue con getCurrentFormIdOfUser
+ * @returns arreglo de {@link FormObjectives}
  */
 export async function getObjectivesByFormId( formId : number ) {
     try {
@@ -71,6 +71,7 @@ export async function getObjectivesByFormId( formId : number ) {
         }
         return formObjectives;
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching objectives: ${(error as Error).message}`);
+        return ([] as FormObjectives[]);
     }
 }
