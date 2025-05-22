@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useState} from "react";
 
 import { setUserIdAction } from "@/app/actions/cookies/setUserId";
-import { sendOTP } from "@/utils/sendOTP";
+import { createUserWithEmailOnlyAction } from "@/app/actions/user/createUserWithEmailOnly";
 
 import { User } from "@/types/User";
 import { Input } from "@/components/ui/input";
@@ -43,10 +43,10 @@ export function ClientComponent( { users } : { users : User[] }) {
         />
         <Button
             variant={"gemso_yellow"}
-            title="Send OTP"
+            title="Create User By Email"
 
-            onClick={() => sendOTP(userEmail)}
-        >Enviar OTP</Button>
+            onClick={() => createUserWithEmailOnlyAction(null, userEmail)}
+        >Crear Usuario Solo con Correo</Button>
         {/* {isPending ? "cargando..." : state} */}
     </>
     )
