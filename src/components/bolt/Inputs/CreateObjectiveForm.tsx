@@ -6,9 +6,8 @@ import { useRouter } from "next/navigation";
 
 // Form Validation
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createObjectiveSchema } from "@/lib/formSchemas/createObjectiveSchema";
+import { createObjectiveSchema } from "@/lib/formSchemas/objectiveSchema";
 
 // Shadcn Components
 import { Input } from "@/components/ui/input";
@@ -32,7 +31,7 @@ import {
 import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 // Types
-import { MutateObjective } from "@/types/Objective";
+import { CreateObjectiveFormData } from "@/types/Objective";
 import { Classification } from "@/types/Classification";
 
 // Actions
@@ -44,38 +43,37 @@ interface CreateObjectiveFormProps {
   formId: number;
 }
 
-type ObjectiveFormData = z.infer<typeof createObjectiveSchema>; //! This is wrong, we should have the ObjectiveFormData type in the schema file
-
 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
-  {
+  
     const router = useRouter();
 
-    const form = useForm<ObjectiveFormData>({
+    const form = useForm<CreateObjectiveFormData>({
       resolver: zodResolver(createObjectiveSchema),
       defaultValues: {
         title: "",
         weight: "",
         classification: "",
         goal: "",
+        result: null,
       },
     });
   
     const [state, newAction] = useActionState(createObjectiveAction, null)
     const [isPending, startTransition] = useTransition();
 
-    async function handleSubmit(data: ObjectiveFormData) {
+    async function handleSubmit(data: CreateObjectiveFormData) {
       const parsedData = createObjectiveSchema.safeParse(data);
       if (!parsedData.success) {
         console.error("Validation errors:", parsedData.error.format());
         return;
       }
 
-      const objectiveData: MutateObjective = {
+      const objectiveData: CreateObjectiveFormData = {
         formID: props.formId,
         title: data.title,
-        weight: parseInt(data.weight),
-        classificationCatalogID: parseInt(data.classification),
+        weight: data.weight,
+        classification: data.classification,
         goal: data.goal,
         result: null,
       };
@@ -208,6 +206,6 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
       </Form>
     );
   }
-}
+
 
 export default CreateObjectiveForm;
