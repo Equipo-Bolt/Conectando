@@ -11,47 +11,48 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 // React and Next.js
-import { useActionState, useTransition } from "react";
+import { useActionState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, LoginSchemaType } from "@/lib/formSchemas/loginSchema"
+import { loginSchema } from "@/lib/formSchemas/loginSchema"
 
-// Actions
-//import { loginUserAction} from "@/app/actions/user/loginUser";
-import { createObjectiveAction } from "@/app/actions/objective/createObjective";
+import { Login } from "@/types/Login";
+
+// * Actions
+import { findUserAction } from "@/app/actions/auth/findUser";
 
 export default function LoginForm() {
   const router = useRouter();
 
-  const form = useForm<LoginSchemaType>({
+  const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
     },
   })
 
-  const [state, newAction] = useActionState(createObjectiveAction, null)
+  const [state, newAction] = useActionState(findUserAction, null)
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = async (data: LoginSchemaType) => {
+  const onSubmit = async (data: Login) => {
     // Validate the form data
     const parsedData = loginSchema.safeParse(data);
 
     startTransition(() => {
-      newAction(parsedData)
+      newAction(String(parsedData.data?.email))
     })
-    
-    // If the form data is valid, you navigate to the OTP page
+  }
+
+  // If the form data is valid, you navigate to the OTP page
+  useEffect(() => {
     if (state?.success === true) {
       router.push("/otp");
-    } else {
-      console.error(parsedData.error);
     }
-  }
+  }, [state, router]);
 
   return (
     
