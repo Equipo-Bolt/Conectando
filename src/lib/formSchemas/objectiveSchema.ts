@@ -23,3 +23,10 @@ export const createObjectiveSchema = z.object({
 export const updateObjectiveSchema = createObjectiveSchema.extend({
   id: z.number(),
 });
+
+export const validObjectiveSchema = createObjectiveSchema.extend({
+  weight: z.number().min(0).max(100, "El peso debe estar entre 0 y 100"),
+  classification: z.object({
+    weight: z.number().min(0).max(100, "El peso de la clasificación debe estar entre 0 y 100"),
+  }),
+});
