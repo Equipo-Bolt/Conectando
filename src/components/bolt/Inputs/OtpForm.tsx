@@ -1,7 +1,7 @@
 "use client"
 
 // React and Next.js
-import { useActionState, useTransition } from "react";
+import { useActionState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // Components
@@ -27,8 +27,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { otpSchema, OtpSchemaType } from "@/lib/formSchemas/otpSchema"
 
 // Actions  
-//import { verifyOtpAction } from "@/app/actions/user/verifyOtp"
-import { createObjectiveAction } from "@/app/actions/objective/createObjective";
+import { loginAction } from "@/app/actions/auth/login";
+
+// NextAuth
+
 
 export default function OtpForm() {
     const router = useRouter();
@@ -36,33 +38,35 @@ export default function OtpForm() {
     const form = useForm<OtpSchemaType>({
         resolver: zodResolver(otpSchema),
         defaultValues: {
-            pin: "",
+            email: "",
+            otp: "",
         },
     })
 
-    const [state, newAction] = useActionState(createObjectiveAction, null)
+    const [state, newAction] = useActionState(loginAction, null)
     const [isPending, startTransition] = useTransition();
 
-    const onSubmit = async (data: OtpSchemaType) =>{
-        // Validate the form data
+    const onSubmit = async (data: OtpSchemaType) => {
         const parsedData = otpSchema.safeParse(data);
+        if (parsedData.success) {
+            startTransition(() => {
+                newAction(parsedData.data);
+            });
+        }
+    };
 
-        startTransition(() => {
-            newAction(parsedData)
-        })
-
-        // If the form data is valid, you navigate to the OTP page
+    useEffect(() => {
         if (state?.success === true) {
             router.push("/misColaboradores");
         }
-    }
+    }, [state, router]);
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                     control={form.control}
-                    name="pin"
+                    name="otp"
                     render={({ field }) => (
                     <FormItem className="w-full flex flex-col items-center justify-center">
                         <FormLabel className="text-gemso-blue text-lg font-semibold mb-[0.5rem]">

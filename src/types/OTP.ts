@@ -2,5 +2,5 @@
 
 export type OTP = {
     email : string,
-    otp : number
+    otp : string
 }
