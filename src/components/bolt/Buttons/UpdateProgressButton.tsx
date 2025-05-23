@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 import { updateFormProgressAction } from "@/app/actions/form/updateFormProgress";
 
-import { validObjectivesSchema } from "@/lib/formSchemas/validObjectivesSchema";
+import { validFormSchema } from "@/lib/formSchemas/validFormSchema";
 
 import { Form } from "@/types/Form";
 import { FormObjectives } from "@/types/FormObjectives";
@@ -27,7 +27,7 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
 
         console.log("formObjectives", formObjectives);
 
-        const result = validObjectivesSchema.safeParse(formObjectives);
+        const result = validFormSchema.safeParse(formObjectives);
 
         if (result.success) {
             startTransition(() => {

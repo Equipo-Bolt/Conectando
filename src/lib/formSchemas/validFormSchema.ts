@@ -2,13 +2,13 @@
 
 import { z } from "zod";
 
-import { objectiveSchema } from "@/lib/formSchemas/objectiveSchema";
+import { validObjectiveSchema } from "@/lib/formSchemas/objectiveSchema";
 
-export const validObjectivesSchema = z.array(z.object({
+export const validFormSchema = z.array(z.object({
   weight: z.number().min(0).max(100),
   classificationTitle: z.string().min(1),
   objectiveClassificationID: z.number().nullable(),
-  objectives: z.array(objectiveSchema)
+  objectives: z.array(validObjectiveSchema)
 })).superRefine((classifications, ctx) => {
   // Check if there's at least one objective per classification type
   const classificationGroups = new Map<string, number>();
@@ -79,4 +79,4 @@ export const validObjectivesSchema = z.array(z.object({
   }
 });
 
-export type ValidObjectivesSchemaType = z.infer<typeof validObjectivesSchema>;
+export type ValidFormSchemaType = z.infer<typeof validFormSchema>;
