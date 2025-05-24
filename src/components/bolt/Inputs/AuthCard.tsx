@@ -19,6 +19,7 @@ import { useState } from "react";
 import GemsoStacked from "@/../../public/Login-GEMSO.png";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
+// ! For nextAuth implementation, Backend needs email related to otp
 export default function AuthCard() {
     const [currentPage, setCurrentPage] = useState("otp");
 

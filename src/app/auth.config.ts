@@ -3,12 +3,12 @@ import { prisma } from "@/lib/prisma";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-export default {
+export const authConfig : NextAuthConfig = {
   providers: [
     Credentials({
        credentials: {
         email: {},
-        password: {}, //! tried to declare otp as credential. did not work
+        password: {},
       },
       authorize: async (credentials) => {
 
@@ -17,16 +17,17 @@ export default {
 
         const user = await prisma.user.findUnique({
           where: {
-            email: String(email),
+            email: email,
           },
           select: {
+            id: true,
             email : true,
             roleID: true
           }
         });
 
         if (!user || !user.email || !otp) {
-          throw new Error("Data faltante para aaautorizar");
+          throw new Error("Data faltante para autorizar");
         }
 
         //TODO change for real logic
@@ -35,9 +36,26 @@ export default {
           throw new Error("Credenciales inválidas")
         }
         
-        //! Mandatory, NextAuth must return either null or an user object
-        return { id: user.email, email: user.email, role: user.roleID };
+        return { id: String(user.id), email: user.email, role: user.roleID };
       },
     }),
   ],
+  callbacks: {
+    // ! Just the set up, not final implementation
+    async jwt({ token, user }) {
+      // * On sign in
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // * Pass token values to session
+      if (token && session.user) {
+        session.user.id = token.id as string;
+      }
+
+      return session;
+    },
+  },
 } satisfies NextAuthConfig;
