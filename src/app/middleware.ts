@@ -1,8 +1,13 @@
-import { NextRequest } from "next/server";
-import { authConfig } from "./auth.config";
-import NextAuth from "next-auth";
+import { auth } from "@/app/auth";
 
-const { auth } = NextAuth(authConfig);
-export default auth(async function middleware(req: NextRequest) {
-  // * custom middleware logic goes here
+// TODO find middleware that protects routes
+export default auth((req) => {
+  if (!req.auth && req.nextUrl.pathname !== "/login") {
+    const newUrl = new URL("/login", req.nextUrl.origin)
+    return Response.redirect(newUrl)
+  }
 });
+
+export const config = {
+  matcher: ["/misObjetivos", "/misColaboradores"],
+};
