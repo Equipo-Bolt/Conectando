@@ -17,14 +17,14 @@ export async function findUserAction(
   try {
 
     const user = await prisma.user.findUnique({
-      where: {email: userEmail}
+      where: {email: userEmail, deactived: false}
     });
 
     if(!user){
       throw new Error("El usuario no está registrado en el sistema")
     }
 
-    sendOTP(userEmail);
+    await sendOTP(userEmail);
     return { success: true, message: userEmail + "Se mandó un correo de autenticación" };
   } catch (error) {
     console.error(`Error: ${(error as Error).message}`);
