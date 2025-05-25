@@ -20,25 +20,37 @@ export const columns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: "division",
+    accessorKey: "divisionID",
     header: "División",
     size: 100,
     cell: ({ row }) => {
-      const divisionName = row.original.businessUnitID.;
+      const divisionName = row.original.divisionID;
       return (
         <div className="flex items-center">
-          <span className="ml-2">{formState}</span>
+          <span className="ml-2">{divisionName}</span>
         </div>
       );
     }
   },
   {
-    accessorKey: "businessUnit",
+    accessorKey: "businessUnitID",
     header: "Unidad de Negocio",
     size: 100,
     cell: ({ row }) => {
-      const userId = row.original.user.id;
+      const businessUnitName = row.original.businessUnitID;
+      return (
+        <div className="flex items-center">
+          <span className="ml-2">{businessUnitName}</span>
+        </div>
+      );
+    }
+  },
 
+  {
+    accessorKey: "options",
+    header: "Opciones",
+    cell: ({ row }) => {
+      const userId = row.original.id;
       return (
         <div className="flex items-center">
           <Button variant={"link"} onClick={() => {

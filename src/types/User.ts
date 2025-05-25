@@ -10,6 +10,7 @@ export interface User {
   bossID?: number;
   roleID?: number;
   businessUnitID?: number;
+  divisionID?: number;
   areaID?: number;
   createdAt: Date;
 }

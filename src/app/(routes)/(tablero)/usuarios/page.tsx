@@ -2,33 +2,19 @@ import { DataTableUsers } from "@/components/bolt/DataTables/dataTableUsers/data
 import { columns } from "@/components/bolt/DataTables/dataTableUsers/columns"
 
 import { getAllUsers } from "@/lib/fetches/user/getAllUsers"
-import { getBusinessUnitById } from "@/lib/fetches/business_unit/getBusinessUnitById";
-import { getDivisionById } from "@/lib/fetches/division/getDivisionById";
+import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
+import { getAllDivisions } from "@/lib/fetches/division/getAllDivisions";
 
-export async function UsersPage() {
+async function UsersPage() {
     const users = await getAllUsers();
-
-    const businessesUnits = await Promise.all(
-        users.map(async (user) => {
-            const businessUnit = await getBusinessUnitById(user.businessUnitID as number);
-            return {
-                businessUnit: businessUnit
-            };
-        })
-    );
-
-    const divisions = await Promise.all(
-        businessesUnits.map(async (businessUnit) => {
-            const division = await getDivisionById(businessUnit.businessUnit.divisionID);
-            return {
-                division: division.title,
-            };
-        })
-    );
-
+    const businessesUnits = await getAllBusinessUnits();
+    const divisions = await getAllDivisions();
+    
     return (
         <div>
-            <DataTableUsers data={users} columns={columns} divisions={divisions} />
+            <DataTableUsers data={users} columns={columns} divisions={divisions} businessUnits={businessesUnits}/>
         </div>
     )
 }
+
+export default UsersPage;
