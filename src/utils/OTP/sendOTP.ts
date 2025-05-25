@@ -14,7 +14,7 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
 
 /**
  * * createOTP creates a cookie that saves userId, used in development
- * @param userEmail<sting> Email of the user to receive OTP for authentification
+ * @param userEmail<string> Email of the user to receive OTP for authentification
  * @returns @see ServerActionResponse
  */
 export async function sendOTP(
