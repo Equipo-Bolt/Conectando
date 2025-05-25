@@ -22,10 +22,7 @@ export default function StartProposalButton({ userId }: { userId: number }) {
 
   return (
     <div className="flex flex-col items-center">
-      <Button
-        className="bg-gemso-yellow hover:bg-gemso-yellow/90 text-white font-bold py-2 px-4 rounded shadow-md"
-        onClick={handleClick}
-      >
+      <Button variant={"gemso_yellow"} onClick={handleClick}>
         Iniciar mi propuesta de objetivos
       </Button>
       {error && <div className="text-red-500 text-center mt-4">{error}</div>}
