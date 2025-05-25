@@ -7,7 +7,7 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      roleId: number;
+      roleID: number;
     } & DefaultSession["user"];
   }
 
@@ -15,7 +15,7 @@ declare module "next-auth" {
   interface User {
     id: string;
     email: string;
-    roleId: number;
+    roleID: number;
   }
 }
 
@@ -23,7 +23,7 @@ declare module "@auth/core/jwt" {
   interface JWT {
     id: string;
     email: string;
-    roleId: number;
+    roleID: number;
   }
 }
 
@@ -72,7 +72,7 @@ export const authConfig: NextAuthConfig = {
         return {
           id: String(userExists.id),
           email: userExists.email,
-          roleId: userExists.roleID,
+          roleID: userExists.roleID,
         };
       },
     }),
@@ -82,7 +82,7 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.roleId = user.roleId;
+        token.roleID = user.roleID;
       }
       return token;
     },
@@ -90,7 +90,7 @@ export const authConfig: NextAuthConfig = {
   
       if (token && session.user) {
         session.user.id = token.id as string;
-        session.user.roleId = token.roleId as number;
+        session.user.roleID = token.roleID as number;
       }
 
       return session;
