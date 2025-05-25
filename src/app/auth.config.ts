@@ -1,42 +1,59 @@
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcrypt";
 
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-export const authConfig : NextAuthConfig = {
+export const authConfig: NextAuthConfig = {
   providers: [
     Credentials({
-       credentials: {
+      credentials: {
         email: {},
         password: {},
       },
       authorize: async (credentials) => {
+        if (!credentials) {
+          throw new Error("Data faltante para autorizar");
+        }
 
-        const email = String(credentials?.email);
-        const otp = Number(credentials?.password);
+        const email = String(credentials.email);
+        const otp = String(credentials.password);
 
-        const user = await prisma.user.findUnique({
+        const userExists = await prisma.user.findUnique({
           where: {
             email: email,
           },
           select: {
             id: true,
-            email : true,
-            roleID: true
-          }
+            email: true,
+            roleID: true,
+          },
         });
 
-        if (!user || !user.email || !otp) {
-          throw new Error("Data faltante para autorizar");
+        if (!userExists) {
+          throw new Error("Usuario no registrado en Base de Datos");
         }
 
-        //TODO change for real logic
-        // Replace this with your actual OTP validation logic
-        if (otp !== 111111) {
-          throw new Error("Credenciales inválidas")
+        const hasehdOTP = await prisma.userOtp.findUnique({
+          where: { userID: userExists.id },
+          select: { otp: true },
+        });
+
+        if (!hasehdOTP?.otp) {
+          throw new Error("Credenciales inválidas");
         }
-        
-        return { id: String(user.id), email: user.email, role: user.roleID };
+
+        const match = await bcrypt.compare(otp, hasehdOTP.otp);
+
+        if (!match) {
+          throw new Error("Credenciales inválidas");
+        }
+
+        return {
+          id: String(userExists.id),
+          email: userExists.email,
+          role: userExists.roleID,
+        };
       },
     }),
   ],
