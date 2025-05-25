@@ -24,9 +24,11 @@ const buttonVariants = cva(
           "bg-gemso-yellow text-primary-foreground shadow-xs hover:bg-gemso-yellow/90 hover:cursor-pointer",
         gemso_blue:
           "bg-gemso-blue text-primary-foreground shadow-xs hover:bg-gemso-blue/90 hover:cursor-pointer",
+        gemso_white_and_blue:
+          "bg-white text-gemso-blue border-3 border-gemso-blue shadow-xs hover:bg-gray-100/90 hover:cursor-pointer",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        default: "h-[3rem] px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
