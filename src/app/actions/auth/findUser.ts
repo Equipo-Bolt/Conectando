@@ -1,6 +1,6 @@
 "use server";
 import { ServerActionResponse } from "@/types/ServerActionResponse";
-import { sendOTP } from "@/utils/sendOTP";
+import { sendOTP } from "@/utils/OTP/sendOTP";
 
 
 /**

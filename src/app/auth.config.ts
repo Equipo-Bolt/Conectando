@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
 
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+
+import { matchOTP } from "@/utils/OTP/matchOTP";
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -34,19 +35,10 @@ export const authConfig: NextAuthConfig = {
           throw new Error("Usuario no registrado en Base de Datos");
         }
 
-        const hasehdOTP = await prisma.userOtp.findUnique({
-          where: { userID: userExists.id },
-          select: { otp: true },
-        });
+        const result = await matchOTP(userExists.id, otp)
 
-        if (!hasehdOTP?.otp) {
-          throw new Error("Credenciales inválidas");
-        }
-
-        const match = await bcrypt.compare(otp, hasehdOTP.otp);
-
-        if (!match) {
-          throw new Error("Credenciales inválidas");
+        if (!result.success) {
+          throw new Error(`${result.error}`);
         }
 
         return {

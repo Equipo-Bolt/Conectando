@@ -9,7 +9,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 
-import { GenerateOTP } from "@/utils/generateOTP";
+import { GenerateOTP } from "@/utils/OTP/generateOTP";
 import { ServerActionResponse } from "@/types/ServerActionResponse";
 
 /**
