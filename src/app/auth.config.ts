@@ -90,7 +90,6 @@ export const authConfig: NextAuthConfig = {
   
       if (token && session.user) {
         session.user.id = token.id as string;
-        session.user.email = token.email as string;
         session.user.roleId = token.roleId as number;
       }
 
