@@ -1,31 +1,76 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from 'next/server';
 import { auth } from "@/app/auth";
+import { Session } from "next-auth";
 
 const PUBLIC_ROUTES = ["/login", "/otp"];
 const PROTECTED_DEFAULT_ROUTE = "/misObjetivos";
 const LOGIN_ROUTE = "/login";
 
-export default auth(async (req) => {
+const ROLES = {
+  "Colaborador": 1,
+  "Jefe Directo": 2,
+  "Administrador": 3,
+  "Colaborador y Jefe Directo": 4,
+  "Colaborador y Administrador": 5,
+  "Jefe Directo y Administrador": 6,
+  "Colaborador, Jefe Directo y Administrador": 7
+}
+
+const ROLE_PROTECTED_ROUTES_CONFIG: Record<string, number[]> = {
+  "/misObjetivos": [
+    ROLES.Colaborador, 
+    ROLES["Colaborador y Jefe Directo"], 
+    ROLES["Colaborador y Administrador"], 
+    ROLES["Colaborador, Jefe Directo y Administrador"]
+  ],
+  "/misColaboradores": [
+    ROLES["Jefe Directo"],
+    ROLES["Colaborador y Jefe Directo"],
+    ROLES["Jefe Directo y Administrador"],
+    ROLES["Colaborador, Jefe Directo y Administrador"]
+  ]
+}
+
+interface NextAuthRequest extends NextRequest {
+  auth: Session | null;
+}
+
+export default auth(async (req: NextAuthRequest) => {
   const { nextUrl } = req;
-  const isAuthenticated = !!req.auth;
+  const session = req.auth;
+  const isAuthenticated = !!session;
+  const userRole = session?.user?.roleID;
+  const currentPath = nextUrl.pathname;
 
-  const isPublicRoute = PUBLIC_ROUTES.some(path => nextUrl.pathname.startsWith(path));
-  const isProtectedRoute = config.matcher.some(path => nextUrl.pathname.startsWith(path));
+  const isPublicRoute = PUBLIC_ROUTES.some(path => currentPath.startsWith(path));
 
+  // If user is already authenticated and attempts to access the login or otp page
   if (isPublicRoute) {
-    if (isAuthenticated && (nextUrl.pathname.startsWith("/login") || nextUrl.pathname.startsWith("/otp"))) {
+    if (isAuthenticated) {
       return NextResponse.redirect(new URL(PROTECTED_DEFAULT_ROUTE, nextUrl.origin))
     }
     return NextResponse.next();
   }
 
 
-  if (isProtectedRoute) {
-    if (!isAuthenticated) {
-      const callbackUrl = nextUrl.pathname + nextUrl.search;
+   // If user is not authenticated
+  if (!isAuthenticated) {
+    const callbackUrl = currentPath + nextUrl.search;
+    return NextResponse.redirect(new URL(`${LOGIN_ROUTE}?callbackUrl=${encodeURIComponent(callbackUrl)}`, nextUrl.origin));
+  }
+
+  // If user is already authenticated and attempts to access some protected route
+  const protectedRouteConfigKey = Object.keys(ROLE_PROTECTED_ROUTES_CONFIG).find(
+    (routePrefix) => currentPath.startsWith(routePrefix)
+  )
+
+  if (protectedRouteConfigKey) {
+    const allowedRolesForPath = ROLE_PROTECTED_ROUTES_CONFIG[protectedRouteConfigKey];
+    if (!userRole || !allowedRolesForPath.includes(userRole)) {
+      const callbackUrl = currentPath + nextUrl.search;
       return NextResponse.redirect(new URL(`${LOGIN_ROUTE}?callbackUrl=${encodeURIComponent(callbackUrl)}`, nextUrl.origin));
     }
-    return NextResponse.next();
   }
 
   return NextResponse.next();
