@@ -13,3 +13,8 @@ export interface User {
   areaID?: number;
   createdAt: Date;
 }
+
+export interface MutateUser{
+    email: string,
+    roleID: number
+}

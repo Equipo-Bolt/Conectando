@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
 import WeightField from "@/components/bolt/Inputs/WeightField";
+import WeightSum from "@/components/bolt/DataTables/WeightSum";
 
 export default async function Feedback() {
   const cookieStore = await cookies();
@@ -71,6 +72,7 @@ export default async function Feedback() {
                   initialWeight={item.weight || 1}
                 />
               </div>
+              <WeightSum objectives={item.objectives} />
             </div>
             <DataTableCollaboratorObjectives
               columns={columns}
