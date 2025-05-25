@@ -1,81 +1,65 @@
-"use server"
+"use server";
 
 import { prisma } from '@/lib/prisma';
 
-//TODO Should use interface to create object and adapt this action to work with useActionState hook.
-export async function createUserAction(data: FormData) {
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+import { MutateUser } from '@/types/User';
 
-    //* Create object to later use interface
-    const newUser = {
-      employeeNumber: data.get("employeeNumber") ? Number(data.get("employeeNumber")) : null,
-      fullName: data.get("fullName") as string || null,
-      email: data.get("email") as string || null,
-      jobPosition: data.get("position") as string || null,
-      positionSeniority: data.get("positionSeniority") ? new Date(data.get("positionSeniority") as string) : null,
-      companySeniority: data.get("companySeniority") ? new Date(data.get("companySeniority") as string) : null,
-      companyContribution: data.get("companyContribution") as string || null,
-      bossID: data.get("bossId") ? Number(data.get("bossId")) : null,
-      businessUnitID: data.get("businessUnitId") ? Number(data.get("businessUnitId")) : null,
-      areaID: data.get("areaId") ? Number(data.get("areaId")) : null
+import { getRoleById } from '@/lib/fetches/role/getRoleById';
+
+/**
+ * * createUserAction() Creates a user given an email and their role.
+
+ * @param prevState<{@link ServerActionResponse}> Initial state of action, set this parameter to null.
+ * @param data<{@link MutateUser}> Must include email and roleID.
+ * 
+ * @returns Promise of type {@link ServerActionResponse}
+ */
+
+export async function createUserAction(
+  prevState: ServerActionResponse | null,
+  data: MutateUser
+): Promise<ServerActionResponse> {
+
+  try {
+
+    if (!data.email) {
+      throw new Error("email es requerido en 'data'");
+    }
+
+    if (!data.roleID) {
+      throw new Error("roleID es requerido en 'data'");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {email: data.email}
+    });
+
+    if(user){
+      throw new Error("Ya existe un usuario con ese correo")
     };
 
-    const missingFields = Object.entries(newUser)
-      .filter(([_, value]) => value === null)
-      .map(([key]) => key);
+    const role = await getRoleById(data.roleID);
 
-    if (missingFields.length > 0) {
-      throw new Error(`The following fields are missing in the new user data: ${missingFields.join(', ')}`);
+    if(!role.id){
+        throw new Error("El rol a asignar no existe")
     }
 
-    try {
-      const userExists = await prisma.user.findFirst({
-        where: {
-          OR: [
-            { employeeNumber: newUser.employeeNumber },
-            { email: newUser.email },
-          ]
-        }
-      })
-
-      if (userExists) {
-        throw new Error('User with the same employee number or email already exists');
+    await prisma.user.create({
+      data: {
+        email: data.email,
+        role: {
+          connect: {
+            id: data.roleID
+          }
+        },
       }
-    
-      await prisma.user.create({
-        data: {
-          employeeNumber: newUser.employeeNumber,
-          fullName: newUser.fullName,
-          email: newUser.email,
-          jobPosition: newUser.jobPosition,
-          positionSeniority: newUser.positionSeniority,
-          companySeniority: newUser.companySeniority,
-          companyContribution: newUser.companyContribution,
-            ...(newUser.bossID !== null && {
-              boss: {
-                connect: {
-                  id: newUser.bossID
-                }
-              }
-            }),
-          ...(newUser.businessUnitID !== null && {
-            businessUnit: {
-              connect: {
-                id: newUser.businessUnitID
-              }
-            }
-          }),
-          ...(newUser.areaID !== null && {
-            area: {
-              connect: {
-                id : newUser.areaID
-              }
-            }
-          })
-        }
-      });
+    });
 
-      return "User Has been created";
-    } catch (error) {
-      throw new Error("Failed to create User");
-    }
+    return {success: true, message: "Usuario creado"}
+
+  } catch (error) {
+    console.error(`Error when creating user: ${(error as Error).message}`)
+    return {success: false, error: `${(error as Error).message}`}
+  }
 } 
