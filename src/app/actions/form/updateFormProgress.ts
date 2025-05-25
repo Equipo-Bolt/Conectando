@@ -35,7 +35,7 @@ export async function updateFormProgressAction(
         }
 
         if (targetForm.progressID === data.progressID){
-            throw new Error("No se inicieron cambios, el nuevo progreso no es distinto")
+            throw new Error("No se hicieron cambios, el nuevo progreso no es distinto")
         }
 
         const targetProgress = await prisma.progress.findUnique({
