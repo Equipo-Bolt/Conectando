@@ -36,7 +36,7 @@ export default async function EditObjectivePage({
     goal: objetivo.goal,
     result: objetivo.result,
     weight: objetivo.weight.toString(),
-    classification: classification.classificationID.toString(),
+    classification: classification.classificationCatalogID.toString(),
   };
 
   return (

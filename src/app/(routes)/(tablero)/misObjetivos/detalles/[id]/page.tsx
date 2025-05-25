@@ -41,7 +41,7 @@ export default async function ObjectiveDetailsPage({
     goal: objetivo.goal,
     result: objetivo.result,
     weight: String(objetivo.weight),
-    classification: String((await classification).classificationID),
+    classification: String((await classification).classificationCatalogID),
   };
 
   return (

@@ -14,7 +14,7 @@ export async function getObjectivesByFormId( formId : number ) {
     try {
         const objectives = await prisma.objective.findMany({
             where: { deactivated : false, formID : formId },
-            include: { classification : true }
+            include: { objectiveClassification : true, comments : true }
         });
 
         const classificationsCatalogs = await getAllClassifications();
@@ -27,22 +27,22 @@ export async function getObjectivesByFormId( formId : number ) {
                 objectives: []
             }));
 
-            return emptyFormObjectives; //! Formulario sin objs pero con clasificaciones en orden
+            return emptyFormObjectives; //! Empty form with ordered classifications
         }
         
-        const uniqueClassificationObjectivesIds = Array.from(new Set(objectives.map(objective => objective.classification.id)));
+        const uniqueClassificationObjectivesIds = Array.from(new Set(objectives.map(objective => objective.objectiveClassification.id)));
 
         const classifications = await Promise.all(uniqueClassificationObjectivesIds.map(ct => getObjectiveClassificationById(ct)));
 
         const objectivesByClassifications : FormObjectives[] = classificationsCatalogs.map(classificationCatalog => {
-            //! Hacemos que respete el orden de las clasificaciones, si no encuentra de una crea el objeto vacio pero usable
             const matchingClassification = classifications.find(classification => classification.classificationTitle === classificationCatalog.title);
             if (matchingClassification) {
                 return {
                     classificationTitle: matchingClassification.classificationTitle,
                     weight: matchingClassification.weight ?? 0,
                     objectiveClassificationID: matchingClassification.id || null,
-                    objectives: objectives.filter(objective => objective.classification.id === matchingClassification.id)
+                    objectives: objectives
+                        .filter(objective => objective.objectiveClassification.id === matchingClassification.id)
                 };
             } 
             
@@ -64,9 +64,8 @@ export async function getObjectivesByFormId( formId : number ) {
                 objectives: objClf.objectives.map(({
                     createdAt,
                     formID,
-                    objectiveClassificationID,
                     ...o 
-                }) => o) //! Excluir datos que no se usan    
+                }) => o) 
             });
         }
         return formObjectives;

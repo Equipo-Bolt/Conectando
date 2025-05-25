@@ -107,7 +107,7 @@ export async function updateObjectiveAction(
       where: { id: data.id },
       data: {
         ...dataWithoutIDs,
-        classification: {
+        objectiveClassification: {
           connect: {
             id: Number(relationId),
           },

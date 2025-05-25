@@ -11,7 +11,7 @@ export async function getAllObjectiveClassifications() {
     try {
         const objectiveClassifications = await prisma.objectiveClassification.findMany({
             where: { deactivated : false },
-            include: { classificationTitle : true }
+            include: { classificationCatalog : true }
         });
 
         if (objectiveClassifications.length === 0) {
@@ -21,10 +21,10 @@ export async function getAllObjectiveClassifications() {
         return objectiveClassifications.map(({ 
             deactivated, 
             updatedAt,
-            classificationTitle,
+            classificationCatalog,
             ...oc }) => ({ 
                 ...oc, 
-                classificationTitle: classificationTitle?.title //! Include Classification title
+                classificationTitle: classificationCatalog?.title
             })) as ObjectiveClassification[];
     } catch(error) {
         console.error(`Error fetching objective classifications: ${(error as Error).message}`);
