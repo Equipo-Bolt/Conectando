@@ -10,7 +10,7 @@ export async function disableBusinessUnitAction(businessUnitId : number) {
     try {
         await prisma.businessUnit.update({
             where: { id : businessUnitId },
-            data: { deactived : true }
+            data: { deactivated : true }
         })
 
         return "Business Unit has been disabled";

@@ -10,7 +10,7 @@ import { ObjectiveClassification } from "@/types/ObjectiveClassification";
 export async function getAllObjectiveClassifications() {
     try {
         const objectiveClassifications = await prisma.objectiveClassification.findMany({
-            where: { deactived : false },
+            where: { deactivated : false },
             include: { classificationTitle : true }
         });
 
@@ -19,7 +19,7 @@ export async function getAllObjectiveClassifications() {
         }
 
         return objectiveClassifications.map(({ 
-            deactived, 
+            deactivated, 
             updatedAt,
             classificationTitle,
             ...oc }) => ({ 

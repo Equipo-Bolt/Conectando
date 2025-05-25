@@ -13,7 +13,7 @@ import { FormObjectives } from "@/types/FormObjectives";
 export async function getObjectivesByFormId( formId : number ) {
     try {
         const objectives = await prisma.objective.findMany({
-            where: { deactived : false, formID : formId },
+            where: { deactivated : false, formID : formId },
             include: { classification : true }
         });
 

@@ -8,7 +8,7 @@ export async function disableClassificationAction(classificationId : number) {
     try {
         await prisma.classification.update({
             where: { id : classificationId },
-            data: { deactived : true }
+            data: { deactivated : true }
         })
 
         return "Classification has been disabled";

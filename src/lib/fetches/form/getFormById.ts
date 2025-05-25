@@ -11,7 +11,7 @@ import { Form } from "@/types/Form";
 export async function getFormById( formId : number ) {
     try {
         const form = await prisma.form.findUnique({
-            where: { deactived : false, id : formId }
+            where: { deactivated : false, id : formId }
         })
 
         if (!form) {

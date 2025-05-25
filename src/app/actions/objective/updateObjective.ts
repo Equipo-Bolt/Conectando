@@ -60,7 +60,7 @@ export async function updateObjectiveAction(
         await prisma.objectiveClassification.create({
           data: {
             weight: 0,
-            classificationTitle: {
+            classificationCatalog: {
               connect: {
                 id: targetClassification.id,
               },
@@ -69,7 +69,7 @@ export async function updateObjectiveAction(
         });
 
       await prisma.form.update({
-        where: { id: parsedData.formID, deactived: false },
+        where: { id: parsedData.formID, deactivated: false },
         data: {
           objectives: {
             create: {
@@ -87,12 +87,12 @@ export async function updateObjectiveAction(
     const duplicateObjective = await prisma.objective.findFirst({
       where: {
         ...dataWithoutIDs,
-        classification: {
-          classificationID: {
+        objectiveClassification: {
+          classificationCatalogID: {
             equals: parsedData.classification
           }
         },
-        deactived: false,
+        deactivated: false,
       },
       select: {
         id: true,

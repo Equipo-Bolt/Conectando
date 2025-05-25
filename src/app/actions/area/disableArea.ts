@@ -10,7 +10,7 @@ export async function disableAreaAction(areaId : number) {
     try {
         await prisma.area.update({
             where: { id : areaId },
-            data: { deactived: true }
+            data: { deactivated: true }
         });
 
         return "Area has been disabled";

@@ -10,7 +10,7 @@ export async function disableProgress(progressId: number) {
     try {
         await prisma.progress.update({
             where: { id: progressId },
-            data: { deactived: true },
+            data: { deactivated: true },
         });
         
         return "Progress has been disabled";

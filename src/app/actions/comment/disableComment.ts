@@ -6,7 +6,7 @@ export async function disableComment(commentId: number) {
   try {
     await prisma.comment.update({
       where: { id : commentId },
-      data: { deactived: true },
+      data: { deactivated: true },
     });
     return "Comment has been disabled";
   } catch (error) {

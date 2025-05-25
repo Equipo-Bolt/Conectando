@@ -28,7 +28,7 @@ export async function updateFormProgressAction(
             throw new Error("Data debe contener progressID para el nuevo progreso");
         }
 
-        const targetForm = await prisma.form.findUnique({ where: { id: data.id, deactived : false } }) as Form;
+        const targetForm = await prisma.form.findUnique({ where: { id: data.id, deactivated : false } }) as Form;
 
         if (!targetForm) {
             throw new Error("Formulario de Objetivos no encontrado");
@@ -39,7 +39,7 @@ export async function updateFormProgressAction(
         }
 
         const targetProgress = await prisma.progress.findUnique({
-          where: { id: data.progressID, deactived : false },
+          where: { id: data.progressID, deactivated : false },
           select: { id : true, title: true },
             });  
 

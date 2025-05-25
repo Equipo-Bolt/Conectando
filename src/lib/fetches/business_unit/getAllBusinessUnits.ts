@@ -10,14 +10,14 @@ import { BusinessUnit } from "@/types/BusinessUnit";
 export async function getAllBusinessUnits() {
     try {
         const businessUnits = await prisma.businessUnit.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (businessUnits.length === 0) {
             throw new Error("No hay Unidades de Negocio")
         }
 
-        return businessUnits.map(({ deactived, updatedAt, ...bu }) => ({
+        return businessUnits.map(({ deactivated, updatedAt, ...bu }) => ({
             ...bu,
             createdAt: bu.createdAt.toISOString()
         })) as BusinessUnit[];

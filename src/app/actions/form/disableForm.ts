@@ -14,7 +14,7 @@ export async function disableForm(
   try {
     await prisma.form.update({
       where: { id: formId },
-      data: { deactived: true },
+      data: { deactivated: true },
     });
     return { success: true, message: "Formulario ha sido desactivado" };
   } catch (error) {
