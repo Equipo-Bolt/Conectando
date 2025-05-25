@@ -76,7 +76,7 @@ export default function ObjectiveForm({
 
     const objectiveData: UpdateObjectiveFormData = {
       id: data.id,
-      formID: 2,
+      formID: objective?.formID,
       title: data.title,
       weight: data.weight,
       classification: data.classification,

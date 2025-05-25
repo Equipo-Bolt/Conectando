@@ -18,10 +18,6 @@ export async function getCommentsFromObjective( objectiveId : number ) {
             where: { deactivated : false, objectiveID : objectiveId }
         });
 
-        if (comments.length === 0) {
-            throw new Error ("No hay commentarios para ese objetivo")
-        }
-
         return comments.map(({ deactivated, updatedAt, ...c }) => ( c )) as Comment[];
     } catch(error) {
         console.error(`Error fetching comments: ${(error as Error).message}`);

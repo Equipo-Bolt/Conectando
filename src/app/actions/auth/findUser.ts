@@ -17,7 +17,7 @@ export async function findUserAction(
   try {
 
     const user = await prisma.user.findUnique({
-      where: {email: userEmail, deactived: false}
+      where: {email: userEmail, deactivated: false}
     });
 
     if(!user){
