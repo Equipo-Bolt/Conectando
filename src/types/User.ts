@@ -1,3 +1,7 @@
+import { z } from "zod";
+
+import { createUserSchema } from "@/lib/formSchemas/userSchema";
+
 export interface User {
   id: number;
   employeeNumber: number;
@@ -15,7 +19,4 @@ export interface User {
   createdAt: Date;
 }
 
-export interface MutateUser{
-    email: string,
-    roleID: number
-}
+export type CreateUserFormData = z.infer<typeof createUserSchema>;

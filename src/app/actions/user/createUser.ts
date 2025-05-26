@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 
 import { ServerActionResponse } from '@/types/ServerActionResponse';
-import { MutateUser } from '@/types/User';
+import { CreateUserFormData } from '@/types/User';
 
 import { getRoleById } from '@/lib/fetches/role/getRoleById';
 
@@ -11,14 +11,14 @@ import { getRoleById } from '@/lib/fetches/role/getRoleById';
  * * createUserAction() Creates a user given an email and their role.
 
  * @param prevState<{@link ServerActionResponse}> Initial state of action, set this parameter to null.
- * @param data<{@link MutateUser}> Must include email and roleID.
+ * @param data<{@link CreateUserFormData}> Must include email and roleID.
  * 
  * @returns Promise of type {@link ServerActionResponse}
  */
 
 export async function createUserAction(
   prevState: ServerActionResponse | null,
-  data: MutateUser
+  data: CreateUserFormData
 ): Promise<ServerActionResponse> {
 
   try {
@@ -39,7 +39,7 @@ export async function createUserAction(
       throw new Error("Ya existe un usuario con ese correo")
     };
 
-    const role = await getRoleById(data.roleID);
+    const role = await getRoleById(parseInt(data.roleID));
 
     if(!role.id){
         throw new Error("El rol a asignar no existe")
@@ -50,7 +50,7 @@ export async function createUserAction(
         email: data.email,
         role: {
           connect: {
-            id: data.roleID
+            id: parseInt(data.roleID)
           }
         },
       }
