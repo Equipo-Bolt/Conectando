@@ -3,41 +3,68 @@ import { prisma } from "@/lib/prisma";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-export default {
+import { matchOTP } from "@/utils/OTP/matchOTP";
+
+export const authConfig: NextAuthConfig = {
   providers: [
     Credentials({
-       credentials: {
+      credentials: {
         email: {},
-        password: {}, //! tried to declare otp as credential. did not work
+        password: {},
       },
       authorize: async (credentials) => {
+        if (!credentials) {
+          throw new Error("Data faltante para autorizar");
+        }
 
-        const email = String(credentials?.email);
-        const otp = Number(credentials?.password);
+        const email = String(credentials.email);
+        const otp = String(credentials.password);
 
-        const user = await prisma.user.findUnique({
+        const userExists = await prisma.user.findUnique({
           where: {
-            email: String(email),
+            email: email,
           },
           select: {
-            email : true,
-            roleID: true
-          }
+            id: true,
+            email: true,
+            roleID: true,
+          },
         });
 
-        if (!user || !user.email || !otp) {
-          throw new Error("Data faltante para aaautorizar");
+        if (!userExists) {
+          throw new Error("Usuario no registrado en Base de Datos");
         }
 
-        //TODO change for real logic
-        // Replace this with your actual OTP validation logic
-        if (otp !== 111111) {
-          throw new Error("Credenciales inválidas")
+        const result = await matchOTP(userExists.id, otp)
+
+        if (!result.success) {
+          throw new Error(`${result.error}`);
         }
-        
-        //! Mandatory, NextAuth must return either null or an user object
-        return { id: user.email, email: user.email, role: user.roleID };
+
+        return {
+          id: String(userExists.id),
+          email: userExists.email,
+          role: userExists.roleID,
+        };
       },
     }),
   ],
+  callbacks: {
+    // ! Just the set up, not final implementation
+    async jwt({ token, user }) {
+      // * On sign in
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // * Pass token values to session
+      if (token && session.user) {
+        session.user.id = token.id as string;
+      }
+
+      return session;
+    },
+  },
 } satisfies NextAuthConfig;

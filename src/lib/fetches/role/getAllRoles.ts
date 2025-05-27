@@ -10,14 +10,14 @@ import { Role } from "@/types/Role";
 export async function getAllRoles() {
     try {
         const roles = await prisma.role.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (roles.length === 0) {
             throw new Error ("No hay Roles")
         }
 
-        return roles.map(({ deactived, updatedAt, ...r }) => ({
+        return roles.map(({ deactivated, updatedAt, ...r }) => ({
             ...r,
             createdAt: r.createdAt.toISOString()
         })) as Role[];

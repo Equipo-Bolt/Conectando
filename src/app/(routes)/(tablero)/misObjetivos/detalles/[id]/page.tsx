@@ -41,7 +41,7 @@ export default async function EditObjectivePage({
     goal: objective.goal,
     result: objective.result,
     weight: objective.weight.toString(),
-    classification: classification.classificationID.toString(),
+    classification: classification.classificationCatalogID.toString(),
   };
   return (
     <div>

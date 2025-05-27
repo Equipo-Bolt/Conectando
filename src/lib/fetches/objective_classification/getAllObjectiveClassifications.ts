@@ -10,8 +10,8 @@ import { ObjectiveClassification } from "@/types/ObjectiveClassification";
 export async function getAllObjectiveClassifications() {
     try {
         const objectiveClassifications = await prisma.objectiveClassification.findMany({
-            where: { deactived : false },
-            include: { classificationTitle : true }
+            where: { deactivated : false },
+            include: { classificationCatalog : true }
         });
 
         if (objectiveClassifications.length === 0) {
@@ -19,12 +19,12 @@ export async function getAllObjectiveClassifications() {
         }
 
         return objectiveClassifications.map(({ 
-            deactived, 
+            deactivated, 
             updatedAt,
-            classificationTitle,
+            classificationCatalog,
             ...oc }) => ({ 
                 ...oc, 
-                classificationTitle: classificationTitle?.title //! Include Classification title
+                classificationTitle: classificationCatalog?.title
             })) as ObjectiveClassification[];
     } catch(error) {
         console.error(`Error fetching objective classifications: ${(error as Error).message}`);

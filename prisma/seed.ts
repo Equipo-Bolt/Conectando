@@ -44,7 +44,7 @@ async function main() {
     await prisma.area.upsert({
       where: { title },
       create: { title },
-      update: { title, deactived: false },
+      update: { title, deactivated: false },
     });
   }
 
@@ -52,7 +52,7 @@ async function main() {
     await prisma.division.upsert({
       where: { title },
       create: { title },
-      update: { title, deactived: false },
+      update: { title, deactivated: false },
     });
   }
 
@@ -60,7 +60,7 @@ async function main() {
     await prisma.businessUnit.upsert({
       where: { title: bu.title },
       create: { title: bu.title, divisionID: bu.divisionID },
-      update: { title: bu.title, divisionID: bu.divisionID, deactived: false },
+      update: { title: bu.title, divisionID: bu.divisionID, deactivated: false },
     });
   }
 
@@ -68,7 +68,7 @@ async function main() {
     await prisma.classification.upsert({
       where: { title },
       create: { title },
-      update: { title, deactived: false },
+      update: { title, deactivated: false },
     });
   }
 
@@ -76,7 +76,7 @@ async function main() {
     await prisma.progress.upsert({
       where: { title },
       create: { title },
-      update: { title, deactived: false },
+      update: { title, deactivated: false },
     });
   }
 
@@ -84,7 +84,7 @@ async function main() {
     await prisma.role.upsert({
       where: { title },
       create: { title },
-      update: { title, deactived: false },
+      update: { title, deactivated: false },
     });
   }
 
@@ -100,7 +100,7 @@ async function main() {
         startsAt: new Date(period.startsAt),
         endsAt: new Date(period.endsAt),
         isCurrent: period.isCurrent,
-        deactived: false,
+        deactivated: false,
       },
     });
   }
@@ -121,7 +121,7 @@ async function main() {
         "Mi puesto como manager de software " +
         "contribuye a la empresa en lograr estar siempre " +
         "actualizados en ámbitos tecnológicos.",
-      deactived: false,
+      deactivated: false,
       role: {
         connect: {
           //* connect allows to relate to an entry with unique field
@@ -186,7 +186,7 @@ async function main() {
       positionSeniority: new Date("2025-04-20"),
       companySeniority: new Date("2025-02-01"),
       companyContribution: "Soy muy chilo",
-      deactived: false,
+      deactivated: false,
       boss: {
         //* Boss of Andres (daniel)
         connect: {
@@ -249,7 +249,7 @@ async function main() {
       positionSeniority: new Date("2025-02-01"),
       companySeniority: new Date("2023-01-26"),
       companyContribution: "Chambeo muy padre",
-      deactived: false,
+      deactivated: false,
       boss: {
         //* Boss of Colaborador 2 (daniel)
         connect: {
@@ -312,7 +312,7 @@ async function main() {
       positionSeniority: new Date("2025-02-01"),
       companySeniority: new Date("2025-02-01"),
       companyContribution: "Aprendo y aprendo",
-      deactived: false,
+      deactivated: false,
       boss: {
         //* Boss of Colaborador 3 (daniel)
         connect: {
@@ -375,7 +375,7 @@ async function main() {
       positionSeniority: new Date("2025-02-01"),
       companySeniority: new Date("2024-08-11"),
       companyContribution: "Aseguro la calidad",
-      deactived: false,
+      deactivated: false,
       boss: {
         connect: {
           id: (await userBoss).id,
@@ -437,7 +437,7 @@ async function main() {
       positionSeniority: new Date("2025-04-01"),
       companySeniority: new Date("2024-04-01"),
       companyContribution: "Soy nuevo nuevo nuevo",
-      deactived: false,
+      deactivated: false,
       boss: {
         connect: {
           id: (await userBoss).id,
@@ -499,7 +499,7 @@ async function main() {
       positionSeniority: new Date("2025-04-02"),
       companySeniority: new Date("2024-04-02"),
       companyContribution: "No hice mis objetivos",
-      deactived: false,
+      deactivated: false,
       boss: {
         connect: {
           id: (await userBoss).id,
@@ -529,7 +529,7 @@ async function main() {
       positionSeniority: new Date("2025-04-02"),
       companySeniority: new Date("2024-04-02"),
       companyContribution: "No hice mis objetivos",
-      deactived: false,
+      deactivated: false,
       boss: {
         connect: {
           id: (await userBoss).id,
@@ -557,7 +557,7 @@ async function main() {
   const formCollaborator = await prisma.form.upsert({
     where: { id: 1 },
     update: {
-      deactived: false,
+      deactivated: false,
       collaborator: {
         connect: {
           id: (await userCollaborator).id,
@@ -596,7 +596,7 @@ async function main() {
   const formBoss = await prisma.form.upsert({
     where: { id: 2 },
     update: {
-      deactived: false,
+      deactivated: false,
       collaborator: {
         connect: {
           id: (await userBoss).id,
@@ -635,7 +635,7 @@ async function main() {
   const formCollaborator2 = await prisma.form.upsert({
     where: { id: 3 },
     update: {
-      deactived: false,
+      deactivated: false,
       collaborator: {
         connect: {
           id: (await userCollaborator2).id,
@@ -674,7 +674,7 @@ async function main() {
   const formCollaborator3 = await prisma.form.upsert({
     where: { id: 4 },
     update: {
-      deactived: false,
+      deactivated: false,
       collaborator: {
         connect: {
           id: (await userCollaborator3).id,
@@ -715,7 +715,7 @@ async function main() {
   const formCollaborator4 = await prisma.form.upsert({
     where: { id : 5 },
     update: {
-      deactived: false,
+      deactivated: false,
       collaborator: {
         connect: {
           id: (await userCollaborator4).id
@@ -755,7 +755,7 @@ async function main() {
   const formCollaborator5 = await prisma.form.upsert({
     where: { id: 5 },
     update: {
-      deactived: false,
+      deactivated: false,
       collaborator: {
         connect: {
           id: (await userCollaborator6).id,
@@ -797,8 +797,8 @@ async function main() {
       where: { id: 1 },
       update: {
         weight: 70,
-        deactived: false,
-        classificationTitle: {
+        deactivated: false,
+        classificationCatalog: {
           connect: {
             id: 1,
           },
@@ -806,7 +806,7 @@ async function main() {
       },
       create: {
         weight: 70,
-        classificationTitle: {
+        classificationCatalog: {
           connect: {
             id: 1,
           },
@@ -819,8 +819,8 @@ async function main() {
       where: { id: 2 },
       update: {
         weight: 10,
-        deactived: false,
-        classificationTitle: {
+        deactivated: false,
+        classificationCatalog: {
           connect: {
             id: 2,
           },
@@ -828,7 +828,7 @@ async function main() {
       },
       create: {
         weight: 10,
-        classificationTitle: {
+        classificationCatalog: {
           connect: {
             id: 2,
           },
@@ -841,8 +841,8 @@ async function main() {
       where: { id: 3 },
       update: {
         weight: 10,
-        deactived: false,
-        classificationTitle: {
+        deactivated: false,
+        classificationCatalog: {
           connect: {
             id: 3,
           },
@@ -850,7 +850,7 @@ async function main() {
       },
       create: {
         weight: 10,
-        classificationTitle: {
+        classificationCatalog: {
           connect: {
             id: 3,
           },
@@ -863,8 +863,8 @@ async function main() {
       where: { id: 4 },
       update: {
         weight: 10,
-        deactived: false,
-        classificationTitle: {
+        deactivated: false,
+        classificationCatalog: {
           connect: {
             id: 4,
           },
@@ -872,7 +872,7 @@ async function main() {
       },
       create: {
         weight: 10,
-        classificationTitle: {
+        classificationCatalog: {
           connect: {
             id: 4,
           },
@@ -887,8 +887,8 @@ async function main() {
       where: { id: 5 },
       update: {
         weight: 25,
-        deactived: false,
-        classificationTitle: {
+        deactivated: false,
+        classificationCatalog: {
           connect: {
             id: 1,
           },
@@ -896,7 +896,7 @@ async function main() {
       },
       create: {
         weight: 25,
-        classificationTitle: {
+        classificationCatalog: {
           connect: {
             id: 1,
           },
@@ -909,8 +909,8 @@ async function main() {
       where: { id: 6 },
       update: {
         weight: 50,
-        deactived: false,
-        classificationTitle: {
+        deactivated: false,
+        classificationCatalog: {
           connect: {
             id: 2,
           },
@@ -918,7 +918,7 @@ async function main() {
       },
       create: {
         weight: 50,
-        classificationTitle: {
+        classificationCatalog: {
           connect: {
             id: 2,
           },
@@ -931,8 +931,8 @@ async function main() {
       where: { id: 7 },
       update: {
         weight: 10,
-        deactived: false,
-        classificationTitle: {
+        deactivated: false,
+        classificationCatalog: {
           connect: {
             id: 3,
           },
@@ -940,7 +940,7 @@ async function main() {
       },
       create: {
         weight: 10,
-        classificationTitle: {
+        classificationCatalog: {
           connect: {
             id: 3,
           },
@@ -953,8 +953,8 @@ async function main() {
       where: { id: 8 },
       update: {
         weight: 15,
-        deactived: false,
-        classificationTitle: {
+        deactivated: false,
+        classificationCatalog: {
           connect: {
             id: 4,
           },
@@ -962,7 +962,7 @@ async function main() {
       },
       create: {
         weight: 15,
-        classificationTitle: {
+        classificationCatalog: {
           connect: {
             id: 4,
           },
@@ -977,8 +977,8 @@ async function main() {
       weight: 20,
       title: "Conseguir mejorar mi nivel de negocio",
       goal: "Al realizar este objetivo tengo como meta llegar a las 100 ventas en 50 dias en los dos departamentos relacionados con mi área.",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivision).id,
         },
@@ -993,7 +993,7 @@ async function main() {
       weight: 20,
       title: "Conseguir mejorar mi nivel de negocio",
       goal: "Al realizar este objetivo tengo como meta llegar a las 100 ventas en 50 dias en los dos departamentos relacionados con mi área.",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivision).id,
         },
@@ -1011,8 +1011,8 @@ async function main() {
     update: {
       weight: 20,
       title: "Crear aportes clavo en el éxito del proyecto",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivision).id,
         },
@@ -1026,7 +1026,7 @@ async function main() {
     create: {
       weight: 20,
       title: "Crear aportes clave en el éxito del proyecto",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivision).id,
         },
@@ -1044,8 +1044,8 @@ async function main() {
     update: {
       weight: 30,
       title: "Conocer diferentes colaboradores",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivision).id,
         },
@@ -1059,7 +1059,7 @@ async function main() {
     create: {
       weight: 30,
       title: "Conocer diferentes colaboradores",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivision).id,
         },
@@ -1077,8 +1077,8 @@ async function main() {
     update: {
       weight: 30,
       title: "Diseñar un buen UI/UX",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivision).id,
         },
@@ -1092,7 +1092,7 @@ async function main() {
     create: {
       weight: 30,
       title: "Diseñar un buen UI/UX",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivision).id,
         },
@@ -1110,8 +1110,8 @@ async function main() {
     update: {
       weight: 50,
       title: "Optimización de Algoritmo",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPerBusiness).id,
         },
@@ -1125,7 +1125,7 @@ async function main() {
     create: {
       weight: 50,
       title: "Optimización de Algoritmo",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPerBusiness).id,
         },
@@ -1143,8 +1143,8 @@ async function main() {
     update: {
       weight: 50,
       title: "Mejora en el Programa Conectado",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPerBusiness).id,
         },
@@ -1158,7 +1158,7 @@ async function main() {
     create: {
       weight: 50,
       title: "Mejora en el Programa Conectado",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPerBusiness).id,
         },
@@ -1176,8 +1176,8 @@ async function main() {
     update: {
       weight: 100,
       title: "Capacitación de Equipo",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPeople).id,
         },
@@ -1191,7 +1191,7 @@ async function main() {
     create: {
       weight: 100,
       title: "Capacitación de Equipo",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPeople).id,
         },
@@ -1209,8 +1209,8 @@ async function main() {
     update: {
       weight: 100,
       title: "Capacitación en Azure",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDevelopment).id,
         },
@@ -1224,7 +1224,7 @@ async function main() {
     create: {
       weight: 100,
       title: "Capacitación en Azure",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDevelopment).id,
         },
@@ -1244,8 +1244,8 @@ async function main() {
       weight: 100,
       title: "Mejorar la eficiencia para realizar más ventas",
       goal: "Mejorar la eficiencia en un 10%.",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivisionA).id,
         },
@@ -1260,7 +1260,7 @@ async function main() {
       weight: 100,
       title: "Mejorar la eficiencia para realizar más ventas",
       goal: "Mejorar la eficiencia en un 10%.",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDivisionA).id,
         },
@@ -1279,8 +1279,8 @@ async function main() {
       weight: 100,
       title: "Referir personas para crecimiento de unidad de negocio",
       goal: "Conseguir referir a 15 personas.",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPerBusinessA).id,
         },
@@ -1295,7 +1295,7 @@ async function main() {
       weight: 100,
       title: "Referir personas para crecimiento de unidad de negocio",
       goal: "Conseguir referir a 15 personas.",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPerBusinessA).id,
         },
@@ -1314,8 +1314,8 @@ async function main() {
       weight: 100,
       title: "Capacitar a compañeros de equipo en actividades de liderazgo",
       goal: "Dedicar 120 horas de actividades de liderazgo.",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPeopleA).id,
         },
@@ -1330,7 +1330,7 @@ async function main() {
       weight: 100,
       title: "Capacitar a compañeros de equipo en actividades de liderazgo",
       goal: "Dedicar 120 horas de actividades de liderazgo.",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationPeopleA).id,
         },
@@ -1349,8 +1349,8 @@ async function main() {
       weight: 100,
       title: "Completar curso de ciberseguridad",
       goal: "Dedicar 30 horas totales al curso.",
-      deactived: false,
-      classification: {
+      deactivated: false,
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDevelopmentA).id,
         },
@@ -1365,7 +1365,7 @@ async function main() {
       weight: 100,
       title: "Completar curso de ciberseguridad",
       goal: "Dedicar 30 horas totales al curso.",
-      classification: {
+      objectiveClassification: {
         connect: {
           id: (await objectiveClassificationDevelopmentA).id,
         },
@@ -1382,7 +1382,7 @@ async function main() {
     where: { id: 1 },
     update: {
       description: "Excelente objetivo de negocio Andrés",
-      deactived: false,
+      deactivated: false,
       objective: {
         connect: {
           id: objective1_1A.id,
@@ -1414,7 +1414,7 @@ async function main() {
     where: { id: 2 },
     update: {
       description: "Considera que tu meta sea de 12 en lugar de 15.",
-      deactived: false,
+      deactivated: false,
       objective: {
         connect: {
           id: objective2_1A.id,

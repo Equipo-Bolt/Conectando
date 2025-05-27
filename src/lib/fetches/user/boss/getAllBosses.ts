@@ -14,19 +14,19 @@ export async function getAllBosses() {
                 OR:[
                     {
                         roleID : 2,
-                        deactived : false 
+                        deactivated : false 
                     },
                     {
                         roleID : 4,
-                        deactived : false 
+                        deactivated : false 
                     },
                     {
                             roleID : 6,
-                        deactived : false 
+                        deactivated : false 
                     },
                     {
                         roleID : 7,
-                        deactived : false 
+                        deactivated : false 
                     }
                 ]
             }
@@ -36,7 +36,7 @@ export async function getAllBosses() {
             throw new Error ("No hay Jefes Directos")
         }
 
-        return bosses.map(({ deactived, updatedAt, ...u }) => ({
+        return bosses.map(({ deactivated, updatedAt, ...u }) => ({
             ...u,
             createdAt: u.createdAt
         })) as User[];

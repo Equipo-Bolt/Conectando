@@ -15,14 +15,10 @@ import { Comment } from "@/types/Comment";
 export async function getCommentsFromObjective( objectiveId : number ) {
     try {
         const comments = await prisma.comment.findMany({
-            where: { deactived : false, objectiveID : objectiveId }
+            where: { deactivated : false, objectiveID : objectiveId }
         });
 
-        if (comments.length === 0) {
-            throw new Error ("No hay commentarios para ese objetivo")
-        }
-
-        return comments.map(({ deactived, updatedAt, ...c }) => ( c )) as Comment[];
+        return comments.map(({ deactivated, updatedAt, ...c }) => ( c )) as Comment[];
     } catch(error) {
         console.error(`Error fetching comments: ${(error as Error).message}`);
         return ([] as Comment[]);

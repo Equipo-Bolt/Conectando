@@ -13,7 +13,7 @@ export interface Objective {
   formID?: number;
   createdAt?: Date;
   objectiveClassificationID: number;
-  comments?: Comment[];
+  comments: Comment[];
 }
 
 export type CreateObjectiveFormData = z.infer<typeof createObjectiveSchema>;

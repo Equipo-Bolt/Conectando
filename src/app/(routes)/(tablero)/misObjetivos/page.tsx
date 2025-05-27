@@ -15,6 +15,9 @@ import { Form } from "@/types/Form";
 import { Progress } from "@/types/Progress";
 import { User } from "@/types/User";
 
+// * NextAuth
+import { auth } from "@/app/auth";
+
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Draft />,
   Enviado: <Sent />,
@@ -32,6 +35,8 @@ async function MyObjectivesPage() {
   const cookieStore = await cookies();
   const userId = cookieStore.get("userId")?.value;
   const user: User = await getUserById(Number(userId));
+  // const session = await auth();
+  //const user: User = await getUserById(Number(session?.user?.id));
   const formId: string = await getFormIdByUserId(user.id);
   if (formId === "Sin Formulario Activo") {
     return (
