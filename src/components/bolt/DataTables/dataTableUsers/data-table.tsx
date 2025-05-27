@@ -56,22 +56,14 @@ export function DataTableUsers<TData, TValue>({
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="w-1/3 bg-gemso-blue text-white font-bold text-base first:rounded-tl-md last:rounded-tr-md py-2 px-4 text-left"
+                  className="bg-gemso-blue text-white font-bold text-base first:rounded-tl-md last:rounded-tr-md py-2 px-4 text-left"
                 >
-                  <div
-                    className={
-                      header.column.columnDef.header === "Objetivo"
-                        ? "w-78" // Set specific width for the column
-                        : "w-auto"
-                    }
-                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                  </div>
                 </th>
               ))}
             </TableRow>

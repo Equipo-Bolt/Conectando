@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createUserSchema } from "@/lib/formSchemas/userSchema";
+import { updateUserSchema } from "@/lib/formSchemas/userSchema";
 
 export interface User {
   id: number;
@@ -12,7 +13,7 @@ export interface User {
   companySeniority?: Date;
   companyContribution?: string;
   bossID?: number;
-  roleID?: number;
+  roleID: number;
   businessUnitID?: number;
   divisionID?: number;
   areaID?: number;
@@ -20,3 +21,4 @@ export interface User {
 }
 
 export type CreateUserFormData = z.infer<typeof createUserSchema>;
+export type UpdateUserFormData = z.infer<typeof updateUserSchema>;

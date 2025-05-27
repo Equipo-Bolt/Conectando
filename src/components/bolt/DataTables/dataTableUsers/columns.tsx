@@ -7,7 +7,9 @@ import { User } from "@/types/User";
 import {ArrowRightEndOnRectangleIcon} from "@heroicons/react/24/outline";
 import { setCustomCookieAction } from "@/app/actions/cookies/setCustomCookie";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+
+import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
+import { disableUser } from "@/app/actions/user/disableUser";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -52,15 +54,25 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const userId = row.original.id;
       return (
-        <div className="flex items-center">
-          <Button variant={"link"} onClick={() => {
+        <div className="flex gap-[1rem]">
+          <button onClick={() => {
             setCustomCookieAction("collaboratorId", String(userId));
             setTimeout(() => {}, 15000);
-          }} asChild>
-            <Link href={`/misColaboradores/${userId}`}>
-              <ArrowRightEndOnRectangleIcon className="w-5 h-5 text-gemso-blue" />
+          }}>
+            <Link href={`/usuarios/detalles/${userId}`}>
+              <ArrowRightEndOnRectangleIcon className="text-gemso-blue w-5 h-5" />
             </Link>
-          </Button>
+          </button>
+          
+          <DeleteButton
+            id={userId}
+            title="Eliminar objetivo"
+            description="¿Seguro que deseas eliminar este objetivo? Esta acción no se puede deshacer."
+            handleConfirm={async (id) => {
+              await disableUser(id);
+              window.location.reload();
+            }}
+          />
         </div>
       );
     },
