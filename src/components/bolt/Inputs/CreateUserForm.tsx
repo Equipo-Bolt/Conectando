@@ -56,6 +56,12 @@ import { User } from "@/types/User";
 // Actions
 import { createUserAction } from "@/app/actions/user/createUser";
 
+// Date formatter
+import { format } from "date-fns";
+
+// Icons
+import { CalendarIcon } from "@heroicons/react/24/outline";
+
 //* Interface
 interface CreateUserFormProps {
   roles: Role[];
@@ -64,13 +70,6 @@ interface CreateUserFormProps {
   businessUnits: BusinessUnit[];
   bosses: User[];
 }
-
-// Date formatter
-import { format } from "date-fns";
-
-// Icons
-import { CalendarIcon } from "@heroicons/react/24/outline";
-
 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CreateUserForm(props: CreateUserFormProps) {
   const router = useRouter();
@@ -79,15 +78,15 @@ export function CreateUserForm(props: CreateUserFormProps) {
     resolver: zodResolver(createUserSchema),
     defaultValues: {
       email: "",
-      roleID: "",
-      employeeNumber: "",
+      roleID: 0,
+      employeeNumber: 0,
       fullName: "",
-      bossId: "",
-      division: "",
-      businessUnitId: "",
-      companySeniority: "",
-      positionSeniority: "",
-      areaId: "",
+      bossID: 0,
+      divisionID: 0,
+      businessUnitID: 0,
+      companySeniority: new Date(),
+      positionSeniority: new Date(),
+      areaID: 0,
       position: "",
       companyContribution: "",
     },
@@ -108,12 +107,12 @@ export function CreateUserForm(props: CreateUserFormProps) {
       roleID: parsedData.data.roleID,
       employeeNumber: parsedData.data.employeeNumber,
       fullName: parsedData.data.fullName,
-      bossId: parsedData.data.bossId,
-      division: parsedData.data.division,
-      businessUnitId: parsedData.data.businessUnitId,
+      bossID: parsedData.data.bossID,
+      divisionID: parsedData.data.divisionID,
+      businessUnitID: parsedData.data.businessUnitID,
       companySeniority: parsedData.data.companySeniority,
       positionSeniority: parsedData.data.positionSeniority,
-      areaId: parsedData.data.areaId,
+      areaID: parsedData.data.areaID,
       position: parsedData.data.position,
       companyContribution: parsedData.data.companyContribution,
     };
@@ -137,12 +136,12 @@ export function CreateUserForm(props: CreateUserFormProps) {
     BusinessUnit[]
   >([]);
 
-  const currentDivision = form.watch("division");
+  const currentDivision = form.watch("divisionID");
 
   useEffect(() => {
     // This effect will run whenever the currentDivision changes
     const filtered = props.businessUnits.filter(
-      (bu) => bu.divisionID === parseInt(currentDivision)
+      (bu) => bu.divisionID === currentDivision || 1
     );
     setFilteredBusinessUnits(filtered);
   }, [currentDivision, props.businessUnits]);
@@ -193,6 +192,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       {...field}
                       type="number"
                       min="1"
+                      
                     />
                   </FormControl>
                 </FormItem>
@@ -248,7 +248,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
             <FormField
               control={form.control}
-              name="division"
+              name="divisionID"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>División</FormLabel>
@@ -280,7 +280,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
             <FormField
               control={form.control}
-              name="areaId"
+              name="areaID"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Área de Trabajo</FormLabel>
@@ -406,7 +406,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
             <FormField
               control={form.control}
-              name="businessUnitId"
+              name="businessUnitID"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Unidad de Negocio</FormLabel>
@@ -436,7 +436,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
             <FormField
               control={form.control}
-              name="bossId"
+              name="bossID"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Jefe Directo</FormLabel>
