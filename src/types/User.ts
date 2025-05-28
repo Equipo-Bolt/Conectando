@@ -5,9 +5,9 @@ import { updateUserSchema } from "@/lib/formSchemas/userSchema";
 
 export interface User {
   id: number;
-  employeeNumber: number;
+  employeeNumber?: number;
   fullName?: string;
-  email?: string;
+  email: string;
   jobPosition?: string;
   positionSeniority?: Date;
   companySeniority?: Date;
