@@ -10,6 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "restartDB": "npx prisma migrate reset --skip-generate",
+    "createMigration": "npx prisma migrate dev --name init --create-only",
     "prepare": "husky"
   },
   "prisma": {

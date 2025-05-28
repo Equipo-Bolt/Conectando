@@ -42,7 +42,7 @@ export const authConfig: NextAuthConfig = {
         const userExists = await prisma.user.findUnique({
           where: {
             email: email,
-            deactived: false
+            deactivated: false
           },
           select: {
             id: true,
