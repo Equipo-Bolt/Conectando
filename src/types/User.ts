@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { completeInfoSchema } from "@/lib/formSchemas/completeInfoSchema";
+
 export interface User {
   id: number;
   employeeNumber: number;
@@ -18,3 +21,5 @@ export interface MutateUser{
     email: string,
     roleID: number
 }
+
+export type CompleteUserSchemaType = z.infer<typeof completeInfoSchema>;
