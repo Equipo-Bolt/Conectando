@@ -65,7 +65,7 @@ interface CompleteInfoFormProps {
 }
 
 //* Action
-import { createUserAction } from "@/app/actions/user/createUser";
+import { createUserActionDP } from "@/app/actions/user/createUserDP";
 import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
@@ -128,7 +128,7 @@ export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : C
                             
                             console.log("Form values JSON:", JSON.stringify(values));
 
-                            await createUserAction(user);
+                            await createUserActionDP(user);
                         })
                     }
                     className="space-y-4 flex flex-col gap-8"
