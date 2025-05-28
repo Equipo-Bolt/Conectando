@@ -84,18 +84,18 @@ export default function UserViewEdit({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {
             id: user.id,
-            employeeNumber: user.employeeNumber,
-            fullName: user.fullName || "",
             email: user.email || "",
+            roleID: user.roleID.toString() || "",
+            employeeNumber: user.employeeNumber?.toString() || "",
+            fullName: user.fullName || "",
+            bossID: user.bossID?.toString() || "",
+            divisionID: user.divisionID?.toString() || "",
+            businessUnitID: user.businessUnitID?.toString() || "",
+            companySeniority: user.companySeniority || "",
+            positionSeniority: user.positionSeniority || "",
+            areaID: user.areaID?.toString() || "",
             position: user.position || "",
-            positionSeniority: user.positionSeniority,
-            companySeniority: user.companySeniority,
             companyContribution: user.companyContribution || "",
-            bossID: user.bossID || undefined,
-            roleID: user.roleID || undefined,
-            businessUnitID: user.businessUnitID || undefined,
-            divisionID: user.divisionID || undefined,
-            areaID: user.areaID || undefined,
         },
     });
 
@@ -118,11 +118,11 @@ export default function UserViewEdit({
         //     positionSeniority: data.positionSeniority,
         //     companySeniority: data.companySeniority,
         //     companyContribution: data.companyContribution,
-        //     bossID: data.bossID || undefined,
+        //     bossID: data.bossID,
         //     roleID: data.roleID,
-        //     businessUnitID: data.businessUnitID || undefined,
-        //     divisionID: data.divisionID || undefined,
-        //     areaID: data.areaID || undefined,
+        //     businessUnitID: data.businessUnitID,
+        //     divisionID: data.divisionID,
+        //     areaID: data.areaID,
         // };
 
         // await startTransition(() => {
@@ -143,18 +143,41 @@ export default function UserViewEdit({
 
     // Here we are using the useState hook to manage the state of the filtered business units
     const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<
-    BusinessUnit[]
+        BusinessUnit[]
     >([]);
 
     const currentDivision = form.watch("divisionID");
-    
+    const currentBusinessUnit = form.watch("businessUnitID");
+
     useEffect(() => {
-        // This effect will run whenever the currentDivision changes
+        // This effect will run whenever currentDivision or businessUnits change
+
+        if (currentDivision === undefined || currentDivision === "") {
+        // If no division is selected, reset the filtered business units
+        setFilteredBusinessUnits(businessUnits);
+        return;
+        } else {
+        // Filter the business units based on the selected division
         const filtered = businessUnits.filter(
-        (bu) => bu.divisionID === currentDivision || 1
+            (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
         );
         setFilteredBusinessUnits(filtered);
-    }, [currentDivision, businessUnits]);
+        form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
+        }
+
+    }, [currentDivision, businessUnits, form]);
+
+    useEffect(() => {
+        // Assign current Division to matching business units division
+        if (currentBusinessUnit && currentBusinessUnit !== "") {
+        const matchingBU = businessUnits.find(
+            (bu) => bu.id === parseInt(currentBusinessUnit, 10)
+        );
+        if (matchingBU) {
+            form.setValue("divisionID", String(matchingBU.divisionID));
+        }
+        }
+    }, [currentBusinessUnit, businessUnits, form]);
 
     return (
         <Form {...form}>
@@ -556,7 +579,7 @@ export default function UserViewEdit({
                 variant={"gemso_blue"}
                 onClick={() => setIsEditable(true)}
                 >
-                Editar Objetivo
+                Editar Usuario
                 </Button>
             )}
             </div>

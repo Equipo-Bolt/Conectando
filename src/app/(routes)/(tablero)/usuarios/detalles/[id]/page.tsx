@@ -32,18 +32,18 @@ export default async function UserDetailsPage({
 
     const userData: UpdateUserFormData = {
         id: user.id,
-        roleID: user.roleID,
-        employeeNumber: user.employeeNumber || undefined,
+        email: user.email,
+        roleID: user.roleID.toString(),
+        employeeNumber: user.employeeNumber?.toString() || "",
         fullName: user.fullName || "",
-        email: user.email || "",
-        position: user.jobPosition || "",
-        positionSeniority: user.positionSeniority ? new Date(user.positionSeniority) : undefined,
-        companySeniority: user.companySeniority ? new Date(user.companySeniority) : undefined,
+        bossID: user.bossID?.toString() || "",
+        divisionID: user.divisionID?.toString() || "",
+        businessUnitID: user.businessUnitID?.toString() || "",
+        companySeniority: user.companySeniority?.toString() || "",
+        positionSeniority: user.positionSeniority?.toString() || "",
+        areaID: user.areaID?.toString() || "",
+        position: user.jobPosition?.toString() || "",
         companyContribution: user.companyContribution || "",
-        bossID: user.bossID || undefined,
-        businessUnitID: user.businessUnitID || undefined,
-        divisionID: user.divisionID || undefined,
-        areaID: user.areaID || undefined,
     };
 
     return (

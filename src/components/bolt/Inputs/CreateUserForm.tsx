@@ -78,15 +78,15 @@ export function CreateUserForm(props: CreateUserFormProps) {
     resolver: zodResolver(createUserSchema),
     defaultValues: {
       email: "",
-      roleID: 0,
-      employeeNumber: 0,
+      roleID: "",
+      employeeNumber: "",
       fullName: "",
-      bossID: 0,
-      divisionID: 0,
-      businessUnitID: 0,
-      companySeniority: new Date(),
-      positionSeniority: new Date(),
-      areaID: 0,
+      bossID: "",
+      divisionID: "",
+      businessUnitID: "",
+      companySeniority: "",
+      positionSeniority: "",
+      areaID: "",
       position: "",
       companyContribution: "",
     },
@@ -104,17 +104,17 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
     const userData: CreateUserFormData = {
       email: parsedData.data.email,
-      roleID: parsedData.data.roleID,
-      employeeNumber: parsedData.data.employeeNumber,
-      fullName: parsedData.data.fullName,
-      bossID: parsedData.data.bossID,
-      divisionID: parsedData.data.divisionID,
-      businessUnitID: parsedData.data.businessUnitID,
-      companySeniority: parsedData.data.companySeniority,
-      positionSeniority: parsedData.data.positionSeniority,
-      areaID: parsedData.data.areaID,
-      position: parsedData.data.position,
-      companyContribution: parsedData.data.companyContribution,
+      roleID: parsedData.data.roleID.toString(),
+      employeeNumber: parsedData.data.employeeNumber?.toString() || "",
+      fullName: parsedData.data.fullName || "",
+      bossID: parsedData.data.bossID?.toString() || "",
+      divisionID: parsedData.data.divisionID?.toString() || "",
+      businessUnitID: parsedData.data.businessUnitID?.toString() || "",
+      companySeniority: parsedData.data.companySeniority || "",
+      positionSeniority: parsedData.data.positionSeniority || "",
+      areaID: parsedData.data.areaID?.toString() || "",
+      position: parsedData.data.position || "",
+      companyContribution: parsedData.data.companyContribution || "",
     };
 
     await startTransition(() => {
@@ -137,14 +137,37 @@ export function CreateUserForm(props: CreateUserFormProps) {
   >([]);
 
   const currentDivision = form.watch("divisionID");
+  const currentBusinessUnit = form.watch("businessUnitID");
 
   useEffect(() => {
-    // This effect will run whenever the currentDivision changes
-    const filtered = props.businessUnits.filter(
-      (bu) => bu.divisionID === currentDivision || 1
-    );
-    setFilteredBusinessUnits(filtered);
-  }, [currentDivision, props.businessUnits]);
+    // This effect will run whenever currentDivision or props.businessUnits change
+
+    if (currentDivision === undefined || currentDivision === "") {
+      // If no division is selected, reset the filtered business units
+      setFilteredBusinessUnits(props.businessUnits);
+      return;
+    } else {
+      // Filter the business units based on the selected division
+      const filtered = props.businessUnits.filter(
+        (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
+      );
+      setFilteredBusinessUnits(filtered);
+      form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
+    }
+
+  }, [currentDivision, props.businessUnits, form]);
+
+  useEffect(() => {
+    // Assign current Division to matching business units division
+    if (currentBusinessUnit && currentBusinessUnit !== "") {
+      const matchingBU = props.businessUnits.find(
+        (bu) => bu.id === parseInt(currentBusinessUnit, 10)
+      );
+      if (matchingBU) {
+        form.setValue("divisionID", String(matchingBU.divisionID));
+      }
+    }
+  }, [currentBusinessUnit, props.businessUnits, form]);
 
   return (
     <Form {...form}>
