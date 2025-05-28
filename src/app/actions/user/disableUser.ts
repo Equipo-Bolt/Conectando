@@ -10,7 +10,7 @@ export async function disableUser(userId: number) {
     try {
         await prisma.user.update({
             where: { id: userId },
-            data: { deactived: true },
+            data: { deactivated: true },
         });
 
         return "User entry has been disabled";

@@ -13,7 +13,7 @@ export async function getObjectiveClassificationById(objectiveClassificationId :
         const objectiveClassification = await prisma.objectiveClassification.findUnique({
             where: { id : objectiveClassificationId },
             include: { 
-              classificationTitle : true
+              classificationCatalog : true
            }
         })
 
@@ -23,7 +23,7 @@ export async function getObjectiveClassificationById(objectiveClassificationId :
 
         return {
             ...objectiveClassification,
-            classificationTitle: objectiveClassification.classificationTitle.title
+            classificationTitle: objectiveClassification.classificationCatalog.title
         } as ObjectiveClassification;
         } catch(error) {
             console.error(`Error fetching objective classification: ${(error as Error).message}`);

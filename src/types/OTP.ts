@@ -1,6 +1,4 @@
-//! type infered from otp schema | ?
+import { z } from "zod";
+import { otpSchema } from "@/lib/formSchemas/otpSchema"
 
-export type OTP = {
-    email : string,
-    otp : string
-}
+export type OtpSchemaType = z.infer<typeof otpSchema>

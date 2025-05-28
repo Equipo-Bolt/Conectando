@@ -15,5 +15,3 @@ export const otpSchema = z.object({
         message: "El código debe de contener solo números.",
     }),
 })
-
-export type OtpSchemaType = z.infer<typeof otpSchema>

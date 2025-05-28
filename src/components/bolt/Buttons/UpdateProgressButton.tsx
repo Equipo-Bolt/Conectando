@@ -34,6 +34,7 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
                 newAction({ id: form.id, progressID: progressID});
             });
         } else {
+            console.log(result.error?.message);
             setErrorMessages(result.error.issues.map(issue => issue.message));
             return;
         }

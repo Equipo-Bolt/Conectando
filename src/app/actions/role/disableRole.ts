@@ -10,7 +10,7 @@ export async function disableRoleAction(roleId : number) {
     try {
         await prisma.role.update({
             where: { id : roleId },
-            data: { deactived : true }
+            data: { deactivated : true }
         });
 
         return "Role has been disabled";

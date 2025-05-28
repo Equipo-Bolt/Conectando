@@ -10,14 +10,14 @@ import { Progress } from "@/types/Progress";
 export async function getAllProgresses() {
     try {
         const progresses = await prisma.progress.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (progresses.length === 0) {
             throw new Error ("No hay Progresos");
         }
 
-        return progresses.map(({ deactived, updatedAt, ...p }) => ({
+        return progresses.map(({ deactivated, updatedAt, ...p }) => ({
             ...p,
             createdAt: p.createdAt.toISOString()
         })) as Progress[];

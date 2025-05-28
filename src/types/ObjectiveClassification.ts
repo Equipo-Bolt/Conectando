@@ -1,7 +1,7 @@
 export interface ObjectiveClassification {
   id: number;
   weight: number | null;
-  classificationID: number;
+  classificationCatalogID: number;
   createdAt: Date;
   classificationTitle: string;
 }

@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 
 // React and Next.js
 import { useActionState, useTransition, useEffect } from "react";
-import { useRouter } from "next/navigation";
+////import { useRouter } from "next/navigation";
 
 
 // Form Validation
@@ -26,7 +26,7 @@ import { Login } from "@/types/Login";
 import { findUserAction } from "@/app/actions/auth/findUser";
 
 export default function LoginForm() {
-  const router = useRouter();
+  ////const router = useRouter();
 
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
@@ -47,12 +47,12 @@ export default function LoginForm() {
     })
   }
 
-  // If the form data is valid, you navigate to the OTP page
-  useEffect(() => {
-    if (state?.success === true) {
-      router.push("/otp");
-    }
-  }, [state, router]);
+  // // If the form data is valid, you navigate to the OTP page
+  //// useEffect(() => {
+  ////   if (state?.success === true) {
+  ////     router.push("/otp");
+  ////   }
+  //// }, [state, router]);
 
   return (
     

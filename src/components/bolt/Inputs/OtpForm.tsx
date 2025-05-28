@@ -24,7 +24,8 @@ import {
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { otpSchema, OtpSchemaType } from "@/lib/formSchemas/otpSchema"
+import { otpSchema } from "@/lib/formSchemas/otpSchema";
+import { OtpSchemaType } from "@/types/OTP";
 
 // Actions  
 import { loginAction } from "@/app/actions/auth/login";
@@ -32,20 +33,21 @@ import { loginAction } from "@/app/actions/auth/login";
 // NextAuth
 
 
+// ! For nextAuth implementation, Backend needs email related to otp
 export default function OtpForm() {
     const router = useRouter();
 
     const form = useForm<OtpSchemaType>({
         resolver: zodResolver(otpSchema),
         defaultValues: {
-            email: "",
+            email: String(process.env.NEXT_PUBLIC_RECEIVER_EMAIL || ""),
             otp: "",
         },
     })
 
     const [state, newAction] = useActionState(loginAction, null)
     const [isPending, startTransition] = useTransition();
-
+    
     const onSubmit = async (data: OtpSchemaType) => {
         const parsedData = otpSchema.safeParse(data);
         if (parsedData.success) {
@@ -57,7 +59,7 @@ export default function OtpForm() {
 
     useEffect(() => {
         if (state?.success === true) {
-            router.push("/misColaboradores");
+            router.push("/misObjetivos");
         }
     }, [state, router]);
 
@@ -73,7 +75,7 @@ export default function OtpForm() {
                             Autenticación de dos pasos
                         </FormLabel>
                         <FormControl>
-                            <InputOTP maxLength={6} {...field}>
+                            <InputOTP maxLength={6} id="otp" {...field}>
                                 <InputOTPGroup>
                                     <InputOTPSlot index={0} />
                                     <InputOTPSlot index={1} />
@@ -96,7 +98,7 @@ export default function OtpForm() {
                     )}
                 />
                 <Button type="submit" className="w-full h-[3rem] mt-[0.5rem]" variant={"gemso_blue"} disabled={isPending}>
-                    Submit
+                    Enviar
                 </Button>
             </form>
         </Form>
