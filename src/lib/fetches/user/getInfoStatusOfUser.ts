@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
 import { completeInfoSchema } from "@/lib/formSchemas/completeInfoSchema";
-import { CompleteInfoSchemaType } from "@/types/User";
 import { InfoStatus } from "@/types/User";
 
 /**
@@ -23,6 +22,7 @@ export async function getInfoStatusOfUser(
       throw new Error("El usuario no existe");
     }
 
+    // ! Removed unnecessary data and differently named atributes
     const {
       id,
       deactivated,
@@ -36,6 +36,7 @@ export async function getInfoStatusOfUser(
       ...cleanUser
     } = user ;
 
+    // * Redeclare object with correct atributed to use safeParse
     const toParseUser = {
       ...cleanUser,
       bossId: user.bossID,
