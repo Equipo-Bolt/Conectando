@@ -25,7 +25,13 @@ import { Login } from "@/types/Login";
 // * Actions
 import { findUserAction } from "@/app/actions/auth/findUser";
 
-export default function LoginForm() {
+interface LoginFormProps {
+  onValueChange: (email: string) => void;
+}
+
+export default function LoginForm(
+  { onValueChange }: LoginFormProps
+) {
   ////const router = useRouter();
 
   const form = useForm<Login>({
@@ -38,21 +44,25 @@ export default function LoginForm() {
   const [state, newAction] = useActionState(findUserAction, null)
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = async (data: Login) => {
-    // Validate the form data
-    const parsedData = loginSchema.safeParse(data);
+const onSubmit = async (data: Login) => {
+  // Validate the form data
 
+  const parsedData = loginSchema.safeParse(data);
+
+  if (parsedData.success) {
     startTransition(() => {
-      newAction(String(parsedData.data?.email))
-    })
+      newAction(parsedData.data.email);
+    });
   }
+};
 
-  // // If the form data is valid, you navigate to the OTP page
-  //// useEffect(() => {
-  ////   if (state?.success === true) {
-  ////     router.push("/otp");
-  ////   }
-  //// }, [state, router]);
+// When state updates and is successful, call the parent callback
+useEffect(() => {
+  if (state?.success === true) {
+    onValueChange(state.message);
+  }
+}, [state, onValueChange]);
+
 
   return (
     
