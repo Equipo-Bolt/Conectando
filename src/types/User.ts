@@ -22,4 +22,7 @@ export interface MutateUser{
     roleID: number
 }
 
-export type CompleteUserSchemaType = z.infer<typeof completeInfoSchema>;
+// ! used in fetches/user/getInfoStatusOfUser()
+export type InfoStatus = "Completed" | "NotCompleted";
+
+export type CompleteInfoSchemaType = z.infer<typeof completeInfoSchema>;

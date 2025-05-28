@@ -3,20 +3,20 @@
 import { prisma } from "@/lib/prisma";
 
 import { ServerActionResponse } from "@/types/ServerActionResponse";
-import { CompleteUserSchemaType } from "@/types/User";
+import { CompleteInfoSchemaType } from "@/types/User";
 
 /**
  * * completeUserInfoAction() Action that updates user with mandatory remaining data.
 
  * @param prevState<{@link ServerActionResponse}> Initial state of action, set this parameter to null.
- * @param data<{@link CompleteUserSchemaType}> Must include all data to complete user info.
+ * @param data<{@link CompleteInfoSchemaType}> Must include all data to complete user info.
  * 
  * @returns Promise of type {@link ServerActionResponse}
  */
 
 export async function completeUserInfoAction(
   prevState: ServerActionResponse | null,
-  data: CompleteUserSchemaType
+  data: CompleteInfoSchemaType
 ): Promise<ServerActionResponse> {
   try {
     const parsedData = {
