@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 // Validation schema for the form
-import { completeInfoSchema } from "@/lib/formSchemas/completeInfoSchema";
+import { completeUserInfoSchema } from "@/lib/formSchemas/userSchema";
 
 // Shadcn UI components for form elements
 import { Button } from "@/components/ui/button";
@@ -72,24 +72,24 @@ import CancelButton from "@/components/bolt/Buttons/CancelButton";
                                 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CompleteInfoForm({ divisions, areas, businessUnits, bosses } : CompleteInfoFormProps ) {
 
-    const form = useForm<z.infer<typeof completeInfoSchema>>({
-        resolver: zodResolver(completeInfoSchema),
+    const form = useForm<z.infer<typeof completeUserInfoSchema>>({
+        resolver: zodResolver(completeUserInfoSchema),
         defaultValues: {
             employeeNumber: "",
             email: "",
             fullName: "",
-            bossId: "",
-            division: "",
-            businessUnitId: "",
+            bossID: "",
+            divisionID: "",
+            businessUnitID: "",
             companySeniority: "",
             positionSeniority: "",
-            areaId: "",
+            areaID: "",
             position: "",
             companyContribution: ""
         }
     });
 
-    const currentDivision = form.watch("division");
+    const currentDivision = form.watch("divisionID");
 
     // Here we are using the useState hook to manage the state of the filtered business units
     const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<BusinessUnit[]>([]);
