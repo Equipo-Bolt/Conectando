@@ -35,7 +35,7 @@ export async function updateObjectiveClassificationAction(
     }
 
     if (objectiveClassificationExists.weight === data.weight) {
-      throw Error("No se realizaron cambios, no se escogío diferente peso");
+      return { success: true, message: "No se realizaron cambios" };
     }
 
     if (data.weight > 100 || data.weight <= 0) {
