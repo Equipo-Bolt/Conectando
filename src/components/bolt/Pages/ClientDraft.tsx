@@ -39,7 +39,7 @@ export default function ClientDraft({
     <div>
       <InfoHover>
         <div className="text-sm mb-[0.5rem]">
-          Para habilitar el envío de tus objetivos a revisión es necesario:
+          Para habilitar el envío de sus objetivos a revisión es necesario:
         </div>
         <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
           <div>1. Tener su información de usuario completa en la página de su perfil.</div>
@@ -51,7 +51,7 @@ export default function ClientDraft({
             3. Tener al menos un objetivo por cada clasificación.
           </div>
           <div>
-            4. Que la suma de los pesos de objetivos por cada clasificación sea
+            4. Que el peso total por cada clasificación sea
             igual a 100.
           </div>
         </div>
