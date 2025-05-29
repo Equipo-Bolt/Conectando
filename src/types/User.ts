@@ -21,9 +21,6 @@ export interface User {
   createdAt: Date;
 }
 
-// ! used in fetches/user/getInfoStatusOfUser()
-export type InfoStatus = "Completed" | "NotCompleted";
-
 export type CreateUserFormData = z.infer<typeof createUserSchema>;
 export type UpdateUserFormData = z.infer<typeof updateUserSchema>;
 export type CompleteInfoSchemaType = z.infer<typeof completeInfoSchema>;
