@@ -7,6 +7,7 @@ import { UpdateObjectiveFormData } from "@/types/Objective";
 import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
 import CommentsSection from "@/components/bolt/Comments/Comments";
+import GoBack from "@/components/bolt/Buttons/GoBack";
 
 /**
  * @description This page component is responsible for rendering the edit objective interface.
@@ -45,7 +46,10 @@ export default async function EditObjectivePage({
   };
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-4">Detalles del Objetivo</h1>
+      <div className="flex items-center gap-x-2 mb-4">
+        <GoBack route={"/misObjetivos"} />
+        <h1 className="text-3xl font-bold">Detalles del Objetivo</h1>
+      </div>
       <p className="text-base mb-6">
         <strong>Colaborador:</strong> Daniel Fernández
       </p>
