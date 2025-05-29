@@ -6,7 +6,7 @@ import { ServerActionResponse } from '@/types/ServerActionResponse';
 import { getCommentById } from '@/lib/fetches/comment/getCommentById';
 
 /**
- * * createCommentAction() Disables a comment
+ * * updateCommentAction() Updates a comment
 
  * @param prevState<{@link ServerActionResponse}> Initial state of action, set this parameter to null
  * @param data<{@link MutateComment}> Must include id of the comment to edit and description.

@@ -34,13 +34,13 @@ export default async function Feedback() {
           Para habilitar el envío de tus objetivos a revisión es necesario:
         </div>
         <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
-          <div>1. Tener tu información de usuario completa.</div>
+          <div>1. Tener su información de usuario completa en la página de su perfil.</div>
           <div>
-            2. Que la suma de los pesos de las clasificaciones de objetivos sea
+            2. Que la suma de los pesos de las clasificaciones sea
             igual a 100.
           </div>
           <div>
-            3. Tener al menos un objetivo por cada clasificación de objetivo.
+            3. Tener al menos un objetivo por cada clasificación.
           </div>
           <div>
             4. Que la suma de los pesos de objetivos por cada clasificación sea

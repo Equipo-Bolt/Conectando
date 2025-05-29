@@ -38,7 +38,7 @@ export async function createUserAction(
 
     //* Makes sure email in unique
     const user = await prisma.user.findUnique({
-      where: {email: data.email}
+      where: {email: data.email, deactivated: false}
     });
     if(user){
       throw new Error("Ya existe un usuario con ese correo")
@@ -87,6 +87,7 @@ export async function createUserAction(
         }
     }
 
+    //* Checks if area exists
     if(data.areaID){
         const areaExists = await getAreaById(parseInt(data.areaID))
         if(!areaExists.id){
@@ -95,7 +96,7 @@ export async function createUserAction(
     }
 
 
-        //* A position seniority cannot be an earlier date than the company seniority but it can be the same
+    //* A position seniority cannot be an earlier date than the company seniority but it can be the same
     if((data.companySeniority && data.positionSeniority) && (new Date(data.positionSeniority) < new Date(data.companySeniority))){
         throw new Error("La antigüedad en la posición no puede ser una fecha anterior a la antigüedad de la empresa")
     }
