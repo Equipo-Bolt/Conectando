@@ -1,7 +1,7 @@
 "use server";
 
-//* Next Cookies
-import { cookies } from "next/headers";
+// * NextAuth
+import { auth } from "@/app/auth";
 
 // Load Data
 import { getAllClassifications } from "@/lib/fetches/classification/getAllClassifications";
@@ -22,8 +22,11 @@ import { User } from "@/types/User";
  */
 async function CreateObjectivePage() {
   //* Using Cookies
-  const cookieStore = await cookies();
-  const userId = cookieStore.get("userId")?.value;
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) {
+      return <p>Error: User not found.</p>;
+    }
   const user: User = await getUserById(Number(userId));
   const formId: string = await getFormIdByUserId(user.id);
   const classifications: Classification[] = await getAllClassifications();

@@ -129,7 +129,6 @@ export default function UserViewEdit({
         await startTransition(() => {
             newAction(userData);
         });
-        console.log("handleSubmit triggered with data:", data);
     }
 
     useEffect(() => {

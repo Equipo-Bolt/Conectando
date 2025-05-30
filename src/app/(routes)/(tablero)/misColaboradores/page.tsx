@@ -5,7 +5,7 @@ import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { DataTableMyCollaborators } from "@/components/bolt/DataTables/dataTableMyCollaborator/data-table";
 import { columns } from "@/components/bolt/DataTables/dataTableMyCollaborator/columns";
 
-import { cookies } from "next/headers";
+import { auth } from "@/app/auth";
 import { getFormById } from "@/lib/fetches/form/getFormById";
 
 /**
@@ -14,8 +14,11 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
  */
 async function MyCollaboratorsPage() {
   // Get user ID from cookies
-  const cookieStore = await cookies();
-  const userId = cookieStore.get("userId")?.value;
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) {
+      return <p>Error: User not found.</p>;
+    }
 
   // Get collaborators and their progress
   const collaborators = await getAllCollaboratorsOfBoss(Number(userId));
