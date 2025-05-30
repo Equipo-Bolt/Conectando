@@ -34,7 +34,7 @@ export async function completeUserInfoAction(
       where: { employeeNumber: parsedData.employeeNumber },
     });
 
-    if (dupeEmployeeNumber) {
+    if (dupeEmployeeNumber && dupeEmployeeNumber.email != parsedData.email) {
       throw new Error(
         "Ya existe un usuario con el mismo número de empleado"
       );
