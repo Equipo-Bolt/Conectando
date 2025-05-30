@@ -1,51 +1,153 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { User } from "@/types/User";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
+import { UpdateUserFormData } from "@/types/User";
 
-export async function updateUserAction(userId: number, data: FormData) {
-    if (!userId){
-        throw new Error ("No id given to user");
-    }
+import { getUserById } from "@/lib/fetches/user/getUserById";
+import { getRoleById } from "@/lib/fetches/role/getRoleById";
+import { getDivisionById } from "@/lib/fetches/division/getDivisionById";
+import { getBusinessUnitById } from "@/lib/fetches/business_unit/getBusinessUnitById";
+import { getAreaById } from "@/lib/fetches/area/getAreaById";
 
-    const rawNewEmployeeNumber = data.get("employeeNumber") as string | null;
-    const newEmail = data.get("email") as string | null;
-    const rawData = Object.fromEntries(data.entries()) as Record<string, unknown>; // ! SEGURAMENTE NO SIRVE. PLACEHOLDER PARA USAR UN DTO
+/**
+ * * updateUserAction() Updates a user given its id
 
-    // ? NO VALIDACIONES POR LINEA, USA INTERFACES
+ * @param prevState<{@link ServerActionResponse}> Initial state of action, set this parameter to null.
+ * @param data<{@link UpdateUserFormData}> Must include id, email and roleID.
+ *
+ * @returns Promise of type {@link ServerActionResponse}
+ */
 
-    const newEmployeeNumber = Number(rawNewEmployeeNumber);
-    if (Number.isNaN(newEmployeeNumber)) {
-        throw new Error("Employee number is invalid");
-    }
+export async function updateUserAction(
+    prevState: ServerActionResponse | null,
+    data: UpdateUserFormData
+) : Promise<ServerActionResponse> {
 
     try {
-        const userExists = await prisma.user.findFirst({
-            where: { 
-                NOT: {
-                    id: userId
+
+        const userExists = await getUserById(data.id)
+        if(!userExists.id){
+            throw new Error("El usuario a editar no existe")
+        }
+
+        //* Makes sure email in unique
+        const user = await prisma.user.findUnique({
+            where: {email: data.email, deactivated: false}
+        });
+        if(user && user.id !== data.id){
+            throw new Error("Ya existe un usuario con ese correo")
+        };
+
+        //* Checks if inserted role exists
+        const role = await getRoleById(parseInt(data.roleID));
+        if(!role.id){
+            throw new Error("El rol a asignar no existe")
+        }
+
+        //* CHECKS FOR OPTIONAL DATA
+        //* Check user for boss exists and is a boss
+        if(data.bossID){
+            const bossExists = await getUserById(parseInt(data.bossID))
+            if(!bossExists.id){
+                throw new Error("El usuario jefe no existe")
+            } else if(!(bossExists.roleID===2 || bossExists.roleID===4 || bossExists.roleID===6 || bossExists.roleID ===7)) {
+                throw new Error("El usuario asignado como jefe no es un jefe")
+            }
+        }
+
+        //* Checks if division exists
+        if(data.divisionID){
+            const divisionExists = await getDivisionById(parseInt(data.divisionID))
+            if(!divisionExists.id){
+                throw new Error("La división ingresada no existe")
+            }
+        }
+
+        //* If there is a business unit there should be a division also
+        //* So check for division in data, check bu exists and check bu division is the same as inserted division
+        if(data.businessUnitID){
+
+            if(!data.divisionID){
+                throw new Error("No se escogió una división para la unidad de negocio")
+            }
+
+            const businessUnitExists = await getBusinessUnitById(parseInt(data.businessUnitID))
+            if(!businessUnitExists.id){
+                throw new Error("La unidad de negocio ingresada no existe")
+            }
+
+            if(businessUnitExists.divisionID !== parseInt(data.divisionID)){
+                throw new Error("La unidad de negocio no coincide con la división ingresada")
+            }
+        }
+
+        //* Checks if area exists
+        if(data.areaID){
+            const areaExists = await getAreaById(parseInt(data.areaID))
+            if(!areaExists.id){
+                throw new Error("El area ingresada no existe")
+            }
+        }
+
+        //* A position seniority cannot be an earlier date than the company seniority but it can be the same
+        if((data.companySeniority && data.positionSeniority) && (new Date(data.positionSeniority) < new Date(data.companySeniority))){
+            throw new Error("La antigüedad en la posición no puede ser una fecha anterior a la antigüedad de la empresa")
+        }
+
+        const { id, roleID, bossID, businessUnitID, areaID, divisionID, ...dataWithoutIDs } = data
+        const parsedData = {...dataWithoutIDs,
+                            employeeNumber: dataWithoutIDs.employeeNumber ? Number(dataWithoutIDs.employeeNumber) : null,
+                            companySeniority: dataWithoutIDs.companySeniority ? new Date(dataWithoutIDs.companySeniority) : null,
+                            positionSeniority: dataWithoutIDs.positionSeniority ? new Date(dataWithoutIDs.positionSeniority) : null,
+                            jobPosition: dataWithoutIDs.position ? dataWithoutIDs.position : null,
+                            fullName: dataWithoutIDs.fullName ? dataWithoutIDs.fullName : dataWithoutIDs.email.split('@')[0],
+                            companyContribution: dataWithoutIDs.companyContribution ? dataWithoutIDs.companyContribution : null}
+        const {position, ...parsedDataNoPosition} = parsedData
+
+
+        await prisma.user.update({
+            where: { id: id },
+            data: {
+                ...parsedDataNoPosition,
+                role: {
+                connect: {
+                    id: parseInt(data.roleID)
+                }
                 },
-                OR: [
-                    {
-                        employeeNumber: newEmployeeNumber
-                    },
-                    {
-                        email: newEmail
-                    }
-                ]
+                boss: {
+                    ...(data.bossID ?
+                        {
+                            connect: {
+                                id: parseInt(data.bossID)
+                            }
+                        } : {}
+                    )
+                },
+                businessUnit: {
+                    ...(data.businessUnitID ?
+                        {
+                            connect: {
+                                id: parseInt(data.businessUnitID)
+                            }
+                        } : {}
+                    )
+                },
+                area: {
+                    ...(data.areaID ?
+                        {
+                            connect: {
+                                id: parseInt(data.areaID)
+                            }
+                        } : {}
+                    )
+                },
             }
         });
 
-        if (userExists) {
-            throw new Error ("User with same data already exists");
-        }
-
-        await prisma.user.update({
-            where: { id: userId },
-            data: rawData, // ! SEGURAMENTE NO SIRVE. PLACEHOLDER PARA USAR UN DTO
-        });
-        return "User has been updated";
-    } catch {
-        throw new Error("Failed to update user");
+        return {success: true, message: "Usuario actualizado"}
+    } catch (error) {
+        console.error(`Error when updating user: ${(error as Error).message}`)
+        return {success: false, error: `${(error as Error).message}`}
     }
 }
