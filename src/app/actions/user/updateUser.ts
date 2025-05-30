@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { User } from "@/types/User";
 
-export async function updateUser(userId: number, data: FormData) {
+export async function updateUserAction(userId: number, data: FormData) {
     if (!userId){
         throw new Error ("No id given to user");
     }
