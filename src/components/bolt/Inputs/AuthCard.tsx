@@ -25,10 +25,11 @@ export default function AuthCard() {
     const [email, setEmail] = useState("");
 
     return (
-    <Card className="md:w-1/3 w-1/2 flex flex-col items-center justify-center p-[2rem]">        {currentPage === "otp" && (
+    <Card className="md:w-1/3 w-2/3 flex flex-col items-center justify-center p-[2rem]">        
+        {currentPage === "otp" && (
             <div className="flex flex-row items-center justify-start w-full ">
                 <button
-                    className="text-gray-500 hover:text-gray-700"
+                    className="text-gray-500 hover:text-gray-700 cursor-pointer"
                     onClick={() => setCurrentPage("login")}
                 >                
                     <ArrowLeftIcon className="h-5 w-5 text-gray-500 mr-2" />

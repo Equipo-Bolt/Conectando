@@ -1,7 +1,7 @@
 "use client"
 
 // React and Next.js
-import { useActionState, useTransition, useEffect } from "react";
+import { useActionState, useTransition, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 // Components
@@ -30,6 +30,7 @@ import { OtpSchemaType } from "@/types/OTP";
 // Actions  
 import { loginAction } from "@/app/actions/auth/login";
 import { findUserAction } from "@/app/actions/auth/findUser";
+import { hasCompletedInfoAction } from "@/app/actions/user/hasCompletedInfo";
 
 // NextAuth
 
@@ -53,6 +54,7 @@ export default function OtpForm(
     
     const onSubmit = async (data: OtpSchemaType) => {
         const parsedData = otpSchema.safeParse(data);
+        
         if (parsedData.success) {
             startTransition(() => {
                 newAction(parsedData.data);
@@ -60,11 +62,23 @@ export default function OtpForm(
         }
     };
 
+    const checkUserInfo = useCallback(async (email: string) => {
+        const response = await hasCompletedInfoAction(email);
+        if (response.success === true) {
+            // If user has all fields filled, redirect to objectives page
+            router.push("/misObjetivos");
+        } else {
+            // If user has not completed all fields, redirect to info status page
+            router.push("/llenarInformacion");
+        }
+        console.log(response);
+    }, [router]);
+
     useEffect(() => {
         if (state?.success === true) {
-            router.push("/misObjetivos");
+            checkUserInfo(form.getValues("email"));
         }
-    }, [state, router]);
+    }, [state, form, checkUserInfo]);
 
     return (
         <Form {...form}>
@@ -106,7 +120,7 @@ export default function OtpForm(
                 <Button
                     type="button"
                     variant="link"
-                    className="w-full text-xs h-[1rem] text-gemso-blue hover:text-gemso-blue/80"
+                    className="w-full text-xs h-[1rem] text-gemso-blue cursor-pointer hover:text-gemso-blue/80"
                     onClick={() => findUserAction(null, form.getValues("email"))}
                     >
                         ¿No recibiste el código? Reenviar OTP

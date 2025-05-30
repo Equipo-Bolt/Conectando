@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 
 import { ServerActionResponse } from "@/types/ServerActionResponse";
-import { CompleteInfoSchemaType } from "@/types/User";
+import { CompleteUserFormData } from "@/types/User";
 
 /**
  * * completeUserInfoAction() Action that updates user with mandatory remaining data.
@@ -16,7 +16,7 @@ import { CompleteInfoSchemaType } from "@/types/User";
 
 export async function completeUserInfoAction(
   prevState: ServerActionResponse | null,
-  data: CompleteInfoSchemaType
+  data: CompleteUserFormData
 ): Promise<ServerActionResponse> {
   try {
     const parsedData = {
@@ -41,6 +41,7 @@ export async function completeUserInfoAction(
     }
 
     const {
+      id,
       businessUnitID,
       bossID,
       areaID,

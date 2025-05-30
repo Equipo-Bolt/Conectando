@@ -140,7 +140,7 @@ export default function UserViewEdit({
         } else {
             console.error("Error updating user:", state.error);
         }
-    }, [state, router]);
+    }, [state, router, user.id]);
 
     // Here we are using the useState hook to manage the state of the filtered business units
     const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<

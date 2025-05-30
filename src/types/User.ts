@@ -23,4 +23,4 @@ export interface User {
 
 export type CreateUserFormData = z.infer<typeof createUserSchema>;
 export type UpdateUserFormData = z.infer<typeof updateUserSchema>;
-export type CompleteInfoSchemaType = z.infer<typeof completeUserInfoSchema>;
+export type CompleteUserFormData = z.infer<typeof completeUserInfoSchema>;
