@@ -205,6 +205,7 @@ export default function ObjectiveForm({
                 <SubmitButton text="Guardar Cambios" isPending={isPending} />
                 <Button
                   variant={"gemso_white_and_blue"}
+                  type="button"
                   onClick={() => {
                     form.reset();
                     setIsEditable(false);
@@ -216,6 +217,7 @@ export default function ObjectiveForm({
             ) : (
               <Button
                 variant={"gemso_blue"}
+                type="button"
                 onClick={() => setIsEditable(true)}
               >
                 Editar Objetivo

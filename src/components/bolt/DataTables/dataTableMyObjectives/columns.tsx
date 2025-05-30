@@ -60,7 +60,7 @@ export const columns: ColumnDef<Objective>[] = [
           <DeleteButton
             id={id}
             title="Eliminar objetivo"
-            description="¿Seguro que deseas eliminar este objetivo? Esta acción no se puede deshacer."
+            description="¿Desea eliminar este objetivo? Esta acción no se puede deshacer."
             handleConfirm={async (id) => {
               await disableObjectiveAction(null, id);
               window.location.reload(); // Recargar la página después de eliminar el objetivo

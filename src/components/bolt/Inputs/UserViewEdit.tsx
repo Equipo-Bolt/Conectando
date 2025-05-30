@@ -103,31 +103,32 @@ export default function UserViewEdit({
     const [isPending, startTransition] = useTransition();
 
     async function handleSubmit(data: UpdateUserFormData) {
-        // const parsedData = updateUserSchema.safeParse(data);
-        // if (!parsedData.success) {
-        //     console.error("Validation errors:", parsedData.error.format());
-        //     return;
-        // }
+        console.log(data.id)
+        const parsedData = updateUserSchema.safeParse(data);
+        if (!parsedData.success) {
+            console.error("Validation errors:", parsedData.error.format());
+            return;
+        }
 
-        // const userData: UpdateUserFormData = {
-        //     id: data.id,
-        //     employeeNumber: data.employeeNumber,
-        //     fullName: data.fullName,
-        //     email: data.email,
-        //     position: data.position,
-        //     positionSeniority: data.positionSeniority,
-        //     companySeniority: data.companySeniority,
-        //     companyContribution: data.companyContribution,
-        //     bossID: data.bossID,
-        //     roleID: data.roleID,
-        //     businessUnitID: data.businessUnitID,
-        //     divisionID: data.divisionID,
-        //     areaID: data.areaID,
-        // };
+        const userData: UpdateUserFormData = {
+            id: data.id,
+            employeeNumber: data.employeeNumber,
+            fullName: data.fullName,
+            email: data.email,
+            position: data.position,
+            positionSeniority: data.positionSeniority,
+            companySeniority: data.companySeniority,
+            companyContribution: data.companyContribution,
+            bossID: data.bossID,
+            roleID: data.roleID,
+            businessUnitID: data.businessUnitID,
+            divisionID: data.divisionID,
+            areaID: data.areaID,
+        };
 
-        // await startTransition(() => {
-        //     newAction(userData);
-        // });
+        await startTransition(() => {
+            newAction(userData);
+        });
         console.log("handleSubmit triggered with data:", data);
     }
 
@@ -186,6 +187,8 @@ export default function UserViewEdit({
             <p className="text-blue-600">Enviando...</p>
             ) : state?.success ? (
             <h1>Resultado: {state.message} </h1>
+            // ) : (state?.success === false) ? (   //! THE ERROR MESSAGE ISNT BEING DISPLAYED TO THE USER?
+            // <h1 className="text-red-600">Resultado: {state.error} </h1>
             ) : (
             <></>
             )}
@@ -227,7 +230,7 @@ export default function UserViewEdit({
                         {...field}
                         type="number"
                         min="1"
-                        
+
                         />
                     </FormControl>
                     </FormItem>
@@ -565,6 +568,7 @@ export default function UserViewEdit({
                 <>
                 <Button
                     variant={"gemso_white_and_blue"}
+                    type="button"
                     onClick={() => {
                     form.reset();
                     setIsEditable(false);
@@ -576,6 +580,7 @@ export default function UserViewEdit({
                 </>
             ) : (
                 <Button
+                type="button"
                 variant={"gemso_blue"}
                 onClick={() => setIsEditable(true)}
                 >
