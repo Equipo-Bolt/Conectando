@@ -12,6 +12,7 @@ import { FormObjectives } from "@/types/FormObjectives";
 import { Form } from "@/types/Form";
 import GradeSum from "../DataTables/GradeSum";
 import SimpleStaticTable from "../DataTables/dataTableGradeWeight/data-table";
+import InfoHover from "../Icons/InfoHover";
 export default function ClientDraft({
   form,
   initialData,
@@ -36,7 +37,30 @@ export default function ClientDraft({
 
   return (
     <div>
-      {/* ... InfoHover, text, etc */}
+      <InfoHover>
+        <div className="text-sm mb-[0.5rem]">
+          Para habilitar el envío de sus objetivos a revisión es necesario:
+        </div>
+        <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
+          <div>1. Tener su información de usuario completa en la página de su perfil.</div>
+          <div>
+            2. Que la suma de los pesos de las clasificaciones sea
+            igual a 100.
+          </div>
+          <div>
+            3. Tener al menos un objetivo por cada clasificación.
+          </div>
+          <div>
+            4. Que el peso total por cada clasificación sea
+            igual a 100.
+          </div>
+        </div>
+      </InfoHover>
+
+      <p className="text-xs">
+        * En caso de actualizar el peso de la clasificación, es necesario
+        refrescar la pagina para poder enviar los objetivos a revisión.
+      </p>
 
       <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"} asChild>
