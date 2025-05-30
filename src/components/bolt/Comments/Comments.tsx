@@ -16,6 +16,8 @@ import { createCommentAction } from "@/app/actions/comment/createComment";
 import { updateCommentAction } from "@/app/actions/comment/updateComment";
 import { disableCommentAction } from "@/app/actions/comment/disableComment";
 
+
+
 interface CommentsSectionProps {
   initialComments: Comment[];
   objectiveId: number;
@@ -36,14 +38,30 @@ export default function CommentsSection({
   const [state, createAction] = useActionState(createCommentAction, null)
   const [isPending, startCreateTransition] = useTransition();
 
-  const handleSaveEdited = (id: number) => {
-    setAllComments((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, description: editedText } : c))
-    );
-    setEditingId(null);
+  const [updateState, updateAction] = useActionState(updateCommentAction, null);
+
+  const handleSaveEdited = async (id: number) => {
+  const updatedEntry: MutateComment = {
+    id,
+    description: editedText,
+    commenterID: commenterId,
+    objectiveID: objectiveId,
   };
 
-  const handleDelete = (id: number) => {
+  await updateAction(updatedEntry);
+};
+
+useEffect(() => {
+  if (updateState?.success) {
+    window.location.reload();
+
+  } else if (updateState?.error) {
+    console.error("Error al actualizar el comentario:", updateState.error);
+  }
+}, [updateState]);
+
+
+  const handleDelete = (id: number) => { //! NO DEBE DE HABER DELETE
     setAllComments((prev) => prev.filter((c) => c.id !== id));
   };
 
