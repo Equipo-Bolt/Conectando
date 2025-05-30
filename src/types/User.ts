@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createUserSchema } from "@/lib/formSchemas/userSchema";
 import { updateUserSchema } from "@/lib/formSchemas/userSchema";
-import { completeInfoSchema } from "@/lib/formSchemas/completeInfoSchema";
+import { completeUserInfoSchema } from "@/lib/formSchemas/userSchema";
 
 export interface User {
   id: number;
@@ -23,4 +23,4 @@ export interface User {
 
 export type CreateUserFormData = z.infer<typeof createUserSchema>;
 export type UpdateUserFormData = z.infer<typeof updateUserSchema>;
-export type CompleteInfoSchemaType = z.infer<typeof completeInfoSchema>;
+export type CompleteInfoSchemaType = z.infer<typeof completeUserInfoSchema>;

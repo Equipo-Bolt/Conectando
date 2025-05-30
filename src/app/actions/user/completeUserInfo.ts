@@ -23,20 +23,12 @@ export async function completeUserInfoAction(
       ...data,
       jobPosition: data.position,
       employeeNumber: Number(data.employeeNumber),
-      businessUnitId: Number(data.businessUnitId),
-      bossId: Number(data.bossId),
-      areaId: Number(data.areaId),
+      businessUnitID: Number(data.businessUnitID),
+      bossID: Number(data.bossID),
+      areaID: Number(data.areaID),
       companySeniority: new Date(data.companySeniority),
       positionSeniority: new Date(data.positionSeniority),
     };
-
-    const dupeEmail = await prisma.user.findUnique({
-      where: { email: parsedData.email },
-    });
-
-    if (dupeEmail) {
-      throw new Error("Ya no existe un usuario con el mismo correo");
-    }
 
     const dupeEmployeeNumber = await prisma.user.findFirst({
       where: { employeeNumber: parsedData.employeeNumber },
@@ -44,16 +36,17 @@ export async function completeUserInfoAction(
 
     if (dupeEmployeeNumber) {
       throw new Error(
-        "Ya no existe un usuario con el mismo número de empleado"
+        "Ya existe un usuario con el mismo número de empleado"
       );
     }
 
     const {
-      businessUnitId,
-      bossId,
-      areaId,
+      businessUnitID,
+      bossID,
+      areaID,
       position,
-      division,
+      divisionID,
+      roleID,
       email,
       ...dataWithoutIDs
     } = parsedData;
@@ -64,17 +57,17 @@ export async function completeUserInfoAction(
         ...dataWithoutIDs,
         businessUnit: {
           connect: {
-            id: parsedData.businessUnitId,
+            id: parsedData.businessUnitID,
           },
         },
         boss: {
           connect: {
-            id: parsedData.bossId,
+            id: parsedData.bossID,
           },
         },
         area: {
           connect: {
-            id: parsedData.areaId,
+            id: parsedData.areaID,
           },
         },
       },
