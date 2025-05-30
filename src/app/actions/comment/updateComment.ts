@@ -34,7 +34,7 @@ export async function updateCommentAction(
     }
 
     if(commentExists.description === data.description){
-      throw new Error("No se realizaron cambios, el contenido es igual")
+      return { success: true, message: "No se realizaron cambios" };
     }
 
     await prisma.comment.update({
