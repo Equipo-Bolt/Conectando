@@ -30,7 +30,7 @@ import { OtpSchemaType } from "@/types/OTP";
 // Actions  
 import { loginAction } from "@/app/actions/auth/login";
 import { findUserAction } from "@/app/actions/auth/findUser";
-import { findInfoStatusUserAction } from "@/app/actions/auth/findInfoStatusUser";
+import { hasCompletedInfoAction } from "@/app/actions/user/hasCompletedInfo";
 
 // NextAuth
 
@@ -63,7 +63,7 @@ export default function OtpForm(
     };
 
     const checkUserInfo = useCallback(async (email: string) => {
-        const response = await findInfoStatusUserAction(null, email);
+        const response = await hasCompletedInfoAction(email);
         if (response.success) {
             // If user has all fields filled, redirect to objectives page
             router.push("/misObjetivos");

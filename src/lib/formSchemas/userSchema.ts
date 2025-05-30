@@ -3,7 +3,7 @@
 import { z } from "zod";
 
 
-export const completeUserInfoSchema = z.object({
+export const userSchema = z.object({
     email: z.string().email("El correo electrónico debe ser válido"),
     roleID: z
         .string()
@@ -106,7 +106,7 @@ export const completeUserInfoSchema = z.object({
         .max(300, "La contribución a la empresa no puede exceder los 300 caracteres"),
 })
 
-export const createUserSchema = completeUserInfoSchema.extend({
+export const createUserSchema = userSchema.extend({
     employeeNumber: z.string().optional(),
     fullName: z.string().optional(),
     bossID: z.string().optional(),
@@ -122,3 +122,7 @@ export const createUserSchema = completeUserInfoSchema.extend({
 export const updateUserSchema = createUserSchema.extend({
     id: z.number(),
 });
+
+export const completeUserInfoSchema = userSchema.extend({
+    id: z.number(),
+})

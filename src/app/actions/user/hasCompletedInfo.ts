@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 
-import { completeInfoSchema } from "@/lib/formSchemas/completeInfoSchema";
+import { completeUserInfoSchema } from "@/lib/formSchemas/userSchema";
 import { ServerActionResponse } from "@/types/ServerActionResponse";
 
 /**
@@ -50,7 +50,7 @@ export async function hasCompletedInfoAction(
       position: userExists.jobPosition
     };
 
-    const result = completeInfoSchema.safeParse(toParseUser);
+    const result = completeUserInfoSchema.safeParse(toParseUser);
 
     if (!result.success) {
         throw new Error("El usuario no ha completado su información")
