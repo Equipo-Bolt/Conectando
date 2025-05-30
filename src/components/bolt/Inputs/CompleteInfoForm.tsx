@@ -80,7 +80,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     defaultValues: {
         id: props.user.id,
         email: props.user.email || "",
-        roleID: props.user.roleID.toString() || "",
+        roleID: String(props.user.roleID) || "",
         employeeNumber: String(props.user.employeeNumber) || "",
         fullName: props.user.fullName || "",
         bossID: String(props.user.bossID) || "",
@@ -107,15 +107,15 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     const userData: CompleteUserFormData = {
       id: parsedData.data.id,
       email: parsedData.data.email,
-      roleID: parsedData.data.roleID.toString(),
-      employeeNumber: parsedData.data.employeeNumber?.toString(),
+      roleID: String(parsedData.data.roleID),
+      employeeNumber: String(parsedData.data.employeeNumber),
       fullName: parsedData.data.fullName,
-      bossID: parsedData.data.bossID?.toString(),
-      divisionID: parsedData.data.divisionID?.toString(),
-      businessUnitID: parsedData.data.businessUnitID?.toString() ,
+      bossID: String(parsedData.data.bossID),
+      divisionID: String(parsedData.data.divisionID),
+      businessUnitID: String(parsedData.data.businessUnitID) ,
       companySeniority: parsedData.data.companySeniority ,
       positionSeniority: parsedData.data.positionSeniority ,
-      areaID: parsedData.data.areaID?.toString() ,
+      areaID: String(parsedData.data.areaID) ,
       position: parsedData.data.position ,
       companyContribution: parsedData.data.companyContribution ,
     };
@@ -155,7 +155,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
         (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
       );
       setFilteredBusinessUnits(filtered);
-      form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
+      form.setValue("businessUnitID", String(filtered[0]?.id) || "");
     }
 
   }, [currentDivision, props.businessUnits, form]);
@@ -358,7 +358,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         </FormControl>
                         <SelectContent>
                         {props.roles.map((role) => (
-                            <SelectItem key={role.id} value={role.id.toString()}>
+                            <SelectItem key={role.id} value={String(role.id)}>
                             {role.title}
                             </SelectItem>
                         ))}
