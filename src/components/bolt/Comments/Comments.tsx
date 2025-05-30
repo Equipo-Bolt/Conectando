@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { startTransition, useActionState, useEffect, useState, useTransition } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,21 +11,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical } from "lucide-react";
 import { Comment } from "@/types/Comment";
+import { MutateComment } from "@/types/Comment";
+import { createCommentAction } from "@/app/actions/comment/createComment";
+import { updateCommentAction } from "@/app/actions/comment/updateComment";
+import { disableCommentAction } from "@/app/actions/comment/disableComment";
 
 interface CommentsSectionProps {
   initialComments: Comment[];
   objectiveId: number;
+  commenterId: number;
 }
 
 export default function CommentsSection({
   initialComments,
   objectiveId,
+  commenterId
 }: CommentsSectionProps) {
   const [allComments, setAllComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");
   const [showNewComment, setShowNewComment] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editedText, setEditedText] = useState("");
+
+  const [state, createAction] = useActionState(createCommentAction, null)
+  const [isPending, startCreateTransition] = useTransition();
 
   const handleSaveEdited = (id: number) => {
     setAllComments((prev) =>
@@ -38,22 +47,34 @@ export default function CommentsSection({
     setAllComments((prev) => prev.filter((c) => c.id !== id));
   };
 
-  const handleAddComment = () => {
+  async function handleAddComment() {
+    console.log(commenterId)
     if (newComment.trim() === "") return;
 
-    const newEntry: Comment = {
-      id: Date.now(),
+    const newEntry: MutateComment = {
       description: newComment,
-      createdAt: new Date(),
-      commentedAt: new Date(),
-      commenterID: 1,
+      commenterID: commenterId, //! ESTO DEBE TENER EL ID DEL USUARIO LOGGEADO
       objectiveID: objectiveId,
     };
 
-    setAllComments((prev) => [...prev, newEntry]);
+    await startCreateTransition(() => {
+      createAction(newEntry);
+    });
+
+
     setNewComment("");
     setShowNewComment(false);
   };
+
+  useEffect(() => {
+    if (state?.success) {
+      console.log(state)
+      window.location.reload();
+    } else if (state?.error) {
+      console.error("Error al crear el comentario:", state.error);
+    }
+  }, [state]);
+
 
   return (
     <div className="space-y-4 border-l pl-4">
@@ -74,7 +95,7 @@ export default function CommentsSection({
             >
               <div className="flex-1">
                 {/* Commenter's name and date */}
-                <strong>Andrés Sandoval</strong>{" "}
+                <strong>{comment.commenterID}</strong>{" "}{/* //! NEED NEXTAUTH TO GET USER FULL NAME */}
                 <span className="text-gray-500">
                   {new Date(comment.createdAt).toLocaleDateString("es-MX")}
                 </span>
@@ -131,12 +152,6 @@ export default function CommentsSection({
                       }}
                     >
                       Modificar
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => handleDelete(comment.id)}
-                    >
-                      Borrar
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
