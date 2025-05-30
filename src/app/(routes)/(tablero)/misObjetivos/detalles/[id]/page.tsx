@@ -8,6 +8,7 @@ import { getObjectiveClassificationById } from "@/lib/fetches/objective_classifi
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
 import CommentsSection from "@/components/bolt/Comments/Comments";
 import GoBack from "@/components/bolt/Buttons/GoBack";
+import { cookies } from "next/headers";
 
 /**
  * @description This page component is responsible for rendering the edit objective interface.
@@ -25,6 +26,11 @@ export default async function EditObjectivePage({
 }: {
   params: { id: string };
 }) {
+  //! COOKIES SHOULD BE CHANGED OT NEXTAUTH
+  const cookieStore = await cookies();
+  const userId = cookieStore.get("userId")?.value;
+  console.log(userId)
+
   const objectiveId = await params;
   const objective = await getObjectiveById(parseInt(objectiveId.id));
   const objectiveClassification = objective.objectiveClassificationID;
@@ -62,6 +68,7 @@ export default async function EditObjectivePage({
         <CommentsSection
           initialComments={comments}
           objectiveId={parseInt(objectiveId.id)}
+          commenterId={userId ? parseInt(userId) : 3}
         />
       </div>
     </div>
