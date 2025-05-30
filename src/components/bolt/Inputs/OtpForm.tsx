@@ -64,13 +64,14 @@ export default function OtpForm(
 
     const checkUserInfo = useCallback(async (email: string) => {
         const response = await hasCompletedInfoAction(email);
-        if (response.success) {
+        if (response.success === true) {
             // If user has all fields filled, redirect to objectives page
             router.push("/misObjetivos");
         } else {
             // If user has not completed all fields, redirect to info status page
             router.push("/llenarInformacion");
         }
+        console.log(response);
     }, [router]);
 
     useEffect(() => {

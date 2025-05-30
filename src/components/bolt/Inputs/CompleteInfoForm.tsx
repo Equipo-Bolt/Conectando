@@ -80,7 +80,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     defaultValues: {
         id: props.user.id,
         email: props.user.email || "",
-        roleID: String(props.user.roleID) || "",
+        roleID: props.user.roleID.toString() || "",
         employeeNumber: String(props.user.employeeNumber) || "",
         fullName: props.user.fullName || "",
         bossID: String(props.user.bossID) || "",
@@ -336,31 +336,36 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
           </div>
 
           <div className="flex flex-col gap-[1rem]">
-            <FormField
-              control={form.control}
-              name="roleID"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Roles<p className="text-gemso-red"> *</p>
-                  </FormLabel>
-                  <FormMessage />
-                  <Select onValueChange={field.onChange}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {props.roles.map((role) => (
-                        <SelectItem key={role.id} value={role.id.toString()}>
-                          {role.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
+<FormField
+                control={form.control}
+                name="roleID"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>
+                        Roles<p className="text-gemso-red"> *</p>
+                    </FormLabel>
+                    <FormMessage />
+                    <Select 
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                    >
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue
+                        placeholder="Seleccionar" />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                        {props.roles.map((role) => (
+                            <SelectItem key={role.id} value={role.id.toString()}>
+                            {role.title}
+                            </SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                    </FormItem>
+                )}
             />
 
             <FormField
