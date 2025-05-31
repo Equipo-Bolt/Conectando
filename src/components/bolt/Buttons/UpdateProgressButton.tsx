@@ -9,10 +9,6 @@ import { validFormSchema } from "@/lib/formSchemas/validFormSchema";
 
 import { Form } from "@/types/Form";
 import { FormObjectives } from "@/types/FormObjectives";
-import { ErrorModal } from "../Modals/ErrorModal";
-
-import { ExclamationTriangleIcon } from "@heroicons/react/24/solid" 
-
 
 export interface ButtonProps {
     text: string;
@@ -71,20 +67,15 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
                 }
             </div>
             {/* Mensaje de Error */}
-            {errorMessages.length > 0 && (
-                <ErrorModal
-                    icon={<ExclamationTriangleIcon className="w-10 h-10" />}
-                    open={errorMessages.length > 0}
-                    setOpen={() => setErrorMessages([])}
-                    title="Por favor, revise los errores"
-                    description={
-                        errorMessages.length > 0
-                            ? errorMessages
-                            : ["No se pudo actualizar el progreso del formulario. Por favor, intente nuevamente."]
-                    }
-                    finishText="Aceptar"
-                />
-            )}
+            <div>
+                {errorMessages.length > 0 && (
+                    <div className="text-red-500 mt-2 flex flex-col items-end text-xs">
+                        {errorMessages.map((message, index) => (
+                            <p key={index}>{message}</p>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>  
     );
 }

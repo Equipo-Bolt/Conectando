@@ -6,7 +6,6 @@ import { getAllDivisions } from "@/lib/fetches/division/getAllDivisions";
 import { getAllAreas } from "@/lib/fetches/area/getAllAreas";
 import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
 import { getAllBosses } from "@/lib/fetches/user/boss/getAllBosses";
-import { getUserById } from "@/lib/fetches/user/getUserById";
 
 // Custom Components
 import CreateUserForm from "@/components/bolt/Inputs/CreateUserForm";
@@ -19,37 +18,15 @@ import { Area } from "@/types/Area";
 import { BusinessUnit } from "@/types/BusinessUnit";
 import { User } from "@/types/User";
 
-// NextAuth
-import { auth } from "@/app/auth";
-
 /**
  * @description This page is used to create a new user.
  */
 async function CreateUserPage() {
-  const session = await auth();
-
-
   const roles: Role[] = await getAllRoles();
   const divisions: Division[] = await getAllDivisions();
   const areas: Area[] = await getAllAreas();
   const bus: BusinessUnit[] = await getAllBusinessUnits();
-  const allBosses: User[] = await getAllBosses();
-
-  if (!session?.user) {
-      throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
-  }
-
-  const User = await getUserById(Number(session.user.id));
-
-  const allowedRoles = [3, 5, 6, 7];
-
-  if (!User || !allowedRoles.includes(User.roleID)) {
-      throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
-  }
-
-const bosses = allBosses.filter(
-  (boss) => boss.id !== User.id
-);
+  const bosses: User[] = await getAllBosses();
 
   return (
     <div>
