@@ -74,14 +74,13 @@ interface CompleteUserFormProps {
 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CompleteInfoForm(props: CompleteUserFormProps) {
   const router = useRouter();
-  
 
   const form = useForm<CompleteUserFormData>({
     resolver: zodResolver(completeUserInfoSchema),
     defaultValues: {
         id: props.user.id,
         email: props.user.email || "",
-        roleID: String(props.user.roleID) || "",
+        roleID: props.user.roleID.toString() || "",
         employeeNumber: String(props.user.employeeNumber) || "",
         fullName: props.user.fullName || "",
         bossID: String(props.user.bossID) || "",
@@ -108,15 +107,15 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     const userData: CompleteUserFormData = {
       id: parsedData.data.id,
       email: parsedData.data.email,
-      roleID: String(parsedData.data.roleID),
-      employeeNumber: String(parsedData.data.employeeNumber),
+      roleID: parsedData.data.roleID.toString(),
+      employeeNumber: parsedData.data.employeeNumber?.toString(),
       fullName: parsedData.data.fullName,
-      bossID: String(parsedData.data.bossID),
-      divisionID: String(parsedData.data.divisionID),
-      businessUnitID: String(parsedData.data.businessUnitID) ,
+      bossID: parsedData.data.bossID?.toString(),
+      divisionID: parsedData.data.divisionID?.toString(),
+      businessUnitID: parsedData.data.businessUnitID?.toString() ,
       companySeniority: parsedData.data.companySeniority ,
       positionSeniority: parsedData.data.positionSeniority ,
-      areaID: String(parsedData.data.areaID) ,
+      areaID: parsedData.data.areaID?.toString() ,
       position: parsedData.data.position ,
       companyContribution: parsedData.data.companyContribution ,
     };
@@ -129,18 +128,11 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
   useEffect(() => {
     if (state === null) return;
     else if (state.success) {
-    const userRoleID = form.getValues("roleID");
-    if (userRoleID === "1") {
-        router.push("/misObjetivos");
-    } else if (userRoleID === "2" || userRoleID === "3") {
-        router.push("/misColaboradores");
-    } else{
-        router.push("/usuarios");
-    }
+      router.push("/usuarios");
     } else {
       console.error("Error creating user:", state);
     }
-  }, [state, router, form]);
+  }, [state, router]);
 
   // Here we are using the useState hook to manage the state of the filtered business units
   const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<
@@ -163,7 +155,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
         (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
       );
       setFilteredBusinessUnits(filtered);
-      form.setValue("businessUnitID", String(filtered[0]?.id) || "");
+      form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
     }
 
   }, [currentDivision, props.businessUnits, form]);
@@ -357,7 +349,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         onValueChange={field.onChange}
                         value={field.value}
                         defaultValue={field.value}
-                        disabled={true}
                     >
                         <FormControl>
                         <SelectTrigger>
@@ -367,7 +358,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         </FormControl>
                         <SelectContent>
                         {props.roles.map((role) => (
-                            <SelectItem key={role.id} value={String(role.id)}>
+                            <SelectItem key={role.id} value={role.id.toString()}>
                             {role.title}
                             </SelectItem>
                         ))}

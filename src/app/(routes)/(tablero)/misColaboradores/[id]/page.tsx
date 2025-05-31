@@ -12,8 +12,12 @@ import { Form } from "@/types/Form";
 import { Progress } from "@/types/Progress";
 import { User } from "@/types/User";
 
-// * NextAuth
-import { auth } from "@/app/auth";
+const stateComponentMap: { [key: string]: React.ReactNode } = {
+  Borrador: <Draft />,
+  Enviado: <Feedback />,
+  Aprobado: <p> Aprobado </p>,
+  Calificado: <p> Calificado </p>,
+};
 
 /**
  * @description This page displays the objectives of a collaborator based on their progress state.
@@ -32,32 +36,9 @@ async function CollaboratorObjectivesPage({
 }: {
   params: { id: string };
 }) {
-  const session = await auth();
-
-  if (!session?.user) {
-      throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
-  }
-
-  const User = await getUserById(Number(session.user.id));
-
-  const allowedRoles = [2, 4, 6, 7];
-
-  if (!User || !allowedRoles.includes(User.roleID)) {
-      throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
-  }
-  
-
   const userId = await params;
   const user: User = await getUserById(parseInt(userId.id));
   const formId: string = await getFormIdByUserId(user.id);
-
-  
-  const stateComponentMap: { [key: string]: React.ReactNode } = {
-    Borrador: <Draft  />,
-    Enviado: <Feedback userId={Number(userId.id)} />,
-    Aprobado: <p> Aprobado </p>,
-    Calificado: <p> Calificado </p>,
-  };
 
   if (formId === "Sin Formulario Activo") {
     return (

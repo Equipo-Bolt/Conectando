@@ -15,20 +15,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Role } from "@/types/Role";
+import { Division } from "@/types/Division";
 import { BusinessUnit } from "@/types/BusinessUnit";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  roles: Role[];
+  divisions: Division[];
   businessUnits: BusinessUnit[];
 }
 
 export function DataTableUsers<TData, TValue>({
   columns,
   data,
-  roles,
+  divisions,
   businessUnits,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
@@ -36,9 +36,9 @@ export function DataTableUsers<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-  const getRoleName = (roleID: number): string => {
-    const role = roles.find((r) => r.id === roleID);
-    return role ? role.title : "Sin Rol";
+  const getDivisionName = (divisionId: number): string => {
+    const division = divisions.find(d => d.id === divisionId);
+    return division ? division.title : "Sin División";
   };
 
   // Helper function to get business unit title by ID
@@ -82,11 +82,9 @@ export function DataTableUsers<TData, TValue>({
                   return (
                     <TableCell key={cell.id} className="py-3 px-4 items-center">
                       {/* Map the cell content depending on division or business unit id*/}
-                      {
-                      cell.column.columnDef.header === "Roles" ? (
-                        getRoleName(cell.getValue() as number)
-                      ) : 
-                      cell.column.columnDef.header ===
+                      {cell.column.columnDef.header === "División" ? (
+                        getDivisionName(cell.getValue() as number)
+                      ) : cell.column.columnDef.header ===
                         "Unidad de Negocio" ? (
                         getBusinessUnitName(cell.getValue() as number)
                       ) : (

@@ -575,7 +575,7 @@ async function main() {
       },
       role: {
         connect: {
-          id: 6,
+          id: 3,
         },
       },
       businessUnit: {
@@ -605,7 +605,7 @@ async function main() {
       },
       role: {
         connect: {
-          id: 6,
+          id: 3,
         },
       },
       businessUnit: {

@@ -23,15 +23,6 @@ export const validFormSchema = z.array(z.object({
         message: `No hay objetivos para la clasificación ${classificationTitle}`,
       });
     }
-    // Check if each objective has a goal
-    for (const objective of objectives) {
-      if (!objective.goal || objective.goal.trim() === "") {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `El objetivo "${objective.title}" no tiene una meta definida.`,
-        });
-      }
-    } 
     
     // Track classification titles for weight validation later
     if (!classificationGroups.has(classificationTitle)) {
