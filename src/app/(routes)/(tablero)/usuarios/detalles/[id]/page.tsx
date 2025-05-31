@@ -49,7 +49,7 @@ export default async function UserDetailsPage({
     if (!User || !allowedRoles.includes(User.roleID)) {
         throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
     }
-
+    
     const userData: UpdateUserFormData = {
         id: user.id,
         email: user.email,
@@ -65,6 +65,7 @@ export default async function UserDetailsPage({
         position: user.jobPosition?.toString() || "",
         companyContribution: user.companyContribution || "",
     };
+
 
     return (
         <div>

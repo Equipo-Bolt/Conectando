@@ -39,6 +39,8 @@ export default async function EditObjectivePage({
 
   const User = await getUserById(Number(session.user.id));
 
+  console.log("User", User);
+
   const allowedRoles = [1, 4, 5, 7];
 
   if (!User || !allowedRoles.includes(User.roleID)) {
@@ -82,7 +84,8 @@ export default async function EditObjectivePage({
         <CommentsSection
           initialComments={comments}
           objectiveId={parseInt(objectiveId.id)}
-          commenterId={userId ? parseInt(userId) : 3}
+          commenterId={ userId ? parseInt(userId) : 0}
+          commenter={User.fullName ? User.fullName : "Usuario Anónimo"}
         />
       </div>
     </div>
