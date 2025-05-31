@@ -7,6 +7,8 @@ import { Area } from "@/types/Area";
  * @returns Promise of type {@link Area}[]
  */
 
+// lol que mal
+
 export async function getAllAreas() {
     try {
         const areas = await prisma.area.findMany({
