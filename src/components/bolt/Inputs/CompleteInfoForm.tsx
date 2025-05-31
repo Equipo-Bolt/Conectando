@@ -74,6 +74,7 @@ interface CompleteUserFormProps {
 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CompleteInfoForm(props: CompleteUserFormProps) {
   const router = useRouter();
+  
 
   const form = useForm<CompleteUserFormData>({
     resolver: zodResolver(completeUserInfoSchema),
@@ -128,11 +129,18 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
   useEffect(() => {
     if (state === null) return;
     else if (state.success) {
-      router.push("/usuarios");
+    const userRoleID = form.getValues("roleID");
+    if (userRoleID === "1") {
+        router.push("/misObjetivos");
+    } else if (userRoleID === "2" || userRoleID === "3") {
+        router.push("/misColaboradores");
+    } else{
+        router.push("/usuarios");
+    }
     } else {
       console.error("Error creating user:", state);
     }
-  }, [state, router]);
+  }, [state, router, form]);
 
   // Here we are using the useState hook to manage the state of the filtered business units
   const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<
@@ -349,6 +357,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         onValueChange={field.onChange}
                         value={field.value}
                         defaultValue={field.value}
+                        disabled={true}
                     >
                         <FormControl>
                         <SelectTrigger>
