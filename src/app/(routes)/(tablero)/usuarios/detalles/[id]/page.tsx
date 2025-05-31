@@ -16,6 +16,9 @@ import { Role } from "@/types/Role";
 import { BusinessUnit } from "@/types/BusinessUnit";
 import { Area } from "@/types/Area";
 
+// NextAuth
+import { auth } from "@/app/auth";
+
 export default async function UserDetailsPage({
     params,
 }: {
@@ -28,8 +31,25 @@ export default async function UserDetailsPage({
     const roles : Role[] = await getAllRoles();
     const businessUnits : BusinessUnit[]= await getAllBusinessUnits();
     const areas : Area[] = await getAllAreas();
-    const bosses: User[] = await getAllBosses();
+    const allBosses : User[] = await getAllBosses();
+    const bosses: User[] = allBosses.filter(
+        (boss) => boss.id !== user.id
+    );
 
+    const session = await auth();
+
+    if (!session?.user) {
+        throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
+    }
+
+    const User = await getUserById(Number(session.user.id));
+
+    const allowedRoles = [3, 5, 6, 7];
+
+    if (!User || !allowedRoles.includes(User.roleID)) {
+        throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
+    }
+    
     const userData: UpdateUserFormData = {
         id: user.id,
         email: user.email,
@@ -45,6 +65,7 @@ export default async function UserDetailsPage({
         position: user.jobPosition?.toString() || "",
         companyContribution: user.companyContribution || "",
     };
+
 
     return (
         <div>

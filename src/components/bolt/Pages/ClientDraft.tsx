@@ -21,7 +21,6 @@ export default function ClientDraft({
   initialData: FormObjectives[];
 }) {
   const [data, setData] = useState(initialData);
-  const totalWeight = data.reduce((sum, item) => sum + item.weight, 0);
 
   // Updates the weight
   const updateWeight = (id: number, newWeight: number) => {

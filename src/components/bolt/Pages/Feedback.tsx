@@ -9,19 +9,21 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
 
 import { FormObjectives } from "@/types/FormObjectives";
 
-import { cookies } from "next/headers";
-
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
 import WeightField from "@/components/bolt/Inputs/WeightField";
 import WeightSum from "@/components/bolt/DataTables/WeightSum";
 
-export default async function Feedback() {
-  const cookieStore = await cookies();
-  const collaboratorId = cookieStore.get("collaboratorId")?.value;
-  console.log("colab " + collaboratorId);
-  const userFormId = await getFormIdByUserId(Number(collaboratorId));
+interface FeedbackProps {
+  userId: number;
+}
+
+export default async function Feedback(
+  props: FeedbackProps
+) {
+  console.log("Feedback component props:", props);
+  const userFormId = await getFormIdByUserId(Number(props.userId));
   const form = await getFormById(parseInt(userFormId));
   const data = (await getObjectivesByFormId(
     parseInt(userFormId)
