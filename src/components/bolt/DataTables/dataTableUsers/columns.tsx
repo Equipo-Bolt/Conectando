@@ -5,7 +5,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { User } from "@/types/User";
 
 import {ArrowRightEndOnRectangleIcon} from "@heroicons/react/24/outline";
-import { setCustomCookieAction } from "@/app/actions/cookies/setCustomCookie";
 import Link from "next/link";
 
 import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
@@ -22,14 +21,14 @@ export const columns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: "divisionID",
-    header: "División",
+    accessorKey: "roleID",
+    header: "Roles",
     size: 100,
     cell: ({ row }) => {
-      const divisionName = row.original.divisionID;
+      const roleName = row.original.roleID;
       return (
         <div className="flex items-center">
-          <span className="ml-2">{divisionName}</span>
+          <span className="ml-2">{roleName}</span>
         </div>
       );
     }
@@ -55,10 +54,7 @@ export const columns: ColumnDef<User>[] = [
       const userId = row.original.id;
       return (
         <div className="flex gap-[1rem]">
-          <button onClick={() => {
-            setCustomCookieAction("collaboratorId", String(userId));
-            setTimeout(() => {}, 15000);
-          }}>
+          <button>
             <Link href={`/usuarios/detalles/${userId}`}>
               <ArrowRightEndOnRectangleIcon className="text-gemso-blue w-5 h-5" />
             </Link>
