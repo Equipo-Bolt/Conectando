@@ -10,9 +10,7 @@ import { FormObjectives } from "@/types/FormObjectives";
 export default async function Draft() {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) {
-    return <p>Error: User not found.</p>;
-  }
+
   const formId = await getFormIdByUserId(Number(userId));
   const form = await getFormById(Number(formId));
   const data = (await getObjectivesByFormId(

@@ -132,7 +132,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     const userRoleID = form.getValues("roleID");
     if (userRoleID === "1") {
         router.push("/misObjetivos");
-    } else if (userRoleID === "2" || userRoleID === "3") {
+    } else if (userRoleID === "2" || userRoleID === "4") {
         router.push("/misColaboradores");
     } else{
         router.push("/usuarios");

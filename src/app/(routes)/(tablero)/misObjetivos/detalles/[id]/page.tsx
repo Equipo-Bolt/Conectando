@@ -33,19 +33,7 @@ export default async function EditObjectivePage({
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (!session?.user) {
-      throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
-  }
-
   const User = await getUserById(Number(session.user.id));
-
-  console.log("User", User);
-
-  const allowedRoles = [1, 4, 5, 7];
-
-  if (!User || !allowedRoles.includes(User.roleID)) {
-      throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
-  }
 
   const objectiveId = await params;
   const objective = await getObjectiveById(parseInt(objectiveId.id));
