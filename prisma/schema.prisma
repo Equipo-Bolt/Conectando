@@ -19,7 +19,7 @@ datasource db {
 //* 5. After that, add both following colums: createdAt and updatedAt --
 //*    for createdAt at use atribute @now() and for updatedAt us @updatedAt @default(now())
 //*    Both colums are DateTime type
-//* 6. Lastly add the colum "deactived" with Boolean type (equals to Bit) --
+//* 6. Lastly add the colum "deactivated" with Boolean type (equals to Bit) --
 //*    and with default value of "false" 
 
 model Objective {
@@ -29,26 +29,26 @@ model Objective {
   title String 
   goal String?
   result String? 
-  classification ObjectiveClassification @relation(fields: [objectiveClassificationID], references: [id])
+  objectiveClassification ObjectiveClassification @relation(fields: [objectiveClassificationID], references: [id])
   objectiveClassificationID Int
   form Form @relation(fields: [formID], references: [id])
   formID Int
   comments Comment[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Objectives")
 }
 
 model ObjectiveClassification {
   id Int @id @default(autoincrement())
   weight Int?
-  classificationTitle Classification @relation(fields: [classificationID], references: [id])
-  classificationID Int
+  classificationCatalog Classification @relation(fields: [classificationCatalogID], references: [id])
+  classificationCatalogID Int
   objectives Objective[] //one-to-many
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("ObjectiveClassifications")
 }
 
@@ -58,7 +58,7 @@ model Classification {
   objectiveClassifications ObjectiveClassification[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Classifications")
 }
 
@@ -68,9 +68,11 @@ model Comment {
   commentedAt DateTime?
   objective Objective @relation(fields: [objectiveID], references: [id])
   objectiveID Int
+  commenter User @relation("WrittenComments", fields: [commenterID], references: [id])
+  commenterID Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Comments")
 }
 
@@ -87,7 +89,7 @@ model Form {
   objectives Objective[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Forms")
 }
 
@@ -97,13 +99,13 @@ model Progress {
   forms Form[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Progresses")
 }
 
 model User {
   id Int @id @default(autoincrement())
-  employeeNumber Int? @unique
+  employeeNumber Int?
   fullName String? 
   email String? @unique
   jobPosition String? 
@@ -118,12 +120,14 @@ model User {
   businessUnitID Int?
   area Area? @relation(fields: [areaID], references: [id])
   areaID Int?
+  userOtp UserOtp? @relation("AuthOtp")
   collaborators User[] @relation("SubordinateOf")
   writtenForms Form[] @relation("WrittenForms")
   evaluatedForms Form[] @relation("EvaluatedForms")
+  comments Comment[] @relation("WrittenComments")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Users")
 }
 
@@ -133,7 +137,7 @@ model Role {
   users User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Roles")
 }
 
@@ -143,7 +147,7 @@ model Division {
   businessUnits BusinessUnit[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Divisions")
 }
 
@@ -155,7 +159,7 @@ model BusinessUnit {
   users User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("BusinessUnits")
 }
 
@@ -165,7 +169,7 @@ model Area {
   users User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Areas")
 }
 
@@ -176,6 +180,18 @@ model Period {
   isCurrent Boolean
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  deactived Boolean @default(false)
+  deactivated Boolean @default(false)
   @@map("Periods")
+}
+
+model UserOtp {
+  id Int @id @default(autoincrement())
+  otp String
+  expiresAt DateTime
+  user User @relation("AuthOtp",fields: [userID], references: [id])
+  userID Int @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  deactivated Boolean @default(false) //! included, even though otps WILL be deleted
+  @@map("UserOtps")
 }

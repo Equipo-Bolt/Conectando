@@ -1,4 +1,4 @@
-import SideNav from "@/components/sidebar";
+import SideNav from "@/components/bolt/Sidebars/sidebar";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">

@@ -1,5 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { TypePeriod } from "@/types/TypePeriod";
+import { Period } from "@/types/Period";
+
+/**
+ * * getPeriodById() gets a period by its id
+ * 
+ * @param periodId<number> id of the period to search
+ * @returns Promise of type {@link Period}
+ */
 
 export async function getPeriodById(periodId : number) {
     try {
@@ -15,11 +22,12 @@ export async function getPeriodById(periodId : number) {
         })
 
         if (!period) {
-            throw new Error ("Period does not exist");
+            throw new Error ("El Periodo no existe");
         }
 
-        return period as TypePeriod;
+        return period as Period;
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching period: ${(error as Error).message}`);
+        return ({} as Period);
     }
 }

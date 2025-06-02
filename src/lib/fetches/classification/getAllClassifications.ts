@@ -1,22 +1,28 @@
 import { prisma } from "@/lib/prisma";
+import { Classification } from "@/types/Classification";
 
-import { TypeClassification } from "@/types/TypeClassification";
+/**
+ * * getAllClassifications() gets all created and not deactivated classifications
+ *
+ * @returns Promise of type {@link Classification}[]
+ */
 
 export async function getAllClassifications() {
     try {
         const classifications = await prisma.classification.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (classifications.length === 0) {
-            throw new Error ("No hay clasificaciones en los catalogos, checa tu db")
+            throw new Error ("No hay clasificaciones")
         }
 
-        return classifications.map(({ deactived, updatedAt, ...c }) => ({
+        return classifications.map(({ deactivated, updatedAt, ...c }) => ({
             ...c,
             createdAt: c.createdAt.toISOString()
-        })) as TypeClassification[];
+        })) as Classification[];
     } catch(error) {
-        throw new Error(`Error al cargar las clasificaiones del catalogo: ${(error as Error).message}`);
+        console.error(`Error fetching classifications: ${(error as Error).message}`);
+        return ([] as Classification[]);
     }
 }

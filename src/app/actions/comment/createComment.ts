@@ -1,47 +1,72 @@
 "use server";
 
-import { prisma } from '@/lib/prisma'; //! Changed path to use @ shortcut
-import type { Comment } from '@prisma/client';
-//! Cannot use type of prisma because it forces frontend to know or access
-//! data they shouldnt.
+import { prisma } from '@/lib/prisma';
+
+import { ServerActionResponse } from '@/types/ServerActionResponse';
+
+import { MutateComment } from '@/types/Comment';
+import { getObjectiveById } from '@/lib/fetches/objective/getObjectiveById';
+import { getUserById } from '@/lib/fetches/user/getUserById';
 
 /**
- * ! This is an example of the data Frontend will need to send to backend if we use prisma type
+ * * createCommentAction() Creates a comment
+
+ * @param prevState<{@link ServerActionResponse}> Initial state of action, set this parameter to null
+ * @param data<{@link MutateComment}> Must include objectiveID, commenterID, and description of the comment.
  * 
-  const dummy: Form = {
-    id: 1,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    evaluatorID: 1,
-    collaboratorID : 1,
-    progressID: 1,
-    approvedAt: null,
-    gradedAt: null,
-    deactived: t
-  };
-  *TODO The implementation is still correct but in the future will need---
-  *TODO--- to create interfaces (sorry).
+ * @returns Promise of type {@link ServerActionResponse}
  */
 
-
-export async function createComment(data: Comment) {
-  if (!data.objectiveID) {
-    throw new Error('objectiveID is required in data');
-  }
+export async function createCommentAction(
+  prevState: ServerActionResponse | null,
+  data: MutateComment
+): Promise<ServerActionResponse> {
 
   try {
-    //! We can omit creating a comment separately and then linkin it ---
-    await prisma.objective.update({
-      where: { id: data.objectiveID },
+
+    if (!data.objectiveID) {
+      throw new Error("objectiveID es requerido en 'data'");
+    }
+
+    if (!data.commenterID) {
+      throw new Error("commenterID es requerido en 'data'");
+    }
+
+    if(!data.description){
+      throw new Error("No se puede crear un comentario vacío")
+    }
+
+    const objectiveExists = await getObjectiveById(data.objectiveID)
+    if(!objectiveExists.id){
+      throw new Error("El objetivo no existe");
+    }
+
+    const commenterExists = await getUserById(data.commenterID)
+    if(!commenterExists.id){
+      throw new Error("El usuario comentando no existe")
+    }
+
+    await prisma.comment.create({
       data: {
-        comments: {
-          create: data //*--- By using the create method in the comments of an objective
-        }
+        description: data.description,
+        commentedAt: new Date(),
+        objective: {
+          connect: {
+            id: data.objectiveID
+          }
+        },
+        commenter: {
+          connect: {
+            id: data.commenterID
+          }
+        },
       }
     });
 
-    return "Comment created"; //!Frontend will (probably) not use the created entity this way
+    return {success: true, message: "Comentario creado"}
+
   } catch (error) {
-    throw new Error('Failed to create comment');
+    console.error(`Error when creating comment: ${(error as Error).message}`)
+    return {success: false, error: `${(error as Error).message}`}
   }
 } 

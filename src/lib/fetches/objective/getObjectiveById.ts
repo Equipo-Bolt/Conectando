@@ -1,18 +1,27 @@
 import { prisma } from "@/lib/prisma";
-import { TypeObjective } from "@/types/TypeObjective";
+import { Objective } from "@/types/Objective";
 
-export async function getObjectiveById(objectiveId : number) {
-    try {
-        const objective = await prisma.objective.findUnique({
-            where: { id : objectiveId }
-        })
+/**
+ * * getObjectiveById() gets an objective by its id
+ *
+ * @param objectiveId<number> id of the objective to search
+ * @returns Promise of type {@link Objective}
+ */
 
-        if (!objective) {
-            throw new Error ("Objective does not exist");
-        }
+export async function getObjectiveById(objectiveId: number) {
+  try {
+    const objective = await prisma.objective.findUnique({
+      where: { id: objectiveId },
+      include: { comments: true },
+    });
 
-        return objective as TypeObjective;
-        } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+    if (!objective) {
+      throw new Error("El Objetivo no existe");
     }
+
+    return objective as Objective;
+  } catch (error) {
+    console.error(`Error fetching objective: ${(error as Error).message}`);
+    return {} as Objective;
+  }
 }

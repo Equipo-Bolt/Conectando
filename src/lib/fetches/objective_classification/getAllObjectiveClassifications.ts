@@ -1,26 +1,33 @@
 import { prisma } from "@/lib/prisma";
-import { TypeObjectiveClassification } from "@/types/TypeObjectiveClassification";
+import { ObjectiveClassification } from "@/types/ObjectiveClassification";
+
+/**
+ * * getAllObjectiveClassifications() gets all created and not deactivated objective classifications
+ *
+ * @returns Promise of type {@link ObjectiveClassification}[]
+ */
 
 export async function getAllObjectiveClassifications() {
     try {
         const objectiveClassifications = await prisma.objectiveClassification.findMany({
-            where: { deactived : false },
-            include: { classificationTitle : true }
+            where: { deactivated : false },
+            include: { classificationCatalog : true }
         });
 
         if (objectiveClassifications.length === 0) {
-            throw new Error ("There are no Objectives Classifications")
+            throw new Error ("No hay Clasificaciones de Objetivos")
         }
 
         return objectiveClassifications.map(({ 
-            deactived, 
+            deactivated, 
             updatedAt,
-            classificationTitle,
+            classificationCatalog,
             ...oc }) => ({ 
                 ...oc, 
-                classificationTitle: classificationTitle?.title //! Include Classification title
-            })) as TypeObjectiveClassification[];
+                classificationTitle: classificationCatalog?.title
+            })) as ObjectiveClassification[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching objective classifications: ${(error as Error).message}`);
+        return ([] as ObjectiveClassification[]);
     }
 }

@@ -5,108 +5,106 @@ import { prisma } from "@/lib/prisma";
 import { getClassificationById } from "@/lib/fetches/classification/getClassificationById";
 import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 
-import { MutateObjectiveInfo } from "@/types/TypeObjective";
+import { CreateObjectiveFormData } from "@/types/Objective";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
 
 /**
- * * createObjectiveAction() -> Esta función crea un objetivo y puede (debe) usarse con useActionSate
- * * Esta función tambien se encarga de buscar si el objetivo que estas creando ya va estar asignado a una-
- * * -relación de Objectivo-Clasificación, si no la encuentra la crea
- * 
- * *Parametros:
- * @param prevState<string> Estado inicial de la action, debe ser nulo o "Enviando..."
- * @param data<TypeObjective> El objeto de TypeObjective creado a partir de la información del formulario para crear objectivo
- * * data.classificationCatalogID<string> Id de la Clasificacion del Catalogo de la db (las que son <U4tr0)
- * @returns Retorna un mensaje o estado de la accion. Puede ser "Se creo" o "Hubo un error".
+ * * createObjectiveAction() This function creates an objective
+ * * This function searches the objective by the given ID to see if it already has an ObjectiveClassification relation
+ * * to be added to, if there are no relations this function creates it.
+ *
+ * @param prevState<string | null> Initial state of action, set this parameter to null
+ * @param data<{@link CreateObjectiveFormData}> Must include classificationCatalogID to assign new classification and new atributes for "formID" | "title" | "goal" | "result" | "weight"
+ * @returns Promise of type {@link ServerActionResponse}
  */
 
 export async function createObjectiveAction(
-  prevState: string | null,
-  data: MutateObjectiveInfo //* TypeObjective ya incluye los ids de form y de clasificacion
-) {
-  //! ERRORES para debugeo
-  if (!data.formID) {
-    throw new Error("formID es requerida en data");
-  }
-
-  if (!data.classificationCatalogID) {
-    throw new Error("classicationId is es requerida en data")
-  }
-
-  if (!data.title) {
-    throw new Error("title es requerida en data")
-  }
-
-  if(!data.weight) {
-    throw new Error("weight es requerida en data")
-  }
-
+  prevState: ServerActionResponse | null,
+  data: CreateObjectiveFormData
+): Promise<ServerActionResponse> {
   try {
-    //* Logica insana para buscar relación Objective-Classification si ya la hay
+    //! Debugging errors, should not appear for user
+    const parsedData =  {  ...data, weight: Number(data.weight), classification : Number(data.classification)} 
 
-    //* 1. Conseguimos la clasificacion
-    const classification = await getClassificationById(Number(data.classificationCatalogID));
-
-    if (!classification) {
-      throw new Error ("La clasificación no se encuentra en los catalogos")
+    if (!parsedData.formID) {
+      throw new Error(
+        "Data debe contener en formID el id del formulario del objetivo"
+      );
     }
 
-    //* 2. Conseguimos los demas Objetivos del Formulario
-    const objectivesFromObjectives = await getObjectivesByFormId(data.formID);
+    if (!parsedData.classification) {
+      throw new Error(
+        "Data debe contener en classificationCatalogID el id de la classificación del catalogo, no de a relación"
+      );
+    }
 
-    //* 3. Verificar que haya objetivos con la misma clasificación (osea esos ya nos diran que hay relacion)
+    if (!parsedData.title) {
+      throw new Error("Data debe contener en title el titulo del objetivo");
+    }
+
+    if (!parsedData.weight) {
+      throw new Error("Data debe contener en weight el peso del objetivo");
+    }
+
+    const targetClassification = await getClassificationById(parsedData.classification);
+
+    if (!targetClassification) {
+      throw new Error("La clasificación no se encuentra en los catalogos");
+    }
+
+    const objectivesFromObjectives = await getObjectivesByFormId(parsedData.formID);
+
     const relationId = objectivesFromObjectives.find(
-      (ofo) => ofo.classificationTitle === classification.title
+      (ofo) => ofo.classificationTitle === targetClassification.title
     )?.objectiveClassificationID;
 
-    //! sacar id y formId de data, nombre feo pero se entiende
-    const { id, formID, classificationCatalogID, ...dataWithoutIds } = data; 
-    //* 3.5 Creamos la relación si es la primera vez que hacemos un objetivo y creamos el objetivo
+    const { id, formID, classification, ...dataWithoutIds } = parsedData;
+   
     if (objectivesFromObjectives.length === 0 || !relationId) {
-      //*primero la objectiveClassification
-      const newObjectiveClassification = await prisma.objectiveClassification.create({
-        data: {
-          weight: 0,
-          classificationTitle: {
-            connect: {
-              id : classification.id
-            }
-          }
-        }
-      })
+      const newObjectiveClassification =
+        await prisma.objectiveClassification.create({
+          data: {
+            weight: 0,
+            classificationCatalog: {
+              connect: {
+                id: targetClassification.id,
+              },
+            },
+          },
+        });
 
-      //*segundo crear el objetivo, creandolo dentro del form  
       await prisma.form.update({
-        where: { id: data.formID, deactived: false },
+        where: { id: parsedData.formID, deactivated: false },
         data: {
           objectives: {
             create: {
               ...dataWithoutIds,
-              objectiveClassificationID: newObjectiveClassification.id
+              weight: Number(dataWithoutIds.weight),
+              objectiveClassificationID: newObjectiveClassification.id,
             },
           },
         },
       });
 
-      return "Objetivo Creado"; //!Success
+      return {success: true, message:"Objetivo Creado"};
     }
 
-    //* 4. Existe relación? Va ahora checa que no este repetido el obj
     const duplicateObjective = await prisma.objective.findFirst({
-      where: { 
+      where: {
         ...dataWithoutIds,
-        deactived: false
+        deactivated: false,
       },
-      select:{
-        id: true
-      }
-    })
+      select: {
+        id: true,
+      },
+    });
 
     if (duplicateObjective) {
-      return "Ya existe un Objetivo identico" //! Fail
+      throw new Error("Ya existe un Objetivo identico");
     }
 
     await prisma.form.update({
-      where: { id: data.formID, deactived: false },
+      where: { id: parsedData.formID, deactivated: false },
       data: {
         objectives: {
           create: {
@@ -117,8 +115,9 @@ export async function createObjectiveAction(
       },
     });
 
-    return "Objetivo Creado"; //!Success
+    return { success: true, message : "Objetivo Creado"};
   } catch (error) {
-    throw new Error(`Failed to create objective: ${(error as Error).message}`);
+    console.error(`Failed to create objective: ${(error as Error).message}`);
+    return { success: false, error : (error as Error).message}
   }
 }

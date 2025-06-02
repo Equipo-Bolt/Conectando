@@ -1,18 +1,25 @@
 import { prisma } from "@/lib/prisma";
-import { TypeComment } from "@/types/TypeComment";
+import { Comment } from "@/types/Comment";
+
+/**
+ * * getAllComments() gets all created and not deactivated comments
+ *
+ * @returns Promise of type {@link Comment}[]
+ */
 
 export async function getAllComments() {
     try {
         const comments = await prisma.comment.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (comments.length === 0) {
-            throw new Error ("There are no Comments")
+            throw new Error ("No hay commentarios")
         }
 
-        return comments.map(({ deactived, updatedAt, ...c }) => c) as TypeComment[];
+        return comments.map(({ deactivated, updatedAt, ...c }) => c) as Comment[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching comments: ${(error as Error).message}`);
+        return ([] as Comment[]);
     }
 }

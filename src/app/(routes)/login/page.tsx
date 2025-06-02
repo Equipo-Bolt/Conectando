@@ -1,26 +1,12 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import AuthCard from "@/components/bolt/Inputs/AuthCard"
 
-const LoginPage = () => {
+export default function LoginPage() {
   return (
     <div>
-      <h1>Login</h1>
-      <form>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name="email" required />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" required />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      <div>
-        <Button variant={"gemso_yellow"}>Click me</Button>
+      <div className="flex h-screen w-full items-center justify-center z-10 relative">
+        <AuthCard />
       </div>
+      <div className="absolute top-0 left-0 right-0 bottom-0 bg-[url(/Molinos-GEMSO.jpg)] bg-cover bg-center opacity-50" />
     </div>
-  );
-};
-
-export default LoginPage;
+  )
+}

@@ -6,10 +6,32 @@
 - First, install the depencies of the project:
 
 ```sh
-npm i
+npm i --force
 ```
+$~$
 
-- Second, run the development server with the command below:
+- Next input the following command to establish connection with your local DB 
+
+***For this step you should have the uncommited secure folder in your project root and your database connection url in a .env file**
+
+```sh prisma
+npx prisma migrate dev --skip-generate
+```
+You should see the following message after naming your migration if prompted:
+
+*The seed command has been executed.*
+$~$
+
+***If the console does not display the  message, run this command**
+```sh prisma
+npx prisma db seed
+```
+And you should see:
+
+*Catalogs and Dummy data seeded.*
+
+$~$
+- Third, run the development project with the command below:
 
 ```sh
 npm run dev
@@ -19,14 +41,25 @@ npm run dev
 
 *Every code saved inside the src directory will refresh the app*
 
+$~$
 
+## VSCODE Extensions :pencil2:
+Install the following VSCODE Extensions:
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [BetterComments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
+- [TailwindInterface](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
 
-### General Branch Naming Conventions
+$~$
+# Developing Conventions
+
+## General Branch Naming Conventions :mag:
 - All branch names must be in English.
-- Each branch name should have a maximum of three words after the branch divition, like Backend/
+- Each branch name should have a maximum of three words after the branch division, like Backend/
 - Each word must start with an uppercase letter, except for the main branches (`main` and `staging`).
 
-## Main and Staging Branches
+$~$
+
+## Main and Staging Branches :lock:
 - The project will have only one main branch called `main`.
 - The `main` branch can only be updated through pull requests from a `QA` branch.
 - Direct changes or pushes to the `main` branch are not allowed.
@@ -34,7 +67,9 @@ npm run dev
 - The `staging` branch serves to merge completed features to create a functional version.
 - The `staging` branch should be frequently updated for the creation of new feature branches.
 
-## QA Branches
+$~$
+
+## QA Branches :wrench:
 - QA branches will be named following the pattern `QA/{sprint number}-{revision number}`.
 - The QA team will use these branches to review and test a version before merging it into `main`.
 - No development or bug fixes will be performed on QA branches.
@@ -46,21 +81,42 @@ npm run dev
 QA/1-2   QA/2-4
 ```
 
+$~$
+
 ### Feature Branches
 - Feature branches will be created from `staging` and named following the pattern: `{layer}/ft/{feature name}`.
 - Once a group of functionalities is completed, a QA branch will be created as described earlier for the QA team to review.
 
-**Examples of feature branch names:**
+**Examples of Feature branch names:**
 ```
 Backend/ft/CreateUser   Frontend/ft/Collaborator   Frontend/ft/HomePage
 ```
 
+$~$
 
+### Hotfix Branches 
+- Similar to Feature Branches, these branches will be created from `staging` and named following the pattern: `{layer}/hotfix/{fix name}`.
+- If no new functionality is developed or the main purpose is to refactor or redo a large amount of code, it should be done in a Hotfix branch.
 
-### Commit Message Conventions
+**Examples of Hotfix branch names:**
+```
+Backend/hotfix/CodeComments   Frontend/hotfix/ZodSchema   Backend/hotfix/CreateAction
+```
+
+$~$
+
+## Coding And Commenting Language Convention :bowtie:
+- All coding logic like .ts files, variable names and functions will be written in **English**
+- Comments, Commit Messages and Pull Requests will be written in **English**
+- All user interface components and modules; like error messages, alerts, pages, routes and page-based components should be in **Spanish**
+
+$~$
+
+## Commit Message Conventions :incoming_envelope:
 | Verb      | Definition |
 |-----------|------------|
 | **ADD**   | When the main changes involve implementing a new feature or adding resources or data necessary for the application. |
+| **MODIFY**   | When the main changes involve altering or changing existing functionalities to achieve a different or similar result, no implementations from scratch. |
 | **DELETE** | When the main changes involve removing files, functions, or general code that can be omitted without replacement. |
 | **MERGE**  | When changes from another branch are merged. |
 | **FIX**    | When fixing a bug or implementing a solution to a test case. |
@@ -70,4 +126,5 @@ Backend/ft/CreateUser   Frontend/ft/Collaborator   Frontend/ft/HomePage
 | **REVERT** | When reverting to a previous commit. |
 | **CONFIG** | When making configuration-related changes or adding packages to the project. |
 | **STYLE**  | When making changes that do not affect code functionality, such as fixing white spaces, missing semicolons, etc. |
+| **TEST** | When unit tests or implementations of QA are commited. |
 

@@ -1,20 +1,28 @@
 import { prisma } from "@/lib/prisma";
-import { TypeUser } from "@/types/TypeUser";
+import { User } from "@/types/User";
+
+/**
+ * * getUserById() gets a user by its id
+ * 
+ * @param userId<number> id of the user to search
+ * @returns Promise of type {@link User}
+ */
 
 export async function getUserById(userId : number) {
     try {
         const user = await prisma.user.findUnique({
-            where: { id : userId, deactived : false },
+            where: { id : userId, deactivated : false },
         });
 
         if (!user) {
-            return ({} as TypeUser);
+            throw new Error("El Usuario no existe");
         }
 
         
-        const { deactived, updatedAt, ...cleanUser } = user;
-        return { ...cleanUser } as TypeUser;
+        const { deactivated, updatedAt, ...cleanUser } = user;
+        return { ...cleanUser } as User;
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching user: ${(error as Error).message}`);
+        return ({} as User);
     }
 }

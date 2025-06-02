@@ -1,53 +1,55 @@
 "use server";
 
-import { prisma } from '@/lib/prisma';
-import { getUserById } from '@/lib/fetches/user/getUserById';
-import { getFormIdByUserId } from '@/lib/fetches/form/getFormIdByUserId';
-import { getCurrentPeriod } from '@/lib/fetches/period/getCurrentPeriod';
+import { prisma } from "@/lib/prisma";
+
+import { ServerActionResponse } from "@/types/ServerActionResponse";
+
+import { getUserById } from "@/lib/fetches/user/getUserById";
+import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
+import { getCurrentPeriod } from "@/lib/fetches/period/getCurrentPeriod";
 
 /**
- * * createFormAction() -> Esta función crea un formulario de objetivos y puede (debe) usarse con useActionSate
- *
- * *Parametros:
- * @param prevState<string> Estado inicial de la action, debe ser nulo o "Enviando...".
- * @param userId<number> ID del usuario que quiere crear un formulario de objetivos.
- * @returns Retorna un mensaje o estado de la accion. Puede ser "Se creo" o "Hubo un error".
+ * * createFormAction() Creates an objectives form with initial progress for logged user
+
+ * @param prevState<ServerActionResponse> Initial state of action, set this parameter to null
+ * @param userId<number> ID of the logged in user
+ * 
+ * @returns Promise of type {@link ServerActionResponse}
  */
 
 export async function createFormAction(
-  prevState: string | null,
+  prevState: ServerActionResponse | null,
   userId: number
-) {
-
+): Promise<ServerActionResponse> {
   try {
-    //* Checa si el usuario existe o no está desactivado
+    //* Check if user exists
     const userExists = await getUserById(userId);
-    if(!userExists.id){
-      return('No se encontró el usuario')
+    if (!userExists.id) {
+      throw new Error("No se encontró el usuario" );
     }
 
-    //* Checa que hay un periodo activo
+    //* Check if there is current period
     const currentPeriod = await getCurrentPeriod();
-    if(!currentPeriod.startsAt){
-      return('No ha iniciado un nuevo periodo')
+    if (!currentPeriod.startsAt) {
+      throw new Error("No ha iniciado un nuevo periodo");
     }
 
-    //* Checa si el usuario tiene un formulario activo y que se creó durante el periodo actual
-    const form = await getFormIdByUserId(userId);
-    if(form !== "Sin Formulario Activo"){
-      return ('El usuario ya tiene un formulario de objetivos activo')
+    //* Check if user has active form and is from current period 
+    const formExists = await getFormIdByUserId(userId);
+    if (formExists !== "Sin Formulario Activo") {
+      throw new Error("El usuario ya tiene un formulario de objetivos activo");
     }
 
-    //* Checa si el usuario tiene un jefe directo
+    //* Check if user has Boss
     const evaluatorId = userExists.bossID;
-    if(!evaluatorId){
-      return ('El usuario debe tener un jefe directo')
+    if (!evaluatorId) {
+      throw new Error("El usuario debe tener un jefe directo");
     }
 
-    //* Checa si el jefe directo existe o no está desactivado
-    const evaluatorExists = await getUserById(Number(evaluatorId))
-    if(!evaluatorExists.id){
-      return ('No se encontró el usuario del jefe directo')
+    //* Check id Boss is active in db
+    const evaluatorExists = await getUserById(Number(evaluatorId));
+    if (!evaluatorExists.id) {
+      throw new Error("No se encontró el usuario del jefe directo en la base de datos");
     }
 
     await prisma.form.create({
@@ -56,24 +58,26 @@ export async function createFormAction(
         gradedAt: null,
         collaborator: {
           connect: {
-            id: userId
-          }
+            id: userId,
+          },
         },
         evaluator: {
           connect: {
-            id: evaluatorId
-          }
+            id: evaluatorId,
+          },
         },
         progress: {
           connect: {
-            id: 1
-          }
-        }
-      }
-    })
+            id: 1,
+          },
+        },
+      },
+    });
+    
+    return { success: true, message: "Formulario de Objetivos Creado"};
 
-    return ("Formulario de objetivos creado");
   } catch (error) {
-    throw new Error(`Error al crear formulario: ${(error as Error).message}`);
-  }
+    console.error(`Error when creating objectives form: ${(error as Error).message}`);
+    return { success: false, error: `${(error as Error).message}` };
+  } 
 }

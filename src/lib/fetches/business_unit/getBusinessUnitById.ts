@@ -1,5 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { TypeDivision } from "@/types/TypeDivision";
+import { BusinessUnit } from "@/types/BusinessUnit";
+
+/**
+ * * getBusinessUnitById() gets a business unit by its id
+ * 
+ * @param businessUnitId<number> id of the business unit to search
+ * @returns Promise of type {@link BusinessUnit}
+ */
 
 export async function getBusinessUnitById(businessUnitId : number) {
     try {
@@ -14,15 +21,17 @@ export async function getBusinessUnitById(businessUnitId : number) {
         })
 
         if (!businessUnit) {
-            throw new Error ("Business Unit does not exist");
+            throw new Error ("La Unidad de Negocio no existe");
         }
 
         return {
             ...businessUnit,
             createdAt: businessUnit.createdAt.toISOString(),
+            divisionID: businessUnit.division.id,
             division: businessUnit.division.title
-        } as TypeDivision;
+        } as BusinessUnit;
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching business unit: ${(error as Error).message}`);
+        return({} as BusinessUnit);
     }
 }

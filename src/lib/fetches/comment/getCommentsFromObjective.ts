@@ -1,18 +1,26 @@
+"use server";
+
 import { prisma } from "@/lib/prisma";
-import { TypeComment } from "@/types/TypeComment";
+import { Comment } from "@/types/Comment";
+
+//! THE FUNCTION GETOBJECTIVEBYID ALREADY RETURNS THE OBJECTIVES COMMENTS, RENDERING THIS FUNCTION OBSOLETE
+
+/**
+ * * getCommentsFromObjective() gets all comments associated to an objective
+ * 
+ * @param objectiveId<number> id of the objective to search for comments
+ * @returns Promise of type {@link Comment}[]
+ */
 
 export async function getCommentsFromObjective( objectiveId : number ) {
     try {
         const comments = await prisma.comment.findMany({
-            where: { deactived : false, objectiveID : objectiveId }
+            where: { deactivated : false, objectiveID : objectiveId }
         });
 
-        if (comments.length === 0) {
-            throw new Error ("There are no Comments for this objective")
-        }
-
-        return comments.map(({ deactived, updatedAt, ...c }) => ( c )) as TypeComment[];
+        return comments.map(({ deactivated, updatedAt, ...c }) => ( c )) as Comment[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching comments: ${(error as Error).message}`);
+        return ([] as Comment[]);
     }
 }

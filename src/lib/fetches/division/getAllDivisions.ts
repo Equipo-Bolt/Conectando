@@ -1,21 +1,28 @@
 import { prisma } from "@/lib/prisma";
-import { TypeDivision } from "@/types/TypeDivision";
+import { Division } from "@/types/Division";
+
+/**
+ * * getAllDivisions() gets all created and not deactivated divisions
+ *
+ * @returns Promise of type {@link Division}[]
+ */
 
 export async function getAllDivisions() {
     try {
         const divisions = await prisma.division.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (divisions.length === 0) {
-            throw new Error ("There are no divisions")
+            throw new Error ("No hay divisiones")
         }
 
-        return divisions.map(({ deactived, updatedAt, ...d }) => ({
+        return divisions.map(({ deactivated, updatedAt, ...d }) => ({
             ...d,
             createdAt: d.createdAt.toISOString()
-        })) as TypeDivision[];
+        })) as Division[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching divisions: ${(error as Error).message}`);
+        return ([] as Division[]);
     }
 }

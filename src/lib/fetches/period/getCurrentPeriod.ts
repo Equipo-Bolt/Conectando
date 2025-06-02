@@ -1,18 +1,25 @@
 import { prisma } from "@/lib/prisma";
-import { TypePeriod } from "@/types/TypePeriod";
+import { Period } from "@/types/Period";
+
+/**
+ * * getCurrentPeriod() gets the current period
+ * 
+ * @returns Promise of type {@link Period}
+ */
 
 export async function getCurrentPeriod() {
     try {
         const period = await prisma.period.findFirst({
-            where: { deactived : false, isCurrent: true }
+            where: { deactivated : false, isCurrent: true }
         });
 
         if (!period) {
-            return ({} as TypePeriod)
+            throw new Error("No hay un Periodo actual")
         }
 
-        return period as TypePeriod;
+        return period as Period;
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching period: ${(error as Error).message}`);
+        return ({} as Period);
     }
 }

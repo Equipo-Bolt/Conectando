@@ -10,7 +10,7 @@ export async function disableDivisionAction(divisionId : number) {
     try {
         await prisma.classification.update({
             where: { id : divisionId },
-            data: { deactived : true }
+            data: { deactivated : true }
         })
 
         return "Classification has been disabled";

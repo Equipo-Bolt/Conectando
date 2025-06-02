@@ -1,21 +1,28 @@
 import { prisma } from "@/lib/prisma";
-import { TypeBusinessUnit } from "@/types/TypeBusinessUnit";
+import { BusinessUnit } from "@/types/BusinessUnit";
+
+/**
+ * * getAllBusinessUnits() gets all created and not deactivated business units
+ *
+ * @returns Promise of type {@link BusinessUnit}[]
+ */
 
 export async function getAllBusinessUnits() {
     try {
         const businessUnits = await prisma.businessUnit.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (businessUnits.length === 0) {
-            throw new Error ("There are no business units")
+            throw new Error("No hay Unidades de Negocio")
         }
 
-        return businessUnits.map(({ deactived, updatedAt, ...bu }) => ({
+        return businessUnits.map(({ deactivated, updatedAt, ...bu }) => ({
             ...bu,
             createdAt: bu.createdAt.toISOString()
-        })) as TypeBusinessUnit[];
+        })) as BusinessUnit[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching business units: ${(error as Error).message}`);
+        return ([] as BusinessUnit[]);
     }
 }

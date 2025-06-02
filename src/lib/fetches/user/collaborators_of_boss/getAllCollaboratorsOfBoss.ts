@@ -1,21 +1,29 @@
 import { prisma } from "@/lib/prisma";
-import { TypeUser } from "@/types/TypeUser";
+import { User } from "@/types/User";
+
+/**
+ * * getAllCollaboratorsOfBoss() gets a all collaborators under a Boss given the Boss's id
+ * 
+ * @param bossId<number> id of the boss to search for their collaborators
+ * @returns Promise of type {@link User}[]
+ */
 
 export async function getAllCollaboratorsOfBoss(bossId : number ) {
     try {
         const collaborators = await prisma.user.findMany({
-            where: { bossID : bossId, deactived : false }
+            where: { bossID : bossId, deactivated : false }
         });
 
         if (collaborators.length === 0) {
-            throw new Error ("User has no collaborators")
+            throw new Error ("El usuario no tiene colaboradores bajo su mando")
         }
 
-        return collaborators.map(({ deactived, updatedAt, ...u }) => ({
+        return collaborators.map(({ deactivated, updatedAt, ...u }) => ({
             ...u,
             createdAt: u.createdAt
-        })) as TypeUser[];
+        })) as User[];
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching collaborators of boss: ${(error as Error).message}`);
+        return ([] as User[]);
     }
 }

@@ -1,4 +1,12 @@
 import { prisma } from "@/lib/prisma";
+import { Role } from "@/types/Role";
+
+/**
+ * * getRoleById() gets a role by its id
+ * 
+ * @param roleId<number> id of the role to search
+ * @returns Promise of type {@link Role}
+ */
 
 export async function getRoleById(roleId : number) {
     try {
@@ -12,14 +20,15 @@ export async function getRoleById(roleId : number) {
         })
 
         if (!role) {
-            throw new Error ("Progress does not exist");
+            throw new Error ("El Rol no existe");
         }
 
         return {
             ...role,
             createdAt: role.createdAt.toISOString()
-        };
+        } as Role;
     } catch(error) {
-        throw new Error(`Error: ${(error as Error).message}`);
+        console.error(`Error fetching role: ${(error as Error).message}`);
+        return ({} as Role);
     }
 }
