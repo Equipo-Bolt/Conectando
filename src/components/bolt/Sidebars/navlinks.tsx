@@ -3,31 +3,48 @@ import { ClipboardDocumentIcon, UsersIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
+import { Role } from "@/types/Role";
 
-// Map of links to display in the side navigation.
 const sections = [
   {
+    roles: [1, 4, 5, 7],
     title: "Creación de Metas",
     links: [
       { name: "Mis Objetivos", href: "/misObjetivos", icon: ClipboardDocumentIcon },
     ],
   },
   {
+    roles: [2, 4, 6, 7],
     title: "Evaluación",
     links: [
       { name: "Mis Colaboradores", href: "/misColaboradores", icon: UsersIcon },
     ],
   },
+  {
+    roles: [3, 5, 6, 7],
+    title: "Administración",
+    links: [
+      { name: "Usuarios", href: "/usuarios", icon: UsersIcon },
+    ],
+  },
 ];
 
-export default function NavLinks() {
+interface NavLinkProps {
+  userRole: Role;
+}
+
+export default function NavLinks({ userRole }: NavLinkProps) {
   const pathname = usePathname();
   if (!pathname) return null;
+
+  const filteredSections = sections.filter((section) =>
+    section.roles.includes(userRole.id)
+  );
 
   return (
     <>
       <hr className="border-selected-blue" />
-      {sections.map((section) => (
+      {filteredSections.map((section) => (
         <div key={section.title}>
           <h2 className="text-white text-xl font-bold mb-[1rem] px-[0.5rem]">
             {section.title}
