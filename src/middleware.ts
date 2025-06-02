@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/app/auth";
 
-const PUBLIC_ROUTES = ["/login", "/403"];
-const UNSEARCHABLE_ROUTES = ["/error", "/llenarInformacion"];
+const PUBLIC_ROUTES = ["/login"];
+const UNSEARCHABLE_ROUTES = ["/error", "/llenarInformacion", "/403"];
 const PROTECTED_DEFAULT_ROUTE = "/misObjetivos";
 const LOGIN_ROUTE = "/login";
 
@@ -83,9 +83,7 @@ export async function middleware(req: NextRequest) {
 
   // If user tries to access unsearchable route
   if (isUnsearchableRoute && isDirectAccess) {
-    return NextResponse.redirect(
-        new URL("/403", nextUrl.origin)
-      );
+    return NextResponse.redirect(new URL("/403", nextUrl.origin));
   }
 
   // If user is already authenticated and attempts to access some protected route
@@ -106,5 +104,12 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/misObjetivos/:path*", "/misColaboradores/:path*", "/usuarios/:path*", "/llenarInformacion/:path*", "/error", "/llenarInformacion"],
+  matcher: [
+    "/misObjetivos/:path*",
+    "/misColaboradores/:path*",
+    "/usuarios/:path*",
+    "/llenarInformacion/:path*",
+    "/error",
+    "/llenarInformacion"
+  ],
 };
