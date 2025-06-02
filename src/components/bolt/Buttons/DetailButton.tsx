@@ -17,7 +17,7 @@ export const DetailButton = ({ id }: DetailButtonProps) => {
   return (
     <button
       onClick={handleClick}
-      className="text-blue-600 hover:text-blue-800 transition-colors"
+      className="cursor-pointer text-blue-600 hover:text-blue-800 transition-colors"
       aria-label="Ver detalles"
     >
       <InformationCircleIcon className="h-5 w-5" />

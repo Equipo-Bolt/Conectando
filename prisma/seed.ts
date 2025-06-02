@@ -60,7 +60,11 @@ async function main() {
     await prisma.businessUnit.upsert({
       where: { title: bu.title },
       create: { title: bu.title, divisionID: bu.divisionID },
-      update: { title: bu.title, divisionID: bu.divisionID, deactivated: false },
+      update: {
+        title: bu.title,
+        divisionID: bu.divisionID,
+        deactivated: false,
+      },
     });
   }
 
@@ -110,7 +114,7 @@ async function main() {
 
   //* Users
   const userBoss = await prisma.user.upsert({
-    where: { employeeNumber: 22222 }, //* We can use the employee number field to search the user
+    where: { email: "daniel@gemso.com" },
     update: {
       fullName: "Daniel Fernández",
       email: "daniel@gemso.com",
@@ -155,6 +159,7 @@ async function main() {
           //* Boss of Daniel
           employeeNumber: 11111,
           fullName: "Juan Gutierrez",
+          email: "juanG@gemso.com",
           jobPosition: "Jefe del sector agrícola",
           roleID: 2,
         },
@@ -178,7 +183,7 @@ async function main() {
   });
 
   const userCollaborator = await prisma.user.upsert({
-    where: { employeeNumber: 33333 },
+    where: { email: "andres@gemso.com" },
     update: {
       fullName: "Andrés Sandoval Ibarra",
       email: "andres@gemso.com",
@@ -241,7 +246,7 @@ async function main() {
   });
 
   const userCollaborator2 = await prisma.user.upsert({
-    where: { employeeNumber: 44444 },
+    where: { email: "colab2@gemso.com" },
     update: {
       fullName: "Colaborador Dos",
       email: "colab2@gemso.com",
@@ -304,7 +309,7 @@ async function main() {
   });
 
   const userCollaborator3 = await prisma.user.upsert({
-    where: { employeeNumber: 55555 },
+    where: { email: "colab3@gemso.com" },
     update: {
       fullName: "Colaborador Tres",
       email: "colab3@gemso.com",
@@ -367,7 +372,7 @@ async function main() {
   });
 
   const userCollaborator4 = await prisma.user.upsert({
-    where: { employeeNumber: 66666 },
+    where: { email: "colab4@gemso.com" },
     update: {
       fullName: "Colaborador Cuatro",
       email: "colab4@gemso.com",
@@ -429,7 +434,7 @@ async function main() {
   });
 
   const userCollaborator5 = await prisma.user.upsert({
-    where: { employeeNumber: 77777 },
+    where: { email: "colab5@gemso.com" },
     update: {
       fullName: "Colaborador Sin Formulario",
       email: "colab5@gemso.com",
@@ -491,7 +496,7 @@ async function main() {
   });
 
   const userCollaborator6 = await prisma.user.upsert({
-    where: { employeeNumber: 88888 },
+    where: { email: "colab6@gemso.com" },
     update: {
       fullName: "Colaborador Con Formulario Sin Objetivos",
       email: "colab6@gemso.com",
@@ -553,6 +558,69 @@ async function main() {
     },
   });
 
+  const userAdministrator1 = await prisma.user.upsert({
+    where: { email: process.env.ADMIN_EMAIL },
+    update: {
+      fullName: "Administrador Gemso",
+      email: process.env.ADMIN_EMAIL,
+      jobPosition: "Administración",
+      positionSeniority: new Date("2025-04-12"),
+      companySeniority: new Date("2024-04-12"),
+      companyContribution: "Administro la super aplicación de Conectando+.",
+      deactivated: false,
+      boss: {
+        connect: {
+          id: (await userBoss).id,
+        },
+      },
+      role: {
+        connect: {
+          id: 3,
+        },
+      },
+      businessUnit: {
+        connect: {
+          id: 7,
+        },
+      },
+      area: {
+        connect: {
+          id: 11,
+        },
+      },
+    },
+    create: {
+      employeeNumber: 99999,
+      fullName: "Administrador Gemso",
+      email: process.env.ADMIN_EMAIL,
+      jobPosition: "Administración",
+      positionSeniority: new Date("2025-04-12"),
+      companySeniority: new Date("2024-04-12"),
+      companyContribution: "Administro la super aplicación de Conectando+.",
+      deactivated: false,
+      boss: {
+        connect: {
+          id: (await userBoss).id,
+        },
+      },
+      role: {
+        connect: {
+          id: 3,
+        },
+      },
+      businessUnit: {
+        connect: {
+          id: 7,
+        },
+      },
+      area: {
+        connect: {
+          id: 11,
+        },
+      },
+    },
+  });
+
   //*Forms
   const formCollaborator = await prisma.form.upsert({
     where: { id: 1 },
@@ -604,7 +672,7 @@ async function main() {
       },
       evaluator: {
         connect: {
-          employeeNumber: 11111,
+          email: "juanG@gemso.com",
         },
       },
       progress: {
@@ -621,7 +689,7 @@ async function main() {
       },
       evaluator: {
         connect: {
-          employeeNumber: 11111,
+          email: "juanG@gemso.com",
         },
       },
       progress: {
@@ -709,48 +777,6 @@ async function main() {
       },
     },
   });
-
-  /** 
-   * ! Cambiado porque solo hay 4 progresos
-  const formCollaborator4 = await prisma.form.upsert({
-    where: { id : 5 },
-    update: {
-      deactivated: false,
-      collaborator: {
-        connect: {
-          id: (await userCollaborator4).id
-        }
-      },
-      evaluator: {
-        connect: {
-          id: (await userBoss).id
-        }
-      },
-      progress: {
-        connect: {
-          id: 5
-        }
-      }
-    },
-    create: {
-      collaborator: {
-        connect: {
-          id: (await userCollaborator4).id
-        }
-      },
-      evaluator: {
-        connect: {
-          id: (await userBoss).id
-        }
-      },
-      progress: {
-        connect: {
-          id: 5
-        }
-      }
-    }
-  })
-    */
 
   const formCollaborator5 = await prisma.form.upsert({
     where: { id: 5 },
@@ -1388,11 +1414,11 @@ async function main() {
           id: objective1_1A.id,
         },
       },
-      commenter :{
+      commenter: {
         connect: {
           id: userBoss.id,
         },
-      }
+      },
     },
     create: {
       description: "Excelente objetivo de negocio Andrés",
@@ -1402,11 +1428,11 @@ async function main() {
           id: objective1_1A.id,
         },
       },
-      commenter :{
+      commenter: {
         connect: {
           id: userBoss.id,
         },
-      }
+      },
     },
   });
 
@@ -1420,11 +1446,11 @@ async function main() {
           id: objective2_1A.id,
         },
       },
-      commenter :{
+      commenter: {
         connect: {
           id: userBoss.id,
         },
-      }
+      },
     },
     create: {
       description: "Considera que tu meta sea de 12 en lugar de 15.",
@@ -1434,11 +1460,11 @@ async function main() {
           id: objective2_1A.id,
         },
       },
-      commenter :{
+      commenter: {
         connect: {
           id: userBoss.id,
         },
-      }
+      },
     },
   });
 

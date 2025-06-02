@@ -25,7 +25,7 @@ export async function findUserAction(
     }
 
     await sendOTP(userEmail);
-    return { success: true, message: userEmail + "Se mandó un correo de autenticación" };
+    return { success: true, message: userEmail};
   } catch (error) {
     console.error(`Error: ${(error as Error).message}`);
     return { success: false, error: `Error: ${(error as Error).message}` };

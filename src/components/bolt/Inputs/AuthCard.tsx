@@ -21,10 +21,21 @@ import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 // ! For nextAuth implementation, Backend needs email related to otp
 export default function AuthCard() {
-    const [currentPage, setCurrentPage] = useState("otp");
+    const [currentPage, setCurrentPage] = useState("login");
+    const [email, setEmail] = useState("");
 
     return (
-    <Card className="md:w-1/3 w-1/2 flex flex-col items-center justify-center p-[2rem]">
+    <Card className="md:w-1/3 w-2/3 flex flex-col items-center justify-center p-[2rem]">        
+        {currentPage === "otp" && (
+            <div className="flex flex-row items-center justify-start w-full ">
+                <button
+                    className="text-gray-500 hover:text-gray-700 cursor-pointer"
+                    onClick={() => setCurrentPage("login")}
+                >                
+                    <ArrowLeftIcon className="h-5 w-5 text-gray-500 mr-2" />
+                </button>
+            </div>
+        )}
         <CardHeader className="w-full text-center">
             <Image
                 src={GemsoStacked}
@@ -36,24 +47,22 @@ export default function AuthCard() {
         </CardHeader>
         <CardContent className="w-full flex flex-col">
             {currentPage === "login" && (
-                <LoginForm />
+                <LoginForm
+                    onValueChange={(email: string) => {
+                        setEmail(email);
+                        setCurrentPage("otp");
+                    }}
+                />
             )}
             {currentPage === "otp" && (
-                <OtpForm />
+                <OtpForm propEmail={email}/>
+            )}
+            {(currentPage !== "otp" && currentPage !== "login") && (
+                <div className="flex items-center justify-center mt-4">
+                    error
+                </div>
             )}
         </CardContent>
-        {currentPage === "otp" && (
-            <div className="flex items-center justify-center mt-4">
-                <ArrowLeftIcon className="h-5 w-5 text-gray-500 mr-2" />
-                <button
-                    className="text-gray-500 hover:text-gray-700"
-                    onClick={() => setCurrentPage("login")}
-                >
-                    Volver a inicio de sesión
-                </button>
-            </div>
-        )}
-
     </Card>
     )
 }

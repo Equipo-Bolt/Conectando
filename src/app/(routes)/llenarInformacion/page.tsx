@@ -2,17 +2,24 @@
 
 import { CompleteInfoForm } from "@/components/bolt/Inputs/CompleteInfoForm";
 
-//!new
+// Fetches
 import { getAllDivisions } from "@/lib/fetches/division/getAllDivisions";
 import { getAllAreas } from "@/lib/fetches/area/getAllAreas";
 import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
+import { getAllBosses } from "@/lib/fetches/user/boss/getAllBosses";
+import { getAllRoles } from "@/lib/fetches/role/getAllRoles";
+import { getUserById } from "@/lib/fetches/user/getUserById";
 
+// Types
 import { Division } from "@/types/Division";
 import { Area } from "@/types/Area";
 import { BusinessUnit } from "@/types/BusinessUnit";
 import { User } from "@/types/User";
-import { getAllBosses } from "@/lib/fetches/user/boss/getAllBosses";
-//! Changed page into async function page
+import { Role } from "@/types/Role";
+
+// * NextAuth
+import { auth } from "@/app/auth";
+
 /**
  * A server component that loads data asynchronously and renders a page
  * for completing user information. The page includes a form populated
@@ -32,11 +39,13 @@ import { getAllBosses } from "@/lib/fetches/user/boss/getAllBosses";
  * The fetched data is passed as props to the `CompleteInfoForm` component.
  */
 async function Page() {
-  //* load data from page, which is a server component
+  const session = await auth();
+  const user: User = await getUserById(Number(session?.user?.id));
   const divisions: Division[] = await getAllDivisions();
   const areas: Area[] = await getAllAreas();
   const bus: BusinessUnit[] = await getAllBusinessUnits();
   const bosses: User[] = await getAllBosses();
+  const roles: Role[] = await getAllRoles();
 
   return (
     <div className="p-[3rem]">
@@ -46,6 +55,8 @@ async function Page() {
         areas={areas}
         businessUnits={bus}
         bosses={bosses}
+        roles={roles}
+        user={user} // Assuming userId is not needed here, or you can pass a valid userId
       />
     </div>
   );

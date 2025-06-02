@@ -116,6 +116,7 @@ $~$
 | Verb      | Definition |
 |-----------|------------|
 | **ADD**   | When the main changes involve implementing a new feature or adding resources or data necessary for the application. |
+| **MODIFY**   | When the main changes involve altering or changing existing functionalities to achieve a different or similar result, no implementations from scratch. |
 | **DELETE** | When the main changes involve removing files, functions, or general code that can be omitted without replacement. |
 | **MERGE**  | When changes from another branch are merged. |
 | **FIX**    | When fixing a bug or implementing a solution to a test case. |

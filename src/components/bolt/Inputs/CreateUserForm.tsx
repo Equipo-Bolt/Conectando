@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { completeUserInfoSchema } from "@/lib/formSchemas/userSchema";
+import { createUserSchema } from "@/lib/formSchemas/userSchema";
 
 // Shadcn Components
 import { Input } from "@/components/ui/input";
@@ -46,7 +46,7 @@ import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { CompleteUserFormData } from "@/types/User";
+import { CreateUserFormData } from "@/types/User";
 import { Role } from "@/types/Role";
 import { Division } from "@/types/Division";
 import { Area } from "@/types/Area";
@@ -54,7 +54,7 @@ import { BusinessUnit } from "@/types/BusinessUnit";
 import { User } from "@/types/User";
 
 // Actions
-import { completeUserInfoAction } from "@/app/actions/user/completeUserInfo";
+import { createUserAction } from "@/app/actions/user/createUser";
 
 // Date formatter
 import { format } from "date-fns";
@@ -63,61 +63,58 @@ import { format } from "date-fns";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 
 //* Interface
-interface CompleteUserFormProps {
+interface CreateUserFormProps {
   roles: Role[];
   divisions: Division[];
   areas: Area[];
   businessUnits: BusinessUnit[];
   bosses: User[];
-  user: User;
 }
 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
-export function CompleteInfoForm(props: CompleteUserFormProps) {
+export function CreateUserForm(props: CreateUserFormProps) {
   const router = useRouter();
 
-  const form = useForm<CompleteUserFormData>({
-    resolver: zodResolver(completeUserInfoSchema),
+  const form = useForm<CreateUserFormData>({
+    resolver: zodResolver(createUserSchema),
     defaultValues: {
-        id: props.user.id,
-        email: props.user.email || "",
-        roleID: props.user.roleID.toString() || "",
-        employeeNumber: String(props.user.employeeNumber) || "",
-        fullName: props.user.fullName || "",
-        bossID: String(props.user.bossID) || "",
-        divisionID: String(props.user.divisionID) || "",
-        businessUnitID: String(props.user.businessUnitID) || "",
-        companySeniority: props.user.companySeniority?.toDateString() || "",
-        positionSeniority: props.user.positionSeniority?.toDateString() || "",
-        areaID: String(props.user.areaID) || "",
-        position: props.user.jobPosition || "",
-        companyContribution: props.user.companyContribution || "",
+      email: "",
+      roleID: "",
+      employeeNumber: "",
+      fullName: "",
+      bossID: "",
+      divisionID: "",
+      businessUnitID: "",
+      companySeniority: "",
+      positionSeniority: "",
+      areaID: "",
+      position: "",
+      companyContribution: "",
     },
   });
 
-  const [state, newAction] = useActionState(completeUserInfoAction, null);
+  const [state, newAction] = useActionState(createUserAction, null);
   const [isPending, startTransition] = useTransition();
 
-  async function handleSubmit(data: CompleteUserFormData) {
-    const parsedData = completeUserInfoSchema.safeParse(data);
+  async function handleSubmit(data: CreateUserFormData) {
+    const parsedData = createUserSchema.safeParse(data);
     if (!parsedData.success) {
       console.error("Validation errors:", parsedData.error.format());
       return;
     }
 
-    const userData: CompleteUserFormData = {
-      id: parsedData.data.id,
+    const userData: CreateUserFormData = {
       email: parsedData.data.email,
       roleID: parsedData.data.roleID.toString(),
-      employeeNumber: parsedData.data.employeeNumber?.toString(),
-      fullName: parsedData.data.fullName,
-      bossID: parsedData.data.bossID?.toString(),
-      divisionID: parsedData.data.divisionID?.toString(),
-      businessUnitID: parsedData.data.businessUnitID?.toString() ,
-      companySeniority: parsedData.data.companySeniority ,
-      positionSeniority: parsedData.data.positionSeniority ,
-      areaID: parsedData.data.areaID?.toString() ,
-      position: parsedData.data.position ,
-      companyContribution: parsedData.data.companyContribution ,
+      employeeNumber: parsedData.data.employeeNumber?.toString() || "",
+      fullName: parsedData.data.fullName || "",
+      bossID: parsedData.data.bossID?.toString() || "",
+      divisionID: parsedData.data.divisionID?.toString() || "",
+      businessUnitID: parsedData.data.businessUnitID?.toString() || "",
+      companySeniority: parsedData.data.companySeniority || "",
+      positionSeniority: parsedData.data.positionSeniority || "",
+      areaID: parsedData.data.areaID?.toString() || "",
+      position: parsedData.data.position || "",
+      companyContribution: parsedData.data.companyContribution || "",
     };
 
     await startTransition(() => {
@@ -336,36 +333,31 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
           </div>
 
           <div className="flex flex-col gap-[1rem]">
-<FormField
-                control={form.control}
-                name="roleID"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>
-                        Roles<p className="text-gemso-red"> *</p>
-                    </FormLabel>
-                    <FormMessage />
-                    <Select 
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        defaultValue={field.value}
-                    >
-                        <FormControl>
-                        <SelectTrigger>
-                            <SelectValue
-                        placeholder="Seleccionar" />
-                        </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                        {props.roles.map((role) => (
-                            <SelectItem key={role.id} value={role.id.toString()}>
-                            {role.title}
-                            </SelectItem>
-                        ))}
-                        </SelectContent>
-                    </Select>
-                    </FormItem>
-                )}
+            <FormField
+              control={form.control}
+              name="roleID"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Roles<p className="text-gemso-red"> *</p>
+                  </FormLabel>
+                  <FormMessage />
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seleccionar" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {props.roles.map((role) => (
+                        <SelectItem key={role.id} value={role.id.toString()}>
+                          {role.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
             />
 
             <FormField
@@ -537,12 +529,12 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
 
         {/* Buttons */}
         <div className="flex justify-end gap-4 pt-2">
-          <CancelButton route="./login" text="Cancelar" />
-          <SubmitButton text="Actualizar" isPending={isPending} />
+          <CancelButton route="./" text="Cancelar" />
+          <SubmitButton text="Crear Usuario" isPending={isPending} />
         </div>
       </form>
     </Form>
   );
 }
 
-export default CompleteInfoForm;
+export default CreateUserForm;
