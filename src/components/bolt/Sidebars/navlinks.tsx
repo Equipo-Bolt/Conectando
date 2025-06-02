@@ -51,7 +51,7 @@ export default function NavLinks({ userRole }: NavLinkProps) {
           </h2>
           <nav className="px-2 gap-[0.5rem] mb-[1rem]">
             {section.links.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = pathname.startsWith(link.href);
               return (
                 <Link
                   key={link.name}
