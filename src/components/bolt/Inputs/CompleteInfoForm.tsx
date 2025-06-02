@@ -78,19 +78,19 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
   const form = useForm<CompleteUserFormData>({
     resolver: zodResolver(completeUserInfoSchema),
     defaultValues: {
-        id: props.user.id,
-        email: props.user.email || "",
-        roleID: props.user.roleID.toString() || "",
-        employeeNumber: String(props.user.employeeNumber) || "",
-        fullName: props.user.fullName || "",
-        bossID: String(props.user.bossID) || "",
-        divisionID: String(props.user.divisionID) || "",
-        businessUnitID: String(props.user.businessUnitID) || "",
-        companySeniority: props.user.companySeniority?.toDateString() || "",
-        positionSeniority: props.user.positionSeniority?.toDateString() || "",
-        areaID: String(props.user.areaID) || "",
-        position: props.user.jobPosition || "",
-        companyContribution: props.user.companyContribution || "",
+      id: props.user.id,
+      email: props.user.email || "",
+      roleID: props.user.roleID.toString() || "",
+      employeeNumber: String(props.user.employeeNumber) || "",
+      fullName: props.user.fullName || "",
+      bossID: String(props.user.bossID) || "",
+      divisionID: String(props.user.divisionID) || "",
+      businessUnitID: String(props.user.businessUnitID) || "",
+      companySeniority: props.user.companySeniority?.toDateString() || "",
+      positionSeniority: props.user.positionSeniority?.toDateString() || "",
+      areaID: String(props.user.areaID) || "",
+      position: props.user.jobPosition || "",
+      companyContribution: props.user.companyContribution || "",
     },
   });
 
@@ -112,12 +112,12 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
       fullName: parsedData.data.fullName,
       bossID: parsedData.data.bossID?.toString(),
       divisionID: parsedData.data.divisionID?.toString(),
-      businessUnitID: parsedData.data.businessUnitID?.toString() ,
-      companySeniority: parsedData.data.companySeniority ,
-      positionSeniority: parsedData.data.positionSeniority ,
-      areaID: parsedData.data.areaID?.toString() ,
-      position: parsedData.data.position ,
-      companyContribution: parsedData.data.companyContribution ,
+      businessUnitID: parsedData.data.businessUnitID?.toString(),
+      companySeniority: parsedData.data.companySeniority,
+      positionSeniority: parsedData.data.positionSeniority,
+      areaID: parsedData.data.areaID?.toString(),
+      position: parsedData.data.position,
+      companyContribution: parsedData.data.companyContribution,
     };
 
     await startTransition(() => {
@@ -128,18 +128,14 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
   useEffect(() => {
     if (state === null) return;
     else if (state.success) {
-
-    const userRoleID = form.getValues("roleID");
-    if (userRoleID === "1") {
+      const userRoleID = form.getValues("roleID");
+      if (userRoleID === "1") {
         router.push("/misObjetivos");
-    } else if (userRoleID === "2" || userRoleID === "4") {
+      } else if (userRoleID === "2" || userRoleID === "4") {
         router.push("/misColaboradores");
-    } else{
+      } else {
         router.push("/usuarios");
-    }
-
-      router.push("/usuarios");
-
+      }
     } else {
       console.error("Error creating user:", state);
     }
@@ -168,7 +164,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
       setFilteredBusinessUnits(filtered);
       form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
     }
-
   }, [currentDivision, props.businessUnits, form]);
 
   useEffect(() => {
@@ -229,7 +224,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       {...field}
                       type="number"
                       min="1"
-                      
                     />
                   </FormControl>
                 </FormItem>
@@ -340,43 +334,41 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
-
                 </FormItem>
               )}
             />
           </div>
 
           <div className="flex flex-col gap-[1rem]">
-<FormField
-                control={form.control}
-                name="roleID"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>
-                        Roles<p className="text-gemso-red"> *</p>
-                    </FormLabel>
-                    <FormMessage />
-                    <Select 
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        defaultValue={field.value}
-                    >
-                        <FormControl>
-                        <SelectTrigger>
-                            <SelectValue
-                        placeholder="Seleccionar" />
-                        </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                        {props.roles.map((role) => (
-                            <SelectItem key={role.id} value={role.id.toString()}>
-                            {role.title}
-                            </SelectItem>
-                        ))}
-                        </SelectContent>
-                    </Select>
-                    </FormItem>
-                )}
+            <FormField
+              control={form.control}
+              name="roleID"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Roles<p className="text-gemso-red"> *</p>
+                  </FormLabel>
+                  <FormMessage />
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seleccionar" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {props.roles.map((role) => (
+                        <SelectItem key={role.id} value={role.id.toString()}>
+                          {role.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
             />
 
             <FormField
@@ -392,7 +384,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       {...field}
                     />
                   </FormControl>
-
                 </FormItem>
               )}
             />
@@ -441,7 +432,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       />
                     </PopoverContent>
                   </Popover>
-
                 </FormItem>
               )}
             />
@@ -471,7 +461,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
-
                 </FormItem>
               )}
             />
@@ -501,7 +490,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
-
                 </FormItem>
               )}
             />
@@ -520,7 +508,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       {...field}
                     />
                   </FormControl>
-
                 </FormItem>
               )}
             />
@@ -539,7 +526,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       className="min-h-[9rem] max-h-[15rem] w-full resize-none"
                     />
                   </FormControl>
-
                 </FormItem>
               )}
             />

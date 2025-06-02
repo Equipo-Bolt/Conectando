@@ -75,9 +75,6 @@ export default function OtpForm(
             } else{
                 router.push("/usuarios");
             }
-
-            // If user has all fields filled, redirect to objectives page
-            router.push("/misObjetivos");
         } else {
             // If user has not completed all fields, redirect to info status page
             router.push("/llenarInformacion");
