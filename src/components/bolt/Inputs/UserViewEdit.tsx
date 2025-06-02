@@ -99,6 +99,7 @@ export default function UserViewEdit({
         },
     });
 
+
     const [state, newAction] = useActionState(updateUserAction, null);
     const [isPending, startTransition] = useTransition();
 
@@ -129,7 +130,6 @@ export default function UserViewEdit({
         await startTransition(() => {
             newAction(userData);
         });
-        console.log("handleSubmit triggered with data:", data);
     }
 
     useEffect(() => {

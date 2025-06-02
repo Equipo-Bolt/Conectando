@@ -32,6 +32,19 @@ async function MyObjectivesPage() {
   const session = await auth();
   const user: User = await getUserById(Number(session?.user?.id));
   const formId: string = await getFormIdByUserId(user.id);
+
+  if (!session?.user) {
+      throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
+  }
+
+  const User = await getUserById(Number(session.user.id));
+
+  const allowedRoles = [1, 4, 5, 7];
+
+  if (!User || !allowedRoles.includes(User.roleID)) {
+      throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
+  }
+
   if (formId === "Sin Formulario Activo") {
     return (
       <div className="container mx-auto py-10">
