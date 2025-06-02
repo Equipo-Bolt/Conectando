@@ -65,6 +65,7 @@ export default function OtpForm(
     const checkUserInfo = useCallback(async (email: string) => {
         const response = await hasCompletedInfoAction(email);
         if (response.success === true) {
+
             // If user has all fields filled, redirect to page based on their role
             const userRoleID = response.message
             if (userRoleID === "1") {
@@ -74,6 +75,9 @@ export default function OtpForm(
             } else{
                 router.push("/usuarios");
             }
+
+            // If user has all fields filled, redirect to objectives page
+            router.push("/misObjetivos");
         } else {
             // If user has not completed all fields, redirect to info status page
             router.push("/llenarInformacion");

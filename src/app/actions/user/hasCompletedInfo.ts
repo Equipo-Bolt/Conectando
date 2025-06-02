@@ -69,10 +69,7 @@ export async function hasCompletedInfoAction(
         throw new Error(result.error.errors.map((e) => e.message).join(", "));
     }
 
-    return { success : true, 
-      //! Cambiar por auth despues
-      message: String(roleID) 
-    };
+    return { success : true, message: "El usuario ha completado su información"};
   } catch (error) {
     console.log(`Error fetching status: ${(error as Error).message}`);
     return {success: false, error: `${(error as Error).message}`}

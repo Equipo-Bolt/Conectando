@@ -5,9 +5,8 @@ import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { DataTableMyCollaborators } from "@/components/bolt/DataTables/dataTableMyCollaborator/data-table";
 import { columns } from "@/components/bolt/DataTables/dataTableMyCollaborator/columns";
 
-import { auth } from "@/app/auth";
+import { cookies } from "next/headers";
 import { getFormById } from "@/lib/fetches/form/getFormById";
-import { getUserById } from "@/lib/fetches/user/getUserById";
 
 /**
  * @description
@@ -15,22 +14,8 @@ import { getUserById } from "@/lib/fetches/user/getUserById";
  */
 async function MyCollaboratorsPage() {
   // Get user ID from cookies
-    const session = await auth();
-    const userId = session?.user?.id;
-
-
-    if (!session?.user) {
-        throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
-    }
-
-    const User = await getUserById(Number(session.user.id));
-
-    const allowedRoles = [2, 4, 6, 7];
-
-    if (!User || !allowedRoles.includes(User.roleID)) {
-        throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
-    }
-    
+  const cookieStore = await cookies();
+  const userId = cookieStore.get("userId")?.value;
 
   // Get collaborators and their progress
   const collaborators = await getAllCollaboratorsOfBoss(Number(userId));

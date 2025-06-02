@@ -6,12 +6,9 @@ import { getAllClassifications } from "@/lib/fetches/classification/getAllClassi
 import { UpdateObjectiveFormData } from "@/types/Objective";
 import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
-import { getUserById } from "@/lib/fetches/user/getUserById";
 import CommentsSection from "@/components/bolt/Comments/Comments";
 import GoBack from "@/components/bolt/Buttons/GoBack";
-
-// NextAuth
-import { auth } from "@/app/auth";
+import { cookies } from "next/headers";
 
 /**
  * @description This page component is responsible for rendering the edit objective interface.
@@ -30,22 +27,9 @@ export default async function EditObjectivePage({
   params: { id: string };
 }) {
   //! COOKIES SHOULD BE CHANGED OT NEXTAUTH
-  const session = await auth();
-  const userId = session?.user?.id;
-
-  if (!session?.user) {
-      throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
-  }
-
-  const User = await getUserById(Number(session.user.id));
-
-  console.log("User", User);
-
-  const allowedRoles = [1, 4, 5, 7];
-
-  if (!User || !allowedRoles.includes(User.roleID)) {
-      throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
-  }
+  const cookieStore = await cookies();
+  const userId = cookieStore.get("userId")?.value;
+  console.log(userId)
 
   const objectiveId = await params;
   const objective = await getObjectiveById(parseInt(objectiveId.id));
@@ -84,8 +68,7 @@ export default async function EditObjectivePage({
         <CommentsSection
           initialComments={comments}
           objectiveId={parseInt(objectiveId.id)}
-          commenterId={ userId ? parseInt(userId) : 0}
-          commenter={User.fullName ? User.fullName : "Usuario Anónimo"}
+          commenterId={userId ? parseInt(userId) : 3}
         />
       </div>
     </div>
