@@ -7,7 +7,7 @@ import {
 } from "@getbrevo/brevo";
 
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import { GenerateOTP } from "@/utils/OTP/generateOTP";
 import { ServerActionResponse } from "@/types/ServerActionResponse";

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from 'next/server';
-
 import { auth } from "./app/auth";
 
 const PUBLIC_ROUTES = ["/login", "/otp"];
@@ -38,7 +37,6 @@ export async function middleware(req: NextRequest) {
   const { nextUrl } = req;
 
   const session = await auth();
-  console.log(session)
   const isAuthenticated = !!session;
   const userRole = session?.user?.roleID;
   const currentPath = nextUrl.pathname;
