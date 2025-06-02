@@ -9,7 +9,6 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
 /**
  * * loginAction action that authenticates the user via otp
  * @param prevState<ServerActionResponse | null> set this value to null
- * @param data<{@link OtpSchemaType}>
  * @returns Promise of type {@link ServerActionResponse}
  */
 

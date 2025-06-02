@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 /**
- * ! This page was created to redirect through middelware. Middleware thrown error could not be caught by error.tsx page.
+ * ! This page was created to redirect through middleware. Middleware thrown error could not be caught by error.tsx page.
  * @returns {JSX Component}
  */
 export default function ForbiddenPage() {
