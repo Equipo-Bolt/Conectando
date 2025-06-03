@@ -4,6 +4,8 @@ import Link from "next/link";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { Role } from "@/types/Role";
+import LogOutButton from "@/components/bolt/Buttons/LogOutButton";
+import MyInfoButton from "@/components/bolt/Buttons/MyInfoButton";
 
 const sections = [
   {
@@ -42,14 +44,14 @@ export default function NavLinks({ userRole }: NavLinkProps) {
   );
 
   return (
-    <>
-      <hr className="border-selected-blue" />
+    <div className="flex flex-col h-full">
+      <hr className="border-selected-blue mb-[0.5rem]" />
       {filteredSections.map((section) => (
         <div key={section.title}>
           <h2 className="text-white text-xl font-bold mb-[1rem] px-[0.5rem]">
             {section.title}
           </h2>
-          <nav className="px-2 gap-[0.5rem] mb-[1rem]">
+          <nav className="px-[0.5rem] gap-[0.5rem] mb-[1rem]">
             {section.links.map((link) => {
               const isActive = pathname.startsWith(link.href);
               return (
@@ -57,7 +59,7 @@ export default function NavLinks({ userRole }: NavLinkProps) {
                   key={link.name}
                   href={link.href}
                   className={clsx(
-                    "flex items-center text-white rounded-lg p-[0.625em]",
+                    "flex items-center text-white rounded-lg p-[0.625em] h-[3rem]",
                     isActive
                       ? "bg-selected-blue"
                       : "hover:bg-gemso-blue"
@@ -69,9 +71,14 @@ export default function NavLinks({ userRole }: NavLinkProps) {
               );
             })}
           </nav>
-          <hr className="border-selected-blue " />
+          <hr className="border-selected-blue mb-[0.5rem]" />
         </div>
       ))}
-    </>
+      <div className="mt-auto px-[0.5rem] py-[0.625rem]">
+        <MyInfoButton />
+        <div className="h-[1rem]" />
+        <LogOutButton />
+      </div>
+    </div>
   );
 }
