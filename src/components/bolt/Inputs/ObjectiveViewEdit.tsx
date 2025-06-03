@@ -1,227 +1,138 @@
 "use client";
 
-// React and Next.js
-import { useActionState, useTransition, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-
-// Form Validation
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { updateObjectiveSchema } from "@/lib/formSchemas/objectiveSchema";
-
-// Shadcn Components
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-} from "@/components/ui/form";
-
-// Custom Components
-import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
-import { Button } from "@/components/ui/button";
-// Types
+import { useCallback } from "react";
+import { Form } from "@/components/ui/form";
 import { UpdateObjectiveFormData } from "@/types/Objective";
 import { Classification } from "@/types/Classification";
-import { Comment } from "@/types/Comment";
+import { ObjectiveProgress } from "@/types/ObjectiveProgress";
 
-// Actions
-import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
+// Hooks
+import { useObjectiveForm } from "@/hooks/updateObjective/useUpdateObjectiveForm";
+import { useUpdateObjectiveAction } from "@/hooks/updateObjective/useUpdateObjectiveAction";
 
-interface DetailObjectivesProps {
+// Components
+import { FormStatus } from "@/components/bolt/ObjectiveForm/FormStatus";
+import { FormFooter } from "@/components/bolt/ObjectiveForm/FormFooter";
+import {
+  TitleField,
+  ClassificationField,
+  WeightField,
+  GoalField,
+  ResultField,
+  GradeField,
+  FinalGradeField,
+} from "@/components/bolt/ObjectiveForm/FormFields";
+
+interface ObjectiveFormProps {
   objective: UpdateObjectiveFormData;
   classifications: Classification[];
-  comments: Comment[] | undefined;
+  progress: ObjectiveProgress;
 }
 
 export default function ObjectiveForm({
   objective,
   classifications,
-}: DetailObjectivesProps) {
-  const router = useRouter();
-  const [isEditable, setIsEditable] = useState(false);
-  const form = useForm<UpdateObjectiveFormData>({
-    resolver: zodResolver(updateObjectiveSchema),
-    defaultValues: {
-      id: objective.id,
-      title: objective.title,
-      weight: objective.weight.toString(),
-      classification: objective.classification,
-      goal: objective.goal ?? "",
-      result: objective.result ?? null,
+  progress,
+}: ObjectiveFormProps) {
+  const {
+    form,
+    formConfig,
+    isEditable,
+    toggleEditable,
+    cancelEdit,
+    setIsEditable,
+  } = useObjectiveForm({ objective, progress: progress });
+
+  const { state, isPending, executeAction } =
+    useUpdateObjectiveAction(setIsEditable);
+
+  const handleSubmit = useCallback(
+    async (data: UpdateObjectiveFormData) => {
+      await executeAction(data);
     },
-  });
-
-  const [state, newAction] = useActionState(updateObjectiveAction, null);
-  const [isPending, startTransition] = useTransition();
-
-  async function handleSubmit(data: UpdateObjectiveFormData) {
-    console.log("handleSubmit triggered with data:", data);
-
-    const parsedData = updateObjectiveSchema.safeParse(data);
-    if (!parsedData.success) {
-      console.log("Validation errors:", parsedData.error.format());
-      return;
-    }
-
-    const objectiveData: UpdateObjectiveFormData = {
-      id: data.id,
-      formID: 2,
-      title: data.title,
-      weight: data.weight,
-      classification: data.classification,
-      goal: data.goal,
-      result: null,
-    };
-
-    await startTransition(() => {
-      newAction(objectiveData);
-    });
-  }
-
-  useEffect(() => {
-    if (state === null) return;
-    else if (state.success) {
-      setIsEditable(false);
-    } else {
-      console.log("Error updating objective:", state.error);
-    }
-  }, [state, router]);
+    [executeAction]
+  );
 
   return (
     <div className="md:col-span-2 space-y-6">
       <Form {...form}>
-        <form
-          onSubmit={(e) => {
-            console.log("Form submitted");
-            form.handleSubmit(handleSubmit)(e);
-          }}
-          className="space-y-6"
-        >
-          {isPending ? (
-            <p className="text-blue-600">Guardando...</p>
-          ) : state?.success ? (
-            <h1>Resultado: {state.message}</h1>
-          ) : state?.error ? (
-            <p className="text-red-600">Error: {state.error}</p>
-          ) : null}
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <FormStatus state={state} isPending={isPending} />
+          {/* Objective Title */}
           <div className="grid grid-cols-1 gap-6">
-            {/* Objective Title */}
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Título del Objetivo</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={!isEditable} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            {formConfig.title.visible && (
+              <TitleField
+                control={form.control}
+                isEditable={isEditable}
+                required={formConfig.title.required}
+                editable={formConfig.title.editable}
+              />
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Objective Clasification */}
-            <FormField
-              control={form.control}
-              name="classification"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Clasificación
-                    <p className="text-gemso-red"> *</p>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    disabled={!isEditable}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Seleccionar" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {classifications.map((classification) => (
-                        <SelectItem
-                          key={classification.id}
-                          value={classification.id.toString()}
-                        >
-                          {classification.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-
+            {/* Objective Classification */}
+            {formConfig.classification.visible && (
+              <ClassificationField
+                control={form.control}
+                classifications={classifications}
+                isEditable={isEditable}
+                required={formConfig.classification.required}
+                editable={formConfig.classification.editable}
+              />
+            )}
             {/* Objective Weight */}
-            <FormField
-              control={form.control}
-              name="weight"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Peso (%)</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={!isEditable} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            {formConfig.weight.visible && (
+              <WeightField
+                control={form.control}
+                isEditable={isEditable}
+                required={formConfig.weight.required}
+                editable={formConfig.weight.editable}
+              />
+            )}
           </div>
 
           {/* Objective Goal */}
-          <FormField
-            control={form.control}
-            name="goal"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Meta</FormLabel>
-                <FormControl>
-                  <Textarea
-                    {...field}
-                    value={field.value || ""}
-                    disabled={!isEditable}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
+          {formConfig.goal.visible && (
+            <GoalField
+              control={form.control}
+              isEditable={isEditable}
+              required={formConfig.goal.required}
+              editable={formConfig.goal.editable}
+            />
+          )}
+
+          {/* Objective Result */}
+          {formConfig.result.visible && (
+            <ResultField
+              control={form.control}
+              isEditable={isEditable}
+              required={formConfig.result.required}
+              editable={formConfig.result.editable}
+            />
+          )}
+
+          {/* Objective Grade */}
+          {formConfig.grade.visible && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <GradeField
+                control={form.control}
+                isEditable={isEditable}
+                required={formConfig.grade.required}
+                editable={formConfig.grade.editable}
+              />
+              <FinalGradeField control={form.control} />
+            </div>
+          )}
+
+          <FormFooter
+            isEditable={isEditable}
+            isPending={isPending}
+            showEditButton={formConfig.showEditButton}
+            editButtonText={formConfig.editButtonText}
+            onEdit={toggleEditable}
+            onCancel={cancelEdit}
           />
-          <div className="flex justify-end gap-4 w-full">
-            {isEditable ? (
-              <>
-                <SubmitButton text="Guardar Cambios" isPending={isPending} />
-                <Button
-                  variant={"gemso_white_and_blue"}
-                  onClick={() => {
-                    form.reset();
-                    setIsEditable(false);
-                  }}
-                >
-                  Cancelar edición
-                </Button>
-              </>
-            ) : (
-              <Button
-                variant={"gemso_blue"}
-                onClick={() => setIsEditable(true)}
-              >
-                Editar Objetivo
-              </Button>
-            )}
-          </div>
         </form>
       </Form>
     </div>

@@ -8,7 +8,9 @@ import { getObjectiveClassificationById } from "@/lib/fetches/objective_classifi
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
 import CommentsSection from "@/components/bolt/Comments/Comments";
 import GoBack from "@/components/bolt/Buttons/GoBack";
-
+import { getProgressById } from "@/lib/fetches/progress/getProgressById";
+import { ObjectiveProgress } from "@/types/ObjectiveProgress";
+import { getFormById } from "@/lib/fetches/form/getFormById";
 /**
  * @description This page component is responsible for rendering the edit objective interface.
  * It fetches the objective details, its classification, and all available classifications
@@ -35,6 +37,10 @@ export default async function EditObjectivePage({
   if (!objective) return notFound();
   const comments = await getCommentsFromObjective(parseInt(objectiveId.id));
 
+  const form = await getFormById(Number(objective.formID));
+  const progress = await getProgressById(form.progressID);
+  const progressStatus = progress.title as ObjectiveProgress;
+
   const updatedObjective: UpdateObjectiveFormData = {
     id: objective.id,
     formID: objective.formID,
@@ -43,6 +49,7 @@ export default async function EditObjectivePage({
     result: objective.result,
     weight: objective.weight.toString(),
     classification: classification.classificationID.toString(),
+    grade: objective.grade?.toString(),
   };
   return (
     <div>
@@ -57,7 +64,7 @@ export default async function EditObjectivePage({
         <ObjectiveForm
           objective={updatedObjective}
           classifications={classifications}
-          comments={objective.comments}
+          progress={progressStatus}
         />
         <CommentsSection
           initialComments={comments}

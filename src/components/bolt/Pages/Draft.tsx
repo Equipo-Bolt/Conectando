@@ -11,6 +11,7 @@ export default async function Draft() {
   const userId = cookieStore.get("userId")?.value;
   const formId = await getFormIdByUserId(Number(userId));
   const form = await getFormById(Number(formId));
+
   const data = (await getObjectivesByFormId(
     Number(formId)
   )) as FormObjectives[];
