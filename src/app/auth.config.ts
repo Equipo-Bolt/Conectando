@@ -1,28 +1,48 @@
-import { prisma } from "@/lib/prisma";
-
-import type { NextAuthConfig } from "next-auth";
+import { DefaultSession, type NextAuthConfig} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-
+import { prisma } from "@/lib/prisma";
 import { matchOTP } from "@/utils/OTP/matchOTP";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      roleID: number;
+    } & DefaultSession["user"];
+  }
+
+
+  interface User {
+    id: string;
+    email: string;
+    roleID: number;
+  }
+}
+
+declare module "@auth/core/jwt" {
+  interface JWT {
+    id: string;
+    email: string;
+    roleID: number;
+  }
+}
+
 
 export const authConfig: NextAuthConfig = {
   providers: [
     Credentials({
-      credentials: {
-        email: {},
-        password: {},
-      },
       authorize: async (credentials) => {
-        if (!credentials) {
-          throw new Error("Data faltante para autorizar");
-        }
+        const email = String(credentials?.email);
+        const otp = String(credentials?.password);
 
-        const email = String(credentials.email);
-        const otp = String(credentials.password);
+        if (!email || !otp) {
+          throw new Error("Existen datos faltantes para autorizar.");
+        }
 
         const userExists = await prisma.user.findUnique({
           where: {
             email: email,
+            deactivated: false
           },
           select: {
             id: true,
@@ -32,7 +52,15 @@ export const authConfig: NextAuthConfig = {
         });
 
         if (!userExists) {
-          throw new Error("Usuario no registrado en Base de Datos");
+          throw new Error("Usuario no encontrado en la base de datos.");
+        }
+
+        if (!userExists.email) {
+          throw new Error("Usuario no tiene correo.")
+        }
+
+        if (!userExists.roleID) {
+          throw new Error("Usuario no tiene rol.")
         }
 
         const result = await matchOTP(userExists.id, otp)
@@ -44,24 +72,25 @@ export const authConfig: NextAuthConfig = {
         return {
           id: String(userExists.id),
           email: userExists.email,
-          role: userExists.roleID,
+          roleID: userExists.roleID,
         };
       },
     }),
   ],
   callbacks: {
-    // ! Just the set up, not final implementation
     async jwt({ token, user }) {
-      // * On sign in
       if (user) {
         token.id = user.id;
+        token.email = user.email;
+        token.roleID = user.roleID;
       }
       return token;
     },
     async session({ session, token }) {
-      // * Pass token values to session
+  
       if (token && session.user) {
         session.user.id = token.id as string;
+        session.user.roleID = token.roleID as number;
       }
 
       return session;
