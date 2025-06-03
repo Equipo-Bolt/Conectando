@@ -10,7 +10,7 @@ export async function disablePeriodAction(periodId : number) {
     try {
         await prisma.period.update({
             where: { id : periodId },
-            data: { deactived : true }
+            data: { deactivated : true }
         });
 
         return "Period has been disabled";

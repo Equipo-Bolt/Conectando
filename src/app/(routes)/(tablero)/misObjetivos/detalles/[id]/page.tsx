@@ -6,11 +6,15 @@ import { getAllClassifications } from "@/lib/fetches/classification/getAllClassi
 import { UpdateObjectiveFormData } from "@/types/Objective";
 import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
+import { getUserById } from "@/lib/fetches/user/getUserById";
 import CommentsSection from "@/components/bolt/Comments/Comments";
 import GoBack from "@/components/bolt/Buttons/GoBack";
 import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { ObjectiveProgress } from "@/types/ObjectiveProgress";
 import { getFormById } from "@/lib/fetches/form/getFormById";
+// NextAuth
+import { auth } from "@/app/auth";
+
 /**
  * @description This page component is responsible for rendering the edit objective interface.
  * It fetches the objective details, its classification, and all available classifications
@@ -27,6 +31,12 @@ export default async function EditObjectivePage({
 }: {
   params: { id: string };
 }) {
+  //! COOKIES SHOULD BE CHANGED OT NEXTAUTH
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  const User = await getUserById(Number(session.user.id));
+
   const objectiveId = await params;
   const objective = await getObjectiveById(parseInt(objectiveId.id));
   const objectiveClassification = objective.objectiveClassificationID;
@@ -48,7 +58,7 @@ export default async function EditObjectivePage({
     goal: objective.goal,
     result: objective.result,
     weight: objective.weight.toString(),
-    classification: classification.classificationID.toString(),
+    classification: classification.classificationCatalogID.toString(),
     grade: objective.grade?.toString(),
   };
   return (
@@ -69,6 +79,8 @@ export default async function EditObjectivePage({
         <CommentsSection
           initialComments={comments}
           objectiveId={parseInt(objectiveId.id)}
+          commenterId={userId ? parseInt(userId) : 0}
+          commenter={User.fullName ? User.fullName : "Usuario Anónimo"}
         />
       </div>
     </div>

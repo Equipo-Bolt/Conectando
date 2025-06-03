@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { ServerActionResponse } from "@/types/ServerActionResponse";
-import { sendOTP } from "@/utils/sendOTP";
+import { sendOTP } from "@/utils/OTP/sendOTP";
 
 
 /**
@@ -17,7 +17,7 @@ export async function findUserAction(
   try {
 
     const user = await prisma.user.findUnique({
-      where: {email: userEmail, deactived: false}
+      where: {email: userEmail, deactivated: false}
     });
 
     if(!user){
@@ -25,7 +25,7 @@ export async function findUserAction(
     }
 
     await sendOTP(userEmail);
-    return { success: true, message: userEmail + "Se mandó un correo de autenticación" };
+    return { success: true, message: userEmail};
   } catch (error) {
     console.error(`Error: ${(error as Error).message}`);
     return { success: false, error: `Error: ${(error as Error).message}` };

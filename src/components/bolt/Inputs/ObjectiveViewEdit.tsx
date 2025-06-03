@@ -29,6 +29,18 @@ interface ObjectiveFormProps {
   progress: ObjectiveProgress;
 }
 
+/**
+ * @description A React component that renders a form for viewing and editing an objective.
+ * It supports various fields such as title, classification, weight, goal, result, and grade.
+ * The form is configurable and allows toggling between editable and non-editable states.
+ *
+ * @param {ObjectiveFormProps} props - The props for the ObjectiveForm component.
+ * @param {Objective} props.objective - The objective data to be displayed and edited.
+ * @param {Classification[]} props.classifications - The list of classifications available for selection.
+ * @param {Progress} props.progress - The progress data associated with the objective.
+ *
+ * @returns {JSX.Element} The rendered ObjectiveForm component.
+ */
 export default function ObjectiveForm({
   objective,
   classifications,

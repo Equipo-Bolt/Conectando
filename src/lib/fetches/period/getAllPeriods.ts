@@ -10,7 +10,7 @@ import { Period } from "@/types/Period";
 export async function getAllPeriods() {
     try {
         const periods = await prisma.period.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (periods.length === 0) {

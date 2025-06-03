@@ -33,7 +33,7 @@ export const FinalGradeField = ({ control }: FinalGradeFieldProps) => {
       name="Final Grade"
       render={() => (
         <FormItem>
-          <FormLabel>Resultado</FormLabel>
+          <FormLabel>Puntaje Ponderado</FormLabel>
           <FormControl>
             <Input disabled={true} value={result} readOnly />
           </FormControl>

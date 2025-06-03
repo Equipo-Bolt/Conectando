@@ -1,43 +1,99 @@
-import { prisma } from "@/lib/prisma";
-
-import type { NextAuthConfig } from "next-auth";
+import { DefaultSession, type NextAuthConfig} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { prisma } from "@/lib/prisma";
+import { matchOTP } from "@/utils/OTP/matchOTP";
 
-export default {
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      roleID: number;
+    } & DefaultSession["user"];
+  }
+
+
+  interface User {
+    id: string;
+    email: string;
+    roleID: number;
+  }
+}
+
+declare module "@auth/core/jwt" {
+  interface JWT {
+    id: string;
+    email: string;
+    roleID: number;
+  }
+}
+
+
+export const authConfig: NextAuthConfig = {
   providers: [
     Credentials({
-       credentials: {
-        email: {},
-        password: {}, //! tried to declare otp as credential. did not work
-      },
       authorize: async (credentials) => {
-
         const email = String(credentials?.email);
-        const otp = Number(credentials?.password);
+        const otp = String(credentials?.password);
 
-        const user = await prisma.user.findUnique({
+        if (!email || !otp) {
+          throw new Error("Existen datos faltantes para autorizar.");
+        }
+
+        const userExists = await prisma.user.findUnique({
           where: {
-            email: String(email),
+            email: email,
+            deactivated: false
           },
           select: {
-            email : true,
-            roleID: true
-          }
+            id: true,
+            email: true,
+            roleID: true,
+          },
         });
 
-        if (!user || !user.email || !otp) {
-          throw new Error("Data faltante para aaautorizar");
+        if (!userExists) {
+          throw new Error("Usuario no encontrado en la base de datos.");
         }
 
-        //TODO change for real logic
-        // Replace this with your actual OTP validation logic
-        if (otp !== 111111) {
-          throw new Error("Credenciales inválidas")
+        if (!userExists.email) {
+          throw new Error("Usuario no tiene correo.")
         }
-        
-        //! Mandatory, NextAuth must return either null or an user object
-        return { id: user.email, email: user.email, role: user.roleID };
+
+        if (!userExists.roleID) {
+          throw new Error("Usuario no tiene rol.")
+        }
+
+        const result = await matchOTP(userExists.id, otp)
+
+        if (!result.success) {
+          throw new Error(`${result.error}`);
+        }
+
+        return {
+          id: String(userExists.id),
+          email: userExists.email,
+          roleID: userExists.roleID,
+        };
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.roleID = user.roleID;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+  
+      if (token && session.user) {
+        session.user.id = token.id as string;
+        session.user.roleID = token.roleID as number;
+      }
+
+      return session;
+    },
+  },
 } satisfies NextAuthConfig;

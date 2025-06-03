@@ -11,7 +11,7 @@ import { User } from "@/types/User";
 export async function getUserById(userId : number) {
     try {
         const user = await prisma.user.findUnique({
-            where: { id : userId, deactived : false },
+            where: { id : userId, deactivated : false },
         });
 
         if (!user) {
@@ -19,7 +19,7 @@ export async function getUserById(userId : number) {
         }
 
         
-        const { deactived, updatedAt, ...cleanUser } = user;
+        const { deactivated, updatedAt, ...cleanUser } = user;
         return { ...cleanUser } as User;
     } catch(error) {
         console.error(`Error fetching user: ${(error as Error).message}`);

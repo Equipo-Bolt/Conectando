@@ -17,7 +17,7 @@ export async function disableObjectiveAction(
   try {
     await prisma.objective.update({
       where: { id: objectiveId },
-      data: { deactived: true },
+      data: { deactivated: true },
     });
     return { success: true, message: "Objective has been disabled" };
   } catch (error) {

@@ -1,7 +1,7 @@
 "use server";
 
-//* Next Cookies
-import { cookies } from "next/headers";
+// * NextAuth
+import { auth } from "@/app/auth";
 
 // Load Data
 import { getAllClassifications } from "@/lib/fetches/classification/getAllClassifications";
@@ -21,12 +21,12 @@ import { User } from "@/types/User";
  * to populate the form. The page displays the user's name and renders a form for creating objectives.
  */
 async function CreateObjectivePage() {
-  //* Using Cookies
-  const cookieStore = await cookies();
-  const userId = cookieStore.get("userId")?.value;
+  const session = await auth();
+  const userId = session?.user?.id;
   const user: User = await getUserById(Number(userId));
   const formId: string = await getFormIdByUserId(user.id);
   const classifications: Classification[] = await getAllClassifications();
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2">Crear Objetivo</h1>

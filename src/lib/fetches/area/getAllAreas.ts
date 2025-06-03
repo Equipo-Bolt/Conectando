@@ -7,10 +7,12 @@ import { Area } from "@/types/Area";
  * @returns Promise of type {@link Area}[]
  */
 
+// lol que mal
+
 export async function getAllAreas() {
     try {
         const areas = await prisma.area.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (areas.length === 0) {
@@ -18,7 +20,7 @@ export async function getAllAreas() {
         };
 
         //! Since we use Date type, we must convert to string
-        return areas.map(({ deactived, updatedAt, ...a }) => ({ //! will be omiting updatedAt and deactived
+        return areas.map(({ deactivated, updatedAt, ...a }) => ({ //! will be omiting updatedAt and deactivated
             ...a,
             createdAt: a.createdAt.toISOString() //* into ISO format
         })) as Area[];

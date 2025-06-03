@@ -20,7 +20,12 @@ export async function createUserWithEmailOnlyAction(
         await prisma.user.create({
             data: {
                 fullName: "Usuario de Desarrollo",
-                email: userEmail
+                email: userEmail,
+                boss: {
+                    connect: {
+                        id : 2
+                    }
+                }
             }
         })
         return { success : true, message : "Usuario para Desarollo creado"}

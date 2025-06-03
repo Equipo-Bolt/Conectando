@@ -10,14 +10,14 @@ import { Division } from "@/types/Division";
 export async function getAllDivisions() {
     try {
         const divisions = await prisma.division.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (divisions.length === 0) {
             throw new Error ("No hay divisiones")
         }
 
-        return divisions.map(({ deactived, updatedAt, ...d }) => ({
+        return divisions.map(({ deactivated, updatedAt, ...d }) => ({
             ...d,
             createdAt: d.createdAt.toISOString()
         })) as Division[];

@@ -17,6 +17,17 @@ interface TitleFieldProps {
   editable: boolean;
 }
 
+/**
+ * @description A React component that renders a form field for entering the title of an objective.
+ * It includes a label, input field, and validation message, with support for editable and required states.
+ *
+ * @param control - The control object used for managing the form state.
+ * @param isEditable - A boolean indicating whether the field is editable.
+ * @param required - A boolean indicating whether the field is required.
+ * @param editable - A boolean indicating whether the field can be edited. conditions.
+ *
+ * @returns {JSX.Element} The rendered TitleField component.
+ */
 export const TitleField = ({
   control,
   isEditable,

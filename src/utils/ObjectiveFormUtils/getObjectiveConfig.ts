@@ -15,6 +15,19 @@ interface ObjectiveFormConfig {
   showEditButton: boolean;
 }
 
+/**
+ * @description Generates the configuration for an objective form based on the provided progress state.
+ *
+ * @param progress - The current progress state of the objective.
+ *                   Possible values are:
+ *                   - "Borrador": Draft state where fields are editable and required.
+ *                   - "Enviado": Submitted state where fields are visible but not editable.
+ *                   - "Aprobado": Approved state where result field becomes editable.
+ *                   - "Calificado": Graded state where all fields are visible but not editable.
+ *
+ * @returns An `ObjectiveFormConfig` object containing visibility, editability, and requirement settings
+ *          for each field, as well as button text and visibility configurations.
+ */
 export const getFormConfig = (progress: string): ObjectiveFormConfig => {
   const config: ObjectiveFormConfig = {
     title: { visible: false, editable: false, required: false },

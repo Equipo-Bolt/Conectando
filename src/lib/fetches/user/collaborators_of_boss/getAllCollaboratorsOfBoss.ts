@@ -11,14 +11,14 @@ import { User } from "@/types/User";
 export async function getAllCollaboratorsOfBoss(bossId : number ) {
     try {
         const collaborators = await prisma.user.findMany({
-            where: { bossID : bossId, deactived : false }
+            where: { bossID : bossId, deactivated : false }
         });
 
         if (collaborators.length === 0) {
             throw new Error ("El usuario no tiene colaboradores bajo su mando")
         }
 
-        return collaborators.map(({ deactived, updatedAt, ...u }) => ({
+        return collaborators.map(({ deactivated, updatedAt, ...u }) => ({
             ...u,
             createdAt: u.createdAt
         })) as User[];

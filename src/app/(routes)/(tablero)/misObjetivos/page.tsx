@@ -1,7 +1,5 @@
 "use server";
 
-import { cookies } from "next/headers";
-
 import Draft from "@/components/bolt/Pages/Draft";
 import Sent from "@/components/bolt/Pages/Sent";
 import StartProposal from "@/components/bolt/Pages/StartProposal";
@@ -14,6 +12,9 @@ import { getUserById } from "@/lib/fetches/user/getUserById";
 import { Form } from "@/types/Form";
 import { Progress } from "@/types/Progress";
 import { User } from "@/types/User";
+
+// * NextAuth
+import { auth } from "@/app/auth";
 
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Draft />,
@@ -28,11 +29,10 @@ const stateComponentMap: { [key: string]: React.ReactNode } = {
  * The page displays a different component depending on the Objectives state.
  */
 async function MyObjectivesPage() {
-  //* Using cookies
-  const cookieStore = await cookies();
-  const userId = cookieStore.get("userId")?.value;
-  const user: User = await getUserById(Number(userId));
+  const session = await auth();
+  const user: User = await getUserById(Number(session?.user?.id));
   const formId: string = await getFormIdByUserId(user.id);
+
   if (formId === "Sin Formulario Activo") {
     return (
       <div className="container mx-auto py-10">

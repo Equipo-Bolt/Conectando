@@ -9,19 +9,21 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
 
 import { FormObjectives } from "@/types/FormObjectives";
 
-import { cookies } from "next/headers";
-
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
 import WeightField from "@/components/bolt/Inputs/WeightField";
 import WeightSum from "@/components/bolt/DataTables/WeightSum";
 
-export default async function Feedback() {
-  const cookieStore = await cookies();
-  const collaboratorId = cookieStore.get("collaboratorId")?.value;
-  console.log("colab " + collaboratorId);
-  const userFormId = await getFormIdByUserId(Number(collaboratorId));
+interface FeedbackProps {
+  userId: number;
+}
+
+export default async function Feedback(
+  props: FeedbackProps
+) {
+  console.log("Feedback component props:", props);
+  const userFormId = await getFormIdByUserId(Number(props.userId));
   const form = await getFormById(parseInt(userFormId));
   const data = (await getObjectivesByFormId(
     parseInt(userFormId)
@@ -31,19 +33,19 @@ export default async function Feedback() {
     <div>
       <InfoHover>
         <div className="text-sm mb-[0.5rem]">
-          Para habilitar el envío de tus objetivos a revisión es necesario:
+          Para habilitar el envío de sus objetivos a revisión es necesario:
         </div>
         <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
-          <div>1. Tener tu información de usuario completa.</div>
+          <div>1. Tener su información de usuario completa en la página de su perfil.</div>
           <div>
-            2. Que la suma de los pesos de las clasificaciones de objetivos sea
+            2. Que la suma de los pesos de las clasificaciones sea
             igual a 100.
           </div>
           <div>
-            3. Tener al menos un objetivo por cada clasificación de objetivo.
+            3. Tener al menos un objetivo por cada clasificación.
           </div>
           <div>
-            4. Que la suma de los pesos de objetivos por cada clasificación sea
+            4. Que el peso total por cada clasificación sea
             igual a 100.
           </div>
         </div>

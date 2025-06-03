@@ -10,14 +10,14 @@ import { Classification } from "@/types/Classification";
 export async function getAllClassifications() {
     try {
         const classifications = await prisma.classification.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (classifications.length === 0) {
             throw new Error ("No hay clasificaciones")
         }
 
-        return classifications.map(({ deactived, updatedAt, ...c }) => ({
+        return classifications.map(({ deactivated, updatedAt, ...c }) => ({
             ...c,
             createdAt: c.createdAt.toISOString()
         })) as Classification[];

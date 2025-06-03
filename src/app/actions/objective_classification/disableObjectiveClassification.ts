@@ -6,7 +6,7 @@ export async function disableObjectiveClassification(objectiveClasificationId: n
   try {
     await prisma.objectiveClassification.update({
       where: { id: objectiveClasificationId },
-      data: { deactived: true },
+      data: { deactivated: true },
     });
     return "Objective Clasification with weight has been disabled";
   } catch (error) {

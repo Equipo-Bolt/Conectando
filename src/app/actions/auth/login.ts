@@ -5,20 +5,21 @@ import { AuthError } from "next-auth";
 import { signIn } from "@/app/auth";
 
 import { ServerActionResponse } from "@/types/ServerActionResponse";
-import { OTP } from "@/types/OTP";
+import { OtpSchemaType } from "@/types/OTP";
 
 /**
- * * loginAction action that will be used to login user wit otp
+ * * loginAction action that authenticates the user via otp
  * @param prevState<ServerActionResponse | null> set this value to null
- * @param data<{@link OTP}>
+ * @param data<{@link OtpSchemaType}>
  * @returns Promise of type {@link ServerActionResponse}
  */
 
 export async function loginAction(
   prevState : ServerActionResponse | null,
-  data: OTP
+  data: OtpSchemaType
 ): Promise<ServerActionResponse> {
   try {
+
     const result = await signIn("credentials", {
       email: data.email,
       password: data.otp,

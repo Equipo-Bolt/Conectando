@@ -1,7 +1,7 @@
 export interface Comment {
   id: number;
   description: string;
-  commentedAt?: Date;
+  commentedAt: Date | null;
   objectiveID: number;
   commenterID: number;
   createdAt: Date;

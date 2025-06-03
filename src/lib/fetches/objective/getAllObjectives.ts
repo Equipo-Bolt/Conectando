@@ -10,14 +10,14 @@ import { Objective } from "@/types/Objective";
 export async function getAllObjectives() {
     try {
         const objectives = await prisma.objective.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (objectives.length === 0) {
             throw new Error ("No hay Objetivos")
         }
 
-        return objectives.map(({ deactived, updatedAt, ...o }) => o) as Objective[];
+        return objectives.map(({ deactivated, updatedAt, ...o }) => o) as Objective[];
     } catch(error) {
         console.error(`Error fetching objectives: ${(error as Error).message}`);
         return ([] as Objective[]);

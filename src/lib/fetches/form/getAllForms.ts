@@ -10,14 +10,14 @@ import { Form } from "@/types/Form";
 export async function getAllForms() {
     try {
         const forms = await prisma.form.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         })
 
         if (forms.length === 0) {
             throw new Error("No hay formularios")
         }
 
-        return forms.map( ( { deactived, updatedAt, ...f} ) => f ) as Form[];
+        return forms.map( ( { deactivated, updatedAt, ...f} ) => f ) as Form[];
     } catch(error) {
         console.error(`Error fetching forms: ${(error as Error).message}`);
         return ([] as Form[]);

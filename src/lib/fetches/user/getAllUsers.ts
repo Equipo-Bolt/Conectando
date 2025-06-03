@@ -10,14 +10,14 @@ import { User } from "@/types/User";
 export async function getAllUsers() {
     try {
         const users = await prisma.user.findMany({
-            where: { deactived : false }
+            where: { deactivated : false }
         });
 
         if (users.length === 0) {
             throw new Error ("No hay Usuarios")
         }
 
-        return users.map(({ deactived, updatedAt, ...u }) => ({
+        return users.map(({ deactivated, updatedAt, ...u }) => ({
             ...u,
             createdAt: u.createdAt
         })) as User[];

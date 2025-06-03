@@ -10,7 +10,7 @@ import { Period } from "@/types/Period";
 export async function getCurrentPeriod() {
     try {
         const period = await prisma.period.findFirst({
-            where: { deactived : false, isCurrent: true }
+            where: { deactivated : false, isCurrent: true }
         });
 
         if (!period) {

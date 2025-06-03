@@ -12,13 +12,6 @@ import { Form } from "@/types/Form";
 import { Progress } from "@/types/Progress";
 import { User } from "@/types/User";
 
-const stateComponentMap: { [key: string]: React.ReactNode } = {
-  Borrador: <Draft />,
-  Enviado: <Feedback />,
-  Aprobado: <p> Aprobado </p>,
-  Calificado: <p> Calificado </p>,
-};
-
 /**
  * @description This page displays the objectives of a collaborator based on their progress state.
  * It fetches user, form, and progress data asynchronously using the provided `id` parameter.
@@ -39,6 +32,14 @@ async function CollaboratorObjectivesPage({
   const userId = await params;
   const user: User = await getUserById(parseInt(userId.id));
   const formId: string = await getFormIdByUserId(user.id);
+
+  
+  const stateComponentMap: { [key: string]: React.ReactNode } = {
+    Borrador: <Draft  />,
+    Enviado: <Feedback userId={Number(userId.id)} />,
+    Aprobado: <p> Aprobado </p>,
+    Calificado: <p> Calificado </p>,
+  };
 
   if (formId === "Sin Formulario Activo") {
     return (

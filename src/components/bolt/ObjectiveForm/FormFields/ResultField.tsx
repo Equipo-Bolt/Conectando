@@ -17,6 +17,18 @@ interface ResultFieldProps {
   editable: boolean;
 }
 
+/**
+ * @description A React component that renders a form field for capturing a result description.
+ * It includes a label, a textarea input, and validation messages.
+ * The component supports conditional editing and required field indication.
+ *
+ * @param control - The control object used for managing the form state.
+ * @param isEditable - A boolean indicating whether the form is being edited or not.
+ * @param required - A boolean indicating whether the field is required.
+ * @param editable - A boolean indicating whether the field can be edited.
+ *
+ * @returns A JSX element representing the result field form component.
+ */
 export const ResultField = ({
   control,
   isEditable,
