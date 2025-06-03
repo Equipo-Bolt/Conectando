@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createCatalogSchema } from "@/lib/formSchemas/catalogSchema";
+import { createCatalogSchema, updateCatalogSchema } from "@/lib/formSchemas/catalogSchema";
 
 export interface Division {
   id: number;
@@ -8,3 +8,4 @@ export interface Division {
 }
 
 export type CreateDivisionFormData = z.infer<typeof createCatalogSchema>;
+export type UpdateDivisionFormData = z.infer<typeof updateCatalogSchema>;

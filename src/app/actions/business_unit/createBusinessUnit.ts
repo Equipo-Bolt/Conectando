@@ -26,7 +26,7 @@ export async function createBusinessUnitAction(
 
     const dupeBusinessUnit = await prisma.businessUnit.findUnique({
       where: {
-        title: data.title,
+        title: data.title, deactivated : false
       },
     });
 

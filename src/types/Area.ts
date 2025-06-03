@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createCatalogSchema } from "@/lib/formSchemas/catalogSchema";
+import { createCatalogSchema, updateCatalogSchema } from "@/lib/formSchemas/catalogSchema";
 
 export interface Area {
   id: number;
@@ -7,3 +7,4 @@ export interface Area {
 }
 
 export type CreateAreaFormData = z.infer<typeof createCatalogSchema>;
+export type UpdateAreaFormData = z.infer<typeof updateCatalogSchema>;
