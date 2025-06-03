@@ -1,55 +1,53 @@
 "use server";
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 
-export async function createBusinessUnitAction(data : FormData) {
-    const newTitle = data.get("title") as string | null;
-    const rawDivisionId = data.get("divisionID") as string | null;
+import { CreateBusinessUnitFormData } from "@/types/BusinessUnit";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
 
-    if (!newTitle) {
-        throw new Error("No title given to new business unit");
+/**
+ * * createaBusinessUnitAction() is an action that creates a new catalog entry for Business Units
+ * @param prevState <string | null> Initial state of action, set this parameter to null
+ * @param data<{@link CreateDivisionFormData}> Must include new Title and Division id to set relation
+ * @returns Promise of type {@link ServerActionResponse}
+ */
+export async function createBusinessUnitAction(
+  prevState: string | null,
+  data: CreateBusinessUnitFormData
+): Promise<ServerActionResponse> {
+  try {
+    const divisionExists = await prisma.division.findUnique({
+      where: { id: data.divisionId, deactivated : false }
+    })
+
+    if (!divisionExists) {
+      throw new Error("No existe la Division a la que se quiere asignar");
     }
-    if (!rawDivisionId) {
-        throw new Error("No division id given to new business unit");
+
+    const dupeBusinessUnit = await prisma.businessUnit.findUnique({
+      where: {
+        title: data.title,
+      },
+    });
+
+    if (dupeBusinessUnit) {
+      throw new Error("Ya existe una Unidad de Negocio con el título introducido");
     }
 
-    const divisionId = Number(rawDivisionId);
-    if (Number.isNaN(divisionId)) {
-        throw new Error("Division id is invalid");
-    }
-
-    try {
-        const divisionExists = await prisma.division.findUnique({
-            where: {
-                id: divisionId
-            }
-        });
-        if (!divisionExists) {
-            throw new Error("Division is not found");
+    await prisma.businessUnit.create({
+      data: {
+        title: data.title,
+        division: {
+          connect: {
+            id : data.divisionId
+          }
         }
+      },
+    });
 
-        const businessUnitExists = await prisma.businessUnit.findUnique({
-            where:{
-                title : newTitle
-            }
-        });
-        if (businessUnitExists) {
-            throw new Error("Business unit with same title already exists");
-        }
-
-        await prisma.businessUnit.create({
-            data: {
-                title: newTitle,
-                division: {
-                    connect: {
-                        id: divisionId
-                    }
-                }
-            }
-        });
-
-        return "Business unit created";
-    } catch {
-        throw new Error("Failed to create business unit");
-    }
+    return { success: true, message: "Unidad de Negocio Creada" };
+  } catch (error) {
+    console.log(`Failed to create Business Unit: ${(error as Error).message}`);
+    return { success: false, error: (error as Error).message };
+  }
 }

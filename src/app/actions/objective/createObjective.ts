@@ -117,7 +117,7 @@ export async function createObjectiveAction(
 
     return { success: true, message : "Objetivo Creado"};
   } catch (error) {
-    console.error(`Failed to create objective: ${(error as Error).message}`);
+    console.log(`Failed to create objective: ${(error as Error).message}`);
     return { success: false, error : (error as Error).message}
   }
 }
