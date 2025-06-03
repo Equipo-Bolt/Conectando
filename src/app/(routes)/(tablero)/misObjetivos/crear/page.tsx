@@ -21,29 +21,12 @@ import { User } from "@/types/User";
  * to populate the form. The page displays the user's name and renders a form for creating objectives.
  */
 async function CreateObjectivePage() {
-  //* Using Cookies
-    const session = await auth();
-    const userId = session?.user?.id;
-    if (!userId) {
-      return <p>Error: User not found.</p>;
-    }
+  const session = await auth();
+  const userId = session?.user?.id;
   const user: User = await getUserById(Number(userId));
   const formId: string = await getFormIdByUserId(user.id);
   const classifications: Classification[] = await getAllClassifications();
 
-  if (!session?.user) {
-      throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
-  }
-
-  const User = await getUserById(Number(session.user.id));
-
-  const allowedRoles = [1, 4, 5, 7];
-
-  if (!User || !allowedRoles.includes(User.roleID)) {
-      throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
-  }
-
-  
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2">Crear Objetivo</h1>

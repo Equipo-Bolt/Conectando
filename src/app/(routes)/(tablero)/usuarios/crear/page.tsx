@@ -27,25 +27,13 @@ import { auth } from "@/app/auth";
  */
 async function CreateUserPage() {
   const session = await auth();
-
-
   const roles: Role[] = await getAllRoles();
   const divisions: Division[] = await getAllDivisions();
   const areas: Area[] = await getAllAreas();
   const bus: BusinessUnit[] = await getAllBusinessUnits();
   const allBosses: User[] = await getAllBosses();
 
-  if (!session?.user) {
-      throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
-  }
-
-  const User = await getUserById(Number(session.user.id));
-
-  const allowedRoles = [3, 5, 6, 7];
-
-  if (!User || !allowedRoles.includes(User.roleID)) {
-      throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
-  }
+  const User = await getUserById(Number(session?.user.id));
 
 const bosses = allBosses.filter(
   (boss) => boss.id !== User.id
