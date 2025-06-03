@@ -58,7 +58,7 @@ export async function createObjectiveAction(
       (ofo) => ofo.classificationTitle === targetClassification.title
     )?.objectiveClassificationID;
 
-    const { id, formID, classification, ...dataWithoutIds } = parsedData;
+    const { formID, classification, ...dataWithoutIds } = parsedData;
    
     if (objectivesFromObjectives.length === 0 || !relationId) {
       const newObjectiveClassification =
