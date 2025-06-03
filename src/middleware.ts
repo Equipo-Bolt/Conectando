@@ -57,10 +57,9 @@ export async function middleware(req: NextRequest) {
     currentPath.startsWith(path)
   );
 
-  // If user is already authenticated and attempts to access the login
+  // * If user is already authenticated and attempts to access the login
   if (isPublicRoute) {
     if (isAuthenticated) {
-      console.log("IS AUTH AND PUBLIC");
       return NextResponse.redirect(
         new URL(PROTECTED_DEFAULT_ROUTE, nextUrl.origin)
       );
@@ -69,9 +68,8 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // If user is not authenticated
+  // * If user is not authenticated
   if (!isAuthenticated) {
-    console.log("IS NOT AUTH");
     const callbackUrl = currentPath + nextUrl.search;
     return NextResponse.redirect(
       new URL(
@@ -81,12 +79,12 @@ export async function middleware(req: NextRequest) {
     );
   }
 
-  // If user tries to access unsearchable route
+  // * If user tries to access unsearchable route
   if (isUnsearchableRoute && isDirectAccess) {
     return NextResponse.redirect(new URL("/403", nextUrl.origin));
   }
 
-  // If user is already authenticated and attempts to access some protected route
+  // * If user is already authenticated and attempts to access some protected route
   const protectedRouteConfigKey = Object.keys(
     ROLE_PROTECTED_ROUTES_CONFIG
   ).find((routePrefix) => currentPath.startsWith(routePrefix));
@@ -95,7 +93,6 @@ export async function middleware(req: NextRequest) {
     const allowedRolesForPath =
       ROLE_PROTECTED_ROUTES_CONFIG[protectedRouteConfigKey];
     if (!userRole || !allowedRolesForPath.includes(userRole)) {
-      console.log("IS PROTECTED AND AUTH");
       return NextResponse.redirect(new URL("/403", nextUrl.origin));
     }
   }
