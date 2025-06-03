@@ -30,7 +30,7 @@ import { auth } from "@/app/auth";
 async function CollaboratorObjectivesPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const session = await auth();
 

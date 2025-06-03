@@ -27,7 +27,7 @@ import { auth } from "@/app/auth";
 export default async function EditObjectivePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   //! COOKIES SHOULD BE CHANGED OT NEXTAUTH
   const session = await auth();
@@ -85,7 +85,6 @@ export default async function EditObjectivePage({
           initialComments={comments}
           objectiveId={parseInt(objectiveId.id)}
           commenterId={ userId ? parseInt(userId) : 0}
-          commenter={User.fullName ? User.fullName : "Usuario Anónimo"}
         />
       </div>
     </div>
