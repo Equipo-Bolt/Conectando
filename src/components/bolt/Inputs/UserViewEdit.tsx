@@ -67,6 +67,7 @@ interface DetailUserProps {
     businessUnits: BusinessUnit[];
     bosses: User[];
     areas: Area[];
+    userInfoView: boolean; // Optional prop to indicate if this is for user info view
 }
 
 export default function UserViewEdit({
@@ -76,6 +77,7 @@ export default function UserViewEdit({
     businessUnits,
     bosses,
     areas,
+    userInfoView,
 }: DetailUserProps) {
     const router = useRouter();
     const [isEditable, setIsEditable] = useState(false);
@@ -250,7 +252,8 @@ export default function UserViewEdit({
                             <Button
                             disabled={!isEditable}
                             className={cn(
-                                "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
+                                "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between px-[1rem] [&_svg:not([class*='size-'])]:size-6",
+
                                 !field.value && "text-muted-foreground"
                             )}
                             >
@@ -419,7 +422,8 @@ export default function UserViewEdit({
                             disabled={!isEditable}
                             variant="outline"
                             className={cn(
-                                "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
+                                "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between px-[1rem] [&_svg:not([class*='size-'])]:size-6",
+
                                 !field.value && "text-muted-foreground"
                             )}
                             >
@@ -551,7 +555,7 @@ export default function UserViewEdit({
                         disabled={!isEditable}
                         placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
                         {...field}
-                        className="min-h-[9rem] max-h-[15rem] w-full resize-none"
+                        className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
                         />
                     </FormControl>
 
@@ -579,6 +583,7 @@ export default function UserViewEdit({
                 <SubmitButton text="Guardar Cambios" isPending={isPending} />
                 </>
             ) : (
+                userInfoView ? (
                 <Button
                 type="button"
                 variant={"gemso_blue"}
@@ -586,6 +591,7 @@ export default function UserViewEdit({
                 >
                 Editar Usuario
                 </Button>
+                ) : null
             )}
             </div>
         </form>

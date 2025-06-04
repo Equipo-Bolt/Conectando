@@ -16,20 +16,25 @@ import { Role } from "@/types/Role";
 import { BusinessUnit } from "@/types/BusinessUnit";
 import { Area } from "@/types/Area";
 
-export default async function UserDetailsPage({
-    params,
-}: {
-    params: { id: string };
-}) {
-    const userParams = await params;
-    const userId = parseInt(userParams.id);
+// NextAuth
+import { auth } from "@/app/auth";
+
+export default async function MyInfoPage(){
+    const session = await auth();
+    const userId = parseInt(session?.user?.id || "0");
+    if (!session || !session.user || !userId) {
+        throw new Error("Unauthorized access");
+    }
     const user : User = await getUserById(userId);
     const divisions : Division[] = await getAllDivisions();
     const roles : Role[] = await getAllRoles();
     const businessUnits : BusinessUnit[]= await getAllBusinessUnits();
     const areas : Area[] = await getAllAreas();
-    const bosses : User[] = await getAllBosses();
-
+    const allBosses : User[] = await getAllBosses();
+    const bosses: User[] = allBosses.filter(
+        (boss) => boss.id !== user.id
+    );
+    
     const userData: UpdateUserFormData = {
         id: user.id,
         email: user.email,
@@ -57,7 +62,7 @@ export default async function UserDetailsPage({
                 businessUnits={businessUnits}
                 areas={areas}
                 bosses={bosses}
-                userInfoView={true}
+                userInfoView={false}
             />
         </div>
     );
