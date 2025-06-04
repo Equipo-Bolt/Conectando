@@ -1,4 +1,10 @@
-import { useActionState, useTransition, useEffect, useCallback } from "react";
+import {
+  useActionState,
+  useTransition,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
 import { UpdateObjectiveFormData } from "@/types/Objective";
 
@@ -14,13 +20,17 @@ import { UpdateObjectiveFormData } from "@/types/Objective";
  * - `executeAction`: A function to execute the update action with the provided data.
  */
 export const useUpdateObjectiveAction = (
-  setIsEditable: (value: boolean) => void
+  setIsEditable: (value: boolean) => void,
+  updateCurrentValues: (newValues: UpdateObjectiveFormData) => void // Nuevo parámetro
 ) => {
   const [state, action] = useActionState(updateObjectiveAction, null);
   const [isPending, startTransition] = useTransition();
 
+  const lastSubmittedDataRef = useRef<UpdateObjectiveFormData | null>(null);
+
   const executeAction = useCallback(
     async (data: UpdateObjectiveFormData) => {
+      lastSubmittedDataRef.current = data;
       startTransition(() => {
         action(data);
       });
@@ -31,10 +41,12 @@ export const useUpdateObjectiveAction = (
   useEffect(() => {
     if (state === null) return;
 
-    if (state.success) {
+    if (state.success && lastSubmittedDataRef.current) {
+      updateCurrentValues(lastSubmittedDataRef.current);
       setIsEditable(false);
+      lastSubmittedDataRef.current = null;
     }
-  }, [state, setIsEditable]);
+  }, [state, setIsEditable, updateCurrentValues]);
 
   return {
     state,

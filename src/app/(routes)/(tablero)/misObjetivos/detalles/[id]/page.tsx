@@ -67,9 +67,7 @@ export default async function EditObjectivePage({
         <GoBack route={"/misObjetivos"} />
         <h1 className="text-3xl font-bold">Detalles del Objetivo</h1>
       </div>
-      <p className="text-base mb-6">
-        <strong>Colaborador:</strong> Daniel Fernández
-      </p>
+      <p className="text-lg font-medium mb-6">Colaborador: {User.fullName}</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <ObjectiveForm
           objective={updatedObjective}
