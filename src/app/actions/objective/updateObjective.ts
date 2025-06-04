@@ -42,6 +42,7 @@ export async function updateObjectiveAction(
       ...data,
       weight: Number(data.weight),
       classification: Number(data.classification),
+      grade: Number(data.grade),
     };
     const { id, formID, classification, ...dataWithoutIDs } = parsedData;
 
