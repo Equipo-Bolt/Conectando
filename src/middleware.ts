@@ -34,6 +34,7 @@ const ROLE_PROTECTED_ROUTES_CONFIG: Record<string, number[]> = {
   ],
   "/usuarios": [
     ROLES.Administrador,
+    ROLES["Colaborador y Administrador"], 
     ROLES["Jefe Directo y Administrador"],
     ROLES["Colaborador, Jefe Directo y Administrador"],
   ],

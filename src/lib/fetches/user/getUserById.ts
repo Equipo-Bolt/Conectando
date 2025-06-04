@@ -12,6 +12,9 @@ export async function getUserById(userId : number) {
     try {
         const user = await prisma.user.findUnique({
             where: { id : userId, deactivated : false },
+            include: {
+                businessUnit: true
+            }
         });
 
         if (!user) {
