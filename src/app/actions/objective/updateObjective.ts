@@ -39,17 +39,26 @@ export async function updateObjectiveAction(
       );
     }
 
-    const parsedData =  {  ...data, weight: Number(data.weight), classification : Number(data.classification)} 
+    const parsedData = {
+      ...data,
+      weight: Number(data.weight),
+      classification: Number(data.classification),
+      grade: Number(data.grade),
+    };
     const { id, formID, classification, ...dataWithoutIDs } = parsedData;
 
-    const targetClassification = await getClassificationById(parsedData.classification);
-    
+    const targetClassification = await getClassificationById(
+      parsedData.classification
+    );
+
     if (!targetClassification) {
       throw new Error("La clasificación no se encuentra en los catalogos");
     }
 
     //TODO rework this logic, because it wont give past created relations
-    const objectivesFromObjectives = await getObjectivesByFormId(Number(parsedData.formID));
+    const objectivesFromObjectives = await getObjectivesByFormId(
+      Number(parsedData.formID)
+    );
 
     const relationId = objectivesFromObjectives.find(
       (ofo) => ofo.classificationTitle === targetClassification.title
@@ -89,8 +98,8 @@ export async function updateObjectiveAction(
         ...dataWithoutIDs,
         objectiveClassification: {
           classificationCatalogID: {
-            equals: parsedData.classification
-          }
+            equals: parsedData.classification,
+          },
         },
         deactivated: false,
       },
@@ -112,7 +121,7 @@ export async function updateObjectiveAction(
             id: Number(relationId),
           },
         },
-      }
+      },
     });
 
     return { success: true, message: "Se ha Actualizado el Objetivo" };
