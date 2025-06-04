@@ -38,7 +38,6 @@ export const useObjectiveForm = ({
 }: UseObjectiveFormParams) => {
   const [isEditable, setIsEditable] = useState(false);
 
-  // Ref para mantener los valores actuales del formulario
   const currentValuesRef = useRef<UpdateObjectiveFormData | null>(null);
 
   const formConfig = useMemo(() => getFormConfig(progress), [progress]);
@@ -47,7 +46,6 @@ export const useObjectiveForm = ({
     [progress]
   );
 
-  // Función para obtener los valores del formulario
   const getFormValues = useCallback(
     (obj: UpdateObjectiveFormData) => ({
       id: obj.id,

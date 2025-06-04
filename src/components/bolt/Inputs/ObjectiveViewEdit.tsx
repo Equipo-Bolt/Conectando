@@ -58,7 +58,7 @@ export default function ObjectiveForm({
 
   const { state, isPending, executeAction } = useUpdateObjectiveAction(
     setIsEditable,
-    updateCurrentValues // Pasamos la función al hook de acción
+    updateCurrentValues
   );
 
   const handleSubmit = useCallback(
