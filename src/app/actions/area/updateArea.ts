@@ -1,39 +1,41 @@
 "use server";
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 
-export async function updateAreaAction(areaId : number, data : FormData) {
-    if (!areaId) {
-        throw new Error("No id given to area");
+import { UpdateAreaFormData } from "@/types/Area";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
+
+/**
+ * * updateAreaAction() is an action that updates an existing catalog entry for Areas
+ * @param prevState <string | null> Initial state of action, set this parameter to null
+ * @param data<{@link UpdateAreaFormData}> Must include new Title and id of Area to update
+ * @returns Promise of type {@link ServerActionResponse}
+ */
+export async function updateAreaAction(
+  prevState: string | null,
+  data: UpdateAreaFormData
+): Promise<ServerActionResponse> {
+  try {
+    const dupeArea = await prisma.area.findUnique({
+      where: {
+        title: data.title,
+      },
+    });
+
+    if (dupeArea) {
+      throw new Error("Ya existe una Area con el título introducido");
     }
 
-    const newTitle = data.get("title") as string | null;
+    await prisma.area.update({
+      where: { id: data.id },
+      data: {
+        title: data.title,
+      },
+    });
 
-    if (!newTitle) {
-        throw new Error("No title given to area")
-    }
-
-    try {
-        const areaExists = await prisma.area.findUnique({
-            where: {
-                NOT: {
-                    id: areaId
-                },
-                title: newTitle
-            }
-        });
-    
-        if (areaExists) {
-            throw new Error("Area with same title already exists");
-        }
-
-        await prisma.area.update({
-            where: { id : areaId },
-            data: { title: newTitle }
-        })
-
-        return "Area title has been updated";
-    } catch {
-        throw new Error ("Failed to update area");
-    }
+    return { success: true, message: "Area Actualizada" };
+  } catch (error) {
+    console.log(`Failed to update area: ${(error as Error).message}`);
+    return { success: false, error: (error as Error).message };
+  }
 }
