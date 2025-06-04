@@ -14,22 +14,18 @@ import { Comment } from "@/types/Comment";
 import { MutateComment } from "@/types/Comment";
 import { createCommentAction } from "@/app/actions/comment/createComment";
 import { updateCommentAction } from "@/app/actions/comment/updateComment";
-import { disableCommentAction } from "@/app/actions/comment/disableComment";
-
 
 
 interface CommentsSectionProps {
   initialComments: Comment[];
   objectiveId: number;
   commenterId: number;
-  commenter: string;
 }
 
 export default function CommentsSection({
   initialComments,
   objectiveId,
   commenterId,
-  commenter
 }: CommentsSectionProps) {
   const [allComments, setAllComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");
@@ -115,7 +111,7 @@ useEffect(() => {
             >
               <div className="flex-1">
                 {/* Commenter's name and date */}
-                <strong>{commenter}</strong>{" "}{/* //! NEED NEXTAUTH TO GET USER FULL NAME */}
+                <strong>{comment.commenterID}</strong>{" "}{/* //! NEED NEXTAUTH TO GET USER FULL NAME */}
                 <span className="text-gray-500">
                   {new Date(comment.createdAt).toLocaleDateString("es-MX")}
                 </span>
