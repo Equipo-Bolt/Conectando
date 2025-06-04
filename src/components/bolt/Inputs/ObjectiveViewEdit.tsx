@@ -53,10 +53,13 @@ export default function ObjectiveForm({
     toggleEditable,
     cancelEdit,
     setIsEditable,
+    updateCurrentValues,
   } = useObjectiveForm({ objective, progress: progress });
 
-  const { state, isPending, executeAction } =
-    useUpdateObjectiveAction(setIsEditable);
+  const { state, isPending, executeAction } = useUpdateObjectiveAction(
+    setIsEditable,
+    updateCurrentValues // Pasamos la función al hook de acción
+  );
 
   const handleSubmit = useCallback(
     async (data: UpdateObjectiveFormData) => {

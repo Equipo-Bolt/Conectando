@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getFormConfig } from "@/utils/ObjectiveFormUtils/getObjectiveConfig";
@@ -38,37 +38,64 @@ export const useObjectiveForm = ({
 }: UseObjectiveFormParams) => {
   const [isEditable, setIsEditable] = useState(false);
 
+  // Ref para mantener los valores actuales del formulario
+  const currentValuesRef = useRef<UpdateObjectiveFormData | null>(null);
+
   const formConfig = useMemo(() => getFormConfig(progress), [progress]);
   const selectedSchema = useMemo(
     () => ObjectiveSchemaSelectionCol(progress),
     [progress]
   );
 
+  // Función para obtener los valores del formulario
+  const getFormValues = useCallback(
+    (obj: UpdateObjectiveFormData) => ({
+      id: obj.id,
+      formID: obj.formID,
+      title: obj.title,
+      weight: obj.weight.toString(),
+      classification: obj.classification,
+      goal: obj.goal ?? "",
+      result: obj.result ?? "",
+      grade: obj.grade,
+    }),
+    []
+  );
+
   const form = useForm<UpdateObjectiveFormData>({
     resolver: zodResolver(selectedSchema),
-    defaultValues: useMemo(
-      () => ({
-        id: objective.id,
-        formID: objective.formID,
-        title: objective.title,
-        weight: objective.weight.toString(),
-        classification: objective.classification,
-        goal: objective.goal ?? "",
-        result: objective.result ?? "",
-        grade: objective.grade,
-      }),
-      [objective]
-    ),
+    defaultValues: useMemo(() => {
+      const values = getFormValues(objective);
+      currentValuesRef.current = values;
+      return values;
+    }, [objective, getFormValues]),
   });
+
+  useEffect(() => {
+    const newValues = getFormValues(objective);
+    currentValuesRef.current = newValues;
+    form.reset(newValues);
+  }, [objective, form, getFormValues]);
 
   const toggleEditable = useCallback(() => {
     setIsEditable((prev) => !prev);
   }, []);
 
   const cancelEdit = useCallback(() => {
-    form.reset();
+    if (currentValuesRef.current) {
+      form.reset(currentValuesRef.current);
+    }
     setIsEditable(false);
   }, [form]);
+
+  const updateCurrentValues = useCallback(
+    (newValues: UpdateObjectiveFormData) => {
+      const formattedValues = getFormValues(newValues);
+      currentValuesRef.current = formattedValues;
+      form.reset(formattedValues);
+    },
+    [form, getFormValues]
+  );
 
   return {
     form,
@@ -77,5 +104,6 @@ export const useObjectiveForm = ({
     toggleEditable,
     cancelEdit,
     setIsEditable,
+    updateCurrentValues,
   };
 };
