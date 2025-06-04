@@ -13,6 +13,7 @@ export default async function Draft() {
 
   const formId = await getFormIdByUserId(Number(userId));
   const form = await getFormById(Number(formId));
+
   const data = (await getObjectivesByFormId(
     Number(formId)
   )) as FormObjectives[];
