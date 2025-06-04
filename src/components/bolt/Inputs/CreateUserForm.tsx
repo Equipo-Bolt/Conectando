@@ -234,7 +234,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       <FormControl>
                         <Button
                           className={cn(
-                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
+                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between px-[1rem] [&_svg:not([class*='size-'])]:size-6",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -391,7 +391,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         <Button
                           variant="outline"
                           className={cn(
-                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between",
+                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between px-[1rem] [&_svg:not([class*='size-'])]:size-6",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -517,7 +517,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     <Textarea
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
                       {...field}
-                      className="min-h-[9rem] max-h-[15rem] w-full resize-none"
+                      className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
                     />
                   </FormControl>
 
