@@ -21,7 +21,7 @@ export default function ErrorPage({
     const router = useRouter();
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen gap-[1rem]">
+        <div className="flex flex-col items-center justify-center h-full gap-[1rem]">
             <ExclamationTriangleIcon className="h-16 w-16 text-red-600" />
             <h1 className="text-2xl font-bold">Oops... Nos encontramos con un error</h1>
             <p className="text-gray-700">{error.message}</p>
