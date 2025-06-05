@@ -1,41 +1,16 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/app/auth";
+import { getDefaultRouteForRole } from "@/utils/getDefaultRouteForRole";
 
 const PUBLIC_ROUTES = ["/login"];
 const UNSEARCHABLE_ROUTES = ["/error", "/llenarInformacion", "/403"];
-const PROTECTED_DEFAULT_ROUTE = "/misObjetivos";
 const LOGIN_ROUTE = "/login";
 
-const ROLES = {
-  Colaborador: 1,
-  "Jefe Directo": 2,
-  Administrador: 3,
-  "Colaborador y Jefe Directo": 4,
-  "Colaborador y Administrador": 5,
-  "Jefe Directo y Administrador": 6,
-  "Colaborador, Jefe Directo y Administrador": 7,
-};
-
 const ROLE_PROTECTED_ROUTES_CONFIG: Record<string, number[]> = {
-  "/misObjetivos": [
-    ROLES.Colaborador,
-    ROLES["Colaborador y Jefe Directo"],
-    ROLES["Colaborador y Administrador"],
-    ROLES["Colaborador, Jefe Directo y Administrador"],
-  ],
-  "/misColaboradores": [
-    ROLES["Jefe Directo"],
-    ROLES["Colaborador y Jefe Directo"],
-    ROLES["Jefe Directo y Administrador"],
-    ROLES["Colaborador, Jefe Directo y Administrador"],
-  ],
-  "/usuarios": [
-    ROLES.Administrador,
-    ROLES["Colaborador y Administrador"], 
-    ROLES["Jefe Directo y Administrador"],
-    ROLES["Colaborador, Jefe Directo y Administrador"],
-  ],
+  "/misObjetivos": [1, 4, 5, 7],
+  "/misColaboradores": [2, 4, 6, 7],
+  "/usuarios": [3, 5, 6, 7],
 };
 
 export async function middleware(req: NextRequest) {
@@ -45,8 +20,9 @@ export async function middleware(req: NextRequest) {
   const session = await auth();
   const isAuthenticated = !!session;
   const userRole = session?.user?.roleID;
+  const protectedDefaultRoute = getDefaultRouteForRole(userRole || 0);
   const currentPath = nextUrl.pathname;
-  const isDirectAccess = !referer;
+  const isDirectAccess = !referer || !referer.startsWith(nextUrl.origin); 
 
   const isPublicRoute = PUBLIC_ROUTES.some((path) =>
     currentPath.startsWith(path)
@@ -60,10 +36,9 @@ export async function middleware(req: NextRequest) {
   if (isPublicRoute) {
     if (isAuthenticated) {
       return NextResponse.redirect(
-        new URL(PROTECTED_DEFAULT_ROUTE, nextUrl.origin)
+        new URL(protectedDefaultRoute, nextUrl.origin)
       );
     }
-    console.log("IS PUBLIC");
     return NextResponse.next();
   }
 
@@ -80,6 +55,9 @@ export async function middleware(req: NextRequest) {
 
   // * If user tries to access unsearchable route
   if (isUnsearchableRoute && isDirectAccess) {
+    if (nextUrl.pathname === "/403") {
+      return NextResponse.redirect(new URL(protectedDefaultRoute, nextUrl.origin));
+    }
     return NextResponse.redirect(new URL("/403", nextUrl.origin));
   }
 
@@ -107,6 +85,7 @@ export const config = {
     "/llenarInformacion/:path*",
     "/error",
     "/llenarInformacion",
-    "/miInformacion"
+    "/miInformacion",
+    "/403"
   ],
 };
