@@ -1,43 +1,40 @@
-// Components
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { DataTableUsers } from "@/components/bolt/DataTables/dataTableUsers/data-table"
-import { columns } from "@/components/bolt/DataTables/dataTableUsers/columns"
-
-// Fetches
-import { getAllUsers } from "@/lib/fetches/user/getAllUsers"
-import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
+import { getUsersPaginationFilters } from "@/lib/fetches/user/getUsersPaginationFilters";
 import { getAllRoles } from "@/lib/fetches/role/getAllRoles";
+import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
+import { getPagesPagination } from "@/lib/fetches/user/getPagesPagination";
 
-
-// NextAuth
 import { User } from "@/types/User";
-import FilterForm from "@/components/bolt/Inputs/FilterForm";
+import { BusinessUnit } from "@/types/BusinessUnit";
+import { Role } from "@/types/Role";
 
-async function UsersPage() {
-    const users: User[] = await getAllUsers();
-    const businessesUnits = await getAllBusinessUnits();
-    const roles = await getAllRoles();
+import CompleteUsersTable from "@/components/bolt/Pages/CompleteUsersTable";
 
-    return (
-        <div>
-            <h1 className="text-3xl  font-bold mb-[2rem] ">Administración de Usuarios</h1>
-
-            <div className="text-lg flex flex-col gap-[1rem]" >
-                <div className="flex flex-row justify-between">
-                    <FilterForm roles={roles} businessUnits={businessesUnits}></FilterForm>
-                    
-                    <div className="flex flex-col justify-center mb-[2rem">
-                        <Button variant={"gemso_blue"} asChild>
-                            <Link href={"/usuarios/crear"}>Crear Usuario</Link>
-                        </Button>
-                    </div>
-
-                </div>
-                <DataTableUsers data={users} columns={columns} roles={roles} businessUnits={businessesUnits}/>
-            </div>
-        </div>
-    )
+interface PageProps {
+  searchParams: {
+    page?: string;
+  };
 }
 
-export default UsersPage;
+export const dynamic = "force-dynamic";
+
+export default async function UsersPage({ searchParams }: PageProps) {
+  const { page } = await searchParams;
+  const currentPage = page || "1";
+  
+  const [users, roles, businessUnits, totalPages] = await Promise.all([
+    getUsersPaginationFilters(currentPage),
+    getAllRoles(),
+    getAllBusinessUnits(),
+    getPagesPagination(),
+  ]);
+
+  return (
+    <CompleteUsersTable
+      users={users}
+      roles={roles}
+      businessUnits={businessUnits}
+      totalPages={totalPages}
+      currentPage={parseInt(currentPage)}
+    />
+  );
+}
