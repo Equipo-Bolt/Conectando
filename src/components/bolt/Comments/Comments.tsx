@@ -14,8 +14,6 @@ import { Comment } from "@/types/Comment";
 import { MutateComment } from "@/types/Comment";
 import { createCommentAction } from "@/app/actions/comment/createComment";
 import { updateCommentAction } from "@/app/actions/comment/updateComment";
-import { disableCommentAction } from "@/app/actions/comment/disableComment";
-
 
 
 interface CommentsSectionProps {
@@ -27,7 +25,7 @@ interface CommentsSectionProps {
 export default function CommentsSection({
   initialComments,
   objectiveId,
-  commenterId
+  commenterId,
 }: CommentsSectionProps) {
   const [allComments, setAllComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");

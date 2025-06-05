@@ -1,57 +1,54 @@
 "use server";
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 
-export async function updateBusinessUnitAction(businessUnitId : number, data : FormData) {
-    if (!businessUnitId){
-        throw new Error ("No id given to business unit");
+import { UpdateBusinessUnitFormData } from "@/types/BusinessUnit";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
+
+/**
+ * * updateBusinessUnitAction() is an action that creates a new catalog entry for Business Units
+ * @param prevState <string | null> Initial state of action, set this parameter to null
+ * @param data<{@link CreateDivisionFormData}> Must include new Title, Division id to set relation, and id of Business Unit to update
+ * @returns Promise of type {@link ServerActionResponse}
+ */
+export async function updateBusinessUnitAction(
+  prevState: string | null,
+  data: UpdateBusinessUnitFormData
+): Promise<ServerActionResponse> {
+  try {
+    const divisionExists = await prisma.division.findUnique({
+      where: { id: data.divisionId, deactivated : false }
+    })
+
+    if (!divisionExists) {
+      throw new Error("No existe la Division a la que se quiere asignar");
     }
 
-    const newTitle = data.get("title") as string | null;
-    const rawDivisionId = data.get("divisionID") as string | null;
+    const dupeBusinessUnit = await prisma.businessUnit.findUnique({
+      where: {
+        title: data.title, deactivated : false
+      },
+    });
 
-    if (!newTitle) {
-        throw new Error("No title given to new business unit");
-    }
-    if (!rawDivisionId) {
-        throw new Error("No division id given to new business unit");
-    }
-
-    const divisionId = Number(rawDivisionId);
-    if (Number.isNaN(divisionId)) {
-        throw new Error("Division id is invalid");
+    if (dupeBusinessUnit) {
+      throw new Error("Ya existe una Unidad de Negocio con el título introducido");
     }
 
-    try {
-        const businessUnitExists = await prisma.businessUnit.findUnique({
-            where: { 
-                NOT: {
-                    id: businessUnitId
-                },
-                title : newTitle 
-            },
-            include: {
-                division:  true
-            }
-        });
-        if (businessUnitExists && businessUnitExists?.division.id === divisionId) {
-            throw new Error ("Business Unit with same data already exists");
+    await prisma.businessUnit.update({
+      where: { id : data.id },
+      data: {
+        title: data.title,
+        division: {
+          connect: {
+            id : data.divisionId
+          }
         }
+      },
+    });
 
-        await prisma.businessUnit.update({
-            where: { id : businessUnitId },
-            data: { 
-                title: newTitle,
-                division: {
-                    connect: {
-                        id: divisionId
-                    }
-                }
-            }
-        });
-
-        return "Business Unit has been updated";
-    } catch {
-        throw new Error ("Failed to update business unit")
-    }
+    return { success: true, message: "Unidad de Negocio Actualizada" };
+  } catch (error) {
+    console.log(`Failed to update Business Unit: ${(error as Error).message}`);
+    return { success: false, error: (error as Error).message };
+  }
 }
