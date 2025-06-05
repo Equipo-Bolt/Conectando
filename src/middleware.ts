@@ -20,8 +20,6 @@ const ROLES = {
 const ROLE_PROTECTED_ROUTES_CONFIG: Record<string, number[]> = {
   "/misObjetivos": [
     ROLES.Colaborador,
-    ROLES["Jefe Directo"],
-    ROLES.Administrador,
     ROLES["Colaborador y Jefe Directo"],
     ROLES["Colaborador y Administrador"],
     ROLES["Colaborador, Jefe Directo y Administrador"],
@@ -108,6 +106,7 @@ export const config = {
     "/usuarios/:path*",
     "/llenarInformacion/:path*",
     "/error",
-    "/llenarInformacion"
+    "/llenarInformacion",
+    "/miInformacion"
   ],
 };
