@@ -10,7 +10,15 @@ export const createCatalogSchema = z.object({
 });
 
 export const createBusinessUnitSchema = createCatalogSchema.extend({
-  divisionId: z.number(),
+  divisionId: z
+    .string()
+    .min(1, "La división es requerida")
+    .refine((val) => {
+      const divisionId = parseInt(val, 10);
+      return !isNaN(divisionId) && divisionId > 0;
+    }, {
+      message: "La división debe ser un número positivo",
+    }),
 });
 export const updateCatalogSchema = createCatalogSchema.extend({
   id: z.number(),
