@@ -9,7 +9,9 @@ import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromO
 import { getUserById } from "@/lib/fetches/user/getUserById";
 import CommentsSection from "@/components/bolt/Comments/Comments";
 import GoBack from "@/components/bolt/Buttons/GoBack";
-
+import { getProgressById } from "@/lib/fetches/progress/getProgressById";
+import { ObjectiveProgress } from "@/types/ObjectiveProgress";
+import { getFormById } from "@/lib/fetches/form/getFormById";
 // NextAuth
 import { auth } from "@/app/auth";
 
@@ -33,19 +35,7 @@ export default async function EditObjectivePage({
   const session = await auth();
   const userId = session?.user?.id;
 
-  if (!session?.user) {
-      throw new Error("Acceso denegado: el usuario no ha inicidado sesión (401)");
-  }
-
   const User = await getUserById(Number(session.user.id));
-
-  console.log("User", User);
-
-  const allowedRoles = [1, 4, 5, 7];
-
-  if (!User || !allowedRoles.includes(User.roleID)) {
-      throw new Error("Acceso denegado: el usuario no tiene permisos suficientes (403)");
-  }
 
   const objectiveId = await params;
   const objective = await getObjectiveById(parseInt(objectiveId.id));
@@ -57,6 +47,10 @@ export default async function EditObjectivePage({
   if (!objective) return notFound();
   const comments = await getCommentsFromObjective(parseInt(objectiveId.id));
 
+  const form = await getFormById(Number(objective.formID));
+  const progress = await getProgressById(form.progressID);
+  const progressStatus = progress.title as ObjectiveProgress;
+
   const updatedObjective: UpdateObjectiveFormData = {
     id: objective.id,
     formID: objective.formID,
@@ -65,6 +59,7 @@ export default async function EditObjectivePage({
     result: objective.result,
     weight: objective.weight.toString(),
     classification: classification.classificationCatalogID.toString(),
+    grade: objective.grade?.toString(),
   };
   return (
     <div>
@@ -72,14 +67,12 @@ export default async function EditObjectivePage({
         <GoBack route={"/misObjetivos"} />
         <h1 className="text-3xl font-bold">Detalles del Objetivo</h1>
       </div>
-      <p className="text-base mb-6">
-        <strong>Colaborador:</strong> Daniel Fernández
-      </p>
+      <p className="text-lg font-medium mb-6">Colaborador: {User.fullName}</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <ObjectiveForm
           objective={updatedObjective}
           classifications={classifications}
-          comments={objective.comments}
+          progress={progressStatus}
         />
         <CommentsSection
           initialComments={comments}

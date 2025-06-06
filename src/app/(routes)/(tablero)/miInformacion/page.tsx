@@ -16,13 +16,15 @@ import { Role } from "@/types/Role";
 import { BusinessUnit } from "@/types/BusinessUnit";
 import { Area } from "@/types/Area";
 
-export default async function UserDetailsPage({
-    params,
-}: {
-    params: Promise<{ id: string }>;
-}) {
-    const userParams = await params;
-    const userId = parseInt(userParams.id);
+// NextAuth
+import { auth } from "@/app/auth";
+
+export default async function MyInfoPage(){
+    const session = await auth();
+    const userId = parseInt(session?.user?.id || "0");
+    if (!session || !session.user || !userId) {
+        throw new Error("Unauthorized access");
+    }
     const user : User = await getUserById(userId);
     const divisions : Division[] = await getAllDivisions();
     const roles : Role[] = await getAllRoles();
@@ -60,7 +62,7 @@ export default async function UserDetailsPage({
                 businessUnits={businessUnits}
                 areas={areas}
                 bosses={bosses}
-                userInfoView={true}
+                userInfoView={false}
             />
         </div>
     );
