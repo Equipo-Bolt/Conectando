@@ -26,18 +26,11 @@ import { auth } from "@/app/auth";
  * @description This page is used to create a new user.
  */
 async function CreateUserPage() {
-  const session = await auth();
   const roles: Role[] = await getAllRoles();
   const divisions: Division[] = await getAllDivisions();
   const areas: Area[] = await getAllAreas();
   const bus: BusinessUnit[] = await getAllBusinessUnits();
   const allBosses: User[] = await getAllBosses();
-
-  const User = await getUserById(Number(session?.user.id));
-
-const bosses = allBosses.filter(
-  (boss) => boss.id !== User.id
-);
 
   return (
     <div>
@@ -47,7 +40,7 @@ const bosses = allBosses.filter(
         divisions={divisions}
         areas={areas}
         businessUnits={bus}
-        bosses={bosses}
+        bosses={allBosses}
       />
     </div>
   );
