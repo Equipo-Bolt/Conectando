@@ -12,14 +12,24 @@ import { FormObjectives } from "@/types/FormObjectives";
  */
 export async function getObjectivesByFormId( formId : number ) {
     try {
-        const objectives = await prisma.objective.findMany({
-            where: { deactivated : false, formID : formId },
-            include: { objectiveClassification : true, comments : true }
-        });
+
+        const targetForm = await prisma.form.findUnique({
+            where: { id : formId },
+            include: { 
+                objectives : {
+                    where: {
+                        deactivated : false
+                    },
+                    include: {
+                        comments : true
+                    }
+            }, }
+        })
+        const targetFormObjectives = targetForm?.objectives;
 
         const classificationsCatalogs = await getAllClassifications();
 
-        if (objectives.length === 0) {  
+        if (!targetFormObjectives) {  
             const emptyFormObjectives : FormObjectives[] = classificationsCatalogs.map(classification => ({
                 classificationTitle: classification.title,
                 weight: 0,
@@ -30,7 +40,7 @@ export async function getObjectivesByFormId( formId : number ) {
             return emptyFormObjectives; //! Empty form with ordered classifications
         }
         
-        const uniqueClassificationObjectivesIds = Array.from(new Set(objectives.map(objective => objective.objectiveClassification.id)));
+        const uniqueClassificationObjectivesIds = Array.from(new Set(targetFormObjectives.map(objective => objective.objectiveClassificationID)));
 
         const classifications = await Promise.all(uniqueClassificationObjectivesIds.map(ct => getObjectiveClassificationById(ct)));
 
@@ -41,8 +51,13 @@ export async function getObjectivesByFormId( formId : number ) {
                     classificationTitle: matchingClassification.classificationTitle,
                     weight: matchingClassification.weight ?? 0,
                     objectiveClassificationID: matchingClassification.id || null,
-                    objectives: objectives
-                        .filter(objective => objective.objectiveClassification.id === matchingClassification.id)
+                    objectives: 
+                        targetFormObjectives
+                        .filter(objective => objective.objectiveClassificationID === matchingClassification.id)
+                        .map(objective => ({
+                            ...objective,
+                            comments: objective.comments ?? []
+                        }))
                 };
             } 
             
