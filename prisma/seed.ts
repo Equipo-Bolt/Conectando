@@ -11,19 +11,13 @@ import * as fs from "fs";
 async function main() {
   //! ------------------------- Catalogs --------------------------------------
 
-  const rawAreas = fs.readFileSync("./secure/areas.json", "utf-8");
-  const rawBusinessUnits = fs.readFileSync(
-    "./secure/businessUnits.json",
-    "utf-8"
-  );
-  const rawClasifications = fs.readFileSync(
-    "./secure/classifications.json",
-    "utf-8"
-  );
-  const rawDivisions = fs.readFileSync("./secure/divisions.json", "utf-8");
-  const rawProgresses = fs.readFileSync("./secure/progresses.json", "utf-8");
-  const rawRoles = fs.readFileSync("./secure/roles.json", "utf-8");
-  const rawPeriods = fs.readFileSync("./secure/periods.json", "utf-8");
+  const rawAreas = process.env.AREA_SECURE ?? '';
+  const rawBusinessUnits = process.env.BU_SECURE ?? '';
+  const rawClasifications = process.env.CLASSIFICATION_SECURE ?? '';
+  const rawDivisions = process.env.DIVISIONS_SECURE ?? '';
+  const rawProgresses = process.env.PROGRESSES_SECURE ?? '';
+  const rawRoles = process.env.ROLES_SECURE ?? '';
+  const rawPeriods = process.env.PERIODS_SECURE ?? '';
 
   const catalogAreas: string[] = JSON.parse(rawAreas);
   const catalogBusinessUnits: { title: string; divisionID: number }[] =

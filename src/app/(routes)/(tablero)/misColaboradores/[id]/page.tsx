@@ -27,7 +27,7 @@ import { User } from "@/types/User";
 async function CollaboratorObjectivesPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const userId = await params;
   const user: User = await getUserById(parseInt(userId.id));
