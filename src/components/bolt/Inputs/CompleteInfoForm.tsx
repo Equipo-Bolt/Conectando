@@ -80,15 +80,15 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     defaultValues: {
       id: props.user.id,
       email: props.user.email || "",
-      roleID: String(props.user.roleID) || "",
-      employeeNumber: String(props.user.employeeNumber) || "",
+      roleID: props.user.roleID?.toString() || "",
+      employeeNumber: props.user.employeeNumber?.toString() || "",
       fullName: props.user.fullName || "",
-      bossID: String(props.user.bossID) || "",
-      divisionID: String(props.user.divisionID) || "",
-      businessUnitID: String(props.user.businessUnitID) || "",
+      bossID: props.user.bossID?.toString() || "",
+      divisionID: props.user.divisionID?.toString() || "",
+      businessUnitID: props.user.businessUnitID?.toString() || "",
       companySeniority: props.user.companySeniority?.toDateString() || "",
       positionSeniority: props.user.positionSeniority?.toDateString() || "",
-      areaID: String(props.user.areaID) || "",
+      areaID: props.user.areaID?.toString() || "",
       position: props.user.jobPosition || "",
       companyContribution: props.user.companyContribution || "",
     },
@@ -159,7 +159,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     } else {
       // Filter the business units based on the selected division
       const filtered = props.businessUnits.filter(
-        (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
+        (bu) => bu.divisionID === parseInt(currentDivision || "0")
       );
       setFilteredBusinessUnits(filtered);
       form.setValue("businessUnitID", String(filtered[0]?.id) || "");
@@ -247,7 +247,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       <FormControl>
                         <Button
                           className={cn(
-                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between [&_svg:not([class*='size-'])]:size-6",
+                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between [&_svg:not([class*='size-'])]:size-6 px-[1rem]",
                             !field.value && "text-muted-foreground px-[1rem]"
                           )}
                         >
