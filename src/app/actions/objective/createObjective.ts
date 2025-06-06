@@ -52,15 +52,24 @@ export async function createObjectiveAction(
       throw new Error("La clasificación no se encuentra en los catalogos");
     }
 
-    const objectivesFromObjectives = await getObjectivesByFormId(parsedData.formID);
+    const targetForm = await prisma.form.findUnique({
+      where: { id : data.formID },
+      include: {
+        objectives : {
+          include: {
+            objectiveClassification : true
+          }
+        }
+      }
+    })
 
-    const relationId = objectivesFromObjectives.find(
-      (ofo) => ofo.classificationTitle === targetClassification.title
+    const relationId = targetForm?.objectives.find(
+      (tfo) => tfo.objectiveClassification.classificationCatalogID === targetClassification.id
     )?.objectiveClassificationID;
 
     const { formID, classification, ...dataWithoutIds } = parsedData;
    
-    if (objectivesFromObjectives.length === 0 || !relationId) {
+    if (!relationId) {
       const newObjectiveClassification =
         await prisma.objectiveClassification.create({
           data: {
