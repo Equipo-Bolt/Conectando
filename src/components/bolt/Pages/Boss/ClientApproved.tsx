@@ -1,19 +1,20 @@
 "use client";
+import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import React, { useState } from "react";
-import WeightField from "@/components/bolt/Inputs/WeightField";
-import { DataTableMyObjectives } from "@/components/bolt/DataTables/dataTableMyObjectives/data-table";
-import WeightSum from "@/components/bolt/DataTables/WeightSum";
-import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { columns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
+import { getColumns } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/columns";
+import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/data-table";
+import { useState, useCallback, useMemo } from "react";
+
 import { FormObjectives } from "@/types/FormObjectives";
 import { Form } from "@/types/Form";
-import GradeSum from "../DataTables/GradeSum";
-import SimpleStaticTable from "../DataTables/dataTableGradeWeight/data-table";
-import InfoHover from "../Icons/InfoHover";
-export default function ClientDraft({
+
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
+import WeightField from "@/components/bolt/Inputs/WeightField";
+import WeightSum from "@/components/bolt/DataTables/WeightSum";
+
+export default function ClientApproved({
   form,
   initialData,
 }: {
@@ -21,9 +22,7 @@ export default function ClientDraft({
   initialData: FormObjectives[];
 }) {
   const [data, setData] = useState(initialData);
-
-  // Updates the weight
-  const updateWeight = (id: number, newWeight: number) => {
+  const updateWeight = useCallback((id: number, newWeight: number) => {
     setData((prev) =>
       prev.map((item) =>
         item.objectiveClassificationID === id
@@ -31,8 +30,12 @@ export default function ClientDraft({
           : item
       )
     );
-  };
+  }, []);
 
+  const columns = useMemo(
+    () => getColumns(form.collaboratorID, false),
+    [form.collaboratorID]
+  );
   return (
     <div>
       <InfoHover>
@@ -54,17 +57,11 @@ export default function ClientDraft({
         </div>
       </InfoHover>
 
-      <p className="text-xs">
-        * En caso de actualizar el peso de la clasificación, es necesario
-        refrescar la pagina para poder enviar los objetivos a revisión.
-      </p>
-
       <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"} asChild>
           <Link href={"/misObjetivos/crear"}>Agregar Objetivo</Link>
         </Button>
       </div>
-
       <div className="container mx-auto">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
@@ -74,29 +71,28 @@ export default function ClientDraft({
             <div className="flex flex-row mb-[1rem] w-full">
               <div className="w-2/3">
                 <WeightField
-                  id={item.objectiveClassificationID ?? 0}
-                  initialWeight={item.weight}
+                  id={item.objectiveClassificationID as number}
+                  initialWeight={item.weight ?? 0}
                   onWeightChange={updateWeight}
+                  disabled={true}
                 />
               </div>
-              <div className="flex gap-5">
-                <WeightSum objectives={item.objectives} />
-                <GradeSum objectives={item.objectives} />
-              </div>
+              <WeightSum objectives={item.objectives} />
             </div>
-
-            <DataTableMyObjectives columns={columns} data={item.objectives} />
+            <DataTableCollaboratorObjectives
+              columns={columns}
+              data={item.objectives}
+            />
           </div>
         ))}
       </div>
-      <div className="text-2xl font-bold pb-[1.5rem]">Sumatorias</div>
-      <SimpleStaticTable data={data} />
+
       <div className="flex justify-end mt-[1rem]">
         <UpdateProgressButton
-          text="Enviar A Revisión"
+          text="Calificar Objetivos"
           form={form}
           formObjectives={data}
-          progressID={2}
+          progressID={4}
         />
       </div>
     </div>

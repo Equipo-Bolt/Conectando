@@ -19,12 +19,14 @@ interface WeightFieldProps {
   id: number;
   initialWeight?: number;
   onWeightChange?: (id: number, newWeight: number) => void;
+  disabled?: boolean;
 }
 
 export default function WeightField({
   id,
   initialWeight,
   onWeightChange,
+  disabled = false,
 }: WeightFieldProps) {
   // Local state to hold input weight value as string
   const [weight, setWeight] = useState<string>("");
@@ -112,7 +114,7 @@ export default function WeightField({
                     value={weight}
                     onChange={(e) => handleWeightChange(e.target.value)}
                     onBlur={handleBlur}
-                    disabled={isPending}
+                    disabled={disabled || isPending}
                     min={1}
                     max={100}
                     placeholder="1–100"
