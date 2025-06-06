@@ -1,12 +1,12 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getFormConfig } from "@/utils/ObjectiveFormUtils/getObjectiveConfig";
-import { ObjectiveSchemaSelectionCol } from "@/utils/ObjectiveFormUtils/schemaSelectionCol";
+import { getBossFormConfig } from "@/utils/ObjectiveFormUtils/Boss/getBossObjectiveConfig";
+import { ObjectiveSchemaSelectionBoss } from "@/utils/ObjectiveFormUtils/Boss/schemaSelectionBoss";
 import { UpdateObjectiveFormData } from "@/types/Objective";
 import { ObjectiveProgress } from "@/types/ObjectiveProgress";
 
-interface UseObjectiveFormParams {
+interface UseBossObjectiveFormParams {
   objective: UpdateObjectiveFormData;
   progress: ObjectiveProgress;
 }
@@ -20,7 +20,7 @@ interface UseObjectiveFormParams {
  * resetting the form to its default values. The hook also dynamically selects the schema
  * and configuration based on the provided progress.
  *
- * @param {UseObjectiveFormParams} params - The parameters for the hook.
+ * @param {UseBossObjectiveFormParams} params - The parameters for the hook.
  * @param {Objective} params.objective - The objective data to populate the form.
  * @param {number} params.progress - The progress value used to determine form configuration and schema.
  *
@@ -32,17 +32,17 @@ interface UseObjectiveFormParams {
  * @returns {() => void} return.cancelEdit - A function to cancel edits and reset the form to its default values.
  * @returns {(value: boolean) => void} return.setIsEditable - A function to manually set the editable state.
  */
-export const useObjectiveForm = ({
+export const useBossObjectiveForm = ({
   objective,
   progress,
-}: UseObjectiveFormParams) => {
+}: UseBossObjectiveFormParams) => {
   const [isEditable, setIsEditable] = useState(false);
 
   const currentValuesRef = useRef<UpdateObjectiveFormData | null>(null);
 
-  const formConfig = useMemo(() => getFormConfig(progress), [progress]);
+  const formConfig = useMemo(() => getBossFormConfig(progress), [progress]);
   const selectedSchema = useMemo(
-    () => ObjectiveSchemaSelectionCol(progress),
+    () => ObjectiveSchemaSelectionBoss(progress),
     [progress]
   );
 

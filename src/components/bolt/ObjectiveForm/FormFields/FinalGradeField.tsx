@@ -8,6 +8,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useWatch, Control } from "react-hook-form";
 import { gradeMultipliers } from "@/types/GradeMultipliers";
+import { calculateGrade } from "@/utils/ObjectiveFormUtils/calculateGrade";
 
 interface FinalGradeFieldProps {
   control: Control<any>;
@@ -24,16 +25,16 @@ interface FinalGradeFieldProps {
 export const FinalGradeField = ({ control }: FinalGradeFieldProps) => {
   const grade = useWatch({ control, name: "grade" });
   const weight = useWatch({ control, name: "weight" });
-  const multiplier = gradeMultipliers[grade];
-  const result = weight * multiplier;
+
+  const result = calculateGrade(grade, weight);
 
   return (
     <FormField
       control={control}
-      name="Final Grade"
+      name="finalGrade"
       render={() => (
         <FormItem>
-          <FormLabel>Puntaje Ponderado</FormLabel>
+          <FormLabel>Calificación</FormLabel>
           <FormControl>
             <Input disabled={true} value={result} readOnly />
           </FormControl>
