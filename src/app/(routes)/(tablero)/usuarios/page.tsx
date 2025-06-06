@@ -2,30 +2,34 @@ import { getUsersPaginationFilters } from "@/lib/fetches/user/getUsersPagination
 import { getAllRoles } from "@/lib/fetches/role/getAllRoles";
 import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
 import { getPagesPagination } from "@/lib/fetches/user/getPagesPagination";
+import { CompleteUsersTable } from "@/components/bolt/Pages/CompleteUsersTable";
+import type { Filter } from "@/types/Filter";
 
-import { User } from "@/types/User";
-import { BusinessUnit } from "@/types/BusinessUnit";
-import { Role } from "@/types/Role";
-
-import CompleteUsersTable from "@/components/bolt/Pages/CompleteUsersTable";
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   searchParams: {
     page?: string;
+    name?: string;
+    roleID?: string;
+    businessUnitID?: string;
   };
 }
 
-export const dynamic = "force-dynamic";
-
 export default async function UsersPage({ searchParams }: PageProps) {
-  const { page } = await searchParams;
-  const currentPage = page || "1";
+  const currentPage = searchParams.page || "1";
   
+  const filters: Filter = {
+    ...(searchParams.name && { name: searchParams.name }),
+    ...(searchParams.roleID && { roleID: searchParams.roleID }),
+    ...(searchParams.businessUnitID && { businessUnitID: searchParams.businessUnitID })
+  };
+
   const [users, roles, businessUnits, totalPages] = await Promise.all([
-    getUsersPaginationFilters(currentPage),
+    getUsersPaginationFilters(currentPage, Object.keys(filters).length ? filters : undefined),
     getAllRoles(),
     getAllBusinessUnits(),
-    getPagesPagination(),
+    getPagesPagination(Object.keys(filters).length ? filters : undefined),
   ]);
 
   return (
@@ -35,6 +39,7 @@ export default async function UsersPage({ searchParams }: PageProps) {
       businessUnits={businessUnits}
       totalPages={totalPages}
       currentPage={parseInt(currentPage)}
+      initialFilters={filters}
     />
   );
 }

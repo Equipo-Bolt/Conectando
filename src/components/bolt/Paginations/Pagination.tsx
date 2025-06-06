@@ -8,23 +8,20 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from "@/components/ui/pagination";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 
-interface PaginationComponentProps {
+interface PaginationProps {
   totalPages: number;
   currentPage: number;
 }
 
-export default function PaginationComponent({ 
-  totalPages, 
-  currentPage 
-}: PaginationComponentProps) {
+export function PaginationComponent({ totalPages, currentPage }: PaginationProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -34,12 +31,7 @@ export default function PaginationComponent({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (currentPage > 1) handlePageChange(currentPage - 1);
-            }}
-            aria-disabled={currentPage <= 1}
+            onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
             className={currentPage <= 1 ? "opacity-50 cursor-not-allowed" : ""}
           />
         </PaginationItem>
@@ -47,12 +39,8 @@ export default function PaginationComponent({
         {Array.from({ length: totalPages }, (_, i) => (
           <PaginationItem key={i}>
             <PaginationLink
-              href="#"
               isActive={i + 1 === currentPage}
-              onClick={(e) => {
-                e.preventDefault();
-                handlePageChange(i + 1);
-              }}
+              onClick={() => handlePageChange(i + 1)}
             >
               {i + 1}
             </PaginationLink>
@@ -61,12 +49,7 @@ export default function PaginationComponent({
 
         <PaginationItem>
           <PaginationNext
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (currentPage < totalPages) handlePageChange(currentPage + 1);
-            }}
-            aria-disabled={currentPage >= totalPages}
+            onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
             className={currentPage >= totalPages ? "opacity-50 cursor-not-allowed" : ""}
           />
         </PaginationItem>
