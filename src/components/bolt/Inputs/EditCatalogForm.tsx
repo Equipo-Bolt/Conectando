@@ -31,59 +31,65 @@ import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
 import { Division } from "@/types/Division";
+import { Area } from "@/types/Area";
+import { BusinessUnit } from "@/types/BusinessUnit";
 
 // Schemas
-import { createCatalogSchema, createBusinessUnitSchema } from "@/lib/formSchemas/catalogSchema";
+import { updateCatalogSchema, updateBusinessUnitSchema } from "@/lib/formSchemas/catalogSchema";
 
 type CatalogType = "Area" | "División" | "Unidad de Negocio";
+type CatalogTypeData = Area | Division | BusinessUnit;
 
 // Actions (these should be imported from your actions directory)
-import { createAreaAction } from "@/app/actions/area/createArea";
-import { createDivisionAction } from "@/app/actions/division/createDivision";
-import { createBusinessUnitAction } from "@/app/actions/business_unit/createBusinessUnit";
+import { updateAreaAction } from "@/app/actions/area/updateArea";
+import { updateDivisionAction } from "@/app/actions/division/updateDivision";
+import { updateBusinessUnitAction } from "@/app/actions/business_unit/updateBusinessUnit";
 
 //* Interface
-interface CreateCatalogFormProps {
-  divisions: Division[];
+interface UpdateCatalogFormProps {
+    data: Area | Division | BusinessUnit;
+    catalogType: CatalogType;
+    divisions: Division[];
 }
 
-export interface CreateCatalogFormData {
-  title: string;
-  divisionId?: string;
+export interface UpdateCatalogFormData {
+    id: number;
+    title: string;
+    divisionId?: string;
 }
 
 //! This definition of props is crucial, otherwise it will throw Intrinsic attributes error
-export function CreateCatalogForm(props: CreateCatalogFormProps) {
+export function EditCatalogForm(props: UpdateCatalogFormProps) {
   const router = useRouter();
 
   // State for catalog type selection
-  const [currentCatalogType, setCurrentCatalogType] = useState<CatalogType>("Unidad de Negocio");
+  const [currentCatalogType, setCurrentCatalogType] = useState<CatalogType>(props.catalogType);
 
   // Get the appropriate schema based on catalog type
   const getSchema = () => {
     return currentCatalogType === "Unidad de Negocio" 
-      ? createBusinessUnitSchema 
-      : createCatalogSchema;
+      ? updateBusinessUnitSchema 
+      : updateCatalogSchema;
   };
 
   // Get default values based on catalog type
   const getDefaultValues = useCallback(() => {
-    const baseValues = { title: "" };
+    const baseValues = { id: props.data.id, title: props.data.title };
     if (currentCatalogType === "Unidad de Negocio") {
       return { ...baseValues, divisionId: "" };
     }
     return baseValues;
-  }, [currentCatalogType]);
+  }, [currentCatalogType, props]);
 
-  const form = useForm<CreateCatalogFormData>({
+  const form = useForm<UpdateCatalogFormData>({
     resolver: zodResolver(getSchema()),
     defaultValues: getDefaultValues(),
   });
 
   // Individual action states for each catalog type
-  const [areaState, areaAction] = useActionState(createAreaAction, null);
-  const [divisionState, divisionAction] = useActionState(createDivisionAction, null);
-  const [businessUnitState, businessUnitAction] = useActionState(createBusinessUnitAction, null);
+  const [areaState, areaAction] = useActionState(updateAreaAction, null);
+  const [divisionState, divisionAction] = useActionState(updateDivisionAction, null);
+  const [businessUnitState, businessUnitAction] = useActionState(updateBusinessUnitAction, null);
   
   const [isPending, startTransition] = useTransition();
 
@@ -105,12 +111,12 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
   }, [currentCatalogType, form, getDefaultValues]);
 
   // Handle form submission
-  async function handleSubmit(data: CreateCatalogFormData) {
+  async function handleSubmit(data: UpdateCatalogFormData) {
     startTransition(() => {
       // Prepare the correct data structure based on catalog type
       if (currentCatalogType === "Unidad de Negocio") {
         // For Business Unit, we need both title and divisionId
-        const parsedData = createBusinessUnitSchema.safeParse(data);
+        const parsedData = updateBusinessUnitSchema.safeParse(data);
 
         if (!parsedData.success) {
           console.error("Validation errors:", parsedData.error.format());
@@ -118,20 +124,24 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
         }
 
         const businessUnitData = {
-          title: parsedData.data.title,
-          divisionId: parsedData.data.divisionId
+            id: parsedData.data.id,
+            title: parsedData.data.title,
+            divisionId: parsedData.data.divisionId
         };
         businessUnitAction(businessUnitData);
       } else {
         // For Area and Division, we only need the title
-        const parsedData = createCatalogSchema.safeParse(data);
+        const parsedData = updateCatalogSchema.safeParse(data);
 
         if (!parsedData.success) {
           console.error("Validation errors:", parsedData.error.format());
           return;
         }
 
-        const catalogData = { title: parsedData.data.title };
+        const catalogData = {
+            id: parsedData.data.id, 
+            title: parsedData.data.title 
+        };
         
         // Call the appropriate action based on catalog type
         if (currentCatalogType === "Area") {
@@ -180,6 +190,7 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
         <Select 
           onValueChange={(value: CatalogType) => setCurrentCatalogType(value)}
           value={currentCatalogType || ""}
+          disabled={true}
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecciona un catálogo" />
@@ -253,9 +264,9 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
 
             {/* Buttons */}
             <div className="flex justify-end gap-4 pt-2">
-              <CancelButton route="./" text="Cancelar" />
+              <CancelButton route="/catalogos" text="Cancelar" />
               <SubmitButton 
-                text={`Crear ${currentCatalogType}`} 
+                text={`Actualizar ${currentCatalogType}`} 
                 isPending={isPending} 
               />
             </div>
@@ -265,5 +276,3 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
     </div>
   );
 }
-
-export default CreateCatalogForm;
