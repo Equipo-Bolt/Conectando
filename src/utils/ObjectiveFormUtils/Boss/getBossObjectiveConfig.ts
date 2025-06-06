@@ -20,15 +20,15 @@ interface ObjectiveFormConfig {
  *
  * @param progress - The current progress state of the objective.
  *                   Possible values are:
- *                   - "Borrador": Draft state where fields are editable and required.
- *                   - "Enviado": Submitted state where fields are visible but not editable.
- *                   - "Aprobado": Approved state where result field becomes editable.
+ *                   - "Borrador": Draft state where fields are not editable.
+ *                   - "Enviado": Submitted state where fields are editable and required.
+ *                   - "Aprobado": Approved state where grade field becomes editable.
  *                   - "Calificado": Graded state where all fields are visible but not editable.
  *
  * @returns An `ObjectiveFormConfig` object containing visibility, editability, and requirement settings
  *          for each field, as well as button text and visibility configurations.
  */
-export const getFormConfig = (progress: string): ObjectiveFormConfig => {
+export const getBossFormConfig = (progress: string): ObjectiveFormConfig => {
   const config: ObjectiveFormConfig = {
     title: { visible: false, editable: false, required: false },
     classification: { visible: false, editable: false, required: false },
@@ -46,18 +46,20 @@ export const getFormConfig = (progress: string): ObjectiveFormConfig => {
       config.classification = { visible: true, editable: true, required: true };
       config.weight = { visible: true, editable: true, required: true };
       config.goal = { visible: true, editable: true, required: false };
-      config.showEditButton = true;
+
+      config.showEditButton = false;
       break;
     case "Enviado":
-      config.title = { visible: true, editable: false, required: false };
+      config.title = { visible: true, editable: true, required: true };
       config.classification = {
         visible: true,
-        editable: false,
-        required: false,
+        editable: true,
+        required: true,
       };
-      config.weight = { visible: true, editable: false, required: false };
-      config.goal = { visible: true, editable: false, required: false };
-      config.showEditButton = false;
+      config.weight = { visible: true, editable: true, required: true };
+      config.goal = { visible: true, editable: true, required: true };
+
+      config.showEditButton = true;
       break;
     case "Aprobado":
       config.title = { visible: true, editable: false, required: false };
@@ -68,8 +70,9 @@ export const getFormConfig = (progress: string): ObjectiveFormConfig => {
       };
       config.weight = { visible: true, editable: false, required: false };
       config.goal = { visible: true, editable: false, required: false };
-      config.result = { visible: true, editable: true, required: true };
-      config.editButtonText = "Agregar resultado";
+      config.result = { visible: true, editable: false, required: false };
+      config.grade = { visible: true, editable: true, required: true };
+      config.showEditButton = true;
       break;
     case "Calificado":
       config.title = { visible: true, editable: false, required: false };
