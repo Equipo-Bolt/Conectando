@@ -15,7 +15,8 @@ import { Comment } from "@/types/Comment";
 export async function getCommentsFromObjective( objectiveId : number ) {
     try {
         const comments = await prisma.comment.findMany({
-            where: { deactivated : false, objectiveID : objectiveId }
+            where: { deactivated : false, objectiveID : objectiveId },
+            include: {commenter: true}
         });
 
         return comments.map(({ deactivated, updatedAt, ...c }) => ( c )) as Comment[];

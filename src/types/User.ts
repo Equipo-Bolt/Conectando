@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BusinessUnit } from "./BusinessUnit";
 
 import { createUserSchema } from "@/lib/formSchemas/userSchema";
 import { updateUserSchema } from "@/lib/formSchemas/userSchema";
@@ -19,6 +20,7 @@ export interface User {
   divisionID?: number;
   areaID?: number;
   createdAt: Date;
+  businessUnit?: BusinessUnit;
 }
 
 export type CreateUserFormData = z.infer<typeof createUserSchema>;
