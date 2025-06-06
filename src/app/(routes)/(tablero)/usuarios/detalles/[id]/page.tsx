@@ -19,7 +19,7 @@ import { Area } from "@/types/Area";
 export default async function UserDetailsPage({
     params,
 }: {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 }) {
     const userParams = await params;
     const userId = parseInt(userParams.id);
@@ -57,6 +57,7 @@ export default async function UserDetailsPage({
                 businessUnits={businessUnits}
                 areas={areas}
                 bosses={bosses}
+                userInfoView={true}
             />
         </div>
     );

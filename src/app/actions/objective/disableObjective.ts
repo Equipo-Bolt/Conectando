@@ -22,7 +22,7 @@ export async function disableObjectiveAction(
     return { success: true, message: "Objective has been disabled" };
   } catch (error) {
     console.error(
-      `Error when disabling objectives form: ${(error as Error).message}`
+      `Error when disabling objective: ${(error as Error).message}`
     );
     return { success: false, error: `${(error as Error).message}` };
   }

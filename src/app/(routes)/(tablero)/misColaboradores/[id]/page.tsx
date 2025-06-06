@@ -1,7 +1,11 @@
 "use server";
 
 import Draft from "@/components/bolt/Pages/Draft";
-import Feedback from "@/components/bolt/Pages/Feedback";
+import Sent from "@/components/bolt/Pages/Boss/Sent";
+import Approved from "@/components/bolt/Pages/Boss/Approved";
+import Graded from "@/components/bolt/Pages/Boss/Graded";
+
+import GoBack from "@/components/bolt/Buttons/GoBack";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
@@ -27,18 +31,17 @@ import { User } from "@/types/User";
 async function CollaboratorObjectivesPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const userId = await params;
   const user: User = await getUserById(parseInt(userId.id));
   const formId: string = await getFormIdByUserId(user.id);
 
-  
   const stateComponentMap: { [key: string]: React.ReactNode } = {
-    Borrador: <Draft  />,
-    Enviado: <Feedback userId={Number(userId.id)} />,
-    Aprobado: <p> Aprobado </p>,
-    Calificado: <p> Calificado </p>,
+    Borrador: <Draft />,
+    Enviado: <Sent userId={Number(userId.id)} />,
+    Aprobado: <Approved userId={Number(userId.id)} />,
+    Calificado: <Graded userId={Number(userId.id)} />,
   };
 
   if (formId === "Sin Formulario Activo") {
@@ -62,8 +65,10 @@ async function CollaboratorObjectivesPage({
 
   return (
     <div>
-      <h1 className="text-3xl  font-bold mb-[1rem]">Objetivos</h1>
-
+      <div className="flex items-center gap-x-2 mb-4">
+        <GoBack route={"/misColaboradores"} />
+        <h1 className="text-3xl  font-bold ">Objetivos</h1>
+      </div>
       <div className="text-lg">
         <p className="font-medium">Colaborador: {user.fullName}</p>
         <p className="text-gemso-blue font-semibold ">Estado: {state.title}</p>

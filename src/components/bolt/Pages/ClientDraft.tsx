@@ -24,7 +24,6 @@ export default function ClientDraft({
 
   // Updates the weight
   const updateWeight = (id: number, newWeight: number) => {
-    console.log(`Updating weight for ID: ${id}, New Weight: ${newWeight}`);
     setData((prev) =>
       prev.map((item) =>
         item.objectiveClassificationID === id
@@ -41,17 +40,16 @@ export default function ClientDraft({
           Para habilitar el envío de sus objetivos a revisión es necesario:
         </div>
         <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
-          <div>1. Tener su información de usuario completa en la página de su perfil.</div>
           <div>
-            2. Que la suma de los pesos de las clasificaciones sea
-            igual a 100.
+            1. Tener su información de usuario completa en la página de su
+            perfil.
           </div>
           <div>
-            3. Tener al menos un objetivo por cada clasificación.
+            2. Que la suma de los pesos de las clasificaciones sea igual a 100.
           </div>
+          <div>3. Tener al menos un objetivo por cada clasificación.</div>
           <div>
-            4. Que el peso total por cada clasificación sea
-            igual a 100.
+            4. Que el peso total por cada clasificación sea igual a 100.
           </div>
         </div>
       </InfoHover>
