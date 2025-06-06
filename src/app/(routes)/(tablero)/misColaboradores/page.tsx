@@ -38,8 +38,8 @@ async function MyCollaboratorsPage() {
   );
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Mis Colaboradores</h1>
+    <div>
+      <h1 className="text-3xl font-bold mb-[1rem]">Mis Colaboradores</h1>
       <DataTableMyCollaborators columns={columns} data={progresses} />
     </div>
   );

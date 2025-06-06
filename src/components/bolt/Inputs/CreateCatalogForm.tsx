@@ -30,8 +30,6 @@ import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
 
 // Types
-import { BusinessUnit } from "@/types/BusinessUnit";
-import { Area } from "@/types/Area";
 import { Division } from "@/types/Division";
 
 // Schemas
@@ -151,22 +149,16 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
     if (currentState === null) return;
     
     if (currentState.success) {
-      // Redirect to appropriate page based on catalog type
-      const redirectPath = currentCatalogType === "Area" ? "/areas" :
-                          currentCatalogType === "División" ? "/divisiones" :
-                          "/unidades-negocio";
-      router.push(redirectPath);
+      router.push("/catalogos");
     } else {
       console.error("Error creating catalog:", currentState);
     }
-  }, [router, currentCatalogType, getCurrentState]);
+  }, [router, getCurrentState]);
 
   const currentState = getCurrentState();
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Crear Catálogo</h1>
-      
+    <div className="w-full">
       {/* Status Messages */}
       {isPending ? (
         <p className="text-blue-600 mb-4">Enviando...</p>
