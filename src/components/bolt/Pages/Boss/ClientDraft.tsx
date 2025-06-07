@@ -1,8 +1,8 @@
 "use client";
 import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesDraftBoss/columns";
-import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/data-table";
+import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesBossDraft/columns";
+import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableObjectivesBossSent/data-table";
 import { useState, useCallback, useMemo } from "react";
 
 import { FormObjectives } from "@/types/FormObjectives";

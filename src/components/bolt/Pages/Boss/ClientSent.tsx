@@ -1,8 +1,8 @@
 "use client";
 import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { getColumns } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/columns";
-import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/data-table";
+import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesBossSent/columns";
+import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableObjectivesBossSent/data-table";
 import { useState, useCallback, useMemo } from "react";
 
 import { FormObjectives } from "@/types/FormObjectives";
@@ -40,7 +40,7 @@ export default function ClientSent({
     <div>
       <InfoHover>
         <div className="text-sm mb-[0.5rem]">
-          Para habilitar el botón de aprobar objetivos es necesario:
+          Para habilitar el botón para aprobar objetivos es necesario:
         </div>
         <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
           <div>

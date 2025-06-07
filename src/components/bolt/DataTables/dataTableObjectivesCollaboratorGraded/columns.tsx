@@ -1,17 +1,13 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-
+import { DetailButton } from "@/components/bolt/Buttons/DetailButton";
 import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
 import IconTooltip from "@/components/bolt/Icons/IconTooltip";
 import { Objective } from "@/types/Objective";
-
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
-import IconCommentStatus from "@/components/bolt/Icons/IconCommentStatus";
-import { BossDetailButton } from "../../Buttons/BossDetailButton";
 import { calculateGrade } from "@/utils/ObjectiveFormUtils/calculateGrade";
 export const getColumns = (
-  collaboratorId: number,
   showDeleteButton: boolean
 ): ColumnDef<Objective>[] => [
   {
@@ -33,12 +29,12 @@ export const getColumns = (
   },
   {
     accessorKey: "result",
-    header: "Resultado",
+    header: "Result",
     cell: ({ row }) => {
-      const resultStatus = row.original.result;
+      const result = row.original.result;
       return (
         <div>
-          <IconTooltip>{resultStatus}</IconTooltip>
+          <IconTooltip>{result}</IconTooltip>
         </div>
       );
     },
@@ -70,7 +66,7 @@ export const getColumns = (
       const id = row.original.id;
       return (
         <div className="flex items-center gap-6">
-          <BossDetailButton id={id} collaboratorId={collaboratorId} />
+          <DetailButton id={id} />
           {showDeleteButton && (
             <DeleteButton
               id={id}

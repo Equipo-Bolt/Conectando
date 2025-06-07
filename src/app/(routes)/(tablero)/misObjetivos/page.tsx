@@ -2,6 +2,8 @@
 
 import Draft from "@/components/bolt/Pages/Collaborator/Draft";
 import Sent from "@/components/bolt/Pages/Collaborator/Sent";
+import Approved from "@/components/bolt/Pages/Collaborator/Approved";
+import Graded from "@/components/bolt/Pages/Collaborator/Graded";
 import StartProposal from "@/components/bolt/Pages/Collaborator/StartProposal";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
@@ -19,8 +21,8 @@ import { auth } from "@/app/auth";
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Draft />,
   Enviado: <Sent />,
-  Aprobado: <p> Aprobado </p>,
-  Calificado: <p> Calificado </p>,
+  Aprobado: <Approved />,
+  Calificado: <Graded />,
 };
 
 /**
