@@ -1,4 +1,4 @@
-import {EditCatalogForm} from "@/components/bolt/Inputs/EditCatalogForm";
+import { EditCatalogForm } from "@/components/bolt/Inputs/EditCatalogForm";
 import { getAllDivisions } from "@/lib/fetches/division/getAllDivisions";
 import { getDivisionById } from "@/lib/fetches/division/getDivisionById";
 

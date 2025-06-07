@@ -76,7 +76,7 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
   const getDefaultValues = useCallback(() => {
     const baseValues = { id: props.data.id, title: props.data.title };
     if (currentCatalogType === "Unidad de Negocio") {
-      return { ...baseValues, divisionId: "" };
+      return { ...baseValues, divisionId: (props.data as BusinessUnit).divisionID?.toString() || "" };
     }
     return baseValues;
   }, [currentCatalogType, props]);
