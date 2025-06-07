@@ -9,7 +9,7 @@ import { Objective } from "@/types/Objective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 import IconCommentStatus from "@/components/bolt/Icons/IconCommentStatus";
 import { BossDetailButton } from "../../Buttons/BossDetailButton";
-
+import { calculateGrade } from "@/utils/ObjectiveFormUtils/calculateGrade";
 export const getColumns = (
   collaboratorId: number,
   showDeleteButton: boolean
@@ -32,6 +32,18 @@ export const getColumns = (
     },
   },
   {
+    accessorKey: "result",
+    header: "Resultado",
+    cell: ({ row }) => {
+      const resultStatus = row.original.result;
+      return (
+        <div>
+          <IconTooltip>{resultStatus}</IconTooltip>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "weight",
     header: "Peso",
     cell: ({ row }) => {
@@ -39,11 +51,17 @@ export const getColumns = (
       return <span>{weightValue}%</span>;
     },
   },
-
   {
-    accessorKey: "comment",
-    header: "Comentado",
-    cell: ({ row }) => <IconCommentStatus objectiveId={row.original.id} />,
+    accessorKey: "score",
+    header: "Calificación",
+    cell: ({ row }) => {
+      const grade = row.original.grade;
+      const weight = row.original.weight;
+
+      const result = calculateGrade(grade, weight);
+
+      return <span>{result}</span>;
+    },
   },
   {
     accessorKey: "options",

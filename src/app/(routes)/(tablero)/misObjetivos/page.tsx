@@ -1,8 +1,8 @@
 "use server";
 
-import Draft from "@/components/bolt/Pages/Draft";
-import Sent from "@/components/bolt/Pages/Sent";
-import StartProposal from "@/components/bolt/Pages/StartProposal";
+import Draft from "@/components/bolt/Pages/Collaborator/Draft";
+import Sent from "@/components/bolt/Pages/Collaborator/Sent";
+import StartProposal from "@/components/bolt/Pages/Collaborator/StartProposal";
 
 import { getFormIdByUserId } from "@/lib/fetches/form/getFormIdByUserId";
 import { getFormById } from "@/lib/fetches/form/getFormById";
@@ -19,7 +19,6 @@ import { auth } from "@/app/auth";
 const stateComponentMap: { [key: string]: React.ReactNode } = {
   Borrador: <Draft />,
   Enviado: <Sent />,
-  "Corrigiendo en Junta": <p> Corrigiendo en Junta </p>,
   Aprobado: <p> Aprobado </p>,
   Calificado: <p> Calificado </p>,
 };

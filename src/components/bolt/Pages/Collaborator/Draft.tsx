@@ -1,4 +1,4 @@
-import ClientDraft from "./ClientDraft";
+import ClientDraft from "@/components/bolt/Pages/Collaborator/ClientDraft";
 
 import { auth } from "@/app/auth";
 

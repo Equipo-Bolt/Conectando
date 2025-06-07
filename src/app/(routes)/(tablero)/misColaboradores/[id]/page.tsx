@@ -1,6 +1,6 @@
 "use server";
 
-import Draft from "@/components/bolt/Pages/Draft";
+import Draft from "@/components/bolt/Pages/Boss/Draft";
 import Sent from "@/components/bolt/Pages/Boss/Sent";
 import Approved from "@/components/bolt/Pages/Boss/Approved";
 import Graded from "@/components/bolt/Pages/Boss/Graded";
@@ -38,7 +38,7 @@ async function CollaboratorObjectivesPage({
   const formId: string = await getFormIdByUserId(user.id);
 
   const stateComponentMap: { [key: string]: React.ReactNode } = {
-    Borrador: <Draft />,
+    Borrador: <Draft userId={Number(userId.id)} />,
     Enviado: <Sent userId={Number(userId.id)} />,
     Aprobado: <Approved userId={Number(userId.id)} />,
     Calificado: <Graded userId={Number(userId.id)} />,

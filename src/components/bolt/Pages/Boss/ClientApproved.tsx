@@ -1,7 +1,7 @@
 "use client";
 import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { getColumns } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/columns";
+import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesGrade/columns";
 import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/data-table";
 import { useState, useCallback, useMemo } from "react";
 
@@ -40,20 +40,10 @@ export default function ClientApproved({
     <div>
       <InfoHover>
         <div className="text-sm mb-[0.5rem]">
-          Para habilitar el envío de sus objetivos a revisión es necesario:
+          Para habilitar el botón de calificar objetivos es necesario:
         </div>
         <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
-          <div>
-            1. Tener su información de usuario completa en la página de su
-            perfil.
-          </div>
-          <div>
-            2. Que la suma de los pesos de las clasificaciones sea igual a 100.
-          </div>
-          <div>3. Tener al menos un objetivo por cada clasificación.</div>
-          <div>
-            4. Que el peso total por cada clasificación sea igual a 100.
-          </div>
+          <div>Calificar cada uno de los objetivos</div>
         </div>
       </InfoHover>
 

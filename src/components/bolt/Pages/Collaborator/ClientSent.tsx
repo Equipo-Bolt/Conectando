@@ -4,16 +4,14 @@ import React, { useState } from "react";
 import WeightField from "@/components/bolt/Inputs/WeightField";
 import { DataTableMyObjectives } from "@/components/bolt/DataTables/dataTableMyObjectives/data-table";
 import WeightSum from "@/components/bolt/DataTables/WeightSum";
-import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { columns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
+
+import { getColumns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
 import { FormObjectives } from "@/types/FormObjectives";
 import { Form } from "@/types/Form";
-import GradeSum from "../DataTables/GradeSum";
-import SimpleStaticTable from "../DataTables/dataTableGradeWeight/data-table";
-import InfoHover from "../Icons/InfoHover";
-export default function ClientDraft({
+import GradeSum from "@/components/bolt/DataTables/GradeSum";
+
+import InfoHover from "@/components/bolt/Icons/InfoHover";
+export default function ClientSent({
   form,
   initialData,
 }: {
@@ -21,7 +19,7 @@ export default function ClientDraft({
   initialData: FormObjectives[];
 }) {
   const [data, setData] = useState(initialData);
-
+  const columns = getColumns(false);
   // Updates the weight
   const updateWeight = (id: number, newWeight: number) => {
     setData((prev) =>
@@ -37,33 +35,10 @@ export default function ClientDraft({
     <div>
       <InfoHover>
         <div className="text-sm mb-[0.5rem]">
-          Para habilitar el envío de sus objetivos a revisión es necesario:
-        </div>
-        <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
-          <div>
-            1. Tener su información de usuario completa en la página de su
-            perfil.
-          </div>
-          <div>
-            2. Que la suma de los pesos de las clasificaciones sea igual a 100.
-          </div>
-          <div>3. Tener al menos un objetivo por cada clasificación.</div>
-          <div>
-            4. Que el peso total por cada clasificación sea igual a 100.
-          </div>
+          Dentro de poco, su jefe directo le citará a una junta 1 a 1 para
+          revisar y aprobar sus objetivos.
         </div>
       </InfoHover>
-
-      <p className="text-xs">
-        * En caso de actualizar el peso de la clasificación, es necesario
-        refrescar la pagina para poder enviar los objetivos a revisión.
-      </p>
-
-      <div className="flex justify-end mb-[1rem]">
-        <Button variant={"gemso_blue"} asChild>
-          <Link href={"/misObjetivos/crear"}>Agregar Objetivo</Link>
-        </Button>
-      </div>
 
       <div className="container mx-auto">
         {data.map((item) => (
@@ -77,6 +52,7 @@ export default function ClientDraft({
                   id={item.objectiveClassificationID ?? 0}
                   initialWeight={item.weight}
                   onWeightChange={updateWeight}
+                  disabled={true}
                 />
               </div>
               <div className="flex gap-5">
@@ -88,16 +64,6 @@ export default function ClientDraft({
             <DataTableMyObjectives columns={columns} data={item.objectives} />
           </div>
         ))}
-      </div>
-      <div className="text-2xl font-bold pb-[1.5rem]">Sumatorias</div>
-      <SimpleStaticTable data={data} />
-      <div className="flex justify-end mt-[1rem]">
-        <UpdateProgressButton
-          text="Enviar A Revisión"
-          form={form}
-          formObjectives={data}
-          progressID={2}
-        />
       </div>
     </div>
   );

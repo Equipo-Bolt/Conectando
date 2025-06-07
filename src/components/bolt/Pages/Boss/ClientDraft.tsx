@@ -1,18 +1,16 @@
 "use client";
 import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesGrade/columns";
+import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesDraftBoss/columns";
 import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableCollaboratorObjectives/data-table";
 import { useState, useCallback, useMemo } from "react";
 
 import { FormObjectives } from "@/types/FormObjectives";
 import { Form } from "@/types/Form";
-
-import GradeSum from "@/components/bolt/DataTables/GradeSum";
 import WeightField from "@/components/bolt/Inputs/WeightField";
 import WeightSum from "@/components/bolt/DataTables/WeightSum";
 
-export default function ClientGraded({
+export default function ClientDraft({
   form,
   initialData,
 }: {
@@ -38,11 +36,10 @@ export default function ClientGraded({
     <div>
       <InfoHover>
         <div className="text-sm mb-[0.5rem]">
-          ¡Felicidades! Ha terminado el proceso de evaluación de este periodo.
+          El colaborador aún esta realizando el borrador de sus objetivos.
         </div>
       </InfoHover>
 
-      <div className="flex justify-end mb-[1rem]"></div>
       <div className="container mx-auto">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
@@ -58,10 +55,7 @@ export default function ClientGraded({
                   disabled={true}
                 />
               </div>
-              <div className="flex gap-5">
-                <WeightSum objectives={item.objectives} />
-                <GradeSum objectives={item.objectives} />
-              </div>
+              <WeightSum objectives={item.objectives} />
             </div>
             <DataTableCollaboratorObjectives
               columns={columns}

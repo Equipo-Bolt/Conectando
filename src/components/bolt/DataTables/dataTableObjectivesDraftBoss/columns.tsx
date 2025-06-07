@@ -7,7 +7,6 @@ import IconTooltip from "@/components/bolt/Icons/IconTooltip";
 import { Objective } from "@/types/Objective";
 
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
-import IconCommentStatus from "@/components/bolt/Icons/IconCommentStatus";
 import { BossDetailButton } from "../../Buttons/BossDetailButton";
 
 export const getColumns = (
@@ -38,12 +37,6 @@ export const getColumns = (
       const weightValue = row.original.weight;
       return <span>{weightValue}%</span>;
     },
-  },
-
-  {
-    accessorKey: "comment",
-    header: "Comentado",
-    cell: ({ row }) => <IconCommentStatus objectiveId={row.original.id} />,
   },
   {
     accessorKey: "options",
