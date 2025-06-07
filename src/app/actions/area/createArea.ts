@@ -1,33 +1,40 @@
 "use server";
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from "@/lib/prisma";
 
-export async function createAreaAction(data : FormData) {
-    const newTitle = data.get("title") as string | null;
+import { CreateAreaFormData } from "@/types/Area";
+import { ServerActionResponse } from "@/types/ServerActionResponse";
 
-    if (!newTitle) {
-        throw new Error("No title given to new area");
+/**
+ * * createaAreaAction() is an action that creates a new catalog entry for Areas
+ * @param prevState <string | null> Initial state of action, set this parameter to null
+ * @param data<{@link CreateAreaFormData}> Must include new Title
+ * @returns Promise of type {@link ServerActionResponse}
+ */
+export async function createAreaAction(
+  prevState: ServerActionResponse | null,
+  data: CreateAreaFormData
+): Promise<ServerActionResponse> {
+  try {
+    const dupeArea = await prisma.area.findUnique({
+      where: {
+        title: data.title,
+      },
+    });
+
+    if (dupeArea) {
+      throw new Error("Ya existe una Area con el título introducido");
     }
 
-    try {
-        const areaExists = await prisma.area.findUnique({
-            where: {
-                title: newTitle
-            }
-        });
-    
-        if (areaExists) {
-            throw new Error("Area with same title already exists");
-        }
+    await prisma.area.create({
+      data: {
+        title: data.title,
+      },
+    });
 
-        await prisma.area.create({
-            data: {
-                title: newTitle
-            }
-        })
-
-        return "Area created";
-    } catch {
-        throw new Error ("Failed to create area");
-    }
+    return { success: true, message: "Area Creada" };
+  } catch (error) {
+    console.log(`Failed to create area: ${(error as Error).message}`);
+    return { success: false, error: (error as Error).message };
+  }
 }

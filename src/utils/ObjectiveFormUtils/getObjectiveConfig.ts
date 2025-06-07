@@ -46,7 +46,6 @@ export const getFormConfig = (progress: string): ObjectiveFormConfig => {
       config.classification = { visible: true, editable: true, required: true };
       config.weight = { visible: true, editable: true, required: true };
       config.goal = { visible: true, editable: true, required: false };
-
       config.showEditButton = true;
       break;
     case "Enviado":

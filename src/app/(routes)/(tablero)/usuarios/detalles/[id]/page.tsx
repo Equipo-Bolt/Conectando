@@ -28,11 +28,8 @@ export default async function UserDetailsPage({
     const roles : Role[] = await getAllRoles();
     const businessUnits : BusinessUnit[]= await getAllBusinessUnits();
     const areas : Area[] = await getAllAreas();
-    const allBosses : User[] = await getAllBosses();
-    const bosses: User[] = allBosses.filter(
-        (boss) => boss.id !== user.id
-    );
-    
+    const bosses : User[] = await getAllBosses();
+
     const userData: UpdateUserFormData = {
         id: user.id,
         email: user.email,

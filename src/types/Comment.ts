@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export interface Comment {
   id: number;
   description: string;
@@ -5,6 +7,7 @@ export interface Comment {
   objectiveID: number;
   commenterID: number;
   createdAt: Date;
+  commenter?: User
 }
 
 export interface MutateComment

@@ -29,7 +29,7 @@ async function CreateObjectivePage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">Crear Objetivo</h1>
+      <h1 className="text-3xl font-bold mb-[1rem]">Crear Objetivo</h1>
       <p className="text-base mb-6">
         Colaborador: {user ? user.fullName : "N/A"}
       </p>

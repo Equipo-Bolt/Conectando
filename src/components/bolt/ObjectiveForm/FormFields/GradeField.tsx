@@ -1,4 +1,3 @@
-// 📁 components/ObjectiveForm/FormFields/GradeField.tsx
 import {
   FormField,
   FormItem,
@@ -50,10 +49,8 @@ export const GradeField = ({
           <FormControl>
             <Input
               type="number"
-              min="1"
-              max="5"
-              step="1"
               {...field}
+              value={field.value || ""}
               disabled={!isEditable || !editable}
               placeholder="1 - 5"
             />

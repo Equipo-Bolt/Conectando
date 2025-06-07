@@ -14,8 +14,6 @@ import { Comment } from "@/types/Comment";
 import { MutateComment } from "@/types/Comment";
 import { createCommentAction } from "@/app/actions/comment/createComment";
 import { updateCommentAction } from "@/app/actions/comment/updateComment";
-import { disableCommentAction } from "@/app/actions/comment/disableComment";
-
 
 
 interface CommentsSectionProps {
@@ -27,7 +25,7 @@ interface CommentsSectionProps {
 export default function CommentsSection({
   initialComments,
   objectiveId,
-  commenterId
+  commenterId,
 }: CommentsSectionProps) {
   const [allComments, setAllComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");
@@ -36,7 +34,8 @@ export default function CommentsSection({
   const [editedText, setEditedText] = useState("");
 
   const [state, createAction] = useActionState(createCommentAction, null)
-  const [isPending, startCreateTransition] = useTransition();
+  const [isPendingCreate, startCreateTransition] = useTransition();
+    const [isPendingEdit, startEditTransition] = useTransition();
 
   const [updateState, updateAction] = useActionState(updateCommentAction, null);
 
@@ -48,7 +47,9 @@ export default function CommentsSection({
     objectiveID: objectiveId,
   };
 
-  await updateAction(updatedEntry);
+  await startEditTransition(() => {
+    updateAction(updatedEntry)
+  });
 };
 
 useEffect(() => {
@@ -66,12 +67,11 @@ useEffect(() => {
   };
 
   async function handleAddComment() {
-    console.log(commenterId)
     if (newComment.trim() === "") return;
 
     const newEntry: MutateComment = {
       description: newComment,
-      commenterID: commenterId, //! ESTO DEBE TENER EL ID DEL USUARIO LOGGEADO
+      commenterID: commenterId,
       objectiveID: objectiveId,
     };
 
@@ -113,7 +113,7 @@ useEffect(() => {
             >
               <div className="flex-1">
                 {/* Commenter's name and date */}
-                <strong>{comment.commenterID}</strong>{" "}{/* //! NEED NEXTAUTH TO GET USER FULL NAME */}
+                <strong>{comment.commenter?.fullName}</strong>{" "}{/* //! NEED NEXTAUTH TO GET USER FULL NAME */}
                 <span className="text-gray-500">
                   {new Date(comment.createdAt).toLocaleDateString("es-MX")}
                 </span>
