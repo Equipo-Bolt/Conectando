@@ -17,12 +17,13 @@ interface PageProps {
 }
 
 export default async function UsersPage({ searchParams }: PageProps) {
-  const currentPage = searchParams.page || "1";
+  const params = await searchParams;
+  const currentPage = params.page || "1";
   
   const filters: Filter = {
-    ...(searchParams.name && { name: searchParams.name }),
-    ...(searchParams.roleID && { roleID: searchParams.roleID }),
-    ...(searchParams.businessUnitID && { businessUnitID: searchParams.businessUnitID })
+    ...(params.name && { name: params.name }),
+    ...(params.roleID && { roleID: params.roleID }),
+    ...(params.businessUnitID && { businessUnitID: params.businessUnitID })
   };
 
   const [users, roles, businessUnits, totalPages] = await Promise.all([
