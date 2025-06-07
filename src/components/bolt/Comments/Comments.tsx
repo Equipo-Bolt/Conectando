@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, useEffect, useState, useTransition } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -61,11 +61,6 @@ useEffect(() => {
   }
 }, [updateState]);
 
-
-  const handleDelete = (id: number) => { //! NO DEBE DE HABER DELETE
-    setAllComments((prev) => prev.filter((c) => c.id !== id));
-  };
-
   async function handleAddComment() {
     if (newComment.trim() === "") return;
 
@@ -113,7 +108,7 @@ useEffect(() => {
             >
               <div className="flex-1">
                 {/* Commenter's name and date */}
-                <strong>{comment.commenter?.fullName}</strong>{" "}{/* //! NEED NEXTAUTH TO GET USER FULL NAME */}
+                <strong>{comment.commenter?.fullName}</strong>
                 <span className="text-gray-500">
                   {new Date(comment.createdAt).toLocaleDateString("es-MX")}
                 </span>

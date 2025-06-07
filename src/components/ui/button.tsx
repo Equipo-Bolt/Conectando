@@ -30,7 +30,7 @@ const buttonVariants = cva(
           "bg-gemso-red text-primary-foreground shadow-xs hover:bg-gemso-red/90 hover:cursor-pointer",
       },
       size: {
-        default: "h-[3rem] w-[10rem]",
+        default: "h-[3rem] min-w-[10rem] w-auto",
         sm: "h-8 rounded-md gap-1.5 px-3",
         lg: "h-10 rounded-md px-6 ",
       },

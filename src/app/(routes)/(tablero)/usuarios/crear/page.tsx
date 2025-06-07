@@ -34,7 +34,7 @@ async function CreateUserPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">Crear Usuario</h1>
+      <h1 className="text-3xl font-bold mb-[1rem]">Crear Usuario</h1>
       <CreateUserForm
         roles={roles}
         divisions={divisions}

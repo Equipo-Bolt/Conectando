@@ -62,7 +62,7 @@ export const columns: ColumnDef<User>[] = [
           
           <DeleteButton
             id={userId}
-            title="Eliminar usuario"
+            title="Eliminar Usuario"
             description="¿Desea eliminar este usuario? Esta acción no se puede deshacer."
             handleConfirm={async (id) => {
               await disableUser(id);

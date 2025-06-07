@@ -59,7 +59,7 @@ export const columns: ColumnDef<Objective>[] = [
           <DetailButton id={id} />
           <DeleteButton
             id={id}
-            title="Eliminar objetivo"
+            title="Eliminar Objetivo"
             description="¿Desea eliminar este objetivo? Esta acción no se puede deshacer."
             handleConfirm={async (id) => {
               await disableObjectiveAction(null, id);

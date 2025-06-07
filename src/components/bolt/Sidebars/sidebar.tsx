@@ -14,7 +14,7 @@ export default async function SideNav() {
 
   return (
     <div className="bg-gemso-dark-blue flex h-full flex-col px-3 py-4 md:px-2">
-      <div className="justify-center mb-20 hidden md:flex">
+      <div className="justify-center mb-[2rem] hidden md:flex">
         <Image
           src={GemsoBlanco}
           alt="Gemso Blanco Logo"
