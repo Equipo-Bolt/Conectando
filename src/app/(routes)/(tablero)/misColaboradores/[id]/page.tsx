@@ -47,7 +47,10 @@ async function CollaboratorObjectivesPage({
   if (formId === "Sin Formulario Activo") {
     return (
       <div className="container mx-auto py-10">
-        <h1 className="text-3xl font-bold mb-[1rem]">Objetivos</h1>
+        <div className="flex items-center gap-x-2 mb-4">
+          <GoBack route={"/misColaboradores"} />
+          <h1 className="text-3xl  font-bold ">Objetivos</h1>
+        </div>
 
         <div className="text-lg">
           <p className="font-medium">Colaborador: {user.fullName}</p>

@@ -35,14 +35,14 @@ export default function ClientApproved({
     <div>
       <InfoHover>
         <div className="text-sm mb-[0.5rem]">
-          Sus objetivos han sido aprobados. Es importante ir agregando el
+          Sus objetivos han sido aprobados. Es importante agregar el
           resultado de cada uno de ellos antes de la evaluación final de sus
           objetivos. Su jefe directo le citará a una junta 1 a 1 para la
           evaluación final.
         </div>
       </InfoHover>
 
-      <div className="container mx-auto">
+      <div className="container mx-auto mt-[2rem]">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
             <h1 className="text-2xl font-bold pb-[1.5rem]">

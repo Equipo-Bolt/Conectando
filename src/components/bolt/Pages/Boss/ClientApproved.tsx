@@ -47,12 +47,7 @@ export default function ClientApproved({
         </div>
       </InfoHover>
 
-      <div className="flex justify-end mb-[1rem]">
-        <Button variant={"gemso_blue"} asChild>
-          <Link href={"/misObjetivos/crear"}>Agregar Objetivo</Link>
-        </Button>
-      </div>
-      <div className="container mx-auto">
+      <div className="container mx-auto mt-[2rem]">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
             <h1 className="text-2xl font-bold pb-[1.5rem]">

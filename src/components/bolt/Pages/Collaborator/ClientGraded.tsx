@@ -40,7 +40,7 @@ export default function ClientGraded({
         </div>
       </InfoHover>
 
-      <div className="container mx-auto">
+      <div className="container mx-auto mt-[2rem]">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
             <h1 className="text-2xl font-bold pb-[1.5rem]">

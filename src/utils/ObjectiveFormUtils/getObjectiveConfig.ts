@@ -69,7 +69,7 @@ export const getFormConfig = (progress: string): ObjectiveFormConfig => {
       config.weight = { visible: true, editable: false, required: false };
       config.goal = { visible: true, editable: false, required: false };
       config.result = { visible: true, editable: true, required: true };
-      config.editButtonText = "Agregar resultado";
+      config.editButtonText = "Agregar Resultado";
       break;
     case "Calificado":
       config.title = { visible: true, editable: false, required: false };

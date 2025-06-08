@@ -29,7 +29,7 @@ export const getColumns = (
   },
   {
     accessorKey: "result",
-    header: "Result",
+    header: "Resultado",
     cell: ({ row }) => {
       const result = row.original.result;
       return (

@@ -73,6 +73,7 @@ export const getBossFormConfig = (progress: string): ObjectiveFormConfig => {
       config.result = { visible: true, editable: false, required: false };
       config.grade = { visible: true, editable: true, required: true };
       config.showEditButton = true;
+      config.editButtonText = "Agregar Puntaje";
       break;
     case "Calificado":
       config.title = { visible: true, editable: false, required: false };

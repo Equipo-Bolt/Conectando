@@ -1,4 +1,4 @@
-import ClientDraft from "@/components/bolt/Pages/Collaborator/ClientDraft";
+import ClientSent from "@/components/bolt/Pages/Collaborator/ClientSent";
 
 import { auth } from "@/app/auth";
 
@@ -18,5 +18,5 @@ export default async function Sent() {
     Number(formId)
   )) as FormObjectives[];
 
-  return <ClientDraft form={form} initialData={data} />;
+  return <ClientSent form={form} initialData={data} />;
 }

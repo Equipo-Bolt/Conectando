@@ -180,7 +180,7 @@ useEffect(() => {
           <div className="mt-4">
             <Textarea
               className="w-full resize-none max-h-30 overflow-y-auto"
-              placeholder="Añadir nuevo comentario..."
+              placeholder="Agregar nuevo comentario..."
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
             />
@@ -204,7 +204,7 @@ useEffect(() => {
             variant={"gemso_blue"}
             onClick={() => setShowNewComment(true)}
           >
-            Añadir Comentario
+            Agregar Comentario
           </Button>
         ))}
     </div>

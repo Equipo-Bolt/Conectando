@@ -42,7 +42,7 @@ export default function ClientGraded({
         </div>
       </InfoHover>
 
-      <div className="flex justify-end mb-[1rem]"></div>
+      <div className="flex justify-end mb-[1rem] mt-[1rem]"></div>
       <div className="container mx-auto">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
