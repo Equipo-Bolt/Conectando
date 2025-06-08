@@ -85,7 +85,7 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
   useEffect(() => {
     if (state === null) return;
     else if (state.success) {
-      router.push("/misObjetivos");
+      router.push("./");
     } else {
       console.error("Error creating objective:", state);
     }

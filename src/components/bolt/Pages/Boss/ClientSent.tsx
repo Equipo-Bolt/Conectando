@@ -56,7 +56,7 @@ export default function ClientSent({
 
       <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"} asChild>
-          <Link href={"/misObjetivos/crear"}>Agregar Objetivo</Link>
+          <Link href={`/misColaboradores/${form.collaboratorID}/crear`}>Agregar Objetivo</Link>
         </Button>
       </div>
       <div className="container mx-auto">
