@@ -7,12 +7,11 @@ import WeightSum from "@/components/bolt/DataTables/WeightSum";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { columns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
+import { getColumns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
 import { FormObjectives } from "@/types/FormObjectives";
 import { Form } from "@/types/Form";
-import GradeSum from "../DataTables/GradeSum";
-import SimpleStaticTable from "../DataTables/dataTableGradeWeight/data-table";
-import InfoHover from "../Icons/InfoHover";
+import SimpleStaticTable from "@/components/bolt/DataTables/dataTableGradeWeight/data-table";
+import InfoHover from "@/components/bolt/Icons/InfoHover";
 export default function ClientDraft({
   form,
   initialData,
@@ -21,6 +20,7 @@ export default function ClientDraft({
   initialData: FormObjectives[];
 }) {
   const [data, setData] = useState(initialData);
+  const columns = getColumns(true);
 
   // Updates the weight
   const updateWeight = (id: number, newWeight: number) => {
@@ -54,11 +54,6 @@ export default function ClientDraft({
         </div>
       </InfoHover>
 
-      <p className="text-xs">
-        * En caso de actualizar el peso de la clasificación, es necesario
-        refrescar la pagina para poder enviar los objetivos a revisión.
-      </p>
-
       <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"} asChild>
           <Link href={"/misObjetivos/crear"}>Agregar Objetivo</Link>
@@ -81,7 +76,6 @@ export default function ClientDraft({
               </div>
               <div className="flex gap-5">
                 <WeightSum objectives={item.objectives} />
-                <GradeSum objectives={item.objectives} />
               </div>
             </div>
 

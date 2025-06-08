@@ -6,7 +6,7 @@ import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
 import IconTooltip from "@/components/bolt/Icons/IconTooltip";
 import { Objective } from "@/types/Objective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
-
+import { calculateGrade } from "@/utils/ObjectiveFormUtils/calculateGrade";
 export const getColumns = (
   showDeleteButton: boolean
 ): ColumnDef<Objective>[] => [
@@ -28,6 +28,18 @@ export const getColumns = (
     },
   },
   {
+    accessorKey: "result",
+    header: "Resultado",
+    cell: ({ row }) => {
+      const result = row.original.result;
+      return (
+        <div>
+          <IconTooltip>{result}</IconTooltip>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "weight",
     header: "Peso",
     cell: ({ row }) => {
@@ -35,7 +47,18 @@ export const getColumns = (
       return <span>{weightValue}%</span>;
     },
   },
+  {
+    accessorKey: "score",
+    header: "Calificación",
+    cell: ({ row }) => {
+      const grade = row.original.grade;
+      const weight = row.original.weight;
 
+      const result = calculateGrade(grade, weight);
+
+      return <span>{result}</span>;
+    },
+  },
   {
     accessorKey: "options",
     header: "Opciones",

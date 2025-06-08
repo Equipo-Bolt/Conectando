@@ -1,18 +1,17 @@
 "use client";
-import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesBossGrade/columns";
-import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableObjectivesBossSent/data-table";
-import { useState, useCallback, useMemo } from "react";
-
-import { FormObjectives } from "@/types/FormObjectives";
-import { Form } from "@/types/Form";
-
-import GradeSum from "@/components/bolt/DataTables/GradeSum";
+import React, { useState } from "react";
 import WeightField from "@/components/bolt/Inputs/WeightField";
+import { DataTableMyObjectives } from "@/components/bolt/DataTables/dataTableMyObjectives/data-table";
 import WeightSum from "@/components/bolt/DataTables/WeightSum";
 
-export default function ClientGraded({
+import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesCollaboratorApproved/columns";
+import { FormObjectives } from "@/types/FormObjectives";
+import { Form } from "@/types/Form";
+import GradeSum from "@/components/bolt/DataTables/GradeSum";
+
+import InfoHover from "@/components/bolt/Icons/InfoHover";
+export default function ClientApproved({
   form,
   initialData,
 }: {
@@ -20,7 +19,9 @@ export default function ClientGraded({
   initialData: FormObjectives[];
 }) {
   const [data, setData] = useState(initialData);
-  const updateWeight = useCallback((id: number, newWeight: number) => {
+  const columns = getColumns(false);
+  // Updates the weight
+  const updateWeight = (id: number, newWeight: number) => {
     setData((prev) =>
       prev.map((item) =>
         item.objectiveClassificationID === id
@@ -28,22 +29,20 @@ export default function ClientGraded({
           : item
       )
     );
-  }, []);
+  };
 
-  const columns = useMemo(
-    () => getColumns(form.collaboratorID, false),
-    [form.collaboratorID]
-  );
   return (
     <div>
       <InfoHover>
         <div className="text-sm mb-[0.5rem]">
-          ¡Felicidades! Ha terminado el proceso de evaluación de este periodo.
+          Sus objetivos han sido aprobados. Es importante agregar el
+          resultado de cada uno de ellos antes de la evaluación final de sus
+          objetivos. Su jefe directo le citará a una junta 1 a 1 para la
+          evaluación final.
         </div>
       </InfoHover>
 
-      <div className="flex justify-end mb-[1rem] mt-[1rem]"></div>
-      <div className="container mx-auto">
+      <div className="container mx-auto mt-[2rem]">
         {data.map((item) => (
           <div key={item.objectiveClassificationID}>
             <h1 className="text-2xl font-bold pb-[1.5rem]">
@@ -52,8 +51,8 @@ export default function ClientGraded({
             <div className="flex flex-row mb-[1rem] w-full">
               <div className="w-2/3">
                 <WeightField
-                  id={item.objectiveClassificationID as number}
-                  initialWeight={item.weight ?? 0}
+                  id={item.objectiveClassificationID ?? 0}
+                  initialWeight={item.weight}
                   onWeightChange={updateWeight}
                   disabled={true}
                 />
@@ -63,10 +62,8 @@ export default function ClientGraded({
                 <GradeSum objectives={item.objectives} />
               </div>
             </div>
-            <DataTableCollaboratorObjectives
-              columns={columns}
-              data={item.objectives}
-            />
+
+            <DataTableMyObjectives columns={columns} data={item.objectives} />
           </div>
         ))}
       </div>

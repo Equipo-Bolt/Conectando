@@ -28,6 +28,18 @@ export const getColumns = (
     },
   },
   {
+    accessorKey: "result",
+    header: "Resultado",
+    cell: ({ row }) => {
+      const result = row.original.result;
+      return (
+        <div>
+          <IconTooltip>{result}</IconTooltip>
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "weight",
     header: "Peso",
     cell: ({ row }) => {
