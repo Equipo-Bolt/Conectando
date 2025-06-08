@@ -21,6 +21,7 @@ import { User } from "@/types/User";
 
 // NextAuth
 import { auth } from "@/app/auth";
+import GoBack from "@/components/bolt/Buttons/GoBack";
 
 /**
  * @description This page is used to create a new user.
@@ -34,7 +35,10 @@ async function CreateUserPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-[1rem]">Crear Usuario</h1>
+      <div className="flex items-center gap-x-2 mb-[1rem]">
+          <GoBack route={"/usuarios"} />
+          <h1 className="text-3xl font-bold">Crear Usuario</h1>
+      </div>
       <CreateUserForm
         roles={roles}
         divisions={divisions}

@@ -64,7 +64,7 @@ export default async function EditObjectivePage({
   };
   return (
     <div>
-      <div className="flex items-center gap-x-2 mb-4">
+      <div className="flex items-center gap-x-2 mb-[1rem]">
         <GoBack route={"/misObjetivos"} />
         <h1 className="text-3xl font-bold">Detalles del Objetivo</h1>
       </div>
