@@ -54,7 +54,7 @@ export default async function MyInfoPage(){
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-4">Detalles del Usuario</h1>
+            <h1 className="text-3xl font-bold mb-[1rem]">Detalles del Usuario</h1>
             <UserViewEdit
                 user={userData}
                 divisions={divisions}

@@ -7,12 +7,11 @@ import WeightSum from "@/components/bolt/DataTables/WeightSum";
 import UpdateProgressButton from "@/components/bolt/Buttons/UpdateProgressButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { columns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
+import { getColumns } from "@/components/bolt/DataTables/dataTableMyObjectives/columns";
 import { FormObjectives } from "@/types/FormObjectives";
 import { Form } from "@/types/Form";
-import GradeSum from "../DataTables/GradeSum";
-import SimpleStaticTable from "../DataTables/dataTableGradeWeight/data-table";
-import InfoHover from "../Icons/InfoHover";
+import SimpleStaticTable from "@/components/bolt/DataTables/dataTableGradeWeight/data-table";
+import InfoHover from "@/components/bolt/Icons/InfoHover";
 export default function ClientDraft({
   form,
   initialData,
@@ -21,10 +20,10 @@ export default function ClientDraft({
   initialData: FormObjectives[];
 }) {
   const [data, setData] = useState(initialData);
+  const columns = getColumns(true);
 
   // Updates the weight
   const updateWeight = (id: number, newWeight: number) => {
-    console.log(`Updating weight for ID: ${id}, New Weight: ${newWeight}`);
     setData((prev) =>
       prev.map((item) =>
         item.objectiveClassificationID === id
@@ -41,25 +40,19 @@ export default function ClientDraft({
           Para habilitar el envío de sus objetivos a revisión es necesario:
         </div>
         <div className="flex flex-col text-sm mb-[0.5rem] ml-[0.5rem] gap-[0.25rem]">
-          <div>1. Tener su información de usuario completa en la página de su perfil.</div>
           <div>
-            2. Que la suma de los pesos de las clasificaciones sea
-            igual a 100.
+            1. Tener su información de usuario completa en la página de su
+            perfil.
           </div>
           <div>
-            3. Tener al menos un objetivo por cada clasificación.
+            2. Que la suma de los pesos de las clasificaciones sea igual a 100.
           </div>
+          <div>3. Tener al menos un objetivo por cada clasificación.</div>
           <div>
-            4. Que el peso total por cada clasificación sea
-            igual a 100.
+            4. Que el peso total por cada clasificación sea igual a 100.
           </div>
         </div>
       </InfoHover>
-
-      <p className="text-xs">
-        * En caso de actualizar el peso de la clasificación, es necesario
-        refrescar la pagina para poder enviar los objetivos a revisión.
-      </p>
 
       <div className="flex justify-end mb-[1rem]">
         <Button variant={"gemso_blue"} asChild>
@@ -83,7 +76,6 @@ export default function ClientDraft({
               </div>
               <div className="flex gap-5">
                 <WeightSum objectives={item.objectives} />
-                <GradeSum objectives={item.objectives} />
               </div>
             </div>
 

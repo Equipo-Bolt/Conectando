@@ -1,16 +1,19 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { DetailButton } from "@/components/bolt/Buttons/DetailButton";
+
 import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
 import IconTooltip from "@/components/bolt/Icons/IconTooltip";
 import { Objective } from "@/types/Objective";
 
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
-
 import IconCommentStatus from "@/components/bolt/Icons/IconCommentStatus";
+import { BossDetailButton } from "../../Buttons/BossDetailButton";
 
-export const columns: ColumnDef<Objective>[] = [
+export const getColumns = (
+  collaboratorId: number,
+  showDeleteButton: boolean
+): ColumnDef<Objective>[] => [
   {
     accessorKey: "title",
     header: "Objetivo",
@@ -36,22 +39,10 @@ export const columns: ColumnDef<Objective>[] = [
       return <span>{weightValue}%</span>;
     },
   },
-  {
-    accessorKey: "score",
-    header: "Calificación",
-    cell: ({ row }) => {
-      const scoreValue = row.original.grade;
 
-      return (
-        <span>
-          {scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}
-        </span>
-      );
-    },
-  },
   {
     accessorKey: "comment",
-    header: "Comentario",
+    header: "Comentado",
     cell: ({ row }) => <IconCommentStatus objectiveId={row.original.id} />,
   },
   {
@@ -61,16 +52,18 @@ export const columns: ColumnDef<Objective>[] = [
       const id = row.original.id;
       return (
         <div className="flex items-center gap-6">
-          <DetailButton id={id} />
-          <DeleteButton
-            id={id}
-            title="Eliminar objetivo"
-            description="¿Desea eliminar este objetivo? Esta acción no se puede deshacer."
-            handleConfirm={async (id) => {
-              await disableObjectiveAction(null, id);
-              window.location.reload();
-            }}
-          />
+          <BossDetailButton id={id} collaboratorId={collaboratorId} />
+          {showDeleteButton && (
+            <DeleteButton
+              id={id}
+              title="Eliminar Objetivo"
+              description="¿Desea eliminar este objetivo? Esta acción no se puede deshacer."
+              handleConfirm={async (id) => {
+                await disableObjectiveAction(null, id);
+                window.location.reload();
+              }}
+            />
+          )}
         </div>
       );
     },

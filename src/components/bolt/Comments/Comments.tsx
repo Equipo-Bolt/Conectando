@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, useEffect, useState, useTransition } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +34,8 @@ export default function CommentsSection({
   const [editedText, setEditedText] = useState("");
 
   const [state, createAction] = useActionState(createCommentAction, null)
-  const [isPending, startCreateTransition] = useTransition();
+  const [isPendingCreate, startCreateTransition] = useTransition();
+    const [isPendingEdit, startEditTransition] = useTransition();
 
   const [updateState, updateAction] = useActionState(updateCommentAction, null);
 
@@ -46,7 +47,9 @@ export default function CommentsSection({
     objectiveID: objectiveId,
   };
 
-  await updateAction(updatedEntry);
+  await startEditTransition(() => {
+    updateAction(updatedEntry)
+  });
 };
 
 useEffect(() => {
@@ -58,18 +61,12 @@ useEffect(() => {
   }
 }, [updateState]);
 
-
-  const handleDelete = (id: number) => { //! NO DEBE DE HABER DELETE
-    setAllComments((prev) => prev.filter((c) => c.id !== id));
-  };
-
   async function handleAddComment() {
-    console.log(commenterId)
     if (newComment.trim() === "") return;
 
     const newEntry: MutateComment = {
       description: newComment,
-      commenterID: commenterId, //! ESTO DEBE TENER EL ID DEL USUARIO LOGGEADO
+      commenterID: commenterId,
       objectiveID: objectiveId,
     };
 
@@ -111,7 +108,7 @@ useEffect(() => {
             >
               <div className="flex-1">
                 {/* Commenter's name and date */}
-                <strong>{comment.commenterID}</strong>{" "}{/* //! NEED NEXTAUTH TO GET USER FULL NAME */}
+                <strong>{comment.commenter?.fullName}</strong>
                 <span className="text-gray-500">
                   {new Date(comment.createdAt).toLocaleDateString("es-MX")}
                 </span>
@@ -183,7 +180,7 @@ useEffect(() => {
           <div className="mt-4">
             <Textarea
               className="w-full resize-none max-h-30 overflow-y-auto"
-              placeholder="Añadir nuevo comentario..."
+              placeholder="Agregar nuevo comentario..."
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
             />
@@ -207,7 +204,7 @@ useEffect(() => {
             variant={"gemso_blue"}
             onClick={() => setShowNewComment(true)}
           >
-            Añadir Comentario
+            Agregar Comentario
           </Button>
         ))}
     </div>

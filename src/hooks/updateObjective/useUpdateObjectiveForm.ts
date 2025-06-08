@@ -55,7 +55,7 @@ export const useObjectiveForm = ({
       classification: obj.classification,
       goal: obj.goal ?? "",
       result: obj.result ?? "",
-      grade: obj.grade,
+      grade: obj.grade ?? "",
     }),
     []
   );

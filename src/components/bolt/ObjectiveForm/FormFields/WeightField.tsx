@@ -48,8 +48,6 @@ export const WeightField = ({
             <Input
               {...field}
               type="number"
-              min="0"
-              max="100"
               disabled={!isEditable || !editable}
               placeholder="0-100"
             />

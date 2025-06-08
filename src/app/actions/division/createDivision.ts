@@ -12,7 +12,7 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
  * @returns Promise of type {@link ServerActionResponse}
  */
 export async function createDivisionAction(
-  prevState: string | null,
+  prevState: ServerActionResponse | null,
   data: CreateDivisionFormData
 ): Promise<ServerActionResponse> {
   try {

@@ -12,6 +12,7 @@ import GoBack from "@/components/bolt/Buttons/GoBack";
 import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { ObjectiveProgress } from "@/types/ObjectiveProgress";
 import { getFormById } from "@/lib/fetches/form/getFormById";
+import BossObjectiveForm from "@/components/bolt/Inputs/BossObjectiveViewEdit";
 // NextAuth
 import { auth } from "@/app/auth";
 
@@ -35,7 +36,7 @@ export default async function EditObjectivePage({
   const session = await auth();
   const userId = session?.user?.id;
 
-  const User = await getUserById(Number(session.user.id));
+  const User = await getUserById(Number(session?.user.id));
 
   const objectiveId = await params;
   const objective = await getObjectiveById(parseInt(objectiveId.id));

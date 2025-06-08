@@ -7,14 +7,15 @@ import IconTooltip from "@/components/bolt/Icons/IconTooltip";
 import { Objective } from "@/types/Objective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 
-export const columns: ColumnDef<Objective>[] = [
+export const getColumns = (
+  showDeleteButton: boolean
+): ColumnDef<Objective>[] => [
   {
     accessorKey: "title",
     header: "Objetivo",
     size: 100,
   },
   {
-    //* Este es el icono que indica si la meta fue declarada o no
     accessorKey: "goal",
     header: "Meta",
     cell: ({ row }) => {
@@ -27,7 +28,6 @@ export const columns: ColumnDef<Objective>[] = [
     },
   },
   {
-    //* Se agrega porcentaje al peso para que se vea mas chilo
     accessorKey: "weight",
     header: "Peso",
     cell: ({ row }) => {
@@ -35,21 +35,8 @@ export const columns: ColumnDef<Objective>[] = [
       return <span>{weightValue}%</span>;
     },
   },
+
   {
-    accessorKey: "score",
-    header: "Calificación",
-    cell: ({ row }) => {
-      const scoreValue = row.original.grade;
-      //* Si es dato nulo o indefinido, se muestra "S/C" (Sin Calificación)
-      return (
-        <span>
-          {scoreValue === null || scoreValue === undefined ? "S/C" : scoreValue}
-        </span>
-      );
-    },
-  },
-  {
-    //* Estos son los botones de opciones que se ven en la tabla
     accessorKey: "options",
     header: "Opciones",
     cell: ({ row }) => {
@@ -57,15 +44,17 @@ export const columns: ColumnDef<Objective>[] = [
       return (
         <div className="flex items-center gap-6">
           <DetailButton id={id} />
-          <DeleteButton
-            id={id}
-            title="Eliminar objetivo"
-            description="¿Desea eliminar este objetivo? Esta acción no se puede deshacer."
-            handleConfirm={async (id) => {
-              await disableObjectiveAction(null, id);
-              window.location.reload(); // Recargar la página después de eliminar el objetivo
-            }}
-          />
+          {showDeleteButton && (
+            <DeleteButton
+              id={id}
+              title="Eliminar Objetivo"
+              description="¿Desea eliminar este objetivo? Esta acción no se puede deshacer."
+              handleConfirm={async (id) => {
+                await disableObjectiveAction(null, id);
+                window.location.reload();
+              }}
+            />
+          )}
         </div>
       );
     },

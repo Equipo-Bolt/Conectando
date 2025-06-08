@@ -12,12 +12,12 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
  * @returns Promise of type {@link ServerActionResponse}
  */
 export async function createBusinessUnitAction(
-  prevState: string | null,
+  prevState: ServerActionResponse | null,
   data: CreateBusinessUnitFormData
 ): Promise<ServerActionResponse> {
   try {
     const divisionExists = await prisma.division.findUnique({
-      where: { id: data.divisionId, deactivated : false }
+      where: { id: Number(data.divisionId), deactivated : false }
     })
 
     if (!divisionExists) {
@@ -39,7 +39,7 @@ export async function createBusinessUnitAction(
         title: data.title,
         division: {
           connect: {
-            id : data.divisionId
+            id : Number(data.divisionId)
           }
         }
       },
