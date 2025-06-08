@@ -63,7 +63,7 @@ export default function OtpForm(
     };
 
     const checkUserInfo = useCallback(async (email: string) => {
-        const response = await hasCompletedInfoAction(email);
+        const response = await hasCompletedInfoAction(null, email);
         if (response.success === true) {
             // If user has all fields filled, redirect to page based on their role
             const userRoleID = response.message

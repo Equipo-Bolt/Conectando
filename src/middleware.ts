@@ -38,7 +38,7 @@ export async function middleware(req: NextRequest) {
    */
   const FORBIDDEN_URL = new URL("/403?origin=internal", nextUrl.origin);
 
-  // ! If home is accessed redirect to login
+  // ! If home is searched or navigated to, redirect to login
   if (currentPath === "/") {
     return NextResponse.redirect(new URL(LOGIN_ROUTE, nextUrl.origin))
   }
@@ -46,19 +46,17 @@ export async function middleware(req: NextRequest) {
   // * If the URL does not have the special "origin=internal" parameter, it is treated as a manual access and redirected.
   if (currentPath === "/403") {
     if (nextUrl.searchParams.get("origin") !== "internal") {
-      // Redirect to a safe page based on authentication status
       const fallbackUrl = isAuthenticated
         ? getDefaultRouteForRole(userRole || 0)
         : LOGIN_ROUTE;
       return NextResponse.redirect(new URL(fallbackUrl, nextUrl.origin));
     }
-    // If it has the special parameter, allow showing the 403 page
     return NextResponse.next();
   }
 
   // * Allow access to public routes for unauthenticated users
   if (PUBLIC_ROUTES.some((path) => currentPath.startsWith(path))) {
-    // Authenticated users trying to access login are redirected to their default route
+    // ! Authenticated users trying to access login are redirected to their default route
     if (isAuthenticated) {
       const defaultRoute = getDefaultRouteForRole(userRole || 0);
       return NextResponse.redirect(new URL(defaultRoute, nextUrl.origin));
@@ -104,12 +102,13 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // If all validations pass, allow the request to continue
+  // * If all validations pass, allow the request to continue
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
+    "/login",
     "/misObjetivos/:path*",
     "/misColaboradores/:path*",
     "/usuarios/:path*",
