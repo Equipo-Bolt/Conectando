@@ -15,11 +15,11 @@ const ROLE_PROTECTED_ROUTES_CONFIG: Record<string, number[]> = {
 };
 
 /**
- * Middleware to handle authentication and authorization.
- * - Redirects public routes if the user is authenticated.
- * - Protects routes based on user role.
- * - Handles unauthenticated access by redirecting to /403 with a callback.
- * - Allows access to /403 only when it is an internal redirect.
+ * * Middleware to handle authentication and authorization.
+ * ! - Redirects public routes if the user is authenticated.
+ * ! - Protects routes based on user role.
+ * ! - Handles unauthenticated access by redirecting to /403 with a callback.
+ * ! - Allows access to /403 only when it is an internal redirect.
  *
  * @param req - Next.js request object
  * @returns NextResponse for request flow control and redirection
@@ -38,7 +38,12 @@ export async function middleware(req: NextRequest) {
    */
   const FORBIDDEN_URL = new URL("/403?origin=internal", nextUrl.origin);
 
-  // If the URL does not have the special "origin=internal" parameter, it is treated as a manual access and redirected.
+  // ! If home is accessed redirect to login
+  if (currentPath === "/") {
+    return NextResponse.redirect(new URL(LOGIN_ROUTE, nextUrl.origin))
+  }
+
+  // * If the URL does not have the special "origin=internal" parameter, it is treated as a manual access and redirected.
   if (currentPath === "/403") {
     if (nextUrl.searchParams.get("origin") !== "internal") {
       // Redirect to a safe page based on authentication status
@@ -51,7 +56,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Allow access to public routes for unauthenticated users
+  // * Allow access to public routes for unauthenticated users
   if (PUBLIC_ROUTES.some((path) => currentPath.startsWith(path))) {
     // Authenticated users trying to access login are redirected to their default route
     if (isAuthenticated) {
@@ -112,5 +117,6 @@ export const config = {
     "/error",
     "/miInformacion",
     "/403",
+    "/"
   ],
 };
