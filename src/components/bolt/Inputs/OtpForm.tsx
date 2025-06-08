@@ -76,7 +76,7 @@ export default function OtpForm(
             }
         } else {
             // If user has not completed all fields, redirect to info status page
-            router.push("/llenarInformacion");
+            router.push("/llenarInformacion?fromApp=true");
         }
         console.log(response);
     }, [router]);

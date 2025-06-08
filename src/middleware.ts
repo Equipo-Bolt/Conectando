@@ -4,6 +4,8 @@ import { auth } from "@/app/auth";
 import { getDefaultRouteForRole } from "@/utils/getDefaultRouteForRole";
 
 const PUBLIC_ROUTES = ["/login"];
+const UNSEARCHABLE_ROUTES = ["/", "/llenarInformacion"];
+
 const LOGIN_ROUTE = "/login";
 
 const ROLE_PROTECTED_ROUTES_CONFIG: Record<string, number[]> = {
@@ -11,13 +13,6 @@ const ROLE_PROTECTED_ROUTES_CONFIG: Record<string, number[]> = {
   "/misColaboradores": [2, 4, 6, 7],
   "/usuarios": [3, 5, 6, 7],
 };
-
-/**
- * Base URL for the 403 page with a special query parameter.
- * The "origin=internal" parameter indicates it was an internal redirect (not manual).
- * This prevents users from being caught in redirect loops when manually accessing /403.
- */
-const FORBIDDEN_URL = new URL("/403?origin=internal", "http://localhost");
 
 /**
  * Middleware to handle authentication and authorization.
@@ -35,6 +30,13 @@ export async function middleware(req: NextRequest) {
   const isAuthenticated = !!session;
   const userRole = session?.user?.roleID;
   const currentPath = nextUrl.pathname;
+
+  /**
+   * Base URL for the 403 page with a special query parameter.
+   * The "origin=internal" parameter indicates it was an internal redirect (not manual).
+   * This prevents users from being caught in redirect loops when manually accessing /403.
+   */
+  const FORBIDDEN_URL = new URL("/403?origin=internal", nextUrl.origin);
 
   // If the URL does not have the special "origin=internal" parameter, it is treated as a manual access and redirected.
   if (currentPath === "/403") {
@@ -59,24 +61,41 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // From here on, authentication is required
+  // * From here on, authentication is required
   if (!isAuthenticated) {
-    // Unauthenticated users trying to access protected routes are redirected to /403
+    // * Unauthenticated users trying to access protected routes are redirected to /403
     FORBIDDEN_URL.searchParams.set("callbackUrl", currentPath + nextUrl.search);
-    return NextResponse.redirect(new URL(FORBIDDEN_URL.pathname + FORBIDDEN_URL.search, nextUrl.origin));
+    return NextResponse.redirect(
+      new URL(FORBIDDEN_URL.pathname + FORBIDDEN_URL.search, nextUrl.origin)
+    );
   }
 
-  // Role-based authorization for protected routes
-  const protectedRouteConfigKey = Object.keys(ROLE_PROTECTED_ROUTES_CONFIG).find((routePrefix) =>
-    currentPath.startsWith(routePrefix)
-  );
+  // ! Unsearchable routes
+  if (UNSEARCHABLE_ROUTES.includes(currentPath)) {
+    const fromApp = nextUrl.searchParams.get("fromApp") === "true";
+
+    if (!fromApp) {
+      const fallbackUrl = getDefaultRouteForRole(userRole || 0);
+      return NextResponse.redirect(new URL(fallbackUrl, nextUrl.origin));
+    }
+  }
+
+  // * Role-based authorization for protected routes
+  const protectedRouteConfigKey = Object.keys(
+    ROLE_PROTECTED_ROUTES_CONFIG
+  ).find((routePrefix) => currentPath.startsWith(routePrefix));
 
   if (protectedRouteConfigKey) {
     const allowedRoles = ROLE_PROTECTED_ROUTES_CONFIG[protectedRouteConfigKey];
     if (!allowedRoles.includes(userRole || -1)) {
-      // If the user's role is not allowed, redirect to /403 with the special parameter
-      FORBIDDEN_URL.searchParams.set("callbackUrl", currentPath + nextUrl.search);
-      return NextResponse.redirect(new URL(FORBIDDEN_URL.pathname + FORBIDDEN_URL.search, nextUrl.origin));
+      // ! If the user's role is not allowed, redirect to /403 with the special parameter
+      FORBIDDEN_URL.searchParams.set(
+        "callbackUrl",
+        currentPath + nextUrl.search
+      );
+      return NextResponse.redirect(
+        new URL(FORBIDDEN_URL.pathname + FORBIDDEN_URL.search, nextUrl.origin)
+      );
     }
   }
 
@@ -91,7 +110,6 @@ export const config = {
     "/usuarios/:path*",
     "/llenarInformacion/:path*",
     "/error",
-    "/llenarInformacion",
     "/miInformacion",
     "/403",
   ],
