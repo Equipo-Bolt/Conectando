@@ -31,7 +31,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-[3rem] min-w-[10rem] w-auto",
-        sm: "h-8 rounded-md gap-1.5 px-3",
+        sm: "h-[2rem] min-w-[1rem] w-auto",
         lg: "h-10 rounded-md px-6 ",
       },
     },

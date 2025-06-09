@@ -7,8 +7,11 @@ import {
   PaginationLink,
   PaginationPrevious,
   PaginationNext,
+  PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+
+import { ChevronFirst, ChevronLast } from "lucide-react";
 
 interface PaginationProps {
   totalPages: number;
@@ -29,29 +32,32 @@ export function PaginationComponent({ totalPages, currentPage }: PaginationProps
   return (
     <Pagination>
       <PaginationContent>
+        <PaginationItem className="cursor-pointer">
+          <PaginationLink onClick={() => handlePageChange(1)}>
+            <ChevronFirst className="size-sm" />
+          </PaginationLink>
+        </PaginationItem>
         <PaginationItem>
           <PaginationPrevious
             onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-            className={currentPage <= 1 ? "opacity-50 cursor-not-allowed" : ""}
+            className={currentPage <= 1 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           />
         </PaginationItem>
-
-        {Array.from({ length: totalPages }, (_, i) => (
-          <PaginationItem key={i}>
-            <PaginationLink
-              isActive={i + 1 === currentPage}
-              onClick={() => handlePageChange(i + 1)}
-            >
-              {i + 1}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
+        <PaginationItem className="px-[1rem]">
+          {currentPage}
+        </PaginationItem>
 
         <PaginationItem>
           <PaginationNext
             onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-            className={currentPage >= totalPages ? "opacity-50 cursor-not-allowed" : ""}
+            className={currentPage >= totalPages ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
           />
+        </PaginationItem>
+
+        <PaginationItem className="cursor-pointer">
+          <PaginationLink onClick={() => handlePageChange(totalPages)}>
+            <ChevronLast className="size-sm" />
+          </PaginationLink>
         </PaginationItem>
       </PaginationContent>
     </Pagination>
