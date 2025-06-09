@@ -180,7 +180,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         {isPending ? (
           <p className="text-blue-600">Enviando...</p>
         ) : state?.success ? (
@@ -226,7 +226,8 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       placeholder="Escribe tu número de empleado"
                       {...field}
                       type="number"
-                      min="1"
+                      min={1}
+                      maxLength={10}
                     />
                   </FormControl>
                 </FormItem>

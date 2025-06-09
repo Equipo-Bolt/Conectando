@@ -8,21 +8,20 @@ import type { Filter } from "@/types/Filter";
 export const dynamic = "force-dynamic";
 
 interface PageProps {
-  searchParams: {
-    page?: string;
-    name?: string;
-    roleID?: string;
-    businessUnitID?: string;
-  };
+  page?: string;
+  name?: string;
+  roleID?: string;
+  businessUnitID?: string;
 }
 
-export default async function UsersPage({ searchParams }: PageProps) {
-  const currentPage = searchParams.page || "1";
+export default async function UsersPage({ searchParams }: { searchParams: Promise<PageProps>}) {
+  const resolvedParams = await searchParams;
+  const currentPage = resolvedParams.page || "1";
   
   const filters: Filter = {
-    ...(searchParams.name && { name: searchParams.name }),
-    ...(searchParams.roleID && { roleID: searchParams.roleID }),
-    ...(searchParams.businessUnitID && { businessUnitID: searchParams.businessUnitID })
+    ...(resolvedParams.name && { name: resolvedParams.name }),
+    ...(resolvedParams.roleID && { roleID: resolvedParams.roleID }),
+    ...(resolvedParams.businessUnitID && { businessUnitID: resolvedParams.businessUnitID })
   };
 
   const [users, roles, businessUnits, totalPages] = await Promise.all([

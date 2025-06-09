@@ -67,7 +67,7 @@ useEffect(() => {
   return (
     
     <Form {...form}>
-      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form noValidate className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="email"
@@ -78,7 +78,7 @@ useEffect(() => {
               </FormLabel>
               <Input 
                 id="email" 
-                type="email" 
+                type="email"
                 placeholder="ejemplo@gemso.com"
                 {...field}
               />

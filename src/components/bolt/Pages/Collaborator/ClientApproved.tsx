@@ -34,9 +34,10 @@ export default function ClientApproved({
   return (
     <div>
       <InfoHover>
-        <div className="text-sm mb-[0.5rem]">
-          Sus objetivos han sido aprobados. Es importante agregar el
-          resultado de cada uno de ellos antes de la evaluación final de sus
+        <div className="flex justify-evenly text-sm mb-[0.5rem] max-w-[30.5rem]">
+          
+          Sus objetivos han sido aprobados.<br />
+          Es importante agregar el resultado de cada uno de ellos antes de la evaluación final de sus
           objetivos. Su jefe directo le citará a una junta 1 a 1 para la
           evaluación final.
         </div>

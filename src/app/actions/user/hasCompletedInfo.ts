@@ -8,12 +8,13 @@ import { getBusinessUnitById } from "@/lib/fetches/business_unit/getBusinessUnit
 
 /**
  * * hasCompletedInfoAction() Fetches a User to display in details page
- *
+ * @param prevState<ServerActionResponse | null> previous state of action, set it to null
  * @param userEmail<string> id of the form of the use (its included in Objective data)
  * @returns Promise of type {@link ServerActionResponse}
  */
 
 export async function hasCompletedInfoAction(
+  prevState: ServerActionResponse | null,
   userEmail: string
 ): Promise<ServerActionResponse> {
   try {

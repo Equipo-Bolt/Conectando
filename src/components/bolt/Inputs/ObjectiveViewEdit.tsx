@@ -71,7 +71,7 @@ export default function ObjectiveForm({
   return (
     <div className="md:col-span-2 space-y-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
           <FormStatus state={state} isPending={isPending} />
           {/* Objective Title */}
           <div className="grid grid-cols-1 gap-6">

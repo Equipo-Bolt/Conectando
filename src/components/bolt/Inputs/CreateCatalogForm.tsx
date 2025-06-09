@@ -195,7 +195,7 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
       {/* Form Fields */}
       {currentCatalogType && (
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
             {/* Title Field */}
             <FormField
               control={form.control}
