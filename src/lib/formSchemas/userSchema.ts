@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { parse, isValid, isBefore, format} from "date-fns";
+import { isBefore } from "date-fns";
 
 export const userSchema = z.object({
     email: z
@@ -70,8 +70,6 @@ export const userSchema = z.object({
         .min(1, "La antigüedad en la empresa es requerida")
         .refine((val) => {
             const parsedDate = new Date(val);
-            console.log("Parsed Date:", parsedDate);
-            console.log(val)
             return !isNaN(parsedDate.getTime()) && isBefore(parsedDate, new Date());
         }, {
             message: "La antigüedad en la empresa debe ser una fecha válida",
