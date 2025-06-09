@@ -12,6 +12,8 @@ import { FormObjectives } from "@/types/FormObjectives";
 import { Form } from "@/types/Form";
 import SimpleStaticTable from "@/components/bolt/DataTables/dataTableGradeWeight/data-table";
 import InfoHover from "@/components/bolt/Icons/InfoHover";
+
+
 export default function ClientDraft({
   form,
   initialData,
@@ -83,8 +85,10 @@ export default function ClientDraft({
           </div>
         ))}
       </div>
+
       <div className="text-2xl font-bold pb-[1.5rem]">Sumatorias</div>
       <SimpleStaticTable data={data} />
+
       <div className="flex justify-end mt-[1rem]">
         <UpdateProgressButton
           text="Enviar A Revisión"
