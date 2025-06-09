@@ -1,7 +1,7 @@
 "use client";
 
 // React and Next.js
-import { useActionState, useTransition, useEffect, useState } from "react";
+import { useActionState, useTransition, useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -82,6 +82,30 @@ export default function UserViewEdit({
     const router = useRouter();
     const [isEditable, setIsEditable] = useState(false);
 
+    // Helper function to get division ID from business unit ID
+    const getDivisionIdFromBusinessUnit = useCallback(
+        (businessUnitId: string) => {
+            if (!businessUnitId) return "";
+            const matchingBU = businessUnits.find(
+                (bu) => bu.id === parseInt(businessUnitId, 10)
+            );
+            return matchingBU ? String(matchingBU.divisionID) : "";
+        },
+        [businessUnits]
+    );
+
+    const getInitialDivisionId = useCallback(() => {
+        // If user has divisionID, use it
+        if (user.divisionID) {
+            return user.divisionID.toString();
+        }
+        // If user doesn't have divisionID but has businessUnitID, map it
+        if (user.businessUnitID) {
+            return getDivisionIdFromBusinessUnit(user.businessUnitID.toString());
+        }
+        return "";
+    }, [user.divisionID, user.businessUnitID, getDivisionIdFromBusinessUnit]);
+
     const form = useForm<UpdateUserFormData>({
         resolver: zodResolver(updateUserSchema),
         defaultValues: {
@@ -91,7 +115,7 @@ export default function UserViewEdit({
             employeeNumber: user.employeeNumber?.toString() || "",
             fullName: user.fullName || "",
             bossID: user.bossID?.toString() || "",
-            divisionID: user.divisionID?.toString() || "",
+            divisionID: getInitialDivisionId(),
             businessUnitID: user.businessUnitID?.toString() || "",
             companySeniority: user.companySeniority || "",
             positionSeniority: user.positionSeniority || "",
@@ -100,7 +124,6 @@ export default function UserViewEdit({
             companyContribution: user.companyContribution || "",
         },
     });
-
 
     const [state, newAction] = useActionState(updateUserAction, null);
     const [isPending, startTransition] = useTransition();
@@ -152,35 +175,51 @@ export default function UserViewEdit({
     const currentDivision = form.watch("divisionID");
     const currentBusinessUnit = form.watch("businessUnitID");
 
+    // Initialize filtered business units on component mount
     useEffect(() => {
-        // This effect will run whenever currentDivision or businessUnits change
-
-        if (currentDivision === undefined || currentDivision === "") {
-        // If no division is selected, reset the filtered business units
-        setFilteredBusinessUnits(businessUnits);
-        return;
+        const initialDivisionId = getInitialDivisionId();
+        if (initialDivisionId) {
+            const filtered = businessUnits.filter(
+                (bu) => bu.divisionID === parseInt(initialDivisionId, 10)
+            );
+            setFilteredBusinessUnits(filtered);
         } else {
-        // Filter the business units based on the selected division
-        const filtered = businessUnits.filter(
-            (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
-        );
-        setFilteredBusinessUnits(filtered);
-        form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
+            setFilteredBusinessUnits(businessUnits);
         }
+    }, [businessUnits, getInitialDivisionId]);
 
-    }, [currentDivision, businessUnits, form]);
+    useEffect(() => {
+        // This effect will run whenever currentDivision changes
+        if (currentDivision === undefined || currentDivision === "") {
+            // If no division is selected, reset the filtered business units
+            setFilteredBusinessUnits(businessUnits);
+            return;
+        } else {
+            // Filter the business units based on the selected division
+            const filtered = businessUnits.filter(
+                (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
+            );
+            setFilteredBusinessUnits(filtered);
+            
+            // Only auto-select first business unit if current selection is not in filtered list
+            const currentBUInFiltered = filtered.find(
+                (bu) => bu.id.toString() === currentBusinessUnit
+            );
+            if (!currentBUInFiltered) {
+                form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
+            }
+        }
+    }, [currentDivision, businessUnits, form, currentBusinessUnit]);
 
     useEffect(() => {
         // Assign current Division to matching business units division
         if (currentBusinessUnit && currentBusinessUnit !== "") {
-        const matchingBU = businessUnits.find(
-            (bu) => bu.id === parseInt(currentBusinessUnit, 10)
-        );
-        if (matchingBU) {
-            form.setValue("divisionID", String(matchingBU.divisionID));
+            const divisionId = getDivisionIdFromBusinessUnit(currentBusinessUnit);
+            if (divisionId && divisionId !== currentDivision) {
+                form.setValue("divisionID", divisionId);
+            }
         }
-        }
-    }, [currentBusinessUnit, businessUnits, form]);
+    }, [currentBusinessUnit, form, currentDivision, getDivisionIdFromBusinessUnit]);
 
     return (
         <Form {...form}>
