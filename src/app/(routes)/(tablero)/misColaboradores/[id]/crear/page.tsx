@@ -21,21 +21,29 @@ import GoBack from "@/components/bolt/Buttons/GoBack";
  * It fetches the user's information, their associated form ID, and a list of classifications
  * to populate the form. The page displays the user's name and renders a form for creating objectives.
  */
-async function CreateObjectivePage() {
+async function CreateObjectivePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const session = await auth();
   const userId = session?.user?.id;
   const user: User = await getUserById(Number(userId));
-  const formId: string = await getFormIdByUserId(user.id);
+
+  const collaboratorId = (await params).id;
+  const Collaborator = await getUserById(Number(collaboratorId));
+
+  const formId: string = await getFormIdByUserId(Number(collaboratorId));
   const classifications: Classification[] = await getAllClassifications();
 
   return (
     <div>
       <div className="flex items-center gap-x-2 mb-[1rem]">
-        <GoBack route={"/misObjetivos"} />
+        <GoBack route={`/misColaboradores/${collaboratorId}`} />
         <h1 className="text-3xl font-bold">Crear Objetivo</h1>
       </div>
       <p className="text-base mb-6">
-        Colaborador: {user ? user.fullName : "N/A"}
+        Colaborador: {Collaborator ? Collaborator.fullName : "N/A"}
       </p>
       <CreateObjectiveForm
         classifications={classifications}

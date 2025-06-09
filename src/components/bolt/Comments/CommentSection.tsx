@@ -111,7 +111,7 @@ useEffect(() => {
               <div className="flex-1">
                 {/* Commenter's name and date */}
                 <strong>{comment.commenter?.fullName}</strong>
-                <span className="text-gray-500">
+                <span className="text-gray-500 ml-[0.5rem]">
                   {new Date(comment.createdAt).toLocaleDateString("es-MX")}
                 </span>
                 {editingId === comment.id ? (

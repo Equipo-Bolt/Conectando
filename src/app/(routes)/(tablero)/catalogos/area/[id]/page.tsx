@@ -1,7 +1,7 @@
+import GoBack from "@/components/bolt/Buttons/GoBack";
 import {EditCatalogForm} from "@/components/bolt/Inputs/EditCatalogForm";
 import { getAreaById } from "@/lib/fetches/area/getAreaById";
 import { getAllDivisions } from "@/lib/fetches/division/getAllDivisions";
-import { get } from "http";
 
 export default async function EditAreaPage({
   params,
@@ -14,7 +14,10 @@ export default async function EditAreaPage({
     const area = await getAreaById(areaId);
     return (
         <div className="flex flex-col gap-[1rem]">
-            <h1 className="text-3xl font-bold">Editar Área</h1>
+            <div className="flex items-center gap-x-2 mb-[1rem]">
+                <GoBack route={"/catalogos"} />
+                <h1 className="text-3xl font-bold">Editar Área</h1>
+            </div>
             <EditCatalogForm
                 divisions={divisions}
                 catalogType="Área"

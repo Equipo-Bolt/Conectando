@@ -7,6 +7,7 @@ import IconTooltip from "@/components/bolt/Icons/IconTooltip";
 import { Objective } from "@/types/Objective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 import { calculateGrade } from "@/utils/ObjectiveFormUtils/calculateGrade";
+import { gradeMultipliers } from "@/types/GradeMultipliers";
 export const getColumns = (
   showDeleteButton: boolean
 ): ColumnDef<Objective>[] => [
@@ -52,11 +53,16 @@ export const getColumns = (
     header: "Calificación",
     cell: ({ row }) => {
       const grade = row.original.grade;
-      const weight = row.original.weight;
+      // const weight = row.original.weight;
 
-      const result = calculateGrade(grade, weight);
+      const multiplier =
+        grade != null && grade in gradeMultipliers
+          ? parseFloat((gradeMultipliers[grade] * 100).toFixed(2)).toString() + "%"
+          : "S/C";
 
-      return <span>{result}</span>;
+      // const result = calculateGrade(grade, weight);
+
+      return <span>{multiplier}</span>;
     },
   },
   {

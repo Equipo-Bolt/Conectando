@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import WeightField from "@/components/bolt/Inputs/WeightField";
 import { DataTableMyObjectives } from "@/components/bolt/DataTables/dataTableMyObjectives/data-table";
+import SimpleStaticTable from "@/components/bolt/DataTables/dataTableGradeWeight/data-table";
 import WeightSum from "@/components/bolt/DataTables/WeightSum";
 
 import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesCollaboratorGraded/columns";
@@ -65,6 +66,10 @@ export default function ClientGraded({
           </div>
         ))}
       </div>
+
+      <div className="text-2xl font-bold pb-[1.5rem]">Sumatorias</div>
+      <SimpleStaticTable data={data} />
+
     </div>
   );
 }

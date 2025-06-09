@@ -24,9 +24,14 @@ interface FinalGradeFieldProps {
  */
 export const FinalGradeField = ({ control }: FinalGradeFieldProps) => {
   const grade = useWatch({ control, name: "grade" });
-  const weight = useWatch({ control, name: "weight" });
+  // const weight = useWatch({ control, name: "weight" });
 
-  const result = calculateGrade(grade, weight);
+  // const result = calculateGrade(grade, weight);
+
+  const multiplier =
+        grade != null && grade in gradeMultipliers
+          ? parseFloat((gradeMultipliers[grade] * 100).toFixed(2)).toString() + "%"
+          : "S/C";
 
   return (
     <FormField
@@ -36,7 +41,7 @@ export const FinalGradeField = ({ control }: FinalGradeFieldProps) => {
         <FormItem>
           <FormLabel>Calificación</FormLabel>
           <FormControl>
-            <Input disabled={true} value={result} readOnly />
+            <Input disabled={true} value={multiplier} readOnly />
           </FormControl>
           <FormMessage />
         </FormItem>

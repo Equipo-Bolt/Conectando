@@ -3,6 +3,7 @@ import InfoHover from "@/components/bolt/Icons/InfoHover";
 
 import { getColumns } from "@/components/bolt/DataTables/dataTableObjectivesBossDraft/columns";
 import { DataTableCollaboratorObjectives } from "@/components/bolt/DataTables/dataTableObjectivesBossSent/data-table";
+import SimpleStaticTable from "@/components/bolt/DataTables/dataTableGradeWeight/data-table";
 import { useState, useCallback, useMemo } from "react";
 
 import { FormObjectives } from "@/types/FormObjectives";
@@ -55,7 +56,9 @@ export default function ClientDraft({
                   disabled={true}
                 />
               </div>
-              <WeightSum objectives={item.objectives} />
+              <div className="flex gap-5">
+                <WeightSum objectives={item.objectives} />
+              </div>
             </div>
             <DataTableCollaboratorObjectives
               columns={columns}
@@ -64,6 +67,10 @@ export default function ClientDraft({
           </div>
         ))}
       </div>
+
+      <div className="text-2xl font-bold pb-[1.5rem]">Sumatorias</div>
+      <SimpleStaticTable data={data} />
+
     </div>
   );
 }

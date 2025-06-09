@@ -42,7 +42,7 @@ export default function GradeSum({ objectives }: GradeSumProps) {
 
   return (
     <div className="h-[1.5rem] font-medium text-sm border-b-2 border-gemso-blue">
-      Calificacion total: {totalWeight}
+      Calificación total: {totalWeight}
     </div>
   );
 }

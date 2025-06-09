@@ -1,3 +1,4 @@
+import GoBack from "@/components/bolt/Buttons/GoBack";
 import { EditCatalogForm } from "@/components/bolt/Inputs/EditCatalogForm";
 import { getAllDivisions } from "@/lib/fetches/division/getAllDivisions";
 import { getDivisionById } from "@/lib/fetches/division/getDivisionById";
@@ -13,7 +14,10 @@ export default async function EditDivisionPage({
     const division = await getDivisionById(divisionId);
     return (
         <div className="flex flex-col gap-[1rem]">
-            <h1 className="text-3xl font-bold">Editar División</h1>
+            <div className="flex items-center gap-x-2 mb-[1rem]">
+                <GoBack route={"/catalogos"} />
+                <h1 className="text-3xl font-bold">Editar División</h1>
+            </div>
             <EditCatalogForm
                 divisions={divisions}
                 catalogType="División"
