@@ -31,7 +31,6 @@ export default async function EditObjectivePage({
 }: {
   params: Promise<{ id: string; idObjetivo: string }>;
 }) {
-  //! COOKIES SHOULD BE CHANGED OT NEXTAUTH
   const session = await auth();
   const Boss = await getUserById(Number(session?.user?.id));
 
