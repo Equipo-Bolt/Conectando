@@ -9,7 +9,7 @@ import { Objective } from "@/types/Objective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 import IconCommentStatus from "@/components/bolt/Icons/IconCommentStatus";
 import { BossDetailButton } from "../../Buttons/BossDetailButton";
-import { calculateGrade } from "@/utils/ObjectiveFormUtils/calculateGrade";
+
 export const getColumns = (
   collaboratorId: number,
   showDeleteButton: boolean
@@ -39,18 +39,7 @@ export const getColumns = (
       return <span>{weightValue}%</span>;
     },
   },
-  {
-    accessorKey: "score",
-    header: "Calificación",
-    cell: ({ row }) => {
-      const grade = row.original.grade;
-      const weight = row.original.weight;
 
-      const result = calculateGrade(grade, weight);
-
-      return <span>{result}</span>;
-    },
-  },
   {
     accessorKey: "comment",
     header: "Comentado",
@@ -67,7 +56,7 @@ export const getColumns = (
           {showDeleteButton && (
             <DeleteButton
               id={id}
-              title="Eliminar objetivo"
+              title="Eliminar Objetivo"
               description="¿Desea eliminar este objetivo? Esta acción no se puede deshacer."
               handleConfirm={async (id) => {
                 await disableObjectiveAction(null, id);

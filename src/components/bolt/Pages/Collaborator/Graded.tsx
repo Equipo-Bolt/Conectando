@@ -1,4 +1,4 @@
-import ClientDraft from "./ClientDraft";
+import ClientGraded from "@/components/bolt/Pages/Collaborator/ClientGraded";
 
 import { auth } from "@/app/auth";
 
@@ -7,7 +7,7 @@ import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFo
 import { getFormById } from "@/lib/fetches/form/getFormById";
 import { FormObjectives } from "@/types/FormObjectives";
 
-export default async function Draft() {
+export default async function Graded() {
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -18,5 +18,5 @@ export default async function Draft() {
     Number(formId)
   )) as FormObjectives[];
 
-  return <ClientDraft form={form} initialData={data} />;
+  return <ClientGraded form={form} initialData={data} />;
 }

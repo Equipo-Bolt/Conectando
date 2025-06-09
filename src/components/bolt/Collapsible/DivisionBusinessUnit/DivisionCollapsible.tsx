@@ -47,8 +47,8 @@ export default function DivisionCollapsible({
 
                     <DeleteButton
                     id={division.key}
-                    title="Eliminar Area"
-                    description="¿Estás seguro de que deseas eliminar esta división? Esta acción no se puede deshacer."
+                    title="Eliminar División"
+                    description="¿Desea eliminar esta división? Esto eliminará también sus unidades de negocio asociadas. Esta acción no se puede deshacer."
                     handleConfirm={async (key) => {
                         await disableDivisionAction(null, key);
                         window.location.reload();

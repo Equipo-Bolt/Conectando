@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, useEffect, useState, useTransition } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,12 +20,14 @@ interface CommentsSectionProps {
   initialComments: Comment[];
   objectiveId: number;
   commenterId: number;
+  isMutable: boolean;
 }
 
 export default function CommentsSection({
   initialComments,
   objectiveId,
   commenterId,
+  isMutable
 }: CommentsSectionProps) {
   const [allComments, setAllComments] = useState<Comment[]>(initialComments);
   const [newComment, setNewComment] = useState("");
@@ -60,11 +62,6 @@ useEffect(() => {
     console.error("Error al actualizar el comentario:", updateState.error);
   }
 }, [updateState]);
-
-
-  const handleDelete = (id: number) => { //! NO DEBE DE HABER DELETE
-    setAllComments((prev) => prev.filter((c) => c.id !== id));
-  };
 
   async function handleAddComment() {
     if (newComment.trim() === "") return;
@@ -113,7 +110,7 @@ useEffect(() => {
             >
               <div className="flex-1">
                 {/* Commenter's name and date */}
-                <strong>{comment.commenter?.fullName}</strong>{" "}{/* //! NEED NEXTAUTH TO GET USER FULL NAME */}
+                <strong>{comment.commenter?.fullName}</strong>
                 <span className="text-gray-500">
                   {new Date(comment.createdAt).toLocaleDateString("es-MX")}
                 </span>
@@ -155,7 +152,7 @@ useEffect(() => {
               </div>
 
               {/* Dropdown menu for editing or deleting the comment */}
-              {editingId !== comment.id && (
+              {isMutable && editingId !== comment.id && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="p-1 hover:bg-gray-100 rounded">
@@ -180,12 +177,12 @@ useEffect(() => {
       </div>
 
       {/* Section for adding a new comment */}
-      {editingId === null &&
+      {isMutable && editingId === null &&
         (showNewComment ? (
           <div className="mt-4">
             <Textarea
               className="w-full resize-none max-h-30 overflow-y-auto"
-              placeholder="Añadir nuevo comentario..."
+              placeholder="Agregar nuevo comentario..."
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
             />
@@ -209,7 +206,7 @@ useEffect(() => {
             variant={"gemso_blue"}
             onClick={() => setShowNewComment(true)}
           >
-            Añadir Comentario
+            Agregar Comentario
           </Button>
         ))}
     </div>

@@ -204,6 +204,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     <Input
                       placeholder="ejemplo@gemso.com"
                       type="email"
+                      disabled={true}
                       {...field}
                     />
                   </FormControl>

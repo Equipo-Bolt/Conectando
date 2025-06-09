@@ -23,8 +23,8 @@ export function BusinessUnitItem({ businessUnit }: { businessUnit: { key: number
                 </button>
                 <DeleteButton
                     id={businessUnit.key}
-                    title="Eliminar businessUnit"
-                    description="¿Estás seguro de que deseas eliminar esta Unidad de Negocio? Esta acción no se puede deshacer."
+                    title="Eliminar Unidad de Negocio"
+                    description="¿Desea eliminar esta unidad de negocio? Esta acción no se puede deshacer."
                     handleConfirm={async (key) => {
                         await disableBusinessUnitAction(null, key);
                         window.location.reload();

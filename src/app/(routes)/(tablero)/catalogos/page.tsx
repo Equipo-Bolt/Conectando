@@ -25,7 +25,7 @@ export default async function CataloguesPage() {
                 </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[1rem] w-full">
-                <AreaCollapsible title="Areas">
+                <AreaCollapsible title="Áreas">
                     {areas.map((area) => (
                         <AreaItem
                             key={area.id}
