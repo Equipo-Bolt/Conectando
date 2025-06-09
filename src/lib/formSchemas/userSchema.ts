@@ -28,7 +28,7 @@ export const userSchema = z.object({
     fullName: z
         .string()
         .min(1, "El nombre completo es requerido")
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/, "El nombre completo solo puede contener letras y espacios y acents"),
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/, "El nombre completo solo puede contener letras, espacios y acentos"),
     bossID: z
         .string()
         .min(1, "El jefe es requerido")
