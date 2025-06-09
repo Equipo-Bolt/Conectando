@@ -184,7 +184,7 @@ export default function UserViewEdit({
 
     return (
         <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
             {isPending ? (
             <p className="text-blue-600">Enviando...</p>
             ) : state?.success ? (
@@ -210,7 +210,7 @@ export default function UserViewEdit({
                         <Input
                         disabled={!isEditable}
                         placeholder="ejemplo@gemso.com"
-                        type="email"
+                        
                         {...field}
                         />
                     </FormControl>
@@ -231,8 +231,8 @@ export default function UserViewEdit({
                         placeholder="Escribe tu número de empleado"
                         {...field}
                         type="number"
-                        min="1"
-
+                        min={1}
+                        maxLength={10}
                         />
                     </FormControl>
                     </FormItem>
