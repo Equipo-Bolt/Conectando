@@ -23,8 +23,8 @@ export function AreaItem({ area }: { area: { key: number; title: string } }) {
                 </button>
                 <DeleteButton
                     id={area.key}
-                    title="Eliminar Area"
-                    description="¿Estás seguro de que deseas eliminar esta área? Esta acción no se puede deshacer."
+                    title="Eliminar Área"
+                    description="¿Desea eliminar esta área? Esta acción no se puede deshacer."
                     handleConfirm={async (key) => {
                         await disableAreaAction(null, key);
                         window.location.reload();

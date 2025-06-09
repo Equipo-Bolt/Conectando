@@ -14,10 +14,10 @@ export default async function EditAreaPage({
     const area = await getAreaById(areaId);
     return (
         <div className="flex flex-col gap-[1rem]">
-            <h1 className="text-3xl font-bold">Editar Area</h1>
+            <h1 className="text-3xl font-bold">Editar Área</h1>
             <EditCatalogForm
                 divisions={divisions}
-                catalogType="Area"
+                catalogType="Área"
                 data={area}
             />
         </div>

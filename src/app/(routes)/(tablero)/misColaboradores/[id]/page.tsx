@@ -1,6 +1,6 @@
 "use server";
 
-import Draft from "@/components/bolt/Pages/Draft";
+import Draft from "@/components/bolt/Pages/Boss/Draft";
 import Sent from "@/components/bolt/Pages/Boss/Sent";
 import Approved from "@/components/bolt/Pages/Boss/Approved";
 import Graded from "@/components/bolt/Pages/Boss/Graded";
@@ -38,7 +38,7 @@ async function CollaboratorObjectivesPage({
   const formId: string = await getFormIdByUserId(user.id);
 
   const stateComponentMap: { [key: string]: React.ReactNode } = {
-    Borrador: <Draft />,
+    Borrador: <Draft userId={Number(userId.id)} />,
     Enviado: <Sent userId={Number(userId.id)} />,
     Aprobado: <Approved userId={Number(userId.id)} />,
     Calificado: <Graded userId={Number(userId.id)} />,
@@ -47,7 +47,10 @@ async function CollaboratorObjectivesPage({
   if (formId === "Sin Formulario Activo") {
     return (
       <div className="container mx-auto py-10">
-        <h1 className="text-3xl font-bold mb-[1rem]">Objetivos</h1>
+        <div className="flex items-center gap-x-2 mb-4">
+          <GoBack route={"/misColaboradores"} />
+          <h1 className="text-3xl  font-bold ">Objetivos</h1>
+        </div>
 
         <div className="text-lg">
           <p className="font-medium">Colaborador: {user.fullName}</p>
