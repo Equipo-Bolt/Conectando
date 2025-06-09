@@ -126,7 +126,18 @@ export const createUserSchema = userSchema.refine((data) => {
 
 export const updateUserSchema = userSchema.extend({
     id: z.number(),
-});
+}).refine((data) => {
+    // Ensure that companySeniority is before positionSeniority
+    if (data.companySeniority && data.positionSeniority) {
+        const companyDate = new Date(data.companySeniority);
+        const positionDate = new Date(data.positionSeniority);
+        return isBefore(companyDate, positionDate) || companyDate.getTime() === positionDate.getTime();
+    }
+    return true;
+}, {
+    message: "La antigüedad en la empresa debe ser anterior o igual a la antigüedad en el puesto",
+    path: ["positionSeniority"], // This helps identify which field has the error
+});;
 
 export const completeUserInfoSchema = z.object({
     id: z.number(),
