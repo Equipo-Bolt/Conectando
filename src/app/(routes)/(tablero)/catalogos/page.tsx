@@ -21,7 +21,7 @@ export default async function CataloguesPage() {
             <h1 className="text-3xl  font-bold">Administración de Catálogos</h1>
             <div className="flex justify-end">
                 <Button variant={"gemso_blue"} asChild>
-                    <Link href={"/catalogos/crear"}>Agregar Catálogo</Link>
+                    <Link href={"/catalogos/crear"}>Agregar Entrada</Link>
                 </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[1rem] w-full">

@@ -8,7 +8,7 @@ export default async function CreateCatalogPage() {
         <div>
           <div className="flex items-center gap-x-2 mb-[1rem]">
                 <GoBack route={"/catalogos"} />
-                <h1 className="text-3xl font-bold">Crear Catálogo</h1>
+                <h1 className="text-3xl font-bold">Crear Entrada de Catálogo</h1>
             </div>
           <CreateCatalogForm divisions={divisions}/>
         </div>

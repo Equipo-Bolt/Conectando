@@ -35,7 +35,7 @@ import { Division } from "@/types/Division";
 // Schemas
 import { createCatalogSchema, createBusinessUnitSchema } from "@/lib/formSchemas/catalogSchema";
 
-type CatalogType = "Area" | "División" | "Unidad de Negocio";
+type CatalogType = "Área" | "División" | "Unidad de Negocio";
 
 // Actions (these should be imported from your actions directory)
 import { createAreaAction } from "@/app/actions/area/createArea";
@@ -90,7 +90,7 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
   // Get current state based on catalog type
   const getCurrentState = useCallback(() => {
     switch (currentCatalogType) {
-      case "Area": return areaState;
+      case "Área": return areaState;
       case "División": return divisionState;
       case "Unidad de Negocio": return businessUnitState;
       default: return null;
@@ -134,7 +134,7 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
         const catalogData = { title: parsedData.data.title };
         
         // Call the appropriate action based on catalog type
-        if (currentCatalogType === "Area") {
+        if (currentCatalogType === "Área") {
           areaAction(catalogData);
         } else if (currentCatalogType === "División") {
           divisionAction(catalogData);
@@ -185,7 +185,7 @@ export function CreateCatalogForm(props: CreateCatalogFormProps) {
             <SelectValue placeholder="Selecciona un catálogo" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Area">Área</SelectItem>
+            <SelectItem value="Área">Área</SelectItem>
             <SelectItem value="División">División</SelectItem>
             <SelectItem value="Unidad de Negocio">Unidad de Negocio</SelectItem>
           </SelectContent>
