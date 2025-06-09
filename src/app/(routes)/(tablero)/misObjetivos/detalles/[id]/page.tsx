@@ -7,7 +7,7 @@ import { UpdateObjectiveFormData } from "@/types/Objective";
 import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
 import { getUserById } from "@/lib/fetches/user/getUserById";
-import CommentsSection from "@/components/bolt/Comments/Comments";
+import CommentsSection from "@/components/bolt/Comments/CommentSection";
 import GoBack from "@/components/bolt/Buttons/GoBack";
 import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { ObjectiveProgress } from "@/types/ObjectiveProgress";
@@ -32,7 +32,6 @@ export default async function EditObjectivePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  //! COOKIES SHOULD BE CHANGED OT NEXTAUTH
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -79,6 +78,7 @@ export default async function EditObjectivePage({
           initialComments={comments}
           objectiveId={parseInt(objectiveId.id)}
           commenterId={ userId ? parseInt(userId) : 0}
+          isMutable={false}
         />
       </div>
     </div>
