@@ -93,7 +93,7 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         {isPending ? (
           <p className="text-blue-600">Enviando...</p>
         ) : state?.success ? (

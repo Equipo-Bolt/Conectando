@@ -101,7 +101,7 @@ export default function WeightField({
   return (
     <div className="space-y-2">
       <Form {...form}>
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form noValidate onSubmit={(e) => e.preventDefault()}>
           <FormField
             name="weight"
             render={() => (
