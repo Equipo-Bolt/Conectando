@@ -83,13 +83,12 @@ export const addGradeToObjectiveSchema = addResultToObjectiveSchema.extend({
 
 //? maybe remove valid from name and also move declaration to files where they are imported?
 export const validDraftObjectiveSchema = createObjectiveSchema
-  .omit({ classification: true })
+  .omit({ classification: true, result: true })
   .extend({
     weight: z.number().min(0).max(100, "El peso debe estar entre 0 y 100"),
   });
 
 export const validSentObjectiveSchema = validDraftObjectiveSchema
-  .omit({ result: true })
   .extend({
     comments: z
       .array(z.custom<Comment>())

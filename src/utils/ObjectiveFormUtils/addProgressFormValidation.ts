@@ -47,21 +47,21 @@ export function addProgressFormValidation(baseSchema: z.ZodTypeAny) {
         if ('comments' in objective && objective.comments.length === 0) { //! WHEN SENT
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: `El objetivo "${objective.title}" no tiene un comentario, debe tener al menos uno`,
+            message: `El objetivo "${objective.title}" no tiene un comentario. Debe tener al menos uno.`,
           });
         }
 
         if ('result' in objective && !objective.result) {//! WHEN APPROVED
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: `El objetivo "${objective.title}" no tiene un resultado de meta`,
+            message: `El objetivo "${objective.title}" no tiene un resultado.`,
           });
         }
 
         if ('grade' in objective && !objective.grade) {//! WHEN APPROVED
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: `El objetivo "${objective.title}" no tiene una calificación`,
+            message: `El objetivo "${objective.title}" no tiene una calificación.`,
           });
         }
       }
