@@ -137,7 +137,7 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
         />
 
         {/* Weight and Grade */}
-        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <FormField
             control={form.control}
             name="classification"
