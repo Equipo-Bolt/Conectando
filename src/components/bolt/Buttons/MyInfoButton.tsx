@@ -22,7 +22,6 @@ export default function MyInfoButton() {
                 <span className="text-sm font-medium">Mi Información</span>
             </Link>
         </Button>
-        {/* {isPending ? "cargando..." : state} */}
     </>
     )
 }

@@ -62,6 +62,7 @@ import { format } from "date-fns";
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { es } from "date-fns/locale";
+import { FormStatus } from "../ObjectiveForm/FormStatus";
 
 //* Interface
 interface CompleteUserFormProps {
@@ -193,13 +194,8 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-6"
       >
-        {isPending ? (
-          <p className="text-blue-600">Enviando...</p>
-        ) : state?.success ? (
-          <h1>Resultado: {state.message} </h1>
-        ) : (
-          <></>
-        )}
+        {/* Form Status */}
+        <FormStatus isPending={isPending} state={state} />
         <div className="grid grid-cols-1 gap-[2rem] md:grid-cols-3">
           <div className="flex flex-col gap-[1rem]">
             <FormField

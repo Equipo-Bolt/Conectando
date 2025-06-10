@@ -36,6 +36,7 @@ import { Classification } from "@/types/Classification";
 
 // Actions
 import { createObjectiveAction } from "@/app/actions/objective/createObjective";
+import { FormStatus } from "../ObjectiveForm/FormStatus";
 
 //* Interface
 interface CreateObjectiveFormProps {
@@ -94,13 +95,8 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
   return (
     <Form {...form}>
       <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        {isPending ? (
-          <p className="text-blue-600">Enviando...</p>
-        ) : state?.success ? (
-          <h1>Resultado: {state.message} </h1>
-        ) : (
-          <></>
-        )}
+        {/* Form Status */}
+        <FormStatus isPending={isPending} state={state} />
         {/* Objective Title */}
         <FormField
           control={form.control}

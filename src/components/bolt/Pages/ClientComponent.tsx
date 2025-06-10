@@ -16,7 +16,6 @@ export function ClientComponent( { users } : { users : User[] }) {
 
             onClick={() => logOut(null)}
         >Cerrar Sesión</Button>
-        {/* {isPending ? "cargando..." : state} */}
     </>
     )
 }
