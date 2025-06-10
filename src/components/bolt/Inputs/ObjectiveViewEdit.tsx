@@ -71,7 +71,11 @@ export default function ObjectiveForm({
   return (
     <div className="md:col-span-2 space-y-6">
       <Form {...form}>
-        <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <form
+          noValidate
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-6"
+        >
           <FormStatus state={state} isPending={isPending} />
           {/* Objective Title */}
           <div className="grid grid-cols-1 gap-6">
@@ -85,7 +89,7 @@ export default function ObjectiveForm({
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
             {/* Objective Classification */}
             {formConfig.classification.visible && (
               <ClassificationField
@@ -129,7 +133,7 @@ export default function ObjectiveForm({
 
           {/* Objective Grade */}
           {formConfig.grade.visible && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
               <GradeField
                 control={form.control}
                 isEditable={isEditable}
