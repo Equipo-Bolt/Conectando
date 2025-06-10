@@ -3,7 +3,7 @@
 import { z } from "zod";
 
 import { validDraftObjectiveSchema } from "@/lib/Schemas/formSchemas/objectiveSchema";
-import { addProgresssFormValidation } from "@/utils/ObjectiveFormUtils/addProgressFormValidation";
+import { addProgressFormValidation } from "@/utils/ObjectiveFormUtils/addProgressFormValidation";
 
 export const draftFormClassifications = z.object({
   weight: z.number().min(0).max(100),
@@ -12,4 +12,4 @@ export const draftFormClassifications = z.object({
   objectives: z.array(validDraftObjectiveSchema)
 })
 //? maybe replace Schema wording to validator?
-export const draftFormSchema = addProgresssFormValidation(draftFormClassifications);
+export const draftFormSchema = addProgressFormValidation(draftFormClassifications);

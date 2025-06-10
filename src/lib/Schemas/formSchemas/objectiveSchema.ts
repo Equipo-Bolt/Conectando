@@ -79,25 +79,19 @@ export const validDraftObjectiveSchema = createObjectiveSchema
     weight: z.number().min(0).max(100, "El peso debe estar entre 0 y 100"),
   });
 
-export const validSentObjectiveSchema = validDraftObjectiveSchema.extend({
-  comments: z
-    .array(z.custom<Comment>())
-    .min(1, { message: "El objetivo debe tener al menos un comentario" }),
-});
-
-export const validAprovedObjectiveSchema = validDraftObjectiveSchema
+export const validSentObjectiveSchema = validDraftObjectiveSchema
+  .omit({ result: true })
   .extend({
-    result: z.string().min(1, "El resultado es requerido").max(500, "Muy Largo"),
-    grade: z
-      .number()
-      .optional()
-      .refine(
-        (val) => {
-          const num = Number(val);
-          return !isNaN(num) && num >= 1 && num <= 5;
-        },
-        {
-          message: "La calificación debe estar entre 1 y 5",
-        }
-      ),
+    comments: z
+      .array(z.custom<Comment>())
+      .min(1, { message: "El objetivo debe tener al menos un comentario" }),
   });
+
+export const validAprovedObjectiveSchema = validDraftObjectiveSchema.extend({
+  result: z
+    .string()
+    .min(1, "El resultado es requerido")
+    .max(500, "Muy Largo")
+    .nullable(),
+  grade: z.number().nullable(),
+});

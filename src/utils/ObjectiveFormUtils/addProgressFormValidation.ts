@@ -22,7 +22,7 @@ import { z } from "zod";
  * @returns A Zod array schema with integrated `superRefine` custom validations applied to the provided base schema.
  */
 
-export function addProgresssFormValidation(baseSchema: z.ZodTypeAny) {
+export function addProgressFormValidation(baseSchema: z.ZodTypeAny) {
   return z.array(baseSchema).superRefine((formClassifications, ctx) => {
     const classificationGroups = new Map<string, number>();
 
@@ -51,7 +51,7 @@ export function addProgresssFormValidation(baseSchema: z.ZodTypeAny) {
           });
         }
 
-        if ('result' in objective && objective.comments && !objective.result) {//! WHEN APPROVED
+        if ('result' in objective && !objective.result) {//! WHEN APPROVED
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: `El objetivo "${objective.title}" no tiene un resultado de meta`,
