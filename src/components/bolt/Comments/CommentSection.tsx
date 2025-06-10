@@ -42,6 +42,7 @@ export default function CommentsSection({
   const [updateState, updateAction] = useActionState(updateCommentAction, null);
 
   const handleSaveEdited = async (id: number) => {
+  if (editedText.trim() === "") return;
   const updatedEntry: MutateComment = {
     id,
     description: editedText,
