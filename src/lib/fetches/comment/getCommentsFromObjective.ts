@@ -1,9 +1,5 @@
-"use server";
-
 import { prisma } from "@/lib/prisma";
 import { Comment } from "@/types/Comment";
-
-//! THE FUNCTION GETOBJECTIVEBYID ALREADY RETURNS THE OBJECTIVES COMMENTS, RENDERING THIS FUNCTION OBSOLETE
 
 /**
  * * getCommentsFromObjective() gets all comments associated to an objective
