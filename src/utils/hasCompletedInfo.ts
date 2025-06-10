@@ -63,8 +63,6 @@ export async function hasCompletedInfo(
 
     const result = completeUserInfoSchema.safeParse(toParseUser);
 
-    console.log(result.success ? "asd" : "no")
-
     if (!result.success) {
         throw new Error(result.error.errors.map((e) => e.message).join(", "));
     }
