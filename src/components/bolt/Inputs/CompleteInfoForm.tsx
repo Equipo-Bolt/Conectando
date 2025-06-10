@@ -130,6 +130,18 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     }
   };
 
+  // Handler to allow only numeric input for employee number
+  const handleEmployeeNumberChange = (value: string) => {
+    if (/^\d*$/.test(value)) {
+      form.setValue("employeeNumber", value);
+    }
+  }
+
+  const handleLeadingOrTrailingSpaces = (value: string, formValue: "email" | "roleID" | "employeeNumber" | "fullName" | "bossID" | "divisionID" | "businessUnitID" | "companySeniority" | "positionSeniority" | "areaID" | "position" | "companyContribution") => {
+    // Trim leading and trailing spaces from the input value
+    form.setValue(formValue, value.trim());
+  }
+
   async function handleSubmit(data: CompleteUserFormData) {
     const parsedData = completeUserInfoSchema.safeParse(data);
     if (!parsedData.success) {
@@ -197,13 +209,15 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                 <FormItem>
                   <FormLabel>
                     Correo Electrónico del Usuario
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <FormControl>
                     <Input
                       placeholder="ejemplo@gemso.com"
                       type="email"
+                      min={1}
+                      maxLength={255}
                       disabled={true}
                       {...field}
                     />
@@ -219,16 +233,16 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Número de Empleado<p className="text-gemso-red"> *</p>
+                    Número de Empleado<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <FormControl>
                     <Input
                       placeholder="Escribe tu número de empleado"
                       {...field}
-                      type="number"
                       min={1}
                       maxLength={10}
+                      onChange={(e) => handleEmployeeNumberChange(e.target.value)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -243,7 +257,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                 <FormItem className="flex flex-col">
                   <FormLabel>
                     Fecha de inicio en la Empresa
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Popover>
@@ -268,6 +282,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       <Calendar
                         locale={es}
                         mode="single"
+                        captionLayout="dropdown" // This enables year/month dropdowns
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -279,7 +294,9 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        captionLayout="dropdown"
+                        defaultMonth={
+                          field.value ? new Date(field.value) : new Date()
+                        }
                       />
                     </PopoverContent>
                   </Popover>
@@ -294,7 +311,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    División<p className="text-gemso-red"> *</p>
+                    División<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Select
@@ -328,7 +345,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Área de Trabajo<p className="text-gemso-red"> *</p>
+                    Área de Trabajo<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Select
@@ -363,7 +380,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                 <FormItem>
                   <FormLabel>
                     Roles
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Select
@@ -396,13 +413,17 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Nombre Completo<p className="text-gemso-red"> *</p>
+                    Nombre Completo<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <FormControl>
                     <Input
                       placeholder="Escribe tu nombre completo"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) =>
+                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "fullName"))
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -417,7 +438,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                 <FormItem className="flex flex-col">
                   <FormLabel>
                     Fecha de inicio en el puesto
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Popover>
@@ -433,9 +454,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                           {field.value ? (
                             format(new Date(field.value), "dd/MM/yyyy")
                           ) : (
-                            <span className="px-[1rem]">
-                              Selecciona una fecha
-                            </span>
+                            <span>Selecciona una fecha</span>
                           )}
                           <CalendarIcon className="text-primary" />
                         </Button>
@@ -445,6 +464,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       <Calendar
                         locale={es}
                         mode="single"
+                        captionLayout="dropdown"
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -456,7 +476,9 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        captionLayout="dropdown"
+                        defaultMonth={
+                          field.value ? new Date(field.value) : new Date()
+                        }
                       />
                     </PopoverContent>
                   </Popover>
@@ -471,7 +493,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Unidad de Negocio<p className="text-gemso-red"> *</p>
+                    Unidad de Negocio<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Select
@@ -502,7 +524,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Jefe Directo<p className="text-gemso-red"> *</p>
+                    Jefe Directo<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Select
@@ -535,13 +557,17 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Puesto<p className="text-gemso-red"> *</p>
+                    Puesto<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <FormControl>
                     <Input
                       placeholder="Escribe el nombre de tu puesto"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) =>
+                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "position"))
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -555,14 +581,18 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>
-                    Contribución<p className="text-gemso-red"> *</p>
+                    Contribución<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <FormControl>
                     <Textarea
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
+                      maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
+                      onChange={(e) =>
+                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "companyContribution"))
+                      }
                     />
                   </FormControl>
                   <FormMessage />

@@ -157,6 +157,18 @@ export function CreateUserForm(props: CreateUserFormProps) {
     }
   }, [state, router]);
 
+  // Handler to allow only numeric input for employee number
+  const handleEmployeeNumberChange = (value: string) => {
+    if (/^\d*$/.test(value)) {
+      form.setValue("employeeNumber", value);
+    }
+  }
+
+  const handleLeadingOrTrailingSpaces = (value: string, formValue: "email" | "roleID" | "employeeNumber" | "fullName" | "bossID" | "divisionID" | "businessUnitID" | "companySeniority" | "positionSeniority" | "areaID" | "position" | "companyContribution") => {
+    // Trim leading and trailing spaces from the input value
+    form.setValue(formValue, value.trim());
+  }
+
   return (
     <Form {...form}>
       <form
@@ -187,8 +199,11 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     <Input
                       placeholder="ejemplo@gemso.com"
                       type="email"
+                      min={1}
+                      maxLength={255}
                       {...field}
-                    />
+                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "email")}
+                      />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -206,9 +221,9 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     <Input
                       placeholder="Escribe tu número de empleado"
                       {...field}
-                      type="number"
                       min={1}
                       maxLength={10}
+                      onChange={(e) => handleEmployeeNumberChange(e.target.value)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -370,7 +385,11 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormControl>
                     <Input
                       placeholder="Escribe tu nombre completo"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) =>
+                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "fullName"))
+                      }
                     />
                   </FormControl>
 
@@ -501,7 +520,11 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormControl>
                     <Input
                       placeholder="Escribe el nombre de tu puesto"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) =>
+                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "position"))
+                      }
                     />
                   </FormControl>
 
@@ -520,8 +543,12 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormControl>
                     <Textarea
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
+                      maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
+                      onChange={(e) =>
+                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "companyContribution"))
+                      }
                     />
                   </FormControl>
 
