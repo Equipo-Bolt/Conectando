@@ -33,7 +33,7 @@ import CancelButton from "@/components/bolt/Buttons/CancelButton";
 import { Division } from "@/types/Division";
 
 // Schemas
-import { createCatalogSchema, createBusinessUnitSchema } from "@/lib/formSchemas/catalogSchema";
+import { createCatalogSchema, createBusinessUnitSchema } from "@/lib/Schemas/formSchemas/catalogSchema";
 
 type CatalogType = "Área" | "División" | "Unidad de Negocio";
 

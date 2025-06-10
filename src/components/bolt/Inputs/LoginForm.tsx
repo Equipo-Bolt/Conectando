@@ -18,7 +18,7 @@ import { useActionState, useTransition, useEffect } from "react";
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/lib/formSchemas/loginSchema"
+import { loginSchema } from "@/lib/Schemas/formSchemas/loginSchema"
 
 import { Login } from "@/types/Login";
 
