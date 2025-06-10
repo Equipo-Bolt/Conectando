@@ -31,7 +31,6 @@ export default async function EditObjectivePage({
 }: {
   params: Promise<{ id: string; idObjetivo: string }>;
 }) {
-  //! COOKIES SHOULD BE CHANGED OT NEXTAUTH
   const session = await auth();
   const Boss = await getUserById(Number(session?.user?.id));
 
@@ -83,7 +82,7 @@ export default async function EditObjectivePage({
           initialComments={comments}
           objectiveId={parseInt(objectiveId)}
           commenterId={Boss.id ? Boss.id : 0}
-          isMutable={true}
+          isMutable={form.progressID === 1 ? false : true}
         />
       </div>
     </div>
