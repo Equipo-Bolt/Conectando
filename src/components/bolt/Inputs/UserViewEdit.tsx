@@ -56,7 +56,7 @@ import { updateUserAction } from "@/app/actions/user/updateUser";
 
 // Date formatter
 import { format } from "date-fns";
-
+import { es } from "date-fns/locale";
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
 
@@ -292,7 +292,6 @@ export default function UserViewEdit({
                             disabled={!isEditable}
                             className={cn(
                                 "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between px-[1rem] [&_svg:not([class*='size-'])]:size-6",
-
                                 !field.value && "text-muted-foreground"
                             )}
                             >
@@ -306,21 +305,21 @@ export default function UserViewEdit({
                         </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                            mode="single"
-                            selected={
-                            field.value ? new Date(field.value) : undefined
-                            }
-                            onSelect={(date) => {
-                            if (date) {
-                                field.onChange(date.toISOString());
-                            }
-                            }}
-                            disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                        />
+                            <Calendar
+                                locale={es}
+                                mode="single"
+                                captionLayout="dropdown" // This enables year/month dropdowns
+                                selected={field.value ? new Date(field.value) : undefined}
+                                onSelect={(date) => {
+                                if (date) {
+                                    field.onChange(date.toISOString());
+                                }
+                                }}
+                                disabled={(date) =>
+                                date > new Date() || date < new Date("1900-01-01")
+                                }
+                                defaultMonth={field.value ? new Date(field.value) : new Date()}
+                            />
                         </PopoverContent>
                     </Popover>
                     </FormItem>
@@ -477,7 +476,8 @@ export default function UserViewEdit({
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
-                            mode="single"
+                        locale={es}    
+                        mode="single"
                             selected={
                             field.value ? new Date(field.value) : undefined
                             }
@@ -489,7 +489,10 @@ export default function UserViewEdit({
                             disabled={(date) =>
                             date > new Date() || date < new Date("1900-01-01")
                             }
-                            initialFocus
+                            defaultMonth={
+                            field.value ? new Date(field.value) : new Date()
+                            }
+                            captionLayout="dropdown" 
                         />
                         </PopoverContent>
                     </Popover>

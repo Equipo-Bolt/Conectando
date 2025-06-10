@@ -58,6 +58,7 @@ import { createUserAction } from "@/app/actions/user/createUser";
 
 // Date formatter
 import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
@@ -249,7 +250,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        mode="single"
+                        locale={es}mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -261,7 +262,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        captionLayout="dropdown" 
                       />
                     </PopoverContent>
                   </Popover>
@@ -406,7 +407,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        mode="single"
+                        locale={es}mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -418,7 +419,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        captionLayout="dropdown" 
                       />
                     </PopoverContent>
                   </Popover>
