@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/app/auth";
 import { getDefaultRouteForRole } from "@/utils/getDefaultRouteForRole";
+import { hasCompletedInfo } from "./utils/hasCompletedInfo";
 
 const PUBLIC_ROUTES = ["/login"];
 const UNSEARCHABLE_ROUTES = ["/", "/llenarInformacion"];
@@ -77,10 +78,18 @@ export async function middleware(req: NextRequest) {
   // ! Unsearchable routes
   if (UNSEARCHABLE_ROUTES.includes(currentPath)) {
     const fromApp = nextUrl.searchParams.get("fromApp") === "true";
-
     if (!fromApp) {
+      console.log("Hola")
       const fallbackUrl = getDefaultRouteForRole(userRole || 0);
       return NextResponse.redirect(new URL(fallbackUrl, nextUrl.origin));
+    }
+    
+    console.log("kys")
+    const response = await hasCompletedInfo(null, Number(session?.user?.id))
+    if (response.success) {
+      console.log("homero chino")
+      const defaultRoute = getDefaultRouteForRole(userRole || 0);
+      return NextResponse.redirect(new URL(defaultRoute, nextUrl.origin));
     }
   }
 

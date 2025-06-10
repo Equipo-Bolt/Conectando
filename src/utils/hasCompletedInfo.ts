@@ -1,5 +1,3 @@
-"use server";
-
 import { prisma } from "@/lib/prisma";
 
 import { completeUserInfoSchema } from "@/lib/formSchemas/userSchema";
@@ -7,19 +5,19 @@ import { ServerActionResponse } from "@/types/ServerActionResponse";
 import { getBusinessUnitById } from "@/lib/fetches/business_unit/getBusinessUnitById";
 
 /**
- * * hasCompletedInfoAction() Fetches a User to display in details page
+ * * hasCompletedInfo() Fetches a User to display in details page
  * @param prevState<ServerActionResponse | null> previous state of action, set it to null
- * @param userEmail<string> id of the form of the use (its included in Objective data)
+ * @param userId<number> id of the form of the use (its included in Objective data)
  * @returns Promise of type {@link ServerActionResponse}
  */
 
-export async function hasCompletedInfoAction(
+export async function hasCompletedInfo(
   prevState: ServerActionResponse | null,
-  userEmail: string
+  userId: number
 ): Promise<ServerActionResponse> {
   try {
     const userExists = await prisma.user.findUnique({
-      where: { email: userEmail, deactivated: false },
+      where: { id: userId, deactivated: false },
     });
 
     if (!userExists) {
@@ -71,7 +69,6 @@ export async function hasCompletedInfoAction(
     }
 
     return { success : true, 
-      //! Cambiar por auth despues
       message: String(roleID) 
     };
   } catch (error) {
