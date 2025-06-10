@@ -6,10 +6,7 @@ export const userSchema = z.object({
         .string()
         .email("El Correo Electrónico debe ser válido")
         .min(1, "El Correo Electrónico es requerido")
-        .max(255, "El Correo Electrónico no puede exceder los 255 caracteres")
-        .refine((val) => val.trim() === val, {
-            message: "El Correo Electrónico no debe tener espacios al inicio o al final",
-        }),
+        .max(255, "El Correo Electrónico no puede exceder los 255 caracteres"),
     roleID: z
         .string()
         .min(1, "El Rol es requerido")
@@ -36,9 +33,6 @@ export const userSchema = z.object({
         .min(1, "El Nombre Completo es requerido")
         .max(255, "El Nombre Completo no puede exceder los 255 caracteres")
         .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, "El Nombre Completo solo puede contener letras, espacios y acentos")
-        .refine((val) => val.trim() === val, {
-            message: "El Nombre Completo no debe tener espacios al inicio o al final",
-        })
         .optional()
         .or(z.literal("")),
     bossID: z
@@ -111,18 +105,12 @@ export const userSchema = z.object({
         .string()
         .min(1, "El Puesto es requerido")
         .max(255, "El Puesto no puede exceder los 255 caracteres")
-        .refine((val) => val.trim() === val, {
-            message: "El Puesto no debe tener espacios al inicio o al final",
-        })
         .optional()
         .or(z.literal("")),
     companyContribution: z
         .string()
         .min(1, "La Contribución a la Empresa es requerida")
         .max(511, "La Contribución a la Empresa no puede exceder los 300 caracteres")
-        .refine((val) => val.trim() === val, {
-            message: "La Contribución a la Empresa no debe tener espacios al inicio o al final",
-        })
         .optional()
         .or(z.literal("")),
 });
@@ -180,10 +168,7 @@ export const completeUserInfoSchema = z.object({
         .string()
         .min(1, "El Correo Electrónico es requerido")
         .email("El Correo Electrónico debe ser válido")
-        .max(255, "El Correo Electrónico no puede exceder los 255 caracteres")
-        .refine((val) => val.trim() === val, {
-            message: "El Correo Electrónico no debe tener espacios al inicio o al final",
-        }),
+        .max(255, "El Correo Electrónico no puede exceder los 255 caracteres"),
     roleID: z
         .string()
         .min(1, "El Rol es requerido")
@@ -207,10 +192,7 @@ export const completeUserInfoSchema = z.object({
         .string()
         .min(1, "El Nombre Completo es requerido")
         .max(255, "El Nombre Completo no puede exceder los 255 caracteres")
-        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, "El Nombre Completo solo puede contener letras, espacios y acentos")
-        .refine((val) => val.trim() === val, {
-            message: "El Nombre Completo no debe tener espacios al inicio o al final",
-        }),
+        .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, "El Nombre Completo solo puede contener letras, espacios y acentos"),
     bossID: z
         .string()
         .min(1, "El Jefe es requerido")
@@ -268,17 +250,11 @@ export const completeUserInfoSchema = z.object({
     position: z
         .string()
         .min(1, "El Puesto es requerido")
-        .max(255, "El Puesto no puede exceder los 255 caracteres")
-        .refine((val) => val.trim() === val, {
-            message: "El Puesto no debe tener espacios al inicio o al final",
-        }),
+        .max(255, "El Puesto no puede exceder los 255 caracteres"),
     companyContribution: z
         .string()
         .min(1, "La Contribución a la Empresa es requerida")
-        .max(511, "La Contribución a la Empresa no puede exceder los 300 caracteres")
-        .refine((val) => val.trim() === val, {
-            message: "La Contribución a la Empresa no debe tener espacios al inicio o al final",
-        }),
+        .max(511, "La Contribución a la Empresa no puede exceder los 300 caracteres"),
 }).refine((data) => {
     // Ensure that companySeniority is before positionSeniority
     const companyDate = new Date(data.companySeniority);
