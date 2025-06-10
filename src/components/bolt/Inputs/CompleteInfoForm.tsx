@@ -61,6 +61,7 @@ import { format } from "date-fns";
 
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import { es } from "date-fns/locale";
 
 //* Interface
 interface CompleteUserFormProps {
@@ -180,7 +181,11 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
 
   return (
     <Form {...form}>
-      <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6"
+      >
         {isPending ? (
           <p className="text-blue-600">Enviando...</p>
         ) : state?.success ? (
@@ -199,7 +204,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     Correo Electrónico del Usuario
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="ejemplo@gemso.com"
@@ -208,6 +213,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -220,7 +226,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Número de Empleado<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe tu número de empleado"
@@ -230,6 +236,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       maxLength={10}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -243,7 +250,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     Fecha de inicio en la Empresa
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -264,6 +271,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        locale={es}
                         mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
@@ -276,10 +284,11 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -292,7 +301,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     División<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -314,6 +323,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -326,7 +336,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Área de Trabajo<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -345,6 +355,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -360,7 +371,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     Roles
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -380,6 +391,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -392,13 +404,14 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Nombre Completo<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe tu nombre completo"
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -412,7 +425,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     Fecha de inicio en el puesto
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -436,6 +449,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        locale={es}
                         mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
@@ -448,10 +462,11 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -464,7 +479,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Unidad de Negocio<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -483,6 +498,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -495,7 +511,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Jefe Directo<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -514,6 +530,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -527,13 +544,14 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Puesto<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe el nombre de tu puesto"
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -546,7 +564,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Contribución<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Textarea
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
@@ -554,6 +572,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

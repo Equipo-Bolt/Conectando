@@ -58,6 +58,7 @@ import { createUserAction } from "@/app/actions/user/createUser";
 
 // Date formatter
 import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
@@ -154,7 +155,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
       setFilteredBusinessUnits(filtered);
       form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
     }
-
   }, [currentDivision, props.businessUnits, form]);
 
   useEffect(() => {
@@ -171,7 +171,11 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
   return (
     <Form {...form}>
-      <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6"
+      >
         {isPending ? (
           <p className="text-blue-600">Enviando...</p>
         ) : state?.success ? (
@@ -190,7 +194,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     Correo Electrónico del Usuario
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="ejemplo@gemso.com"
@@ -198,6 +202,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -208,7 +213,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Número de Empleado</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe tu número de empleado"
@@ -218,6 +223,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       maxLength={10}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -228,7 +234,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Fecha de inicio en la Empresa</FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -249,6 +255,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        locale={es}
                         mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
@@ -261,10 +268,11 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -275,7 +283,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>División</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -297,6 +305,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -307,7 +316,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Área de Trabajo</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -327,6 +336,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </SelectContent>
                   </Select>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -341,7 +351,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormLabel>
                     Roles<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
@@ -356,6 +366,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -366,7 +377,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nombre Completo</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe tu nombre completo"
@@ -374,6 +385,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     />
                   </FormControl>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -384,7 +396,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Fecha de inicio en el puesto</FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -406,6 +418,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        locale={es}
                         mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
@@ -418,11 +431,12 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -433,7 +447,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Unidad de Negocio</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -453,6 +467,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </SelectContent>
                   </Select>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -463,7 +478,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Jefe Directo</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -483,6 +498,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </SelectContent>
                   </Select>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -494,7 +510,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Puesto</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe el nombre de tu puesto"
@@ -502,6 +518,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     />
                   </FormControl>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -512,7 +529,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Contribución</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Textarea
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
@@ -521,6 +538,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     />
                   </FormControl>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />

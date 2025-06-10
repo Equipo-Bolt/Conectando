@@ -21,6 +21,8 @@ import { BusinessUnit } from "@/types/BusinessUnit";
 import { Area } from "@/types/Area";
 import { updateUserAction } from "@/app/actions/user/updateUser";
 import { format } from "date-fns";
+import { es } from "date-fns/locale";
+// Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { Loader } from 'lucide-react';
 
@@ -149,7 +151,7 @@ export default function UserViewEdit({
                     Correo Electrónico del Usuario
                     <span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       disabled={!isEditable}
@@ -157,8 +159,9 @@ export default function UserViewEdit({
                       {...field}
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Employee Number Field */}
@@ -168,7 +171,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Número de Empleado</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       disabled={!isEditable}
@@ -179,18 +182,18 @@ export default function UserViewEdit({
                       maxLength={10}
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
-            {/* Company Seniority Field */}
             <FormField
               control={form.control}
               name="companySeniority"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Fecha de inicio en la Empresa</FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -212,8 +215,12 @@ export default function UserViewEdit({
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        locale={es}
                         mode="single"
-                        selected={field.value ? new Date(field.value) : undefined}
+                        captionLayout="dropdown" // This enables year/month dropdowns
+                        selected={
+                          field.value ? new Date(field.value) : undefined
+                        }
                         onSelect={(date) => {
                           if (date) {
                             field.onChange(date.toISOString());
@@ -222,12 +229,16 @@ export default function UserViewEdit({
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        defaultMonth={
+                          field.value ? new Date(field.value) : new Date()
+                        }
                       />
                     </PopoverContent>
                   </Popover>
-                </FormItem>
-              )}
+
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Division Field */}
@@ -237,7 +248,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>División</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={handleDivisionChange}
                     value={field.value}
@@ -256,8 +267,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Area Field */}
@@ -267,7 +279,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Área de Trabajo</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -286,8 +298,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
           </div>
 
@@ -302,7 +315,7 @@ export default function UserViewEdit({
                   <FormLabel>
                     Roles<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select 
                     onValueChange={field.onChange}
                     value={field.value}
@@ -321,8 +334,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Full Name Field */}
@@ -332,7 +346,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nombre Completo</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       disabled={!isEditable}
@@ -340,18 +354,18 @@ export default function UserViewEdit({
                       {...field}
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
-            {/* Position Seniority Field */}
             <FormField
               control={form.control}
               name="positionSeniority"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Fecha de inicio en el puesto</FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -360,6 +374,7 @@ export default function UserViewEdit({
                           variant="outline"
                           className={cn(
                             "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between px-[1rem] [&_svg:not([class*='size-'])]:size-6",
+
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -374,8 +389,11 @@ export default function UserViewEdit({
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        locale={es}
                         mode="single"
-                        selected={field.value ? new Date(field.value) : undefined}
+                        selected={
+                          field.value ? new Date(field.value) : undefined
+                        }
                         onSelect={(date) => {
                           if (date) {
                             field.onChange(date.toISOString());
@@ -384,12 +402,18 @@ export default function UserViewEdit({
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        defaultMonth={
+                          field.value ? new Date(field.value) : new Date()
+                        }
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
-                </FormItem>
-              )}
+
+
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Business Unit Field */}
@@ -399,7 +423,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Unidad de Negocio</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={handleBusinessUnitChange}
                     value={field.value}
@@ -418,8 +442,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Boss Field */}
@@ -429,7 +454,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Jefe Directo</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -448,8 +473,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
           </div>
 
@@ -462,7 +488,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Puesto</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       disabled={!isEditable}
@@ -470,8 +496,9 @@ export default function UserViewEdit({
                       {...field}
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Company Contribution Field */}
@@ -481,7 +508,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Contribución</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Textarea
                       disabled={!isEditable}
@@ -490,8 +517,9 @@ export default function UserViewEdit({
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
           </div>
         </div>
