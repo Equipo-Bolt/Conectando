@@ -2,6 +2,7 @@ import { DefaultSession, type NextAuthConfig} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@/lib/prisma";
 import { matchOTP } from "@/utils/OTP/matchOTP";
+import { hasCompletedInfo } from "@/utils/hasCompletedInfo";
 
 declare module "next-auth" {
   interface Session {
@@ -16,6 +17,7 @@ declare module "next-auth" {
     id: string;
     email: string;
     roleID: number;
+    hasCompletedInfo: boolean;
   }
 }
 
@@ -24,6 +26,7 @@ declare module "@auth/core/jwt" {
     id: string;
     email: string;
     roleID: number;
+    hasCompletedInfo: boolean;
   }
 }
 
@@ -73,6 +76,7 @@ export const authConfig: NextAuthConfig = {
           id: String(userExists.id),
           email: userExists.email,
           roleID: userExists.roleID,
+          hasCompletedInfo: (await hasCompletedInfo(userExists.id)).success ? true : false
         };
       },
     }),
@@ -83,6 +87,7 @@ export const authConfig: NextAuthConfig = {
         token.id = user.id;
         token.email = user.email;
         token.roleID = user.roleID;
+        token.hasCompletedInfo = user.hasCompletedInfo
       }
       return token;
     },
@@ -91,6 +96,7 @@ export const authConfig: NextAuthConfig = {
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.roleID = token.roleID as number;
+        session.user.hasCompletedInfo = token.hasCompletedInfo;
       }
 
       return session;
