@@ -1,5 +1,26 @@
 // lib/Schemas/utils/formValidation.ts
 import { z } from "zod";
+/**
+ * @description Applies custom validation logic to a Zod schema representing an array of classification objects.
+ * This function enforces business logic rules such as:
+ * - Borrador and forward:
+ * - - Each classification must include at least one objective.
+ * - - Each objective must have a non-empty goal.
+ * - - The sum of objective weights within each classification title must be exactly 100.
+ * - - The total weight across all classifications must also sum to 100.
+ * - Enviado and forward:
+ * - - Objectives must include a `comments` field and it must not be empty.
+ * - Aproved:
+ * - - ALL Objectives must be graded.
+ * - - ALL Objectives must have result field completed.
+ *
+ * ! This utility function allowed to NOT have a bunch of duped code. I basically check if the Objective type that is being received has
+ * ! 'main' values that are needed for validation.
+ *
+ * @param baseSchema - A Zod object schema defining the structure of a single classification.
+ *                     Must include a `classificationTitle`, `weight`, and an `objectives` array.
+ * @returns A Zod array schema with integrated `superRefine` custom validations applied to the provided base schema.
+ */
 
 export function addProgresssFormValidation(baseSchema: z.ZodTypeAny) {
   return z.array(baseSchema).superRefine((formClassifications, ctx) => {
@@ -23,11 +44,24 @@ export function addProgresssFormValidation(baseSchema: z.ZodTypeAny) {
           });
         }
 
-        // Optional check for sent schema
         if ('comments' in objective && !objective.comments) { //! WHEN SENT
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: `El objetivo "${objective.title}" no tiene un comentario, debe tener al menos uno`,
+          });
+        }
+
+        if ('result' in objective && objective.comments && !objective.result) {//! WHEN APPROVED
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `El objetivo "${objective.title}" no tiene un resultado de meta`,
+          });
+        }
+
+        if ('grade' in objective && !objective.grade) {//! WHEN APPROVED
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `El objetivo "${objective.title}" no tiene una calificación`,
           });
         }
       }

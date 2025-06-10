@@ -72,6 +72,7 @@ export const addGradeToObjectiveSchema = addResultToObjectiveSchema.extend({
     ),
 });
 
+//? maybe remove valid from name and also move declaration to files where they are imported?
 export const validDraftObjectiveSchema = createObjectiveSchema
   .omit({ classification: true })
   .extend({
@@ -79,5 +80,24 @@ export const validDraftObjectiveSchema = createObjectiveSchema
   });
 
 export const validSentObjectiveSchema = validDraftObjectiveSchema.extend({
-  comments: z.array(z.custom<Comment>()).min(1, { message: "El objetivo debe tener al menos un comentario" }),
+  comments: z
+    .array(z.custom<Comment>())
+    .min(1, { message: "El objetivo debe tener al menos un comentario" }),
 });
+
+export const validAprovedObjectiveSchema = validDraftObjectiveSchema
+  .extend({
+    result: z.string().min(1, "El resultado es requerido").max(500, "Muy Largo"),
+    grade: z
+      .number()
+      .optional()
+      .refine(
+        (val) => {
+          const num = Number(val);
+          return !isNaN(num) && num >= 1 && num <= 5;
+        },
+        {
+          message: "La calificación debe estar entre 1 y 5",
+        }
+      ),
+  });
