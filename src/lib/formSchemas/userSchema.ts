@@ -159,7 +159,7 @@ export const updateUserSchema = userSchema.extend({
     return true;
 }, {
     message: "Si se proporciona una División, también debe proporcionarse una Unidad de Negocio",
-    path: ["divisionID"],
+    path: ["businessUnitID"],
 });
 
 export const completeUserInfoSchema = z.object({
