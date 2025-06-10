@@ -8,7 +8,7 @@ import { Objective } from "@/types/Objective";
 
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 import IconCommentStatus from "@/components/bolt/Icons/IconCommentStatus";
-import { BossDetailButton } from "../../Buttons/BossDetailButton";
+import { BossDetailButton } from "@/components/bolt/Buttons/BossDetailButton";
 
 export const getColumns = (
   collaboratorId: number,
@@ -43,7 +43,7 @@ export const getColumns = (
   {
     accessorKey: "comment",
     header: "Comentado",
-    cell: ({ row }) => <IconCommentStatus objectiveId={row.original.id} />,
+    cell: ({ row }) => <IconCommentStatus hasComments={row.original.comments.length === 0 ? false : true} />,
   },
   {
     accessorKey: "options",

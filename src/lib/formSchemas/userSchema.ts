@@ -126,6 +126,12 @@ export const createUserSchema = userSchema.refine((data) => {
 
 export const updateUserSchema = userSchema.extend({
     id: z.number(),
+    businessUnit: z.object({
+        id: z.number(),
+        title: z.string(),
+        divisionID: z.number()
+    }).optional(),
+
 }).refine((data) => {
     // Ensure that companySeniority is before positionSeniority
     if (data.companySeniority && data.positionSeniority) {
@@ -137,7 +143,20 @@ export const updateUserSchema = userSchema.extend({
 }, {
     message: "Esta fecha debe ser previa o igual a la fecha de inicio en la empresa",
     path: ["positionSeniority"], // This helps identify which field has the error
-});;
+}).refine((data) => {
+    // Ensure that if there is a divisionID there is also a businessUnitID
+    if (data.divisionID && !data.businessUnitID) {
+        return false;
+    }
+    // Ensure that if there is a businessUnitID there is also a divisionID
+    if (data.businessUnitID && !data.divisionID) {
+        return false;
+    }
+    return true;
+}, {
+    message: "Si se proporciona una división, también debe proporcionarse una unidad de negocio",
+    path: ["divisionID"],
+});
 
 export const completeUserInfoSchema = z.object({
     id: z.number(),
