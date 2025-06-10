@@ -1,7 +1,13 @@
 "use client";
 
 // React and Next.js
-import { useActionState, useTransition, useEffect, useState, useCallback } from "react";
+import {
+  useActionState,
+  useTransition,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
 
 // Form Validation
@@ -23,6 +29,7 @@ import {
   FormItem,
   FormLabel,
   FormControl,
+  FormMessage,
 } from "@/components/ui/form";
 
 // Custom Components
@@ -35,7 +42,10 @@ import { Area } from "@/types/Area";
 import { BusinessUnit } from "@/types/BusinessUnit";
 
 // Schemas
-import { updateCatalogSchema, updateBusinessUnitSchema } from "@/lib/formSchemas/catalogSchema";
+import {
+  updateCatalogSchema,
+  updateBusinessUnitSchema,
+} from "@/lib/formSchemas/catalogSchema";
 
 type CatalogType = "Área" | "División" | "Unidad de Negocio";
 type CatalogTypeData = Area | Division | BusinessUnit;
@@ -47,15 +57,15 @@ import { updateBusinessUnitAction } from "@/app/actions/business_unit/updateBusi
 
 //* Interface
 interface UpdateCatalogFormProps {
-    data: Area | Division | BusinessUnit;
-    catalogType: CatalogType;
-    divisions: Division[];
+  data: Area | Division | BusinessUnit;
+  catalogType: CatalogType;
+  divisions: Division[];
 }
 
 export interface UpdateCatalogFormData {
-    id: number;
-    title: string;
-    divisionId?: string;
+  id: number;
+  title: string;
+  divisionId?: string;
 }
 
 //! This definition of props is crucial, otherwise it will throw Intrinsic attributes error
@@ -63,12 +73,14 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
   const router = useRouter();
 
   // State for catalog type selection
-  const [currentCatalogType, setCurrentCatalogType] = useState<CatalogType>(props.catalogType);
+  const [currentCatalogType, setCurrentCatalogType] = useState<CatalogType>(
+    props.catalogType
+  );
 
   // Get the appropriate schema based on catalog type
   const getSchema = () => {
-    return currentCatalogType === "Unidad de Negocio" 
-      ? updateBusinessUnitSchema 
+    return currentCatalogType === "Unidad de Negocio"
+      ? updateBusinessUnitSchema
       : updateCatalogSchema;
   };
 
@@ -76,7 +88,10 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
   const getDefaultValues = useCallback(() => {
     const baseValues = { id: props.data.id, title: props.data.title };
     if (currentCatalogType === "Unidad de Negocio") {
-      return { ...baseValues, divisionId: (props.data as BusinessUnit).divisionID?.toString() || "" };
+      return {
+        ...baseValues,
+        divisionId: (props.data as BusinessUnit).divisionID?.toString() || "",
+      };
     }
     return baseValues;
   }, [currentCatalogType, props]);
@@ -88,18 +103,28 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
 
   // Individual action states for each catalog type
   const [areaState, areaAction] = useActionState(updateAreaAction, null);
-  const [divisionState, divisionAction] = useActionState(updateDivisionAction, null);
-  const [businessUnitState, businessUnitAction] = useActionState(updateBusinessUnitAction, null);
-  
+  const [divisionState, divisionAction] = useActionState(
+    updateDivisionAction,
+    null
+  );
+  const [businessUnitState, businessUnitAction] = useActionState(
+    updateBusinessUnitAction,
+    null
+  );
+
   const [isPending, startTransition] = useTransition();
 
   // Get current state based on catalog type
   const getCurrentState = useCallback(() => {
     switch (currentCatalogType) {
-      case "Área": return areaState;
-      case "División": return divisionState;
-      case "Unidad de Negocio": return businessUnitState;
-      default: return null;
+      case "Área":
+        return areaState;
+      case "División":
+        return divisionState;
+      case "Unidad de Negocio":
+        return businessUnitState;
+      default:
+        return null;
     }
   }, [currentCatalogType, areaState, divisionState, businessUnitState]);
 
@@ -124,9 +149,9 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
         }
 
         const businessUnitData = {
-            id: parsedData.data.id,
-            title: parsedData.data.title,
-            divisionId: parsedData.data.divisionId
+          id: parsedData.data.id,
+          title: parsedData.data.title,
+          divisionId: parsedData.data.divisionId,
         };
         businessUnitAction(businessUnitData);
       } else {
@@ -139,10 +164,10 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
         }
 
         const catalogData = {
-            id: parsedData.data.id, 
-            title: parsedData.data.title 
+          id: parsedData.data.id,
+          title: parsedData.data.title,
         };
-        
+
         // Call the appropriate action based on catalog type
         if (currentCatalogType === "Área") {
           areaAction(catalogData);
@@ -157,7 +182,7 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
   useEffect(() => {
     const currentState = getCurrentState();
     if (currentState === null) return;
-    
+
     if (currentState.success) {
       router.push("/catalogos");
     } else {
@@ -187,7 +212,7 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Tipo de Catálogo<span className="text-red-500"> *</span>
         </label>
-        <Select 
+        <Select
           onValueChange={(value: CatalogType) => setCurrentCatalogType(value)}
           value={currentCatalogType || ""}
           disabled={true}
@@ -206,7 +231,11 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
       {/* Form Fields */}
       {currentCatalogType && (
         <Form {...form}>
-          <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form
+            noValidate
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="space-y-6"
+          >
             {/* Title Field */}
             <FormField
               control={form.control}
@@ -218,10 +247,12 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
                   </FormLabel>
                   <FormControl>
                     <Input
+                      maxLength={36}
                       placeholder={`Título del ${currentCatalogType.toLowerCase()}`}
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -256,6 +287,7 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
                           </SelectItem>
                         ))}
                       </SelectContent>
+                      <FormMessage />
                     </Select>
                   </FormItem>
                 )}
@@ -265,9 +297,9 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
             {/* Buttons */}
             <div className="flex justify-end gap-4 pt-2">
               <CancelButton route="/catalogos" text="Cancelar" />
-              <SubmitButton 
-                text={`Actualizar ${currentCatalogType}`} 
-                isPending={isPending} 
+              <SubmitButton
+                text={`Actualizar ${currentCatalogType}`}
+                isPending={isPending}
               />
             </div>
           </form>
