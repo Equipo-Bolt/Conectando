@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 
 import { updateFormProgressAction } from "@/app/actions/form/updateFormProgress";
 
-import { validFormSchema } from "@/lib/formSchemas/validFormSchema";
+import { draftFormSchema } from "@/lib/Schemas/progressSchemas/draftFormSchema";
+import { sentFormSchema } from "@/lib/Schemas/progressSchemas/sentFormSchema";
 
 import { Form } from "@/types/Form";
 import { FormObjectives } from "@/types/FormObjectives";
-import { ErrorModal } from "../Modals/ErrorModal";
+import { ErrorModal } from "@/components/bolt/Modals/ErrorModal";
 
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid" 
 
@@ -31,7 +32,7 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
 
         console.log("formObjectives", formObjectives);
 
-        const result = validFormSchema.safeParse(formObjectives);
+        const result = sentFormSchema.safeParse(formObjectives);
 
         if (result.success) {
             startTransition(() => {

@@ -3,7 +3,7 @@ import {
   addResultToObjectiveSchema,
   updateObjectiveSchema,
   addGoalToObjectiveSchema,
-} from "@/lib/formSchemas/objectiveSchema";
+} from "@/lib/Schemas/formSchemas/objectiveSchema";
 
 import { ZodType } from "zod";
 import { UpdateObjectiveFormData } from "@/types/Objective";

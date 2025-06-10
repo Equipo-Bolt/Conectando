@@ -24,7 +24,7 @@ import {
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { otpSchema } from "@/lib/formSchemas/otpSchema";
+import { otpSchema } from "@/lib/Schemas/formSchemas/otpSchema";
 import { OtpSchemaType } from "@/types/OTP";
 
 // Actions  

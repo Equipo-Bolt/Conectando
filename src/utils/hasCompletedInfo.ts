@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-import { completeUserInfoSchema } from "@/lib/formSchemas/userSchema";
+import { completeUserInfoSchema } from "@/lib/Schemas/formSchemas/userSchema";
 import { ServerActionResponse } from "@/types/ServerActionResponse";
 import { getBusinessUnitById } from "@/lib/fetches/business_unit/getBusinessUnitById";
 
