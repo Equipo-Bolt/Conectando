@@ -47,6 +47,7 @@ export const TitleField = ({
           <FormControl>
             <Input
               {...field}
+              maxLength={60}
               disabled={!isEditable || !editable}
               placeholder="Ingrese el título del objetivo"
             />

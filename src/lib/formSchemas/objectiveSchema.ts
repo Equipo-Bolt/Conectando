@@ -4,7 +4,10 @@ import { z } from "zod";
 
 export const createObjectiveSchema = z.object({
   formID: z.number().optional(),
-  title: z.string().min(1, "El título del objetivo es requerido"),
+  title: z
+    .string()
+    .min(1, "El título del objetivo es requerido")
+    .max(60, "El título excede el largo permitdo"),
   weight: z
     .string()
     .min(1, "El peso es requerido")
@@ -12,14 +15,14 @@ export const createObjectiveSchema = z.object({
     .refine(
       (val) => {
         const num = Number(val);
-        return !isNaN(num) && num >= 0 && num <= 100;
+        return !isNaN(num) && num >= 1 && num <= 100;
       },
       {
-        message: "El peso debe estar entre 0 y 100",
+        message: "El peso debe estar entre 1 y 100",
       }
     ),
-  classification: z.string().min(1, "Seleccione una clasificación"),
-  goal: z.string().nullable(),
+  classification: z.string().min(1, "La clasificación es requerida"),
+  goal: z.string().max(511, "La meta excede el largo permitido").nullable(),
   result: z.string().nullable(),
 });
 
@@ -48,12 +51,18 @@ export const updateObjectiveSchema = createObjectiveSchema.extend({
     ),
 });
 export const addGoalToObjectiveSchema = updateObjectiveSchema.extend({
-  goal: z.string().min(1, "La meta es requerida").max(500, "Muy Largo"),
+  goal: z
+    .string()
+    .min(1, "La meta es requerida")
+    .max(511, "La meta excede el largo permitido"),
 });
 
 export const addResultToObjectiveSchema = updateObjectiveSchema.extend({
   id: z.number(),
-  result: z.string().min(1, "El resultado es requerido").max(500, "Muy Largo"),
+  result: z
+    .string()
+    .min(1, "El resultado es requerido")
+    .max(511, "El resultado excede el largo permitido"),
 });
 export const addGradeToObjectiveSchema = addResultToObjectiveSchema.extend({
   grade: z
