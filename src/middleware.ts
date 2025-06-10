@@ -79,15 +79,11 @@ export async function middleware(req: NextRequest) {
   if (UNSEARCHABLE_ROUTES.includes(currentPath)) {
     const fromApp = nextUrl.searchParams.get("fromApp") === "true";
     if (!fromApp) {
-      console.log("Hola")
       const fallbackUrl = getDefaultRouteForRole(userRole || 0);
       return NextResponse.redirect(new URL(fallbackUrl, nextUrl.origin));
     }
     
-    console.log("kys")
-    const response = await hasCompletedInfo(null, Number(session?.user?.id))
-    if (response.success) {
-      console.log("homero chino")
+    if (session?.user?.hasCompletedInfo) {
       const defaultRoute = getDefaultRouteForRole(userRole || 0);
       return NextResponse.redirect(new URL(defaultRoute, nextUrl.origin));
     }

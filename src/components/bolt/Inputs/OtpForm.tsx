@@ -1,7 +1,7 @@
 "use client"
 
 // React and Next.js
-import { useActionState, useTransition } from "react";
+import { useActionState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 // Components
@@ -58,13 +58,17 @@ export default function OtpForm(
             startTransition(() => {
                 newAction(parsedData.data)
             });
-            router.push("/llenarInformacion?fromApp=true");
             
-            console.log("waht")
         }
-
         return;
     };
+
+    useEffect(() => {
+        if (state?.success) {
+            router.push("/llenarInformacion?fromApp=true")
+        }
+
+    }, [router, state])
 
     return (
         <Form {...form}>

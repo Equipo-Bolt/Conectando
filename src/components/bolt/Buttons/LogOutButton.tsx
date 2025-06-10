@@ -12,7 +12,7 @@ export default function LogOutButton() {
     <>
         <Button
             title="Log Out"
-            className="flex w-full justify-start rounded-lg bg-gemso-red hover:bg-gemso-red/90 h-[3rem]"
+            className="flex w-full justify-start rounded-lg bg-gemso-red hover:bg-gemso-red/90 h-[3rem] cursor-pointer"
             onClick={() => logOut(null)
                 .then(() => router.push("/login"))
             }
