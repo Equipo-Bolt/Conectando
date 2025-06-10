@@ -13,11 +13,15 @@ import { disableUser } from "@/app/actions/user/disableUser";
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "user",
-    header: "Usuarios",
+    header: "Usuario",
     size: 100,
     cell: ({ row }) => {
       const userName = row.original.fullName;
-      return <span>{userName}</span>;
+      if (!userName) {
+        return <span className="text-gray-500">Sin Nombre</span>;
+      }
+      const shortenedName = userName.length > 30 ? `${userName.slice(0, 30)}...` : userName;
+      return <span>{shortenedName}</span>;
     },
   },
   {
