@@ -10,7 +10,7 @@ import { Filter } from "@/types/Filter"
  * @returns Promise of type {@link User}[] which contains the 10 users according to the page
  */
 
-const USERS_PER_PAGE = 10;
+const USERS_PER_PAGE = 7;
 
 export async function getUsersPaginationFilters(
     pagination: string,

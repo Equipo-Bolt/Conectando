@@ -1,11 +1,16 @@
 "use client";
 
+// React and Next.js
 import { useActionState, useTransition, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+
+// Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateUserSchema } from "@/lib/formSchemas/userSchema";
+
+// Shadcn Components
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
@@ -22,6 +27,7 @@ import { Area } from "@/types/Area";
 import { updateUserAction } from "@/app/actions/user/updateUser";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { FormStatus } from "@/components/bolt/ObjectiveForm/FormStatus";
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { Loader } from 'lucide-react';
@@ -147,8 +153,7 @@ export default function UserViewEdit({
     <Form {...form}>
       <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         {/* Status Messages */}
-        {isPending && <p className="text-blue-600">Enviando...</p>}
-        {state?.success && <h1>Resultado: {state.message}</h1>}
+        <FormStatus isPending={isPending} state={state}/>
 
         <div className="grid grid-cols-1 gap-[2rem] md:grid-cols-3">
           {/* First Column */}

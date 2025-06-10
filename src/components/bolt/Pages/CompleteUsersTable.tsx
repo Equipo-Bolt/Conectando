@@ -45,11 +45,11 @@ export function CompleteUsersTable({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-[2rem]">
       <h1 className="text-3xl font-bold">Administración de Usuarios</h1>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center flex-wrap gap-4">
+      <div className="flex flex-col gap-[1rem]">
+        <div className="flex justify-between items-center flex-wrap gap-[1rem]">
           <FilterForm 
             roles={roles} 
             businessUnits={businessUnits}
