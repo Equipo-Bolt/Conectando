@@ -8,27 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { updateUserSchema } from "@/lib/formSchemas/userSchema";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import { UpdateUserFormData, User } from "@/types/User";
@@ -61,8 +44,8 @@ export default function UserViewEdit({
 }: DetailUserProps) {
   const router = useRouter();
   const [isEditable, setIsEditable] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  
+  const [formInitialized, setFormInitialized] = useState(false);
+
   const form = useForm<UpdateUserFormData>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
@@ -72,8 +55,8 @@ export default function UserViewEdit({
       employeeNumber: user.employeeNumber?.toString() || "",
       fullName: user.fullName || "",
       bossID: user.bossID?.toString() || "",
-      divisionID: user.businessUnit?.divisionID?.toString() || "",
-      businessUnitID: user.businessUnitID?.toString() || "",
+      divisionID: "",
+      businessUnitID: "",
       companySeniority: user.companySeniority || "",
       positionSeniority: user.positionSeniority || "",
       areaID: user.areaID?.toString() || "",
@@ -92,18 +75,35 @@ export default function UserViewEdit({
     form.setValue("businessUnitID", "");
   };
 
-  async function handleSubmit(data: UpdateUserFormData) {
+  const handleSubmit = (data: UpdateUserFormData) => {
     const parsedData = updateUserSchema.safeParse(data);
     if (!parsedData.success) {
       console.error("Validation errors:", parsedData.error.format());
       return;
     }
     startTransition(() => newAction(data));
-  }
+  };
+
+  useEffect(() => {
+    if (!formInitialized && user?.businessUnitID && businessUnits.length > 0) {
+      const initialBU = businessUnits.find(
+        (bu) => String(bu.id) === String(user.businessUnitID)
+      );
+
+      if (initialBU) {
+        form.reset({
+          ...form.getValues(),
+          divisionID: String(initialBU.divisionID),
+          businessUnitID: String(initialBU.id),
+        });
+        setFormInitialized(true);
+      }
+    }
+  }, [formInitialized, user?.businessUnitID, businessUnits, form]);
 
   const filteredBusinessUnits = useMemo(() => {
     if (!currentDivision) return businessUnits;
-    return businessUnits.filter(bu => bu.divisionID === parseInt(currentDivision));
+    return businessUnits.filter((bu) => bu.divisionID === parseInt(currentDivision));
   }, [currentDivision, businessUnits]);
 
   useEffect(() => {
@@ -113,6 +113,9 @@ export default function UserViewEdit({
     }
   }, [state, router, user.id]);
 
+  if (!user || businessUnits.length === 0 || !formInitialized) {
+    return <div>Loading...</div>;
+  }
   
   return (
     <Form {...form}>
