@@ -204,7 +204,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     Correo Electrónico del Usuario
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="ejemplo@gemso.com"
@@ -226,7 +226,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Número de Empleado<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe tu número de empleado"
@@ -250,7 +250,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     Fecha de inicio en la Empresa
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -301,7 +301,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     División<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -336,7 +336,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Área de Trabajo<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -371,7 +371,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     Roles
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -404,7 +404,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Nombre Completo<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe tu nombre completo"
@@ -425,7 +425,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     Fecha de inicio en el puesto
                     <p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -479,7 +479,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Unidad de Negocio<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -511,7 +511,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Jefe Directo<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -544,7 +544,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Puesto<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe el nombre de tu puesto"
@@ -564,7 +564,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                   <FormLabel>
                     Contribución<p className="text-gemso-red"> *</p>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Textarea
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"

@@ -151,7 +151,7 @@ export default function UserViewEdit({
                     Correo Electrónico del Usuario
                     <span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       disabled={!isEditable}
@@ -159,8 +159,9 @@ export default function UserViewEdit({
                       {...field}
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Employee Number Field */}
@@ -170,7 +171,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Número de Empleado</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       disabled={!isEditable}
@@ -181,8 +182,9 @@ export default function UserViewEdit({
                       maxLength={10}
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             <FormField
@@ -233,9 +235,10 @@ export default function UserViewEdit({
                       />
                     </PopoverContent>
                   </Popover>
+
+
                   <FormMessage />
-                </FormItem>
-              )}
+                </FormItem>              )}
             />
 
             {/* Division Field */}
@@ -245,7 +248,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>División</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={handleDivisionChange}
                     value={field.value}
@@ -264,8 +267,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Area Field */}
@@ -275,7 +279,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Área de Trabajo</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -294,8 +298,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
           </div>
 
@@ -310,7 +315,7 @@ export default function UserViewEdit({
                   <FormLabel>
                     Roles<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select 
                     onValueChange={field.onChange}
                     value={field.value}
@@ -329,8 +334,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Full Name Field */}
@@ -340,7 +346,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nombre Completo</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       disabled={!isEditable}
@@ -348,8 +354,9 @@ export default function UserViewEdit({
                       {...field}
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             <FormField
@@ -403,9 +410,10 @@ export default function UserViewEdit({
                     </PopoverContent>
                   </Popover>
 
+
+
                   <FormMessage />
-                </FormItem>
-              )}
+                </FormItem>              )}
             />
 
             {/* Business Unit Field */}
@@ -415,7 +423,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Unidad de Negocio</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={handleBusinessUnitChange}
                     value={field.value}
@@ -434,8 +442,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Boss Field */}
@@ -445,7 +454,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Jefe Directo</FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -464,8 +473,9 @@ export default function UserViewEdit({
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
           </div>
 
@@ -478,7 +488,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Puesto</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       disabled={!isEditable}
@@ -486,8 +496,9 @@ export default function UserViewEdit({
                       {...field}
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
 
             {/* Company Contribution Field */}
@@ -497,7 +508,7 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Contribución</FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Textarea
                       disabled={!isEditable}
@@ -506,8 +517,9 @@ export default function UserViewEdit({
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
                     />
                   </FormControl>
-                </FormItem>
-              )}
+
+                  <FormMessage />
+                </FormItem>              )}
             />
           </div>
         </div>
