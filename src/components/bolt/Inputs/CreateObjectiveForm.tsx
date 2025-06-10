@@ -25,6 +25,7 @@ import {
   FormItem,
   FormLabel,
   FormControl,
+  FormMessage,
 } from "@/components/ui/form";
 
 // Custom Components
@@ -90,10 +91,23 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
       console.error("Error creating objective:", state);
     }
   }, [state, router]);
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    onChange: (value: string) => void
+  ) => {
+    const value = e.target.value;
 
+    if (value === "" || /^\d{1,3}$/.test(value)) {
+      onChange(value);
+    }
+  };
   return (
     <Form {...form}>
-      <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6"
+      >
         {isPending ? (
           <p className="text-blue-600">Enviando...</p>
         ) : state?.success ? (
@@ -113,36 +127,17 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
               <FormControl>
                 <Input
                   placeholder="Introduzca el título del objetivo"
+                  maxLength={60}
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
 
         {/* Weight and Grade */}
-        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-4">
-          <FormField
-            control={form.control}
-            name="weight"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Peso (%)<p className="text-gemso-red"> *</p>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    max="100"
-                    min="1"
-                    placeholder="Introduzca el peso del objetivo"
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <FormField
             control={form.control}
             name="classification"
@@ -171,7 +166,28 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
                       </SelectItem>
                     ))}
                   </SelectContent>
+                  <FormMessage />
                 </Select>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="weight"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Peso (%)<p className="text-gemso-red"> *</p>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="number"
+                    placeholder="1-100"
+                    onChange={(e) => handleInputChange(e, field.onChange)}
+                  />
+                </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -188,10 +204,12 @@ export function CreateObjectiveForm(props: CreateObjectiveFormProps) {
               <FormControl>
                 <Textarea
                   placeholder="Introduzca su meta"
+                  maxLength={511}
                   {...field}
                   value={field.value || ""}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

@@ -77,7 +77,7 @@ export default async function EditObjectivePage({
         <CommentsSection
           initialComments={comments}
           objectiveId={parseInt(objectiveId.id)}
-          commenterId={ userId ? parseInt(userId) : 0}
+          commenterId={userId ? parseInt(userId) : 0}
           isMutable={false}
         />
       </div>

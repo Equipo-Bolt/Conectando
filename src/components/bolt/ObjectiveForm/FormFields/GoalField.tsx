@@ -47,6 +47,7 @@ export const GoalField = ({
           </FormLabel>
           <FormControl>
             <Textarea
+              maxLength={511}
               {...field}
               value={field.value || ""}
               disabled={!isEditable || !editable}
