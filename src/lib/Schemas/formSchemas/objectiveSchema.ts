@@ -93,14 +93,11 @@ export const validSentObjectiveSchema = validDraftObjectiveSchema
   .extend({
     comments: z
       .array(z.custom<Comment>())
-      .min(1, { message: "El objetivo debe tener al menos un comentario" }),
   });
 
 export const validAprovedObjectiveSchema = validDraftObjectiveSchema.extend({
   result: z
     .string()
-    .min(1, "El resultado es requerido")
-    .max(500, "Muy Largo")
     .nullable(),
   grade: z.number().nullable(),
 });
