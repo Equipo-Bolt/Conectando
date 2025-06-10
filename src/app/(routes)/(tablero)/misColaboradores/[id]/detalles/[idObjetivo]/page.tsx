@@ -77,7 +77,7 @@ export default async function EditObjectivePage({
         <BossObjectiveForm
           objective={updatedObjective}
           classifications={classifications}
-          progress={progressStatus}
+          progress={"Aprobado"}
         />
         <CommentsSection
           initialComments={comments}
