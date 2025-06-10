@@ -1,7 +1,7 @@
 "use client";
 
 // React and Next.js
-import { useActionState, useTransition, useEffect, useState } from "react";
+import { useActionState, useTransition, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -71,6 +71,7 @@ interface CreateUserFormProps {
   businessUnits: BusinessUnit[];
   bosses: User[];
 }
+
 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CreateUserForm(props: CreateUserFormProps) {
   const router = useRouter();
@@ -95,6 +96,30 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
   const [state, newAction] = useActionState(createUserAction, null);
   const [isPending, startTransition] = useTransition();
+
+  const currentDivision = form.watch("divisionID");
+
+  // Filter business units based on selected division using useMemo
+  const filteredBusinessUnits = useMemo(() => {
+    if (!currentDivision) return props.businessUnits;
+    return props.businessUnits.filter(bu => bu.divisionID === parseInt(currentDivision));
+  }, [currentDivision, props.businessUnits]);
+
+  const handleDivisionChange = (value: string) => {
+    form.setValue("divisionID", value);
+    // Clear business unit when division changes
+    form.setValue("businessUnitID", "");
+  };
+
+  const handleBusinessUnitChange = (value: string) => {
+    form.setValue("businessUnitID", value);
+    
+    // Auto-set division based on business unit selection
+    const selectedBusinessUnit = props.businessUnits.find(bu => String(bu.id) === value);
+    if (selectedBusinessUnit) {
+      form.setValue("divisionID", String(selectedBusinessUnit.divisionID));
+    }
+  };
 
   async function handleSubmit(data: CreateUserFormData) {
     const parsedData = createUserSchema.safeParse(data);
@@ -132,43 +157,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
     }
   }, [state, router]);
 
-  // Here we are using the useState hook to manage the state of the filtered business units
-  const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<
-    BusinessUnit[]
-  >([]);
-
-  const currentDivision = form.watch("divisionID");
-  const currentBusinessUnit = form.watch("businessUnitID");
-
-  useEffect(() => {
-    // This effect will run whenever currentDivision or props.businessUnits change
-
-    if (currentDivision === undefined || currentDivision === "") {
-      // If no division is selected, reset the filtered business units
-      setFilteredBusinessUnits(props.businessUnits);
-      return;
-    } else {
-      // Filter the business units based on the selected division
-      const filtered = props.businessUnits.filter(
-        (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
-      );
-      setFilteredBusinessUnits(filtered);
-      form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
-    }
-  }, [currentDivision, props.businessUnits, form]);
-
-  useEffect(() => {
-    // Assign current Division to matching business units division
-    if (currentBusinessUnit && currentBusinessUnit !== "") {
-      const matchingBU = props.businessUnits.find(
-        (bu) => bu.id === parseInt(currentBusinessUnit, 10)
-      );
-      if (matchingBU) {
-        form.setValue("divisionID", String(matchingBU.divisionID));
-      }
-    }
-  }, [currentBusinessUnit, props.businessUnits, form]);
-
   return (
     <Form {...form}>
       <form
@@ -192,7 +180,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                 <FormItem>
                   <FormLabel>
                     Correo Electrónico del Usuario
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <FormControl>
@@ -257,6 +245,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       <Calendar
                         locale={es}
                         mode="single"
+                        captionLayout="dropdown" // This enables year/month dropdowns
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -268,7 +257,9 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        captionLayout="dropdown"
+                        defaultMonth={
+                          field.value ? new Date(field.value) : new Date()
+                        }
                       />
                     </PopoverContent>
                   </Popover>
@@ -285,9 +276,8 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormLabel>División</FormLabel>
 
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={handleDivisionChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -320,7 +310,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -349,7 +338,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Roles<p className="text-gemso-red"> *</p>
+                    Roles<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Select onValueChange={field.onChange}>
@@ -449,9 +438,8 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormLabel>Unidad de Negocio</FormLabel>
 
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={handleBusinessUnitChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -482,7 +470,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
