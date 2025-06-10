@@ -44,7 +44,7 @@ export function addProgressFormValidation(baseSchema: z.ZodTypeAny) {
           });
         }
 
-        if ('comments' in objective && !objective.comments) { //! WHEN SENT
+        if ('comments' in objective && objective.comments.length === 0) { //! WHEN SENT
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: `El objetivo "${objective.title}" no tiene un comentario, debe tener al menos uno`,
