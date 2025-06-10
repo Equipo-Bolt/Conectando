@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useTransition, useEffect, useState, useCallback, useMemo } from "react";
+import { useActionState, useTransition, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
@@ -22,6 +22,7 @@ import { Area } from "@/types/Area";
 import { updateUserAction } from "@/app/actions/user/updateUser";
 import { format } from "date-fns";
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import { Loader } from 'lucide-react';
 
 interface DetailUserProps {
   user: UpdateUserFormData;
@@ -44,7 +45,15 @@ export default function UserViewEdit({
 }: DetailUserProps) {
   const router = useRouter();
   const [isEditable, setIsEditable] = useState(false);
-  const [formInitialized, setFormInitialized] = useState(false);
+  const [state, newAction] = useActionState(updateUserAction, null);
+  const [isPending, startTransition] = useTransition();
+
+  // Get initial division ID based on user's business unit
+  const initialDivisionID = useMemo(() => {
+    if (!user.businessUnitID) return "";
+    const userBusinessUnit = businessUnits.find(bu => String(bu.id) === String(user.businessUnitID));
+    return userBusinessUnit ? String(userBusinessUnit.divisionID) : "";
+  }, [user.businessUnitID, businessUnits]);
 
   const form = useForm<UpdateUserFormData>({
     resolver: zodResolver(updateUserSchema),
@@ -55,8 +64,8 @@ export default function UserViewEdit({
       employeeNumber: user.employeeNumber?.toString() || "",
       fullName: user.fullName || "",
       bossID: user.bossID?.toString() || "",
-      divisionID: "",
-      businessUnitID: "",
+      divisionID: initialDivisionID,
+      businessUnitID: user.businessUnitID?.toString() || "",
       companySeniority: user.companySeniority || "",
       positionSeniority: user.positionSeniority || "",
       areaID: user.areaID?.toString() || "",
@@ -65,14 +74,28 @@ export default function UserViewEdit({
     },
   });
 
-  const [state, newAction] = useActionState(updateUserAction, null);
-  const [isPending, startTransition] = useTransition();
-
   const currentDivision = form.watch("divisionID");
+
+  // Filter business units based on selected division
+  const filteredBusinessUnits = useMemo(() => {
+    if (!currentDivision) return businessUnits;
+    return businessUnits.filter(bu => bu.divisionID === parseInt(currentDivision));
+  }, [currentDivision, businessUnits]);
 
   const handleDivisionChange = (value: string) => {
     form.setValue("divisionID", value);
+    // Clear business unit when division changes
     form.setValue("businessUnitID", "");
+  };
+
+  const handleBusinessUnitChange = (value: string) => {
+    form.setValue("businessUnitID", value);
+    
+    // Auto-set division based on business unit selection
+    const selectedBusinessUnit = businessUnits.find(bu => String(bu.id) === value);
+    if (selectedBusinessUnit) {
+      form.setValue("divisionID", String(selectedBusinessUnit.divisionID));
+    }
   };
 
   const handleSubmit = (data: UpdateUserFormData) => {
@@ -84,28 +107,12 @@ export default function UserViewEdit({
     startTransition(() => newAction(data));
   };
 
-  useEffect(() => {
-    if (!formInitialized && user?.businessUnitID && businessUnits.length > 0) {
-      const initialBU = businessUnits.find(
-        (bu) => String(bu.id) === String(user.businessUnitID)
-      );
+  const handleCancelEdit = () => {
+    form.reset();
+    setIsEditable(false);
+  };
 
-      if (initialBU) {
-        form.reset({
-          ...form.getValues(),
-          divisionID: String(initialBU.divisionID),
-          businessUnitID: String(initialBU.id),
-        });
-        setFormInitialized(true);
-      }
-    }
-  }, [formInitialized, user?.businessUnitID, businessUnits, form]);
-
-  const filteredBusinessUnits = useMemo(() => {
-    if (!currentDivision) return businessUnits;
-    return businessUnits.filter((bu) => bu.divisionID === parseInt(currentDivision));
-  }, [currentDivision, businessUnits]);
-
+  // Handle successful form submission
   useEffect(() => {
     if (state?.success) {
       setIsEditable(false);
@@ -113,21 +120,24 @@ export default function UserViewEdit({
     }
   }, [state, router, user.id]);
 
-  if (!user || businessUnits.length === 0 || !formInitialized) {
-    return <div>Loading...</div>;
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <Loader className="w-12 h-12 animate-spin text-gemso-blue" />
+        <p className="loading text-gemso-blue">Cargando...</p>
+      </div>
+    );
   }
-  
+
   return (
     <Form {...form}>
       <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        {isPending ? (
-          <p className="text-blue-600">Enviando...</p>
-        ) : state?.success ? (
-          <h1>Resultado: {state.message} </h1>
-        ) : (
-          <></>
-        )}
+        {/* Status Messages */}
+        {isPending && <p className="text-blue-600">Enviando...</p>}
+        {state?.success && <h1>Resultado: {state.message}</h1>}
+
         <div className="grid grid-cols-1 gap-[2rem] md:grid-cols-3">
+          {/* First Column */}
           <div className="flex flex-col gap-[1rem]">
             {/* Email Field */}
             <FormField
@@ -137,7 +147,7 @@ export default function UserViewEdit({
                 <FormItem>
                   <FormLabel>
                     Correo Electrónico del Usuario
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
                   <FormMessage />
                   <FormControl>
@@ -203,9 +213,7 @@ export default function UserViewEdit({
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={
-                          field.value ? new Date(field.value) : undefined
-                        }
+                        selected={field.value ? new Date(field.value) : undefined}
                         onSelect={(date) => {
                           if (date) {
                             field.onChange(date.toISOString());
@@ -233,7 +241,6 @@ export default function UserViewEdit({
                   <Select
                     onValueChange={handleDivisionChange}
                     value={field.value}
-                    defaultValue={field.value}
                     disabled={!isEditable}
                   >
                     <FormControl>
@@ -264,7 +271,6 @@ export default function UserViewEdit({
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
                     disabled={!isEditable}
                   >
                     <FormControl>
@@ -285,6 +291,7 @@ export default function UserViewEdit({
             />
           </div>
 
+          {/* Second Column */}
           <div className="flex flex-col gap-[1rem]">
             {/* Role Field */}
             <FormField
@@ -293,13 +300,12 @@ export default function UserViewEdit({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Roles<p className="text-gemso-red"> *</p>
+                    Roles<span className="text-gemso-red"> *</span>
                   </FormLabel>
                   <FormMessage />
                   <Select 
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
                     disabled={!isEditable}
                   >
                     <FormControl>
@@ -309,7 +315,7 @@ export default function UserViewEdit({
                     </FormControl>
                     <SelectContent>
                       {roles.map((role) => (
-                        <SelectItem key={role.id} value={role.id.toString()}>
+                        <SelectItem key={role.id} value={String(role.id)}>
                           {role.title}
                         </SelectItem>
                       ))}
@@ -369,9 +375,7 @@ export default function UserViewEdit({
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={
-                          field.value ? new Date(field.value) : undefined
-                        }
+                        selected={field.value ? new Date(field.value) : undefined}
                         onSelect={(date) => {
                           if (date) {
                             field.onChange(date.toISOString());
@@ -397,9 +401,8 @@ export default function UserViewEdit({
                   <FormLabel>Unidad de Negocio</FormLabel>
                   <FormMessage />
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={handleBusinessUnitChange}
                     value={field.value}
-                    defaultValue={field.value}
                     disabled={!isEditable}
                   >
                     <FormControl>
@@ -419,110 +422,106 @@ export default function UserViewEdit({
               )}
             />
 
-                <FormField
-                control={form.control}
-                name="bossID"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Jefe Directo</FormLabel>
-                    <FormMessage />
-                    <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        defaultValue={field.value}
-                        disabled={!isEditable}
-                    >
-                        <FormControl>
-                        <SelectTrigger>
-                            <SelectValue
-                        placeholder="Selecciona un jefe" />
-                        </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                        {bosses.map((boss) => (
-                            <SelectItem key={boss.id} value={String(boss.id)}>
-                            {boss.fullName}
-                            </SelectItem>
-                        ))}
-                        </SelectContent>
-                    </Select>
-
-                    </FormItem>
-                )}
-                />
-            </div>
-            <div className="flex flex-col gap-[1rem]">
-                <FormField
-                control={form.control}
-                name="position"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Puesto</FormLabel>
-                    <FormMessage />
+            {/* Boss Field */}
+            <FormField
+              control={form.control}
+              name="bossID"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Jefe Directo</FormLabel>
+                  <FormMessage />
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    disabled={!isEditable}
+                  >
                     <FormControl>
-                        <Input
-                        disabled={!isEditable}
-                        placeholder="Escribe el nombre de tu puesto"
-                        {...field}
-                        />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona un jefe" />
+                      </SelectTrigger>
                     </FormControl>
+                    <SelectContent>
+                      {bosses.map((boss) => (
+                        <SelectItem key={boss.id} value={String(boss.id)}>
+                          {boss.fullName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </div>
 
-                    </FormItem>
-                )}
-                />
+          {/* Third Column */}
+          <div className="flex flex-col gap-[1rem]">
+            {/* Position Field */}
+            <FormField
+              control={form.control}
+              name="position"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Puesto</FormLabel>
+                  <FormMessage />
+                  <FormControl>
+                    <Input
+                      disabled={!isEditable}
+                      placeholder="Escribe el nombre de tu puesto"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-                <FormField
-                control={form.control}
-                name="companyContribution"
-                render={({ field }) => (
-                    <FormItem className="w-full">
-                    <FormLabel>Contribución</FormLabel>
-                    <FormMessage />
-                    <FormControl>
-                        <Textarea
-                        disabled={!isEditable}
-                        placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
-                        {...field}
-                        className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
-                        />
-                    </FormControl>
+            {/* Company Contribution Field */}
+            <FormField
+              control={form.control}
+              name="companyContribution"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Contribución</FormLabel>
+                  <FormMessage />
+                  <FormControl>
+                    <Textarea
+                      disabled={!isEditable}
+                      placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
+                      {...field}
+                      className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
 
-                    </FormItem>
-                )}
-                />
-            </div>
-            </div>
-
-            {/* Buttons */}
-
-            <div className="flex justify-end gap-4 w-full">
-            {isEditable ? (
-                <>
-                <Button
-                    variant={"gemso_white_and_blue"}
-                    type="button"
-                    onClick={() => {
-                    form.reset();
-                    setIsEditable(false);
-                    }}
-                >
-                    Cancelar edición
-                </Button>
-                <SubmitButton text="Guardar Cambios" isPending={isPending} />
-                </>
-            ) : (
-                userInfoView ? (
-                <Button
+        {/* Action Buttons */}
+        <div className="flex justify-end gap-4 w-full">
+          {isEditable ? (
+            <>
+              <Button
+                variant="gemso_white_and_blue"
                 type="button"
-                variant={"gemso_blue"}
+                onClick={handleCancelEdit}
+              >
+                Cancelar edición
+              </Button>
+              <SubmitButton text="Guardar Cambios" isPending={isPending} />
+            </>
+          ) : (
+            userInfoView && (
+              <Button
+                type="button"
+                variant="gemso_blue"
                 onClick={() => setIsEditable(true)}
-                >
+              >
                 Editar Usuario
-                </Button>
-                ) : null
-            )}
-            </div>
-        </form>
-        </Form>
-    );
+              </Button>
+            )
+          )}
+        </div>
+      </form>
+    </Form>
+  );
 }
