@@ -67,23 +67,23 @@ export const userSchema = z.object({
         .or(z.literal("")),
     companySeniority: z
         .string()
-        .min(1, "La antigüedad en la empresa es requerida")
+        .min(1, "La fecha de inicio en la empresa es requerida")
         .refine((val) => {
             const parsedDate = new Date(val);
             return !isNaN(parsedDate.getTime()) && isBefore(parsedDate, new Date());
         }, {
-            message: "La antigüedad en la empresa debe ser una fecha válida",
+            message: "La fecha de inicio en la empresa debe ser una fecha válida",
         })
         .optional()
         .or(z.literal("")),
     positionSeniority: z
         .string()
-        .min(1, "La antigüedad en el puesto es requerida")
+        .min(1, "La fecha de inicio en el puesto es requerida")
         .refine((val) => {
             const parsedDate = new Date(val);
             return !isNaN(parsedDate.getTime()) && isBefore(parsedDate, new Date());
         }, {
-            message: "La antigüedad en el puesto debe ser una fecha válida",
+            message: "La fecha de inicio en el puesto debe ser una fecha válida",
         })
         .optional()
         .or(z.literal("")),
@@ -120,7 +120,7 @@ export const createUserSchema = userSchema.refine((data) => {
     }
     return true;
 }, {
-    message: "La antigüedad en la empresa debe ser anterior o igual a la antigüedad en el puesto",
+    message: "Esta fecha debe ser previa o igual a la fecha de inicio en la empresa",
     path: ["positionSeniority"], // This helps identify which field has the error
 });
 
@@ -135,7 +135,7 @@ export const updateUserSchema = userSchema.extend({
     }
     return true;
 }, {
-    message: "La antigüedad en la empresa debe ser anterior o igual a la antigüedad en el puesto",
+    message: "Esta fecha debe ser previa o igual a la fecha de inicio en la empresa",
     path: ["positionSeniority"], // This helps identify which field has the error
 });;
 
@@ -193,21 +193,21 @@ export const completeUserInfoSchema = z.object({
         }),
     companySeniority: z
         .string()
-        .min(1, "La antigüedad en la empresa es requerida")
+        .min(1, "La fecha de inicio en la empresa es requerida")
         .refine((val) => {
             const parsedDate = new Date(val);
             return !isNaN(parsedDate.getTime()) && isBefore(parsedDate, new Date());
         }, {
-            message: "La antigüedad en la empresa debe ser una fecha válida",
+            message: "La fecha de inicio en la empresa debe ser una fecha válida",
         }),
     positionSeniority: z
         .string()
-        .min(1, "La antigüedad en el puesto es requerida")
+        .min(1, "La fecha de inicio en el puesto es requerida")
         .refine((val) => {
             const parsedDate = new Date(val);
             return !isNaN(parsedDate.getTime()) && isBefore(parsedDate, new Date());
         }, {
-            message: "La antigüedad en el puesto debe ser una fecha válida",
+            message: "La fecha de inicio en el puesto debe ser una fecha válida",
         }),
     areaID: z
         .string()
@@ -229,6 +229,6 @@ export const completeUserInfoSchema = z.object({
     const positionDate = new Date(data.positionSeniority);
     return isBefore(companyDate, positionDate) || companyDate.getTime() === positionDate.getTime();
 }, {
-    message: "La antigüedad en la empresa debe ser anterior o igual a la antigüedad en el puesto",
+    message: "Esta fecha debe ser previa o igual a la fecha de inicio en la empresa",
     path: ["positionSeniority"],
 });

@@ -181,7 +181,11 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
 
   return (
     <Form {...form}>
-      <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6"
+      >
         {isPending ? (
           <p className="text-blue-600">Enviando...</p>
         ) : state?.success ? (
@@ -209,6 +213,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -231,6 +236,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       maxLength={10}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -278,10 +284,11 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        captionLayout="dropdown" 
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -316,6 +323,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -347,6 +355,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -382,6 +391,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -401,6 +411,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -438,7 +449,8 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        locale={es}mode="single"
+                        locale={es}
+                        mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -450,10 +462,11 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        captionLayout="dropdown" 
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -485,6 +498,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -516,6 +530,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -536,6 +551,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -556,6 +572,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

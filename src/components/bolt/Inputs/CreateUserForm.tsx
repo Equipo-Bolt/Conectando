@@ -155,7 +155,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
       setFilteredBusinessUnits(filtered);
       form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
     }
-
   }, [currentDivision, props.businessUnits, form]);
 
   useEffect(() => {
@@ -172,7 +171,11 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
   return (
     <Form {...form}>
-      <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6"
+      >
         {isPending ? (
           <p className="text-blue-600">Enviando...</p>
         ) : state?.success ? (
@@ -199,6 +202,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -219,6 +223,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       maxLength={10}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -250,7 +255,8 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        locale={es}mode="single"
+                        locale={es}
+                        mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -262,10 +268,11 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        captionLayout="dropdown" 
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -298,6 +305,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -328,6 +336,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </SelectContent>
                   </Select>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -357,6 +366,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -375,6 +385,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     />
                   </FormControl>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -407,7 +418,8 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
-                        locale={es}mode="single"
+                        locale={es}
+                        mode="single"
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -419,11 +431,12 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        captionLayout="dropdown" 
+                        captionLayout="dropdown"
                       />
                     </PopoverContent>
                   </Popover>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -454,6 +467,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </SelectContent>
                   </Select>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -484,6 +498,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     </SelectContent>
                   </Select>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -503,6 +518,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     />
                   </FormControl>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -522,6 +538,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     />
                   </FormControl>
 
+                  <FormMessage />
                 </FormItem>
               )}
             />
