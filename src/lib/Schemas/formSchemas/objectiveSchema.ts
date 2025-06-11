@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 
+import { Comment } from "@/types/Comment";
+
 export const createObjectiveSchema = z.object({
   formID: z.number().optional(),
   title: z
@@ -79,8 +81,22 @@ export const addGradeToObjectiveSchema = addResultToObjectiveSchema.extend({
     ),
 });
 
-export const validObjectiveSchema = createObjectiveSchema
-  .omit({ classification: true })
+//? maybe remove valid from name and also move declaration to files where they are imported?
+export const validDraftObjectiveSchema = createObjectiveSchema
+  .omit({ classification: true, result: true })
   .extend({
     weight: z.number().min(0).max(100, "El peso debe estar entre 0 y 100"),
   });
+
+export const validSentObjectiveSchema = validDraftObjectiveSchema
+  .extend({
+    comments: z
+      .array(z.custom<Comment>())
+  });
+
+export const validAprovedObjectiveSchema = validDraftObjectiveSchema.extend({
+  result: z
+    .string()
+    .nullable(),
+  grade: z.number().nullable(),
+});

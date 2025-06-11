@@ -34,7 +34,7 @@ import { FormStatus } from "@/components/bolt/ObjectiveForm/FormStatus";
 import { Division } from "@/types/Division";
 
 // Schemas
-import { createCatalogSchema, createBusinessUnitSchema } from "@/lib/formSchemas/catalogSchema";
+import { createCatalogSchema, createBusinessUnitSchema } from "@/lib/Schemas/formSchemas/catalogSchema";
 
 type CatalogType = "Área" | "División" | "Unidad de Negocio";
 

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createCatalogSchema, updateCatalogSchema } from "@/lib/formSchemas/catalogSchema";
+import { createCatalogSchema, updateCatalogSchema } from "@/lib/Schemas/formSchemas/catalogSchema";
 
 export interface Division {
   id: number;

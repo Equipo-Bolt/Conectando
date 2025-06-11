@@ -1,4 +1,4 @@
-import { createBusinessUnitSchema, updateBusinessUnitSchema } from "@/lib/formSchemas/catalogSchema";
+import { createBusinessUnitSchema, updateBusinessUnitSchema } from "@/lib/Schemas/formSchemas/catalogSchema";
 import { z } from "zod";
 
 export interface BusinessUnit {

@@ -5,14 +5,31 @@ import { Button } from "@/components/ui/button";
 
 import { updateFormProgressAction } from "@/app/actions/form/updateFormProgress";
 
-import { validFormSchema } from "@/lib/formSchemas/validFormSchema";
+// * Progress Validators/Schemas
+import { draftFormSchema } from "@/lib/Schemas/progressSchemas/draftFormSchema";
+import { sentFormSchema } from "@/lib/Schemas/progressSchemas/sentFormSchema";
+import { approvedFormSchema } from "@/lib/Schemas/progressSchemas/approvedFormSchema";
 
 import { Form } from "@/types/Form";
 import { FormObjectives } from "@/types/FormObjectives";
-import { ErrorModal } from "../Modals/ErrorModal";
+import { ErrorModal } from "@/components/bolt/Modals/ErrorModal";
 
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid" 
 
+// didnt have time to make this pretty
+// * Enum for progress IDs
+export enum ProgressID {
+    Draft = 2,
+    Sent = 3,
+    Approved = 4,
+}
+
+// * Map progress IDs to schemas
+const progressSchemaMap = {
+    [ProgressID.Draft]: draftFormSchema,
+    [ProgressID.Sent]: sentFormSchema,
+    [ProgressID.Approved]: approvedFormSchema,
+};
 
 export interface ButtonProps {
     text: string;
@@ -27,11 +44,12 @@ export default function UpdateProgressButton({ text, form, formObjectives, progr
     const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
     const handleClick = () => {
-        if (isPending) return; // Prevent multiple clicks
+        if (isPending) return; 
 
-        console.log("formObjectives", formObjectives);
+        //! select validator/schema
+        const selectedSchema = progressSchemaMap[(progressID) as ProgressID]
 
-        const result = validFormSchema.safeParse(formObjectives);
+        const result = selectedSchema.safeParse(formObjectives);
 
         if (result.success) {
             startTransition(() => {

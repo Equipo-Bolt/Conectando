@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateObjectiveSchema } from "@/lib/formSchemas/objectiveSchema";
+import { updateObjectiveSchema } from "@/lib/Schemas/formSchemas/objectiveSchema";
 
 // Shadcn Components
 import { Input } from "@/components/ui/input";
