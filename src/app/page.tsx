@@ -6,6 +6,8 @@ import { ClientComponent } from "@/components/bolt/Pages/ClientComponent";
 
 import { getAllUsers } from "@/lib/fetches/user/getAllUsers";
 
+// LGTM!!!!!
+
 //! switched to function to async for cookies´test
 export default async function Home() {
   //!testing cookies at ClientComponent.tsx
