@@ -561,9 +561,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       placeholder="Escribe el nombre de tu puesto"
                       maxLength={255}
                       {...field}
-                      onChange={(e) =>
-                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "position"))
-                      }
+                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "position")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -586,9 +584,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
-                      onChange={(e) =>
-                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "companyContribution"))
-                      }
+                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "companyContribution")}
                     />
                   </FormControl>
                   <FormMessage />
