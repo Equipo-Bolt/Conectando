@@ -594,7 +594,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
 
         {/* Buttons */}
         <div className="flex justify-end gap-4 pt-2">
-          <CancelButton route="./login" text="Cancelar" />
           <SubmitButton text="Actualizar" isPending={isPending} />
         </div>
       </form>
