@@ -9,9 +9,16 @@ import { Input } from "@/components/ui/input";
 import { useWatch, Control } from "react-hook-form";
 import { gradeMultipliers } from "@/types/GradeMultipliers";
 import { calculateGrade } from "@/utils/ObjectiveFormUtils/calculateGrade";
+import { UpdateObjectiveFormData } from "@/types/Objective";
+
+interface FormValues {
+  grade: number;
+  weight: number;
+  finalGrade: number;
+}
 
 interface FinalGradeFieldProps {
-  control: Control<any>;
+  control: Control<UpdateObjectiveFormData>;
 }
 
 /**
