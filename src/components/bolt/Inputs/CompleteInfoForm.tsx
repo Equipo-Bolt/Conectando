@@ -417,9 +417,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       placeholder="Escribe tu nombre completo"
                       maxLength={255}
                       {...field}
-                      onChange={(e) =>
-                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "fullName"))
-                      }
+                      onChange={(e) =>handleLeadingOrTrailingSpaces(e.target.value, "fullName")}
                     />
                   </FormControl>
                   <FormMessage />
