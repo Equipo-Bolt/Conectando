@@ -250,7 +250,8 @@ export const completeUserInfoSchema = z.object({
     position: z
         .string()
         .min(1, "El Puesto es requerido")
-        .max(255, "El Puesto no puede exceder los 255 caracteres"),
+        .max(255, "El Puesto no puede exceder los 255 caracteres")
+    ,
     companyContribution: z
         .string()
         .min(1, "La Contribución a la Empresa es requerida")
