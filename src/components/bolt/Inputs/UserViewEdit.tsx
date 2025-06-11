@@ -65,7 +65,7 @@ export default function UserViewEdit({
     resolver: zodResolver(updateUserSchema),
     defaultValues: {
       id: user.id,
-      email: user.email || "",
+      email: user.email.trim() || "",
       roleID: String(user.roleID) || "",
       employeeNumber: user.employeeNumber?.toString() || "",
       fullName: user.fullName || "",
@@ -111,18 +111,39 @@ export default function UserViewEdit({
     }
   };
 
-  const handleLeadingOrTrailingSpaces = (value: string, formValue: "email" | "roleID" | "employeeNumber" | "fullName" | "bossID" | "divisionID" | "businessUnitID" | "companySeniority" | "positionSeniority" | "areaID" | "position" | "companyContribution") => {
-    // Trim leading and trailing spaces from the input value
-    form.setValue(formValue, value.trim());
-  };
-
   const handleSubmit = (data: UpdateUserFormData) => {
     const parsedData = updateUserSchema.safeParse(data);
     if (!parsedData.success) {
       console.error("Validation errors:", parsedData.error.format());
       return;
     }
-    startTransition(() => newAction(data));
+
+    if (parsedData.data.fullName)
+      parsedData.data.fullName = parsedData.data.fullName.trim();
+
+    if (parsedData.data.position)
+      parsedData.data.position = parsedData.data.position.trim();
+
+    if (parsedData.data.companyContribution)
+      parsedData.data.companyContribution = parsedData.data.companyContribution.trim();
+    
+    const userData: UpdateUserFormData = {
+      id: parsedData.data.id,
+      email: parsedData.data.email.trim(),
+      roleID: parsedData.data.roleID.toString(),
+      employeeNumber: parsedData.data.employeeNumber?.toString() || "",
+      fullName: parsedData.data.fullName || "",
+      bossID: parsedData.data.bossID?.toString() || "",
+      divisionID: parsedData.data.divisionID?.toString() || "",
+      businessUnitID: parsedData.data.businessUnitID?.toString() || "",
+      companySeniority: parsedData.data.companySeniority || "",
+      positionSeniority: parsedData.data.positionSeniority || "",
+      areaID: parsedData.data.areaID?.toString() || "",
+      position: parsedData.data.position || "",
+      companyContribution: parsedData.data.companyContribution || "",
+    };
+
+    startTransition(() => newAction(userData));
   };
 
   const handleCancelEdit = () => {
@@ -174,7 +195,6 @@ export default function UserViewEdit({
                       type="email"
                       maxLength={255}
                       {...field}
-                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "email")}
                     />
                   </FormControl>
 
@@ -376,7 +396,6 @@ export default function UserViewEdit({
                       placeholder="Escribe tu nombre completo"
                       maxLength={255}
                       {...field}
-                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "fullName")}
                     />
                   </FormControl>
 
@@ -521,7 +540,6 @@ export default function UserViewEdit({
                       placeholder="Escribe el nombre de tu puesto"
                       maxLength={255}
                       {...field}
-                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "position")}
                     />
                   </FormControl>
 
@@ -545,7 +563,6 @@ export default function UserViewEdit({
                       maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
-                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "companyContribution")}
                     />
                   </FormControl>
 
