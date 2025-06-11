@@ -1,5 +1,7 @@
+import { ServerActionResponse } from "@/types/ServerActionResponse";
+
 interface FormStatusProps {
-  state: any;
+  state: ServerActionResponse  | null;
   isPending: boolean;
 }
 

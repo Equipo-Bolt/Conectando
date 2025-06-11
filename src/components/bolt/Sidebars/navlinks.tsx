@@ -27,6 +27,7 @@ const sections = [
     title: "Administración",
     links: [
       { name: "Usuarios", href: "/usuarios", icon: UsersIcon },
+      { name: "Catálogos", href: "/catalogos", icon: ClipboardDocumentIcon },
     ],
   },
 ];

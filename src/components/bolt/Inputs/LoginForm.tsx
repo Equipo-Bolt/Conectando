@@ -18,7 +18,7 @@ import { useActionState, useTransition, useEffect } from "react";
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/lib/formSchemas/loginSchema"
+import { loginSchema } from "@/lib/Schemas/formSchemas/loginSchema"
 
 import { Login } from "@/types/Login";
 
@@ -67,7 +67,7 @@ useEffect(() => {
   return (
     
     <Form {...form}>
-      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+      <form noValidate className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="email"
@@ -78,8 +78,9 @@ useEffect(() => {
               </FormLabel>
               <Input 
                 id="email" 
-                type="email" 
+                type="email"
                 placeholder="ejemplo@gemso.com"
+                maxLength={255}
                 {...field}
               />
               <FormMessage className="text-gemso-red text-sm mt-1"/>

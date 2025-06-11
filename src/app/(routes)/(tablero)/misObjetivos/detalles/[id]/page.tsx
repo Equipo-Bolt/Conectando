@@ -7,11 +7,12 @@ import { UpdateObjectiveFormData } from "@/types/Objective";
 import { getObjectiveClassificationById } from "@/lib/fetches/objective_classification/getObjectiveClassificationById";
 import { getCommentsFromObjective } from "@/lib/fetches/comment/getCommentsFromObjective";
 import { getUserById } from "@/lib/fetches/user/getUserById";
-import CommentsSection from "@/components/bolt/Comments/Comments";
+import CommentsSection from "@/components/bolt/Comments/CommentSection";
 import GoBack from "@/components/bolt/Buttons/GoBack";
 import { getProgressById } from "@/lib/fetches/progress/getProgressById";
 import { ObjectiveProgress } from "@/types/ObjectiveProgress";
 import { getFormById } from "@/lib/fetches/form/getFormById";
+import BossObjectiveForm from "@/components/bolt/Inputs/BossObjectiveViewEdit";
 // NextAuth
 import { auth } from "@/app/auth";
 
@@ -31,11 +32,10 @@ export default async function EditObjectivePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  //! COOKIES SHOULD BE CHANGED OT NEXTAUTH
   const session = await auth();
   const userId = session?.user?.id;
 
-  const User = await getUserById(Number(session.user.id));
+  const User = await getUserById(Number(session?.user.id));
 
   const objectiveId = await params;
   const objective = await getObjectiveById(parseInt(objectiveId.id));
@@ -63,7 +63,7 @@ export default async function EditObjectivePage({
   };
   return (
     <div>
-      <div className="flex items-center gap-x-2 mb-4">
+      <div className="flex items-center gap-x-2 mb-[1rem]">
         <GoBack route={"/misObjetivos"} />
         <h1 className="text-3xl font-bold">Detalles del Objetivo</h1>
       </div>
@@ -77,7 +77,8 @@ export default async function EditObjectivePage({
         <CommentsSection
           initialComments={comments}
           objectiveId={parseInt(objectiveId.id)}
-          commenterId={ userId ? parseInt(userId) : 0}
+          commenterId={userId ? parseInt(userId) : 0}
+          isMutable={false}
         />
       </div>
     </div>

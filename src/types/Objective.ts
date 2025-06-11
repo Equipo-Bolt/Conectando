@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { Comment } from "./Comment";
-import { createObjectiveSchema, updateObjectiveSchema} from "@/lib/formSchemas/objectiveSchema";
+import { createObjectiveSchema, updateObjectiveSchema} from "@/lib/Schemas/formSchemas/objectiveSchema";
 
 export interface Objective {
   id: number;

@@ -48,7 +48,7 @@ export function DataTableUsers<TData, TValue>({
   };
 
   return (
-    <div className="rounded-md overflow-hidden mb-[2rem]">
+    <div className="rounded-md overflow-hidden">
       <Table>
         <TableHeader className="rounded-t-md">
           {table.getHeaderGroups().map((headerGroup) => (

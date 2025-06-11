@@ -14,8 +14,8 @@ import { getFormById } from "@/lib/fetches/form/getFormById";
  */
 async function MyCollaboratorsPage() {
   // Get user ID from cookies
-    const session = await auth();
-    const userId = session?.user?.id;
+  const session = await auth();
+  const userId = session?.user?.id;
 
   // Get collaborators and their progress
   const collaborators = await getAllCollaboratorsOfBoss(Number(userId));
@@ -25,7 +25,7 @@ async function MyCollaboratorsPage() {
       if (formId === "Sin Formulario Activo") {
         return {
           user: collaborator,
-          progress: { id: 5, title: "Sin Formulario", createdAt: "today" }, // puedes ajustar esto si quieres
+          progress: { id: 5, title: "Sin Formulario", createdAt: "today" },
         };
       }
       const form = await getFormById(parseInt(formId));
@@ -38,8 +38,8 @@ async function MyCollaboratorsPage() {
   );
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Mis Colaboradores</h1>
+    <div>
+      <h1 className="text-3xl font-bold mb-[1rem]">Mis Colaboradores</h1>
       <DataTableMyCollaborators columns={columns} data={progresses} />
     </div>
   );

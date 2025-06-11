@@ -1,8 +1,9 @@
 import { z } from "zod";
+import { BusinessUnit } from "./BusinessUnit";
 
-import { createUserSchema } from "@/lib/formSchemas/userSchema";
-import { updateUserSchema } from "@/lib/formSchemas/userSchema";
-import { completeUserInfoSchema } from "@/lib/formSchemas/userSchema";
+import { createUserSchema } from "@/lib/Schemas/formSchemas/userSchema";
+import { updateUserSchema } from "@/lib/Schemas/formSchemas/userSchema";
+import { completeUserInfoSchema } from "@/lib/Schemas/formSchemas/userSchema";
 
 export interface User {
   id: number;
@@ -19,6 +20,7 @@ export interface User {
   divisionID?: number;
   areaID?: number;
   createdAt: Date;
+  businessUnit?: BusinessUnit;
 }
 
 export type CreateUserFormData = z.infer<typeof createUserSchema>;

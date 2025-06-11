@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateObjectiveSchema } from "@/lib/formSchemas/objectiveSchema";
+import { updateObjectiveSchema } from "@/lib/Schemas/formSchemas/objectiveSchema";
 
 // Shadcn Components
 import { Input } from "@/components/ui/input";
@@ -38,6 +38,7 @@ import { Comment } from "@/types/Comment";
 
 // Actions
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
+import { FormStatus } from "../ObjectiveForm/FormStatus";
 
 interface DetailObjectivesProps {
   objective: UpdateObjectiveFormData;
@@ -118,13 +119,9 @@ export default function EditObjective({
               }}
               className="space-y-6"
             >
-              {isPending ? (
-                <p className="text-blue-600">Guardando...</p>
-              ) : state?.success ? (
-                <h1>Resultado: {state.message} </h1>
-              ) : (
-                <>Error: {state?.error}</> //! Added this should be change woth error pop up
-              )}
+              {/* Form Status */}
+              <FormStatus isPending={isPending} state={state} />
+
               <div className="grid grid-cols-1 gap-6">
                 {/* Objective Title */}
                 <FormField

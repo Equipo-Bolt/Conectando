@@ -1,37 +1,44 @@
-// Components
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { DataTableUsers } from "@/components/bolt/DataTables/dataTableUsers/data-table"
-import { columns } from "@/components/bolt/DataTables/dataTableUsers/columns"
-
-// Fetches
-import { getAllUsers } from "@/lib/fetches/user/getAllUsers"
-import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
+import { getUsersPaginationFilters } from "@/lib/fetches/user/getUsersPaginationFilters";
 import { getAllRoles } from "@/lib/fetches/role/getAllRoles";
+import { getAllBusinessUnits } from "@/lib/fetches/business_unit/getAllBusinessUnits";
+import { getPagesPagination } from "@/lib/fetches/user/getPagesPagination";
+import { CompleteUsersTable } from "@/components/bolt/Pages/CompleteUsersTable";
+import type { Filter } from "@/types/Filter";
 
-// NextAuth
-import { User } from "@/types/User";
+export const dynamic = "force-dynamic";
 
-async function UsersPage() {
-    const users: User[] = await getAllUsers();
-    const businessesUnits = await getAllBusinessUnits();
-    const roles = await getAllRoles();
-
-    return (
-        <div>
-            <h1 className="text-3xl  font-bold mb-[1rem]">Administración de Usuarios</h1>
-
-            <div className="text-lg flex flex-col gap-[1rem]" >
-                <div className="flex justify-end">
-                    <Button variant={"gemso_blue"} asChild>
-                        <Link href={"/usuarios/crear"}>Crear Usuario</Link>
-                    </Button>
-                </div>
-                <DataTableUsers data={users} columns={columns} roles={roles} businessUnits={businessesUnits}/>
-                
-            </div>
-        </div>
-    )
+interface PageProps {
+  page?: string;
+  name?: string;
+  roleID?: string;
+  businessUnitID?: string;
 }
 
-export default UsersPage;
+export default async function UsersPage({ searchParams }: { searchParams: Promise<PageProps>}) {
+  const resolvedParams = await searchParams;
+  const currentPage = resolvedParams.page || "1";
+  
+  const filters: Filter = {
+    ...(resolvedParams.name && { name: resolvedParams.name }),
+    ...(resolvedParams.roleID && { roleID: resolvedParams.roleID }),
+    ...(resolvedParams.businessUnitID && { businessUnitID: resolvedParams.businessUnitID })
+  };
+
+  const [users, roles, businessUnits, totalPages] = await Promise.all([
+    getUsersPaginationFilters(currentPage, Object.keys(filters).length ? filters : undefined),
+    getAllRoles(),
+    getAllBusinessUnits(),
+    getPagesPagination(Object.keys(filters).length ? filters : undefined),
+  ]);
+
+  return (
+    <CompleteUsersTable
+      users={users}
+      roles={roles}
+      businessUnits={businessUnits}
+      totalPages={totalPages}
+      currentPage={parseInt(currentPage)}
+      initialFilters={filters}
+    />
+  );
+}

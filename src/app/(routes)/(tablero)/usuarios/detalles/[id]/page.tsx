@@ -15,6 +15,7 @@ import { Division } from "@/types/Division";
 import { Role } from "@/types/Role";
 import { BusinessUnit } from "@/types/BusinessUnit";
 import { Area } from "@/types/Area";
+import GoBack from "@/components/bolt/Buttons/GoBack";
 
 export default async function UserDetailsPage({
     params,
@@ -28,11 +29,8 @@ export default async function UserDetailsPage({
     const roles : Role[] = await getAllRoles();
     const businessUnits : BusinessUnit[]= await getAllBusinessUnits();
     const areas : Area[] = await getAllAreas();
-    const allBosses : User[] = await getAllBosses();
-    const bosses: User[] = allBosses.filter(
-        (boss) => boss.id !== user.id
-    );
-    
+    const bosses : User[] = await getAllBosses();
+
     const userData: UpdateUserFormData = {
         id: user.id,
         email: user.email,
@@ -52,7 +50,10 @@ export default async function UserDetailsPage({
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-4">Detalles del Usuario</h1>
+            <div className="flex items-center gap-x-2 mb-[1rem]">
+                <GoBack route={"/usuarios"} />
+                <h1 className="text-3xl font-bold">Detalles del Usuario</h1>
+            </div>
             <UserViewEdit
                 user={userData}
                 divisions={divisions}

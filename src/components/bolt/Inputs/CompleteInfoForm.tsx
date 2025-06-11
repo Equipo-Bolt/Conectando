@@ -1,14 +1,14 @@
 "use client";
 
 // React and Next.js
-import { useActionState, useTransition, useEffect, useState } from "react";
+import { useActionState, useTransition, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { completeUserInfoSchema } from "@/lib/formSchemas/userSchema";
+import { completeUserInfoSchema } from "@/lib/Schemas/formSchemas/userSchema";
 
 // Shadcn Components
 import { Input } from "@/components/ui/input";
@@ -61,6 +61,8 @@ import { format } from "date-fns";
 
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import { es } from "date-fns/locale";
+import { FormStatus } from "../ObjectiveForm/FormStatus";
 
 //* Interface
 interface CompleteUserFormProps {
@@ -71,24 +73,32 @@ interface CompleteUserFormProps {
   bosses: User[];
   user: User;
 }
-//! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
+
+//! This definition of props is crucial, otherwise it will throw Intrinsic attributes error
 export function CompleteInfoForm(props: CompleteUserFormProps) {
   const router = useRouter();
+
+  // Get initial division ID based on user's business unit
+  const initialDivisionID = useMemo(() => {
+    if (!props.user.businessUnitID) return "";
+    const userBusinessUnit = props.businessUnits.find(bu => String(bu.id) === String(props.user.businessUnitID));
+    return userBusinessUnit ? String(userBusinessUnit.divisionID) : "";
+  }, [props.user.businessUnitID, props.businessUnits]);
 
   const form = useForm<CompleteUserFormData>({
     resolver: zodResolver(completeUserInfoSchema),
     defaultValues: {
       id: props.user.id,
       email: props.user.email || "",
-      roleID: String(props.user.roleID) || "",
-      employeeNumber: String(props.user.employeeNumber) || "",
+      roleID: props.user.roleID?.toString() || "",
+      employeeNumber: props.user.employeeNumber?.toString() || "",
       fullName: props.user.fullName || "",
-      bossID: String(props.user.bossID) || "",
-      divisionID: String(props.user.divisionID) || "",
-      businessUnitID: String(props.user.businessUnitID) || "",
+      bossID: props.user.bossID?.toString() || "",
+      divisionID: initialDivisionID,
+      businessUnitID: props.user.businessUnitID?.toString() || "",
       companySeniority: props.user.companySeniority?.toDateString() || "",
       positionSeniority: props.user.positionSeniority?.toDateString() || "",
-      areaID: String(props.user.areaID) || "",
+      areaID: props.user.areaID?.toString() || "",
       position: props.user.jobPosition || "",
       companyContribution: props.user.companyContribution || "",
     },
@@ -96,6 +106,42 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
 
   const [state, newAction] = useActionState(completeUserInfoAction, null);
   const [isPending, startTransition] = useTransition();
+
+  const currentDivision = form.watch("divisionID");
+
+  // Filter business units based on selected division
+  const filteredBusinessUnits = useMemo(() => {
+    if (!currentDivision) return props.businessUnits;
+    return props.businessUnits.filter(bu => bu.divisionID === parseInt(currentDivision));
+  }, [currentDivision, props.businessUnits]);
+
+  const handleDivisionChange = (value: string) => {
+    form.setValue("divisionID", value);
+    // Clear business unit when division changes
+    form.setValue("businessUnitID", "");
+  };
+
+  const handleBusinessUnitChange = (value: string) => {
+    form.setValue("businessUnitID", value);
+    
+    // Auto-set division based on business unit selection
+    const selectedBusinessUnit = props.businessUnits.find(bu => String(bu.id) === value);
+    if (selectedBusinessUnit) {
+      form.setValue("divisionID", String(selectedBusinessUnit.divisionID));
+    }
+  };
+
+  // Handler to allow only numeric input for employee number
+  const handleEmployeeNumberChange = (value: string) => {
+    if (/^\d*$/.test(value)) {
+      form.setValue("employeeNumber", value);
+    }
+  }
+
+  const handleLeadingOrTrailingSpaces = (value: string, formValue: "email" | "roleID" | "employeeNumber" | "fullName" | "bossID" | "divisionID" | "businessUnitID" | "companySeniority" | "positionSeniority" | "areaID" | "position" | "companyContribution") => {
+    // Trim leading and trailing spaces from the input value
+    form.setValue(formValue, value.trim());
+  }
 
   async function handleSubmit(data: CompleteUserFormData) {
     const parsedData = completeUserInfoSchema.safeParse(data);
@@ -141,53 +187,15 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     }
   }, [state, router, form]);
 
-  // Here we are using the useState hook to manage the state of the filtered business units
-  const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<
-    BusinessUnit[]
-  >([]);
-
-  const currentDivision = form.watch("divisionID");
-  const currentBusinessUnit = form.watch("businessUnitID");
-
-  useEffect(() => {
-    // This effect will run whenever currentDivision or props.businessUnits change
-
-    if (currentDivision === undefined || currentDivision === "") {
-      // If no division is selected, reset the filtered business units
-      setFilteredBusinessUnits(props.businessUnits);
-      return;
-    } else {
-      // Filter the business units based on the selected division
-      const filtered = props.businessUnits.filter(
-        (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
-      );
-      setFilteredBusinessUnits(filtered);
-      form.setValue("businessUnitID", String(filtered[0]?.id) || "");
-    }
-  }, [currentDivision, props.businessUnits, form]);
-
-  useEffect(() => {
-    // Assign current Division to matching business units division
-    if (currentBusinessUnit && currentBusinessUnit !== "") {
-      const matchingBU = props.businessUnits.find(
-        (bu) => bu.id === parseInt(currentBusinessUnit, 10)
-      );
-      if (matchingBU) {
-        form.setValue("divisionID", String(matchingBU.divisionID));
-      }
-    }
-  }, [currentBusinessUnit, props.businessUnits, form]);
-
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        {isPending ? (
-          <p className="text-blue-600">Enviando...</p>
-        ) : state?.success ? (
-          <h1>Resultado: {state.message} </h1>
-        ) : (
-          <></>
-        )}
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6"
+      >
+        {/* Form Status */}
+        <FormStatus isPending={isPending} state={state} />
         <div className="grid grid-cols-1 gap-[2rem] md:grid-cols-3">
           <div className="flex flex-col gap-[1rem]">
             <FormField
@@ -197,16 +205,20 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                 <FormItem>
                   <FormLabel>
                     Correo Electrónico del Usuario
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="ejemplo@gemso.com"
                       type="email"
+                      min={1}
+                      maxLength={255}
+                      disabled={true}
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -217,17 +229,19 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Número de Empleado<p className="text-gemso-red"> *</p>
+                    Número de Empleado<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe tu número de empleado"
                       {...field}
-                      type="number"
-                      min="1"
+                      min={1}
+                      maxLength={10}
+                      onChange={(e) => handleEmployeeNumberChange(e.target.value)}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -239,15 +253,15 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                 <FormItem className="flex flex-col">
                   <FormLabel>
                     Fecha de inicio en la Empresa
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           className={cn(
-                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between [&_svg:not([class*='size-'])]:size-6",
+                            "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between [&_svg:not([class*='size-'])]:size-6 px-[1rem]",
                             !field.value && "text-muted-foreground px-[1rem]"
                           )}
                         >
@@ -262,7 +276,9 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        locale={es}
                         mode="single"
+                        captionLayout="dropdown" // This enables year/month dropdowns
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -274,10 +290,13 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        defaultMonth={
+                          field.value ? new Date(field.value) : new Date()
+                        }
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -288,13 +307,12 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    División<p className="text-gemso-red"> *</p>
+                    División<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={handleDivisionChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -312,6 +330,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -322,9 +341,9 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Área de Trabajo<p className="text-gemso-red"> *</p>
+                    Área de Trabajo<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -343,6 +362,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -356,9 +376,9 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                 <FormItem>
                   <FormLabel>
                     Roles
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -378,6 +398,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -388,15 +409,18 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Nombre Completo<p className="text-gemso-red"> *</p>
+                    Nombre Completo<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe tu nombre completo"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) =>handleLeadingOrTrailingSpaces(e.target.value, "fullName")}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -408,9 +432,9 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                 <FormItem className="flex flex-col">
                   <FormLabel>
                     Fecha de inicio en el puesto
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -424,9 +448,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                           {field.value ? (
                             format(new Date(field.value), "dd/MM/yyyy")
                           ) : (
-                            <span className="px-[1rem]">
-                              Selecciona una fecha
-                            </span>
+                            <span>Selecciona una fecha</span>
                           )}
                           <CalendarIcon className="text-primary" />
                         </Button>
@@ -434,7 +456,9 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
+                        locale={es}
                         mode="single"
+                        captionLayout="dropdown"
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -446,10 +470,13 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        initialFocus
+                        defaultMonth={
+                          field.value ? new Date(field.value) : new Date()
+                        }
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -460,13 +487,12 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Unidad de Negocio<p className="text-gemso-red"> *</p>
+                    Unidad de Negocio<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={handleBusinessUnitChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -481,6 +507,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -491,9 +518,9 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Jefe Directo<p className="text-gemso-red"> *</p>
+                    Jefe Directo<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
@@ -512,6 +539,7 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -523,15 +551,18 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Puesto<p className="text-gemso-red"> *</p>
+                    Puesto<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Input
                       placeholder="Escribe el nombre de tu puesto"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "position")}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -542,16 +573,19 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>
-                    Contribución<p className="text-gemso-red"> *</p>
+                    Contribución<span className="text-gemso-red"> *</span>
                   </FormLabel>
-                  <FormMessage />
+
                   <FormControl>
                     <Textarea
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
+                      maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
+                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "companyContribution")}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -560,7 +594,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
 
         {/* Buttons */}
         <div className="flex justify-end gap-4 pt-2">
-          <CancelButton route="./login" text="Cancelar" />
           <SubmitButton text="Actualizar" isPending={isPending} />
         </div>
       </form>

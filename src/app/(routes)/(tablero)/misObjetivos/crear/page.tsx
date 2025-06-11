@@ -14,6 +14,7 @@ import CreateObjectiveForm from "@/components/bolt/Inputs/CreateObjectiveForm";
 // Types
 import { Classification } from "@/types/Classification";
 import { User } from "@/types/User";
+import GoBack from "@/components/bolt/Buttons/GoBack";
 
 /**
  * @description This page is used to create a new objective for a user.
@@ -29,7 +30,10 @@ async function CreateObjectivePage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">Crear Objetivo</h1>
+      <div className="flex items-center gap-x-2 mb-[1rem]">
+        <GoBack route={"/misObjetivos"} />
+        <h1 className="text-3xl font-bold">Crear Objetivo</h1>
+      </div>
       <p className="text-base mb-6">
         Colaborador: {user ? user.fullName : "N/A"}
       </p>

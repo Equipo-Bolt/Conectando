@@ -1,7 +1,6 @@
 "use server";
 
 import { getClassificationById } from "@/lib/fetches/classification/getClassificationById";
-import { getObjectivesByFormId } from "@/lib/fetches/objective/getObjectivesByFormId";
 import { prisma } from "@/lib/prisma";
 
 import { UpdateObjectiveFormData } from "@/types/Objective";
@@ -55,13 +54,21 @@ export async function updateObjectiveAction(
       throw new Error("La clasificación no se encuentra en los catalogos");
     }
 
-    //TODO rework this logic, because it wont give past created relations
-    const objectivesFromObjectives = await getObjectivesByFormId(
-      Number(parsedData.formID)
-    );
+    const targetForm = await prisma.form.findUnique({
+      where: { id: data.formID },
+      include: {
+        objectives: {
+          include: {
+            objectiveClassification: true
+          },
+        },
+      },
+    });
 
-    const relationId = objectivesFromObjectives.find(
-      (ofo) => ofo.classificationTitle === targetClassification.title
+    const relationId = targetForm?.objectives.find(
+      (tfo) =>
+        tfo.objectiveClassification.classificationCatalogID ===
+        targetClassification.id
     )?.objectiveClassificationID;
 
     if (!relationId) {
@@ -77,14 +84,13 @@ export async function updateObjectiveAction(
           },
         });
 
-      await prisma.form.update({
-        where: { id: parsedData.formID, deactivated: false },
+      await prisma.objective.update({
+        where: { id: data.id },
         data: {
-          objectives: {
-            create: {
-              ...dataWithoutIDs,
-              weight: Number(dataWithoutIDs.weight),
-              objectiveClassificationID: newObjectiveClassification.id,
+          ...dataWithoutIDs,
+          objectiveClassification: {
+            connect: {
+              id: newObjectiveClassification.id,
             },
           },
         },

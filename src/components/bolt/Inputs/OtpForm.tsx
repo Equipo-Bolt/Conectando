@@ -1,7 +1,7 @@
 "use client"
 
 // React and Next.js
-import { useActionState, useTransition, useEffect, useCallback } from "react";
+import { useActionState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 // Components
@@ -24,13 +24,12 @@ import {
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { otpSchema } from "@/lib/formSchemas/otpSchema";
+import { otpSchema } from "@/lib/Schemas/formSchemas/otpSchema";
 import { OtpSchemaType } from "@/types/OTP";
 
 // Actions  
 import { loginAction } from "@/app/actions/auth/login";
 import { findUserAction } from "@/app/actions/auth/findUser";
-import { hasCompletedInfoAction } from "@/app/actions/user/hasCompletedInfo";
 
 // NextAuth
 
@@ -57,39 +56,23 @@ export default function OtpForm(
         
         if (parsedData.success) {
             startTransition(() => {
-                newAction(parsedData.data);
+                newAction(parsedData.data)
             });
+            
         }
+        return;
     };
 
-    const checkUserInfo = useCallback(async (email: string) => {
-        const response = await hasCompletedInfoAction(email);
-        if (response.success === true) {
-            // If user has all fields filled, redirect to page based on their role
-            const userRoleID = response.message
-            if (userRoleID === "1") {
-                router.push("/misObjetivos");
-            } else if (userRoleID === "2" || userRoleID === "4") {
-                router.push("/misColaboradores");
-            } else{
-                router.push("/usuarios");
-            }
-        } else {
-            // If user has not completed all fields, redirect to info status page
-            router.push("/llenarInformacion");
-        }
-        console.log(response);
-    }, [router]);
-
     useEffect(() => {
-        if (state?.success === true) {
-            checkUserInfo(form.getValues("email"));
+        if (state?.success) {
+            router.push("/llenarInformacion?fromApp=true")
         }
-    }, [state, form, checkUserInfo]);
+
+    }, [router, state])
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form noValidate onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                     control={form.control}
                     name="otp"

@@ -21,33 +21,30 @@ import { User } from "@/types/User";
 
 // NextAuth
 import { auth } from "@/app/auth";
+import GoBack from "@/components/bolt/Buttons/GoBack";
 
 /**
  * @description This page is used to create a new user.
  */
 async function CreateUserPage() {
-  const session = await auth();
   const roles: Role[] = await getAllRoles();
   const divisions: Division[] = await getAllDivisions();
   const areas: Area[] = await getAllAreas();
   const bus: BusinessUnit[] = await getAllBusinessUnits();
   const allBosses: User[] = await getAllBosses();
 
-  const User = await getUserById(Number(session?.user.id));
-
-const bosses = allBosses.filter(
-  (boss) => boss.id !== User.id
-);
-
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">Crear Usuario</h1>
+      <div className="flex items-center gap-x-2 mb-[1rem]">
+          <GoBack route={"/usuarios"} />
+          <h1 className="text-3xl font-bold">Crear Usuario</h1>
+      </div>
       <CreateUserForm
         roles={roles}
         divisions={divisions}
         areas={areas}
         businessUnits={bus}
-        bosses={bosses}
+        bosses={allBosses}
       />
     </div>
   );

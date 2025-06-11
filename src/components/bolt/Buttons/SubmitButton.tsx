@@ -7,7 +7,7 @@ export interface ButtonProps {
 
 export default function SubmitButton({ text, isPending }: ButtonProps) {
   return (
-    <Button type="submit" disabled={isPending} variant={"gemso_blue"}>
+    <Button type="submit" disabled={isPending} variant={"gemso_blue"} className="px-[1rem]">
       {text}
     </Button>
   );
