@@ -8,13 +8,18 @@ import { Objective } from "@/types/Objective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 import { calculateGrade } from "@/utils/ObjectiveFormUtils/calculateGrade";
 import { gradeMultipliers } from "@/types/GradeMultipliers";
+import { TextWithTooltip } from "@/components/bolt/Icons/TextwithTooltip";
 export const getColumns = (
   showDeleteButton: boolean
 ): ColumnDef<Objective>[] => [
   {
     accessorKey: "title",
     header: "Objetivo",
-    size: 100,
+    cell: ({ row }) => {
+      const title = row.original.title;
+
+      return <TextWithTooltip title={title} />;
+    },
   },
   {
     accessorKey: "goal",
@@ -57,7 +62,8 @@ export const getColumns = (
 
       const multiplier =
         grade != null && grade in gradeMultipliers
-          ? parseFloat((gradeMultipliers[grade] * 100).toFixed(2)).toString() + "%"
+          ? parseFloat((gradeMultipliers[grade] * 100).toFixed(2)).toString() +
+            "%"
           : "S/C";
 
       // const result = calculateGrade(grade, weight);

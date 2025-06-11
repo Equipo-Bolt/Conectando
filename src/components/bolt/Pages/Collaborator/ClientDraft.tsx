@@ -13,7 +13,6 @@ import { Form } from "@/types/Form";
 import SimpleStaticTable from "@/components/bolt/DataTables/dataTableGradeWeight/data-table";
 import InfoHover from "@/components/bolt/Icons/InfoHover";
 
-
 export default function ClientDraft({
   form,
   initialData,

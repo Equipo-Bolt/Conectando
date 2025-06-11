@@ -6,14 +6,18 @@ import { DeleteButton } from "@/components/bolt/Buttons/DeleteButton";
 import IconTooltip from "@/components/bolt/Icons/IconTooltip";
 import { Objective } from "@/types/Objective";
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
-
+import { TextWithTooltip } from "@/components/bolt/Icons/TextwithTooltip";
 export const getColumns = (
   showDeleteButton: boolean
 ): ColumnDef<Objective>[] => [
   {
     accessorKey: "title",
     header: "Objetivo",
-    size: 100,
+    cell: ({ row }) => {
+      const title = row.original.title;
+
+      return <TextWithTooltip title={title} />;
+    },
   },
   {
     accessorKey: "goal",
