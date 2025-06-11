@@ -8,7 +8,7 @@ import { Objective } from "@/types/Objective";
 
 import { disableObjectiveAction } from "@/app/actions/objective/disableObjective";
 import { BossDetailButton } from "../../Buttons/BossDetailButton";
-
+import { TextWithTooltip } from "@/components/bolt/Icons/TextwithTooltip";
 export const getColumns = (
   collaboratorId: number,
   showDeleteButton: boolean
@@ -16,7 +16,11 @@ export const getColumns = (
   {
     accessorKey: "title",
     header: "Objetivo",
-    size: 100,
+    cell: ({ row }) => {
+      const title = row.original.title;
+
+      return <TextWithTooltip title={title} />;
+    },
   },
   {
     accessorKey: "goal",
