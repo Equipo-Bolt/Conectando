@@ -520,9 +520,8 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       placeholder="Escribe el nombre de tu puesto"
                       maxLength={255}
                       {...field}
-                      onChange={(e) =>
-                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "position"))
-                      }
+                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "position")}
+
                     />
                   </FormControl>
 
@@ -544,9 +543,8 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
-                      onChange={(e) =>
-                        field.onChange(handleLeadingOrTrailingSpaces(e.target.value, "companyContribution"))
-                      }
+                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "companyContribution")}
+
                     />
                   </FormControl>
 
