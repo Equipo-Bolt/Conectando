@@ -5,7 +5,8 @@ export const userSchema = z.object({
     email: z
         .string()
         .email("El Correo Electrónico debe ser válido")
-        .min(1, "El Correo Electrónico es requerido"),
+        .min(1, "El Correo Electrónico es requerido")
+        .max(255, "El Correo Electrónico no puede exceder los 255 caracteres"),
     roleID: z
         .string()
         .min(1, "El Rol es requerido")
@@ -18,6 +19,7 @@ export const userSchema = z.object({
     employeeNumber: z
         .string()
         .min(1, "El Número de Empleado es requerido")
+        .max(10, "El Número de Empleado no puede exceder los 10 caracteres")
         .refine((val) => {
             const employeeNumber = parseInt(val, 10);
             return !isNaN(employeeNumber) && employeeNumber > 0;
@@ -29,6 +31,7 @@ export const userSchema = z.object({
     fullName: z
         .string()
         .min(1, "El Nombre Completo es requerido")
+        .max(255, "El Nombre Completo no puede exceder los 255 caracteres")
         .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, "El Nombre Completo solo puede contener letras, espacios y acentos")
         .optional()
         .or(z.literal("")),
@@ -101,12 +104,13 @@ export const userSchema = z.object({
     position: z
         .string()
         .min(1, "El Puesto es requerido")
+        .max(255, "El Puesto no puede exceder los 255 caracteres")
         .optional()
         .or(z.literal("")),
     companyContribution: z
         .string()
         .min(1, "La Contribución a la Empresa es requerida")
-        .max(300, "La Contribución a la Empresa no puede exceder los 300 caracteres")
+        .max(511, "La Contribución a la Empresa no puede exceder los 300 caracteres")
         .optional()
         .or(z.literal("")),
 });
@@ -155,12 +159,16 @@ export const updateUserSchema = userSchema.extend({
     return true;
 }, {
     message: "Si se proporciona una División, también debe proporcionarse una Unidad de Negocio",
-    path: ["divisionID"],
+    path: ["businessUnitID"],
 });
 
 export const completeUserInfoSchema = z.object({
     id: z.number(),
-    email: z.string().email("El Correo Electrónico debe ser válido"),
+    email: z
+        .string()
+        .min(1, "El Correo Electrónico es requerido")
+        .email("El Correo Electrónico debe ser válido")
+        .max(255, "El Correo Electrónico no puede exceder los 255 caracteres"),
     roleID: z
         .string()
         .min(1, "El Rol es requerido")
@@ -173,6 +181,7 @@ export const completeUserInfoSchema = z.object({
     employeeNumber: z
         .string()
         .min(1, "El Número de Empleado es requerido")
+        .max(10, "El Número de Empleado no puede exceder los 10 caracteres")
         .refine((val) => {
             const employeeNumber = parseInt(val, 10);
             return !isNaN(employeeNumber) && employeeNumber > 0;
@@ -182,6 +191,7 @@ export const completeUserInfoSchema = z.object({
     fullName: z
         .string()
         .min(1, "El Nombre Completo es requerido")
+        .max(255, "El Nombre Completo no puede exceder los 255 caracteres")
         .regex(/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/, "El Nombre Completo solo puede contener letras, espacios y acentos"),
     bossID: z
         .string()
@@ -237,11 +247,15 @@ export const completeUserInfoSchema = z.object({
         }, {
             message: "El Área debe ser un número positivo",
         }),
-    position: z.string().min(1, "El Puesto es requerido"),
+    position: z
+        .string()
+        .min(1, "El Puesto es requerido")
+        .max(255, "El Puesto no puede exceder los 255 caracteres")
+    ,
     companyContribution: z
         .string()
         .min(1, "La Contribución a la Empresa es requerida")
-        .max(300, "La Contribución a la Empresa no puede exceder los 300 caracteres"),
+        .max(511, "La Contribución a la Empresa no puede exceder los 300 caracteres"),
 }).refine((data) => {
     // Ensure that companySeniority is before positionSeniority
     const companyDate = new Date(data.companySeniority);

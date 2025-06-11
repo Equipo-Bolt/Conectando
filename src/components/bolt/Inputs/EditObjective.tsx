@@ -38,6 +38,7 @@ import { Comment } from "@/types/Comment";
 
 // Actions
 import { updateObjectiveAction } from "@/app/actions/objective/updateObjective";
+import { FormStatus } from "../ObjectiveForm/FormStatus";
 
 interface DetailObjectivesProps {
   objective: UpdateObjectiveFormData;
@@ -118,13 +119,9 @@ export default function EditObjective({
               }}
               className="space-y-6"
             >
-              {isPending ? (
-                <p className="text-blue-600">Guardando...</p>
-              ) : state?.success ? (
-                <h1>Resultado: {state.message} </h1>
-              ) : (
-                <>Error: {state?.error}</> //! Added this should be change woth error pop up
-              )}
+              {/* Form Status */}
+              <FormStatus isPending={isPending} state={state} />
+
               <div className="grid grid-cols-1 gap-6">
                 {/* Objective Title */}
                 <FormField

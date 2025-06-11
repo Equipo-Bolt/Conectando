@@ -9,7 +9,7 @@ import { Filter } from "@/types/Filter"
  * @returns Promise of type number which is the number of pages of users according to the filters
  */
 
-const USERS_PER_PAGE = 10;
+const USERS_PER_PAGE = 7;
 
 export async function getPagesPagination(
     filters? : Filter

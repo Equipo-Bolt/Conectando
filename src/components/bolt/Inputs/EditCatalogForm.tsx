@@ -35,6 +35,7 @@ import {
 // Custom Components
 import SubmitButton from "@/components/bolt/Buttons/SubmitButton";
 import CancelButton from "@/components/bolt/Buttons/CancelButton";
+import { FormStatus } from "@/components/bolt/ObjectiveForm/FormStatus";
 
 // Types
 import { Division } from "@/types/Division";
@@ -195,17 +196,8 @@ export function EditCatalogForm(props: UpdateCatalogFormProps) {
   return (
     <div className="w-full">
       {/* Status Messages */}
-      {isPending ? (
-        <p className="text-blue-600 mb-[1rem]">Enviando...</p>
-      ) : currentState?.success === true ? (
-        <div className="mb-[1rem] p-3 rounded-md bg-green-100 text-green-800 border border-green-200">
-          {currentState.message}
-        </div>
-      ) : currentState?.success === false ? (
-        <div className="mb-[1rem] p-3 rounded-md bg-red-100 text-red-800 border border-red-200">
-          {currentState?.error}
-        </div>
-      ) : null}
+      <FormStatus isPending={isPending} state={currentState}/>
+      
 
       {/* Catalog Type Selection */}
       <div className="mb-[1rem]">

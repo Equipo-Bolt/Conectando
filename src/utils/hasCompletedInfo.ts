@@ -58,7 +58,7 @@ export async function hasCompletedInfo(
       companySeniority: String(userExists.companySeniority),
       positionSeniority: String(userExists.positionSeniority),
       areaID: String(userExists.areaID),
-      position: String(userExists.jobPosition)
+      position: userExists.jobPosition
     };
 
     const result = completeUserInfoSchema.safeParse(toParseUser);

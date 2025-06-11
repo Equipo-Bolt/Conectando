@@ -1,8 +1,11 @@
 "use client";
 
+// React and Next.js
 import { useActionState, useTransition, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+
+// Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateUserSchema } from "@/lib/Schemas/formSchemas/userSchema";
@@ -22,6 +25,7 @@ import { Area } from "@/types/Area";
 import { updateUserAction } from "@/app/actions/user/updateUser";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { FormStatus } from "@/components/bolt/ObjectiveForm/FormStatus";
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { Loader } from 'lucide-react';
@@ -100,6 +104,18 @@ export default function UserViewEdit({
     }
   };
 
+  // Handler to allow only numeric input for employee number
+  const handleEmployeeNumberChange = (value: string) => {
+    if (/^\d*$/.test(value)) {
+      form.setValue("employeeNumber", value);
+    }
+  };
+
+  const handleLeadingOrTrailingSpaces = (value: string, formValue: "email" | "roleID" | "employeeNumber" | "fullName" | "bossID" | "divisionID" | "businessUnitID" | "companySeniority" | "positionSeniority" | "areaID" | "position" | "companyContribution") => {
+    // Trim leading and trailing spaces from the input value
+    form.setValue(formValue, value.trim());
+  };
+
   const handleSubmit = (data: UpdateUserFormData) => {
     const parsedData = updateUserSchema.safeParse(data);
     if (!parsedData.success) {
@@ -135,8 +151,7 @@ export default function UserViewEdit({
     <Form {...form}>
       <form noValidate onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         {/* Status Messages */}
-        {isPending && <p className="text-blue-600">Enviando...</p>}
-        {state?.success && <h1>Resultado: {state.message}</h1>}
+        <FormStatus isPending={isPending} state={state}/>
 
         <div className="grid grid-cols-1 gap-[2rem] md:grid-cols-3">
           {/* First Column */}
@@ -156,12 +171,16 @@ export default function UserViewEdit({
                     <Input
                       disabled={!isEditable}
                       placeholder="ejemplo@gemso.com"
+                      type="email"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "email")}
                     />
                   </FormControl>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             {/* Employee Number Field */}
@@ -177,14 +196,15 @@ export default function UserViewEdit({
                       disabled={!isEditable}
                       placeholder="Escribe tu número de empleado"
                       {...field}
-                      type="number"
                       min={1}
                       maxLength={10}
+                      onChange={(e) => handleEmployeeNumberChange(e.target.value)}
                     />
                   </FormControl>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             <FormField
@@ -236,9 +256,9 @@ export default function UserViewEdit({
                     </PopoverContent>
                   </Popover>
 
-
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             {/* Division Field */}
@@ -269,7 +289,8 @@ export default function UserViewEdit({
                   </Select>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             {/* Area Field */}
@@ -300,7 +321,8 @@ export default function UserViewEdit({
                   </Select>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
           </div>
 
@@ -336,7 +358,8 @@ export default function UserViewEdit({
                   </Select>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             {/* Full Name Field */}
@@ -351,12 +374,15 @@ export default function UserViewEdit({
                     <Input
                       disabled={!isEditable}
                       placeholder="Escribe tu nombre completo"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "fullName")}
                     />
                   </FormControl>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             <FormField
@@ -374,7 +400,6 @@ export default function UserViewEdit({
                           variant="outline"
                           className={cn(
                             "w-full text-accent-foreground font-normal bg-primary-foreground border border-gray-500 rounded-lg h-[3rem] text-small focus-visible:ring-[1px] hover:bg-primary-foreground justify-between px-[1rem] [&_svg:not([class*='size-'])]:size-6",
-
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -410,10 +435,9 @@ export default function UserViewEdit({
                     </PopoverContent>
                   </Popover>
 
-
-
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             {/* Business Unit Field */}
@@ -444,7 +468,8 @@ export default function UserViewEdit({
                   </Select>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             {/* Boss Field */}
@@ -475,7 +500,8 @@ export default function UserViewEdit({
                   </Select>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
           </div>
 
@@ -493,12 +519,15 @@ export default function UserViewEdit({
                     <Input
                       disabled={!isEditable}
                       placeholder="Escribe el nombre de tu puesto"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "position")}
                     />
                   </FormControl>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
 
             {/* Company Contribution Field */}
@@ -513,13 +542,16 @@ export default function UserViewEdit({
                     <Textarea
                       disabled={!isEditable}
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
+                      maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
+                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "companyContribution")}
                     />
                   </FormControl>
 
                   <FormMessage />
-                </FormItem>              )}
+                </FormItem>
+              )}
             />
           </div>
         </div>

@@ -80,6 +80,7 @@ useEffect(() => {
                 id="email" 
                 type="email"
                 placeholder="ejemplo@gemso.com"
+                maxLength={255}
                 {...field}
               />
               <FormMessage className="text-gemso-red text-sm mt-1"/>

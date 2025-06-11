@@ -21,7 +21,6 @@ export default function LogOutButton() {
             <ArrowLeftStartOnRectangleIcon className="w-[1.5rem] h-[1.5rem]" />
             <span className="text-sm font-medium">Cerrar Sesión</span>
         </Button>
-        {/* {isPending ? "cargando..." : state} */}
     </>
     )
 }

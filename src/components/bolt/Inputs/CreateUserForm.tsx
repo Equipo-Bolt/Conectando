@@ -1,7 +1,7 @@
 "use client";
 
 // React and Next.js
-import { useActionState, useTransition, useEffect, useState } from "react";
+import { useActionState, useTransition, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -62,6 +62,7 @@ import { es } from "date-fns/locale";
 
 // Icons
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import { FormStatus } from "../ObjectiveForm/FormStatus";
 
 //* Interface
 interface CreateUserFormProps {
@@ -71,6 +72,7 @@ interface CreateUserFormProps {
   businessUnits: BusinessUnit[];
   bosses: User[];
 }
+
 //! This definition of props is crucial, otherwise it will throw Intrinsic atributes error
 export function CreateUserForm(props: CreateUserFormProps) {
   const router = useRouter();
@@ -95,6 +97,30 @@ export function CreateUserForm(props: CreateUserFormProps) {
 
   const [state, newAction] = useActionState(createUserAction, null);
   const [isPending, startTransition] = useTransition();
+
+  const currentDivision = form.watch("divisionID");
+
+  // Filter business units based on selected division using useMemo
+  const filteredBusinessUnits = useMemo(() => {
+    if (!currentDivision) return props.businessUnits;
+    return props.businessUnits.filter(bu => bu.divisionID === parseInt(currentDivision));
+  }, [currentDivision, props.businessUnits]);
+
+  const handleDivisionChange = (value: string) => {
+    form.setValue("divisionID", value);
+    // Clear business unit when division changes
+    form.setValue("businessUnitID", "");
+  };
+
+  const handleBusinessUnitChange = (value: string) => {
+    form.setValue("businessUnitID", value);
+    
+    // Auto-set division based on business unit selection
+    const selectedBusinessUnit = props.businessUnits.find(bu => String(bu.id) === value);
+    if (selectedBusinessUnit) {
+      form.setValue("divisionID", String(selectedBusinessUnit.divisionID));
+    }
+  };
 
   async function handleSubmit(data: CreateUserFormData) {
     const parsedData = createUserSchema.safeParse(data);
@@ -132,42 +158,17 @@ export function CreateUserForm(props: CreateUserFormProps) {
     }
   }, [state, router]);
 
-  // Here we are using the useState hook to manage the state of the filtered business units
-  const [filteredBusinessUnits, setFilteredBusinessUnits] = useState<
-    BusinessUnit[]
-  >([]);
-
-  const currentDivision = form.watch("divisionID");
-  const currentBusinessUnit = form.watch("businessUnitID");
-
-  useEffect(() => {
-    // This effect will run whenever currentDivision or props.businessUnits change
-
-    if (currentDivision === undefined || currentDivision === "") {
-      // If no division is selected, reset the filtered business units
-      setFilteredBusinessUnits(props.businessUnits);
-      return;
-    } else {
-      // Filter the business units based on the selected division
-      const filtered = props.businessUnits.filter(
-        (bu) => bu.divisionID === parseInt(currentDivision || "0", 10)
-      );
-      setFilteredBusinessUnits(filtered);
-      form.setValue("businessUnitID", filtered[0]?.id.toString() || "");
+  // Handler to allow only numeric input for employee number
+  const handleEmployeeNumberChange = (value: string) => {
+    if (/^\d*$/.test(value)) {
+      form.setValue("employeeNumber", value);
     }
-  }, [currentDivision, props.businessUnits, form]);
+  }
 
-  useEffect(() => {
-    // Assign current Division to matching business units division
-    if (currentBusinessUnit && currentBusinessUnit !== "") {
-      const matchingBU = props.businessUnits.find(
-        (bu) => bu.id === parseInt(currentBusinessUnit, 10)
-      );
-      if (matchingBU) {
-        form.setValue("divisionID", String(matchingBU.divisionID));
-      }
-    }
-  }, [currentBusinessUnit, props.businessUnits, form]);
+  const handleLeadingOrTrailingSpaces = (value: string, formValue: "email" | "roleID" | "employeeNumber" | "fullName" | "bossID" | "divisionID" | "businessUnitID" | "companySeniority" | "positionSeniority" | "areaID" | "position" | "companyContribution") => {
+    // Trim leading and trailing spaces from the input value
+    form.setValue(formValue, value.trim());
+  }
 
   return (
     <Form {...form}>
@@ -176,13 +177,10 @@ export function CreateUserForm(props: CreateUserFormProps) {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-6"
       >
-        {isPending ? (
-          <p className="text-blue-600">Enviando...</p>
-        ) : state?.success ? (
-          <h1>Resultado: {state.message} </h1>
-        ) : (
-          <></>
-        )}
+        {/* Form Status */}
+        <FormStatus isPending={isPending} state={state} />
+
+        {/* Form Fields */}
         <div className="grid grid-cols-1 gap-[2rem] md:grid-cols-3">
           <div className="flex flex-col gap-[1rem]">
             <FormField
@@ -192,15 +190,18 @@ export function CreateUserForm(props: CreateUserFormProps) {
                 <FormItem>
                   <FormLabel>
                     Correo Electrónico del Usuario
-                    <p className="text-gemso-red"> *</p>
+                    <span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <FormControl>
                     <Input
                       placeholder="ejemplo@gemso.com"
                       type="email"
+                      min={1}
+                      maxLength={255}
                       {...field}
-                    />
+                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "email")}
+                      />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -218,9 +219,9 @@ export function CreateUserForm(props: CreateUserFormProps) {
                     <Input
                       placeholder="Escribe tu número de empleado"
                       {...field}
-                      type="number"
                       min={1}
                       maxLength={10}
+                      onChange={(e) => handleEmployeeNumberChange(e.target.value)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -257,6 +258,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       <Calendar
                         locale={es}
                         mode="single"
+                        captionLayout="dropdown" // This enables year/month dropdowns
                         selected={
                           field.value ? new Date(field.value) : undefined
                         }
@@ -268,7 +270,9 @@ export function CreateUserForm(props: CreateUserFormProps) {
                         disabled={(date) =>
                           date > new Date() || date < new Date("1900-01-01")
                         }
-                        captionLayout="dropdown"
+                        defaultMonth={
+                          field.value ? new Date(field.value) : new Date()
+                        }
                       />
                     </PopoverContent>
                   </Popover>
@@ -285,9 +289,8 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormLabel>División</FormLabel>
 
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={handleDivisionChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -320,7 +323,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -349,7 +351,7 @@ export function CreateUserForm(props: CreateUserFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Roles<p className="text-gemso-red"> *</p>
+                    Roles<span className="text-gemso-red"> *</span>
                   </FormLabel>
 
                   <Select onValueChange={field.onChange}>
@@ -381,7 +383,9 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormControl>
                     <Input
                       placeholder="Escribe tu nombre completo"
+                      maxLength={255}
                       {...field}
+                      onChange={(e) =>handleLeadingOrTrailingSpaces(e.target.value, "fullName")}
                     />
                   </FormControl>
 
@@ -449,9 +453,8 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormLabel>Unidad de Negocio</FormLabel>
 
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={handleBusinessUnitChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -482,7 +485,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
-                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -514,7 +516,10 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormControl>
                     <Input
                       placeholder="Escribe el nombre de tu puesto"
+                      maxLength={255}
                       {...field}
+                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "position")}
+
                     />
                   </FormControl>
 
@@ -533,8 +538,11 @@ export function CreateUserForm(props: CreateUserFormProps) {
                   <FormControl>
                     <Textarea
                       placeholder="Cómo contribuye tu puesto a la estrategia de GEMSO"
+                      maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
+                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "companyContribution")}
+
                     />
                   </FormControl>
 
