@@ -138,11 +138,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
     }
   }
 
-  const handleLeadingOrTrailingSpaces = (value: string, formValue: "email" | "roleID" | "employeeNumber" | "fullName" | "bossID" | "divisionID" | "businessUnitID" | "companySeniority" | "positionSeniority" | "areaID" | "position" | "companyContribution") => {
-    // Trim leading and trailing spaces from the input value
-    form.setValue(formValue, value.trim());
-  }
-
   async function handleSubmit(data: CompleteUserFormData) {
     const parsedData = completeUserInfoSchema.safeParse(data);
     if (!parsedData.success) {
@@ -155,15 +150,15 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
       email: parsedData.data.email,
       roleID: String(parsedData.data.roleID),
       employeeNumber: String(parsedData.data.employeeNumber),
-      fullName: parsedData.data.fullName,
+      fullName: parsedData.data.fullName.trim(),
       bossID: String(parsedData.data.bossID),
       divisionID: String(parsedData.data.divisionID),
       businessUnitID: String(parsedData.data.businessUnitID),
       companySeniority: parsedData.data.companySeniority,
       positionSeniority: parsedData.data.positionSeniority,
       areaID: String(parsedData.data.areaID),
-      position: parsedData.data.position,
-      companyContribution: parsedData.data.companyContribution,
+      position: parsedData.data.position.trim(),
+      companyContribution: parsedData.data.companyContribution.trim(),
     };
 
     await startTransition(() => {
@@ -417,7 +412,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       placeholder="Escribe tu nombre completo"
                       maxLength={255}
                       {...field}
-                      onChange={(e) =>handleLeadingOrTrailingSpaces(e.target.value, "fullName")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -559,7 +553,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       placeholder="Escribe el nombre de tu puesto"
                       maxLength={255}
                       {...field}
-                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "position")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -582,7 +575,6 @@ export function CompleteInfoForm(props: CompleteUserFormProps) {
                       maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
-                      onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "companyContribution")}
                     />
                   </FormControl>
                   <FormMessage />

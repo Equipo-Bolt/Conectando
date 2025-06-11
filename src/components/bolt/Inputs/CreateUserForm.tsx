@@ -129,8 +129,17 @@ export function CreateUserForm(props: CreateUserFormProps) {
       return;
     }
 
+    if (parsedData.data.fullName)
+      parsedData.data.fullName = parsedData.data.fullName.trim();
+
+    if (parsedData.data.position)
+      parsedData.data.position = parsedData.data.position.trim();
+
+    if (parsedData.data.companyContribution)
+      parsedData.data.companyContribution = parsedData.data.companyContribution.trim();
+    
     const userData: CreateUserFormData = {
-      email: parsedData.data.email,
+      email: parsedData.data.email.trim(),
       roleID: parsedData.data.roleID.toString(),
       employeeNumber: parsedData.data.employeeNumber?.toString() || "",
       fullName: parsedData.data.fullName || "",
@@ -165,11 +174,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
     }
   }
 
-  const handleLeadingOrTrailingSpaces = (value: string, formValue: "email" | "roleID" | "employeeNumber" | "fullName" | "bossID" | "divisionID" | "businessUnitID" | "companySeniority" | "positionSeniority" | "areaID" | "position" | "companyContribution") => {
-    // Trim leading and trailing spaces from the input value
-    form.setValue(formValue, value.trim());
-  }
-
   return (
     <Form {...form}>
       <form
@@ -200,7 +204,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       min={1}
                       maxLength={255}
                       {...field}
-                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "email")}
                       />
                   </FormControl>
                   <FormMessage />
@@ -385,7 +388,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       placeholder="Escribe tu nombre completo"
                       maxLength={255}
                       {...field}
-                      onChange={(e) =>handleLeadingOrTrailingSpaces(e.target.value, "fullName")}
                     />
                   </FormControl>
 
@@ -518,8 +520,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       placeholder="Escribe el nombre de tu puesto"
                       maxLength={255}
                       {...field}
-                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "position")}
-
                     />
                   </FormControl>
 
@@ -541,8 +541,6 @@ export function CreateUserForm(props: CreateUserFormProps) {
                       maxLength={511}
                       {...field}
                       className="min-h-[8.5rem] max-h-[19rem] w-full resize-none"
-                        onChange={(e) => handleLeadingOrTrailingSpaces(e.target.value, "companyContribution")}
-
                     />
                   </FormControl>
 
