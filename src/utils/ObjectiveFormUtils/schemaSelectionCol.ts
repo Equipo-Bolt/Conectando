@@ -2,7 +2,7 @@ import {
   addGradeToObjectiveSchema,
   addResultToObjectiveSchema,
   updateObjectiveSchema,
-} from "@/lib/formSchemas/objectiveSchema";
+} from "@/lib/Schemas/formSchemas/objectiveSchema";
 
 import { ZodType } from "zod";
 import { UpdateObjectiveFormData } from "@/types/Objective";

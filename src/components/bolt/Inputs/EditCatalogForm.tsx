@@ -45,7 +45,7 @@ import { BusinessUnit } from "@/types/BusinessUnit";
 import {
   updateCatalogSchema,
   updateBusinessUnitSchema,
-} from "@/lib/formSchemas/catalogSchema";
+} from "@/lib/Schemas/formSchemas/catalogSchema";
 
 type CatalogType = "Área" | "División" | "Unidad de Negocio";
 type CatalogTypeData = Area | Division | BusinessUnit;

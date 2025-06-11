@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 // Form Validation
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createUserSchema } from "@/lib/formSchemas/userSchema";
+import { createUserSchema } from "@/lib/Schemas/formSchemas/userSchema";
 
 // Shadcn Components
 import { Input } from "@/components/ui/input";

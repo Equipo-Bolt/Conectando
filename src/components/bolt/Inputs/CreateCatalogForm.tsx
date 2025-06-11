@@ -43,7 +43,7 @@ import { Division } from "@/types/Division";
 import {
   createCatalogSchema,
   createBusinessUnitSchema,
-} from "@/lib/formSchemas/catalogSchema";
+} from "@/lib/Schemas/formSchemas/catalogSchema";
 
 type CatalogType = "Área" | "División" | "Unidad de Negocio";
 
